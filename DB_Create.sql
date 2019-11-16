@@ -1,3 +1,4 @@
+DROP DATABASE IF EXISTS Quick_Match;
 CREATE DATABASE Quick_Match CHARACTER SET 'utf8';
 USE Quick_Match;
 
@@ -26,7 +27,7 @@ CREATE TABLE IF NOT EXISTS Slot (
 id SMALLINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 start_hour TIME NOT NULL,
 end_hour TIME NOT NULL,
-repeat_day DATE									/*Champ a preciser*/
+repeat_day VARCHAR(9)									/*Champ a preciser*/
 );
 
 CREATE TABLE IF NOT EXISTS Invitation (
@@ -44,7 +45,7 @@ location TEXT, 									/*A voir pour le type*/
 minimal_team_size SMALLINT
 );
 
-CREATE TABLE IF NOT EXISTS Player_Belong_Group (
+CREATE TABLE IF NOT EXISTS Player_Belong_Club (
 player SMALLINT UNSIGNED,
 club SMALLINT UNSIGNED,
 is_admin TINYINT UNSIGNED,						/*Trouver un meilleur equivalent aux booléens maybe*/
