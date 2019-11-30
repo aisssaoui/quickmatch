@@ -1,4 +1,5 @@
 <template>
+
   <div id="app">
     <Nav msg="Nav" />
     <Home msg="QuickMatch" />
@@ -28,7 +29,7 @@ export default {
   color: #2c3e50;
 }
 #title {
-  padding-top: 200px;
+  padding-top: 200px; 
 }
 #logo {
   text-align: left;

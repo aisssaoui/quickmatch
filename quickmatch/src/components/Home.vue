@@ -1,29 +1,36 @@
 <template>
   <div class="hello">
     <!-- image slider -->
-    <div id="slide" class="carousel slide" data-ride="carousel">
-      <ul class="carousel-indicators">
-        <li data-target="#slide" data-slide-to="0" class="active"></li>
-        <li data-target="#slide" data-slide-to="1"></li>
-        <li data-target="#slide" data-slide-to="2"></li>
-      </ul>
-      <div class="carousel-inner">
-        <div class="carousel-item active">
-          <img src="../assets/foot1.jpg" />
-          <div id="caption" class="carousel-caption">
-            <h1 class="display-2">QuickMatch</h1>
-            <h3 id="head-c">Plus jamais du temps à perdre</h3>
-            <button type="button" class="btn btn-outline-dark btn-lg btn-light">Se connecter</button>``
-            <button type="button" class="btn btn-primary btn-lg">S'inscrire</button>
-          </div>
-        </div>
-        <div class="carousel-item">
-          <img src="../assets/foot2.jpg" />
-        </div>
-        <div class="carousel-item">
-          <img src="../assets/foot3.jpg" />
-        </div>
-      </div>
+    <div >
+      <b-carousel
+        id="carousel-1"
+        v-model="slide"
+        indicators
+        @sliding-start="onSlideStart"
+        @sliding-end="onSlideEnd"
+      >
+        <b-carousel-slide>
+          <template v-slot:img>
+            <img src="../assets/foot1.jpg" />
+            <div id="caption" class="carousel-caption">
+              <h1 class="display-2">QuickMatch</h1>
+              <h3 id="head-c">Plus jamais du temps à perdre</h3>
+              <button type="button" class="btn btn-outline-dark btn-lg btn-light">Se connecter</button>
+              <button type="button" class="btn btn-primary btn-lg">S'inscrire</button>
+            </div>
+          </template>
+        </b-carousel-slide>
+        <b-carousel-slide>
+          <template v-slot:img>
+            <img src="../assets/basketball.jpg" />
+          </template>
+        </b-carousel-slide>
+        <b-carousel-slide>
+          <template v-slot:img>
+            <img src="../assets/volleyball.jpg" />
+          </template>
+        </b-carousel-slide>
+        </b-carousel>
     </div>
 
     <!-- Jumbotron -->
@@ -57,16 +64,20 @@
     <div class="container-fluid padding balls">
       <div class="row text-center padding" id="types">
         <div class="col-sm-12 col-md-6">
-          <a  href="#">
-          <img src="../assets/pro.png" style="width:80px;height:70px;" />
-          <h3 id="foot"><span>PRO FOOT</span></h3>
+          <a href="#">
+            <img src="../assets/pro.png" style="width:80px;height:70px;" />
+            <h3 id="foot">
+              <span>PRO FOOT</span>
+            </h3>
           </a>
           <p>Match de football professionel.</p>
         </div>
         <div class="col-sm-12 col-md-6">
-          <a  href="#">
-          <img src="../assets/street.png" style="width:70px;height:70px;" />
-          <h3 id="foot"><span>STREET FOOT</span></h3>
+          <a href="#">
+            <img src="../assets/street.png" style="width:70px;height:70px;" />
+            <h3 id="foot">
+              <span>STREET FOOT</span>
+            </h3>
           </a>
           <p>Match de professionel de salle.</p>
         </div>
@@ -74,7 +85,7 @@
           <img src="../assets/pro.png" style="width:80px;height:70px;" />
           <h3 id="foot">PRO FOOT</h3>
           <p>Match de football professionel.</p>
-        </div> -->
+        </div>-->
       </div>
       <hr class="my-4" />
     </div>
@@ -86,7 +97,7 @@
           <h2>Connect</h2>
         </div>
         <div class="col-12 social padding">
-          <a  href="#">
+          <a href="#">
             <img src="../assets/fb.png" style="width:50px;height:50px;" />
           </a>
           <a href="#">
@@ -109,10 +120,20 @@
 
 <script>
 export default {
-  name: "HelloWorld",
-  props: {
-    msg: String
+  data() {
+    return {
+      slide: 0,
+      sliding: null
+    };
   }
+  // methods: {
+  //   onSlideStart(slide) {
+  //     this.sliding = true;
+  //   },
+  //   onSlideEnd(slide) {
+  //     this.sliding = false;
+  //   }
+  // }
 };
 </script>
 
@@ -134,7 +155,6 @@ a {
   color: #42b983;
 } */
 
-
 #head-c {
   margin-top: 0px;
   margin-bottom: 10px;
@@ -148,7 +168,7 @@ a {
 #jumb {
   padding: 20px 10px 20px 10px;
 }
-#connect{
+#connect {
   padding-bottom: 40px;
 }
 #types {
@@ -156,7 +176,7 @@ a {
   margin-right: 70px;
 }
 
-.balls{
+.balls {
   padding-top: 50px;
 }
 .display-2 {
@@ -168,7 +188,7 @@ a {
 }
 
 .social {
-  padding-top: 30px
+  padding-top: 30px;
 }
 
 .social a {
@@ -176,33 +196,33 @@ a {
 }
 .carousel-inner img {
   width: 100%;
-  height: 100%; 
+  height: 100%;
 }
 
-.carousel-caption{
+.carousel-caption {
   position: absolute;
   top: 50%;
-  transform: translateY(-30%)
+  transform: translateY(-30%);
 }
-.carousel-caption h1{
+.carousel-caption h1 {
   font-size: 500%;
-  text-shadow: 1px 1px 7px #1E013D;
+  text-shadow: 1px 1px 7px #1e013d;
 }
-.carousel-caption h2{
+.carousel-caption h2 {
   font-size: 200%;
   font-weight: 500;
-  text-shadow: 1px 1px 1px 7px #1E013D;
+  text-shadow: 1px 1px 1px 7px #1e013d;
 }
 
 .container-fluid a {
   color: #000;
 }
 .container-fluid a:hover {
-  color: #3C007A;
+  color: #3c007a;
   text-decoration: none;
 }
 .btn-primary {
-  background-color: #3C007A;
+  background-color: #3c007a;
   border: 1px solid black;
 }
 .btn-primary:hover {
@@ -211,6 +231,6 @@ a {
 }
 
 .btn-secondary {
-  border: 1px solid #3C007A;
+  border: 1px solid #3c007a;
 }
 </style>
