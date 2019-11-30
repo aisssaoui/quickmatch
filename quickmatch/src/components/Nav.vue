@@ -44,17 +44,21 @@
 </script>
 
 <style>
-#app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-#title {
-  padding-top: 200px;
-}
+
 #logo {
   text-align: left;
 }
+.navbar{
+  padding: .8rem;
+  }
+  
+.navbar-nav li {
+  padding-right: 20px;
+}
+
+.nav-link {
+  font-size: 1.1em !important;
+}
+
+
 </style>

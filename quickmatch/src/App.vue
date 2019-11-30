@@ -2,17 +2,19 @@
   <div id="app">
     <Nav msg="Nav" />
     <Home msg="QuickMatch" />
+    <Footer msg="Footer" />
   </div>
 </template>
 
 <script>
 import Home from "./components/Home.vue";
 import Nav from "./components/Nav.vue";
+import Footer from "./components/Footer.vue";
 
 export default {
   name: "app",
   components: {
-    Home, Nav
+    Home, Nav, Footer
   }
 };
 </script>
