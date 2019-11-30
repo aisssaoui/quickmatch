@@ -4,7 +4,7 @@ CREATE DATABASE Quick_Match WITH ENCODING 'UTF8';
 
 
 CREATE TABLE IF NOT EXISTS Player (
-id SERIAL PRIMARY KEY CHECK (id >= 0),
+id SERIAL PRIMARY KEY,
 surname VARCHAR(40) NOT NULL,
 first_name VARCHAR(40) NOT NULL,
 mail_address VARCHAR(40),
@@ -17,7 +17,7 @@ victories SMALLINT DEFAULT 0 NOT NULL CHECK (victories >= 0)
 );
 
 CREATE TABLE IF NOT EXISTS Club (				/* Table groupe*/
-id SERIAL PRIMARY KEY CHECK (id >= 0),
+id SERIAL PRIMARY KEY,
 title VARCHAR(40) NOT NULL,						/*Nom du groupe*/
 creation_date TIMESTAMP NOT NULL,
 private BOOLEAN
@@ -26,14 +26,14 @@ private BOOLEAN
 /*Pas de table feuille stat car (1,1)-(1,1)*/
 
 CREATE TABLE IF NOT EXISTS Slot (
-id SERIAL PRIMARY KEY CHECK (id >= 0),
+id SERIAL PRIMARY KEY,
 start_hour TIME NOT NULL,
 end_hour TIME NOT NULL,
 repeat_day VARCHAR(9)									/*Champ a preciser*/
 );
 
 CREATE TABLE IF NOT EXISTS Invitation (
-id SERIAL PRIMARY KEY CHECK (id >= 0),
+id SERIAL PRIMARY KEY,
 slot SMALLINT CHECK (slot >= 0),
 player SMALLINT CHECK (player >= 0),
 FOREIGN KEY (slot) REFERENCES Slot(id),
@@ -42,7 +42,7 @@ event_type VARCHAR(20)  						/*type discutable si liste finie d'event*/
 );
 
 CREATE TABLE IF NOT EXISTS Meet (				/*Nom a revoir peut etre*/
-id SERIAL PRIMARY KEY CHECK (id >= 0),
+id SERIAL PRIMARY KEY,
 slot SMALLINT CHECK (slot >= 0),
 invitation SMALLINT CHECK (invitation >= 0),
 FOREIGN KEY (slot) REFERENCES Slot(id),
