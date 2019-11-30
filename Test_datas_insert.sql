@@ -1,92 +1,70 @@
-SET FOREIGN_KEY_CHECKS = 0;
-TRUNCATE TABLE Player_Belong_Club;
-TRUNCATE TABLE Player_Played_Meet;   
-TRUNCATE TABLE Player_Available_Slot;
-TRUNCATE TABLE Player;
-TRUNCATE TABLE Club;
-TRUNCATE TABLE Slot;
-TRUNCATE TABLE Invitation; 
-TRUNCATE TABLE Meet; 
-SET FOREIGN_KEY_CHECKS = 1;
+TRUNCATE TABLE Player, Club, Slot, Invitation, Meet, Player_Belong_Club, Meet_Sheet, Invitation_For_Meet CASCADE;
 
-INSERT INTO Player (surname, first_name, scored_goals, conceded_goals, matches_played, victories)
-	VALUES ('Chataigner', 'Johan', 1, 0, 1, 1),
-			('Genty', 'Laurent', 2, 1, 1, 0),
-            ('Issaoui', 'Ali', 2, 2, 1, 0),
-            ('Abderrahmane', 'Faiz', 0, 0, 1, 1),
-            ('Rosay', 'Maxime', 2, 2, 1, 0),
-            ('Hala', 'Mehdi', 2, 1, 1, 0),
-            ('Faverge', 'Mathieu', 100, 0, 1, 1),
-            ('Delarue', 'Tony', 101, 0, 1, 1),
-            ('Meline', 'Raphael', 1, 2, 1, 0),
-            ('Danquigny', 'Antoine', 0, 0, 0, 0);
+INSERT INTO Player (surname, first_name, mail_address, phone_number, scored_goals, conceded_goals, matches_played, victories)
+	VALUES ('Chataigner', 'Johan', 'Chataigner@gmail.com', '0600000000', 1, 0, 1, 1),
+				 ('Genty', 'Laurent', 'Genty@gmail.com', '0600000001', 2, 1, 1, 0),
+         ('Issaoui', 'Ali', 'Issaoui@gmail.com', '0600000002', 2, 2, 1, 0),
+         ('Abderrahmane', 'Faiz', 'Abderrahmane@gmail.com', '0600000003', 0, 0, 1, 1),
+         ('Rosay', 'Maxime', 'Rosay@gmail.com', '0600000004', 2, 2, 1, 0),
+         ('Hala', 'Mehdi', 'Hala@gmail.com', '0600000005', 2, 1, 1, 0),
+         ('Faverge', 'Mathieu', 'Faverge@gmail.com', '0600000006', 100, 0, 1, 1),
+         ('Delarue', 'Tony', 'Delarue@gmail.com', '0600000007', 101, 0, 1, 1),
+         ('Meline', 'Raphael', 'Meline@gmail.com', '0600000008', 1, 2, 1, 0),
+         ('Danquigny', 'Antoine', 'Danquigny@gmail.com', '0600000009', 1000, 0, 1, 1);
 
-INSERT INTO Club (title, creation_date)
-	VALUES ('Inria', '2019-11-16 17:00:00'),
-			('Enseirb', '2019-11-16 17:00:00'),
-            ('Gars', '2019-11-16 17:00:00'),
-            ('Filles', '2019-11-16 17:00:00');
+INSERT INTO Club (title, creation_date, private)
+	VALUES ('Inria', '2019-11-16 17:00:00', FALSE),
+				 ('Enseirb', '2019-11-16 17:00:00', FALSE),
+         ('Gars', '2019-11-16 17:00:00', FALSE),
+         ('Filles', '2019-11-16 17:00:00', FALSE);
 
 INSERT INTO Slot (start_hour, end_hour, repeat_day)
 	VALUES ('14:00:00', '16:00:00', 'Monday'),
-			('14:30:00', '16:30:00', 'Wednesday'),
-            ('13:00:00', '15:00:00', 'Saturday'),
-            ('15:00:00', '17:00:00', 'Sunday');
-          
-INSERT INTO Invitation (event_type)
-	VALUES ('Match'),
-			('Tournoi'),
-            ('Match'),
-            ('Match'),
-            ('Tournoi');
-           
-INSERT INTO Meet (slot, invitation, location, minimal_team_size)
-	VALUES (1, 1, 'François Bordes', 2),
-			(2, 2, 'Cosec', 3),
-            (3, 3, 'François Bordes', 2),
-            (4, 4, 'Cosec', 2),
-            (1, 5, 'François Bordes', 3);
-            
+				 ('14:30:00', '16:30:00', 'Wednesday'),
+         ('13:00:00', '15:00:00', 'Saturday'),
+         ('15:00:00', '17:00:00', 'Sunday');
+
+INSERT INTO Invitation (slot, player, event_type)
+	VALUES (1, 1, 'Match'),
+				 (3, 7, 'Tournoi'),
+         (1, 2, 'Match'),
+         (1, 3, 'Match'),
+         (3, 8, 'Tournoi');
+
+INSERT INTO Meet (location, precise_date, minimal_team_size, maximal_team_size, deletion_date)
+	VALUES ('François Bordes', '2019-12-10 14:00:00', 2, 22, NULL),
+				 ('Cosec', '2019-12-10 14:00:00', 2, 22, NULL),
+         ('François Bordes', '2019-12-11 14:30:00', 2, 22, NULL),
+         ('Cosec', '2019-12-11 14:30:00', 2, 22, NULL),
+         ('François Bordes', '2019-12-14 13:00:00', 2, 22, NULL);
+
 INSERT INTO Player_Belong_Club (player, club, is_admin)
-	VALUES 	(1, 2, 1),
-			(2, 2, 0),
-            (3, 2, 0),
-            (4, 2, 0),
-            (5, 2, 0),
-            (6, 2, 0),
-            (7, 2, 1),
-            (8, 2, 0),
-            (9, 1, 0),
-            (10, 1, 0);
-         
-INSERT INTO Player_Played_Meet (player, meet, won)
-	VALUES (1, 1, 1),
-			(2, 1, 0),
-            (3, 2, 0),
-            (4, 2, 1),
-            (5, 2, 0),
-            (6, 3, 0),
-            (7, 3, 1),
-            (8, 4, 1),
-            (9, 4, 0),
-            (10, 1, 1);
-	
-INSERT INTO Player_Available_Slot (player, slot)
-	VALUES (1, 1),
-			(2, 1),
-            (3, 1),
-            (4, 1),
-            (5, 1),
-            (5, 2),
-            (6, 2),
-            (6, 4),
-            (7, 3),
-            (7, 4),
-            (8, 1),
-            (8, 2),
-            (9, 1),
-            (9, 4),
-            (10, 1),
-            (10, 3);
-            
-    
+	VALUES (1, 2, TRUE),
+				 (2, 2, FALSE),
+         (3, 2, FALSE),
+         (4, 2, FALSE),
+         (5, 2, FALSE),
+         (6, 2, FALSE),
+         (7, 1, TRUE),
+         (8, 1, FALSE),
+         (9, 2, FALSE),
+         (10, 2, FALSE);
+
+INSERT INTO Meet_Sheet (player, meet, won)
+	VALUES (1, 1, TRUE),
+				 (2, 1, FALSE),
+         (3, 2, FALSE),
+         (4, 2, TRUE),
+         (5, 2, FALSE),
+         (6, 3, FALSE),
+         (7, 3, TRUE),
+         (8, 4, TRUE),
+         (9, 4, FALSE),
+         (10, 1, TRUE);
+
+INSERT INTO Invitation_For_Meet (invitation, meet)
+	VALUES (1, 2),
+				 (2, 1),
+         (3, 5),
+         (4, 4),
+         (5, 3);

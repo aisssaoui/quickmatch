@@ -1,17 +1,8 @@
-SET FOREIGN_KEY_CHECKS = 0;
-TRUNCATE TABLE Player_Belong_Club;
-TRUNCATE TABLE Player_Played_Meet;   
-TRUNCATE TABLE Player_Available_Slot;
-TRUNCATE TABLE Player;
-TRUNCATE TABLE Club;
-TRUNCATE TABLE Slot;
-TRUNCATE TABLE Invitation; 
-TRUNCATE TABLE Meet; 
-SET FOREIGN_KEY_CHECKS = 1;
+TRUNCATE TABLE Player, Club, Slot, Invitation, Meet, Player_Belong_Club, Meet_Sheet, Invitation_For_Meet CASCADE;
 
 -- Function that creates a new player
 DELIMITER//
-CREATE FUNCTION CreatePlayer(surname VARCHAR(40), first_name VARCHAR(40))
+CREATE OR REPLACE FUNCTION CreatePlayer(surname VARCHAR(40), first_name VARCHAR(40))
 RETURNS INT
 BEGIN
     INSERT INTO Player (surname, first_name, scored_goals, conceded_goals, matches_played, victories)
@@ -22,7 +13,7 @@ DELIMITER;
 
 -- Function that adds scored goals of a player to the table
 DELIMITER//
-CREATE FUNCTION PlayerScoredGoals(sn VARCHAR(40), fn VARCHAR(40), scored_goals_game SMALLINT)
+CREATE OR REPLACE FUNCTION PlayerScoredGoals(sn VARCHAR(40), fn VARCHAR(40), scored_goals_game SMALLINT)
 RETURNS INT
 BEGIN
     UPDATE Player
@@ -34,7 +25,7 @@ DELIMITER;
 
 -- Function that updates conceded goals after a game
 DELIMITER//
-CREATE FUNCTION PlayerconcededGoals(meet_id SMALLINT, winner_score SMALLINT, loser_score)
+CREATE OR REPLACE FUNCTION PlayerconcededGoals(meet_id SMALLINT, winner_score SMALLINT, loser_score)
 RETURNS INT
 BEGIN
     UPDATE Player P INNER JOIN Player_Played_Meet M on P.id = M.player
@@ -48,7 +39,7 @@ DELIMITER;
 
 -- Function that creates a club
 DELIMITER//
-CREATE FUNCTION CreateClub(club_name VARCHAR(40))
+CREATE OR REPLACE FUNCTION CreateClub(club_name VARCHAR(40))
 RETURNS INT
 BEGIN
     INSERT INTO Club (title, creation_date)
