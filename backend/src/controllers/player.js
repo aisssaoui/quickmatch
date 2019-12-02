@@ -5,24 +5,19 @@ import db from '../db';
 const Player = {
   /**
    * Create A Reflection
-   * @param {object} req 
+   * @param {object} req
    * @param {object} res
-   * @returns {object} Player object 
+   * @returns {object} Player object
    */
   async create(req, res) {
-    const text = `INSERT INTO Player (id, surname, first_name, mail_address, phone_number, scored_goals, conceded_goals, matches_played, victories)
-	    VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9)
+    const text = `INSERT INTO Player (surname, first_name, mail_address, phone_number)
+	    VALUES($1, $2, $3, $4)
         returning *`;
     const values = [
-      req.body.id,
       req.body.surname,
       req.body.first_name,
       req.body.mail_adress,
-      req.body.phone_number,
-      req.body.scored_goals,
-      req.body.conceded_goals,
-      req.body.matches_played,
-      req.body.victories
+      req.body.phone_number
     ];
 
     try {
@@ -34,8 +29,8 @@ const Player = {
   },
   /**
    * Get All players
-   * @param {object} req 
-   * @param {object} res 
+   * @param {object} req
+   * @param {object} res
    * @returns {object} players array
    */
   async getAll(req, res) {
@@ -49,7 +44,7 @@ const Player = {
   },
   /**
    * Get A Player
-   * @param {object} req 
+   * @param {object} req
    * @param {object} res
    * @returns {object} player object
    */
@@ -67,8 +62,8 @@ const Player = {
   },
   /**
    * Update A Player
-   * @param {object} req 
-   * @param {object} res 
+   * @param {object} req
+   * @param {object} res
    * @returns {object} updated reflection
    */
   async update(req, res) {
@@ -96,9 +91,9 @@ const Player = {
   },
   /**
    * Delete A Player
-   * @param {object} req 
-   * @param {object} res 
-   * @returns {void} return statuc code 204 
+   * @param {object} req
+   * @param {object} res
+   * @returns {void} return statuc code 204
    */
   async delete(req, res) {
     const deleteQuery = 'DELETE FROM player WHERE id=$1 returning *';
