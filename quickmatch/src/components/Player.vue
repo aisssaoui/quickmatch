@@ -3,7 +3,7 @@
     <b-row>
       <b-col cols="4">
         <b-form v-on:submit.prevent="addPlayer">
-           <b-form-group id="surname" label="Nom:" label-for="surname">
+           <b-form-group id="surname" label="Nom :" label-for="surname">
               <b-form-input id="surname" v-model="form.surname"></b-form-input>
             </b-form-group>
           <b-form-group id="first_name" label="Prénom :" label-for="first_name">

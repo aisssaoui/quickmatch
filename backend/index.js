@@ -19,5 +19,11 @@ app.get('/api/v1/Players/:id', Player.getOne);
 app.put('/api/v1/Players/:id', Player.update);
 app.delete('/api/v1/Players/:id', Player.delete);
 
+app.post('/api/v1/Clubs', Club.create);
+app.get('/api/v1/Clubs', Club.getAll);
+app.get('/api/v1/Clubs/:id', Club.getOne);
+app.put('/api/v1/Clubs/:id', Club.update);
+app.delete('/api/v1/Clubs/:id', Club.delete);
+
 app.listen(3000)
 console.log('app running on port ', 3000);

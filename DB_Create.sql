@@ -17,9 +17,9 @@ victories SMALLINT DEFAULT 0 NOT NULL CHECK (victories >= 0)
 
 CREATE TABLE IF NOT EXISTS Club (				/* Table groupe*/
 id SMALLSERIAL PRIMARY KEY,
-title VARCHAR(40) NOT NULL,						/*Nom du groupe*/
-creation_date TIMESTAMP NOT NULL,
-private BOOLEAN
+club_name VARCHAR(40) NOT NULL,
+creation_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+private_club BOOLEAN
 );
 
 /*Pas de table feuille stat car (1,1)-(1,1)*/

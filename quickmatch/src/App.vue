@@ -6,6 +6,7 @@
     <Footer msg="Footer" />
 
     <router-link to="/player">easter egg</router-link>
+    <router-link to="/club">easter egg 2</router-link>
   </div>
 </template>
 
@@ -30,7 +31,7 @@ export default {
   color: #2c3e50;
 }
 #title {
-  padding-top: 200px; 
+  padding-top: 200px;
 }
 #logo {
   text-align: left;
