@@ -3,11 +3,13 @@
     <nav class="navbar navbar-expand-md navbar-light bg-light sticky-top">
       <div class="container-fluid">
         <a class="navbar-brand" href="#">
+          <router-link to="/">
           <img
             alt="quickmatch-logo"
             src="../assets/logo-quickmatch.png"
             style="width:80px;height:80px;"
           />
+          </router-link>
         </a>
         <button
           class="navbat-toggler"

@@ -1,21 +1,22 @@
 <template>
-
   <div id="app">
+
     <Nav msg="Nav" />
-    <Home msg="QuickMatch" />
+      <router-view></router-view>
     <Footer msg="Footer" />
+
+    <router-link to="/player">easter egg</router-link>
   </div>
 </template>
 
 <script>
-import Home from "./components/Home.vue";
 import Nav from "./components/Nav.vue";
 import Footer from "./components/Footer.vue";
 
 export default {
   name: "app",
   components: {
-    Home, Nav, Footer
+    Nav, Footer
   }
 };
 </script>
