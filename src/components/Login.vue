@@ -12,7 +12,7 @@
                     <v-card-title align="center" j>Log in to Quick Match</v-card-title>
                 </v-layout>
                     <v-col class="py-0" cols="4" md="12">
-                        <v-text-field v-model="username" :rules="usernameRules" :counter="10" label="Username" required outlined filled></v-text-field>
+                        <v-text-field v-model="username" :rules="usernameRules" :counter="15" label="Username" required outlined filled></v-text-field>
                     </v-col>
                     <v-col class="py-0" cols="6" md="12">
                         <v-text-field v-model="password" :rules="passwordRules" label="Password" type="password" required outlined filled></v-text-field>
@@ -39,7 +39,7 @@
             <v-card class="mx-10" raised width="25%">
                 
                 <v-layout justify-center="true">
-                    <v-card-title align="center" j>Not yet registered ?</v-card-title>
+                    <v-card-title align="center">Not yet registered ?</v-card-title>
                 </v-layout>
                 <v-row class="pa-0" align="center" justify="center">
                     <v-col cols="10">
@@ -67,7 +67,7 @@
             username: '',
             usernameRules: [
                 v => !!v || 'Name is required',
-                v => v.length <= 10 || 'Username must be less than 10 characters',
+                v => v.length <= 15 || 'Username must be less than 10 characters',
             ],
             password: '',
             passwordRules: [
