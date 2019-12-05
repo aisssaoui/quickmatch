@@ -6,39 +6,53 @@
             </v-col>
         </v-row>
         <v-layout row wrap align-center="true" justify-center="true">
-            <v-card raised width="25%">
+            <v-card class="mx-10" raised width="25%">
                 <v-form v-model="valid">
                 <v-layout justify-center="true">
                     <v-card-title align="center" j>Log in to Quick Match</v-card-title>
                 </v-layout>
-                    <v-col cols="4" md="12">
+                    <v-col class="py-0" cols="4" md="12">
                         <v-text-field v-model="username" :rules="usernameRules" :counter="10" label="Username" required outlined filled></v-text-field>
                     </v-col>
-                    <v-col cols="6" md="12">
+                    <v-col class="py-0" cols="6" md="12">
                         <v-text-field v-model="password" :rules="passwordRules" label="Password" type="password" required outlined filled></v-text-field>
                     </v-col>
                 </v-form>
                 <v-row class="pa-0" align="center" justify="center">
-                    <v-col cols="10">
+                    <v-col class="pt-0" cols="10">
                         <v-btn rounded outlined block>Login</v-btn>
                     </v-col>
                 </v-row>
                 <v-divider></v-divider>
-                <v-row class="pa-0" align="center" justify="center">
+                <v-row align="center" justify="center">
                     <v-col cols="10">
-                        <v-btn rounded outlined block>Login with Google</v-btn>
+                        <v-btn color="green lighten-1" rounded outlined block>Login with Google</v-btn>
                     </v-col>
                 </v-row>
                 <v-card-subtitle class="pa-0" align="center">OR</v-card-subtitle>
                 <v-row class="pa-0" justify="center">
                     <v-col cols="10">
-                        <v-btn rounded outlined block>Login with Facebook</v-btn>
+                        <v-btn color="blue darken-2" rounded outlined block>Login with Facebook</v-btn>
+                    </v-col>
+                </v-row>
+            </v-card>
+            <v-card class="mx-10" raised width="25%">
+                
+                <v-layout justify-center="true">
+                    <v-card-title align="center" j>Not yet registered ?</v-card-title>
+                </v-layout>
+                <v-row class="pa-0" align="center" justify="center">
+                    <v-col cols="10">
+                        <v-btn to="/signin" rounded outlined block>Register Now !</v-btn>
                     </v-col>
                 </v-row>
                 <v-divider></v-divider>
-                <v-row align="center" justify="center">
-                    <v-col cols="6">
-                        <v-btn outlined block rounded>Forgot password ?</v-btn>
+                <v-layout justify-center="true">
+                    <v-card-title align="center" j>Forgot Password ?</v-card-title>
+                </v-layout>
+                <v-row class="pa-0" align="center" justify="center">
+                    <v-col cols="10">
+                        <v-btn rounded outlined block>Reset Password</v-btn>
                     </v-col>
                 </v-row>
             </v-card>
