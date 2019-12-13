@@ -1,39 +1,29 @@
 <template>
-  <div id="app">
+  <v-app>
 
-    <Nav msg="Nav" />
+    <Appbar></Appbar>
+
+    <v-content>
       <router-view></router-view>
-    <Footer msg="Footer" />
+    </v-content>
 
-    <router-link to="/player">easter egg</router-link>
-    <router-link to="/club">easter egg 2</router-link>
-  </div>
+    <Footer></Footer>
+
+  </v-app>
 </template>
 
 <script>
-import Nav from "./components/Nav.vue";
-import Footer from "./components/Footer.vue";
+  import Appbar from "./components/Appbar"
+  import Footer from "./components/Footer"
 
-export default {
-  name: "app",
-  components: {
-    Nav, Footer
-  }
-};
+  export default {
+    components: {
+        Appbar, Footer
+    }
+  };
+
 </script>
 
 <style>
-#app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-#title {
-  padding-top: 200px;
-}
-#logo {
-  text-align: left;
-}
+
 </style>

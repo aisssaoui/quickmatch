@@ -1,0 +1,85 @@
+<template>
+    <v-app-bar class="pa-0 ma-0" hide-on-scroll app color="black" dark>
+
+        <v-btn to="/" text>
+          <v-icon dark left>mdi-home-circle</v-icon>
+          Accueil
+        </v-btn>
+        <v-divider vertical></v-divider>
+
+        <v-btn to="/calendar" text>
+          <v-icon dark left>mdi-calendar-clock</v-icon>
+          Agenda
+        </v-btn>
+        <v-divider vertical></v-divider>
+
+        <v-btn to="/stat" text>
+          <v-icon dark left>mdi-poll</v-icon>
+          Statistiques
+        </v-btn>
+        <v-divider vertical></v-divider>
+
+        <v-btn to="/match" text>
+          <v-icon dark left>mdi-trophy-outline</v-icon>
+          Matchs
+        </v-btn>
+        <v-divider vertical></v-divider>
+
+        <v-spacer></v-spacer>
+
+        <v-divider vertical></v-divider>
+
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on }">
+            <v-btn to="/invitation" v-on="on" text>
+              <v-icon>mdi-bell-ring-outline</v-icon>
+            </v-btn>
+          </template>
+          <span>Invitations</span>
+        </v-tooltip>
+        
+        <v-divider vertical></v-divider>
+
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on }">
+            <v-btn to='/login' v-if="!isLoggedIn" v-on="on" text>
+              <v-icon dark left>mdi-login</v-icon>
+            </v-btn>
+          </template>
+          <span>Se connecter</span>
+        </v-tooltip>
+            
+        <v-tooltip bottom open-on-hover>
+          <template v-slot:activator="{ on }">  
+            <v-btn v-if="isLoggedIn" v-on:click="logout" v-on="on" text>
+              <v-icon dark left>mdi-logout</v-icon>
+            </v-btn>
+          </template>
+          <span>Se déconnecter</span>
+        </v-tooltip>       
+
+    </v-app-bar>
+</template>
+
+<script>
+import store from "../store";
+
+export default {
+    methods: {
+      logout: function() {
+        store.dispatch('logout')
+        this.$router.push('/')
+      },
+      login: function() {
+        store.dispatch('login')
+        this.$router.push('/login')
+      }
+    },
+    computed: {
+      isLoggedIn() {
+        return this.$store.getters.isLoggedIn;
+      }
+    }
+};
+
+</script>
