@@ -5,21 +5,27 @@ CREATE DATABASE Quick_Match WITH ENCODING 'UTF8';
 
 CREATE TABLE IF NOT EXISTS Player (
 id SMALLSERIAL PRIMARY KEY,
-surname VARCHAR(40) NOT NULL,
-first_name VARCHAR(40) NOT NULL,
-mail_address VARCHAR(40),
-phone_number VARCHAR(20),						/*A voir pour le type selon utilisation*/
+surname VARCHAR(20) NOT NULL,
+first_name VARCHAR(20) NOT NULL,
+pseudo VARCHAR(20) NOT NULL,
+mdp VARCHAR(20) NOT NULL,
+mail_address VARCHAR(50),
+phone_number VARCHAR(10),						/*A voir pour le type selon utilisation*/
 scored_goals SMALLINT DEFAULT 0 NOT NULL CHECK (scored_goals >= 0),
 conceded_goals SMALLINT DEFAULT 0 NOT NULL CHECK (conceded_goals >= 0),
 matches_played SMALLINT DEFAULT 0 NOT NULL CHECK (matches_played >= 0),
-victories SMALLINT DEFAULT 0 NOT NULL CHECK (victories >= 0)
+victories SMALLINT DEFAULT 0 NOT NULL CHECK (victories >= 0),
+UNIQUE(pseudo),
+UNIQUE(mail_address),
+UNIQUE(phone_number)
 );
 
 CREATE TABLE IF NOT EXISTS Club (				/* Table groupe*/
 id SMALLSERIAL PRIMARY KEY,
 club_name VARCHAR(40) NOT NULL,
 creation_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-private_club BOOLEAN
+private_club BOOLEAN,
+UNIQUE(club_name)
 );
 
 /*Pas de table feuille stat car (1,1)-(1,1)*/
@@ -28,14 +34,15 @@ CREATE TABLE IF NOT EXISTS Slot (
 id SMALLSERIAL PRIMARY KEY,
 start_hour TIME NOT NULL,
 end_hour TIME NOT NULL,
-repeat_day VARCHAR(9)									/*Champ a preciser*/
+repeat_day VARCHAR(9),							/*Champ a preciser*/
+UNIQUE(start_hour, end_hour, repeat_day)
 );
 
 CREATE TABLE IF NOT EXISTS Invitation (
 id SMALLSERIAL PRIMARY KEY,
 slot SMALLINT CHECK (slot >= 0),
 player SMALLINT CHECK (player >= 0),
-FOREIGN KEY (slot) REFERENCES Slot(id),
+FOREIGN KEY (slot)   REFERENCES Slot(id),
 FOREIGN KEY (player) REFERENCES Player(id),
 event_type VARCHAR(20)  						/*type discutable si liste finie d'event*/
 );
@@ -65,7 +72,7 @@ scored_goals SMALLINT CHECK (scored_goals >= 0) DEFAULT 0 NOT NULL,
 conceded_goals SMALLINT CHECK (conceded_goals >= 0) DEFAULT 0 NOT NULL,
 won BOOLEAN,
 FOREIGN KEY (player) REFERENCES Player(id),
-FOREIGN KEY (meet) REFERENCES Meet(id),
+FOREIGN KEY (meet)   REFERENCES Meet(id),
 PRIMARY KEY (player, meet)
 );
 
@@ -73,6 +80,6 @@ CREATE TABLE IF NOT EXISTS Invitation_For_Meet (
 invitation SMALLINT CHECK (invitation >= 0),
 meet SMALLINT CHECK (meet >= 0),
 FOREIGN KEY (invitation) REFERENCES Invitation(id),
-FOREIGN KEY (meet) REFERENCES Meet(id),
+FOREIGN KEY (meet)       REFERENCES Meet(id),
 PRIMARY KEY (invitation, meet)
 );
