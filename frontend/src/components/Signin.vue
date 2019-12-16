@@ -5,45 +5,45 @@
                 <v-form v-model="valid" >
                     <v-row class="pa-0" justify="center" align="center">
                       <v-col align="center" cols="5">
-                          <v-img src="../assets/logo.png" alt="Quick Match logo"></v-img>Register
+                          <v-img src="../assets/logo.png" alt="Quick Match logo"></v-img>Inscription
                       </v-col>
                     </v-row>
                     <v-col class="py-0" cols="6" md="12">
-                        <v-text-field v-model="surname" :rules="surnameRules" :counter="20" label="Surname" required outlined filled></v-text-field>
+                        <v-text-field v-model="surname" :rules="surnameRules" :counter="20" label="Nom" required outlined filled></v-text-field>
                     </v-col>
                     <v-col class="py-0" cols="6" md="12">
-                        <v-text-field v-model="first_name" :rules="first_nameRules" :counter="20" label="First name" required outlined filled></v-text-field>
+                        <v-text-field v-model="first_name" :rules="first_nameRules" :counter="20" label="Prénom" required outlined filled></v-text-field>
                     </v-col>
                     <v-col class="py-0" cols="6" md="12">
                         <v-text-field v-model="pseudo" :rules="pseudoRules" :counter="20" label="Pseudo" required outlined filled></v-text-field>
                     </v-col>
                     <v-col class="py-0" cols="6" md="12">
-                        <v-text-field v-model="mdp" :rules="mdpRules" :counter="20" label="Password" type="password" required outlined filled></v-text-field>
+                        <v-text-field v-model="password" :rules="passwordRules" :counter="20" label="Mot de passe" type="password" required outlined filled></v-text-field>
                     </v-col>
                     <v-col class="py-0" cols="6" md="12">
                         <v-text-field v-model="email" :rules="emailRules" :counter="50" label="E-mail" required outlined filled></v-text-field>
                     </v-col>
                     <v-col class="py-0" cols="6" md="12">
-                        <v-text-field v-model="tel" :rules="telRules" :counter="14" label="phone number" required outlined filled></v-text-field>
+                        <v-text-field v-model="tel" :rules="telRules" :counter="14" label="Numéro de téléphone" required outlined filled></v-text-field>
                     </v-col>
 
 
                 </v-form>
                 <v-row class="pa-0" align="center" justify="center">
                     <v-col class="pt-0" cols="10">
-                        <v-btn rounded outlined block>Login</v-btn>
+                        <v-btn rounded outlined block>Se connecter</v-btn>
                     </v-col>
                 </v-row>
                 <v-divider></v-divider>
                 <v-row align="center" justify="center">
                     <v-col cols="10">
-                        <v-btn color="green lighten-1" rounded outlined block>Login with Google</v-btn>
+                        <v-btn color="green lighten-1" rounded outlined block>Se connecter avec Google</v-btn>
                     </v-col>
                 </v-row>
-                <v-card-subtitle class="pa-0" align="center">OR</v-card-subtitle>
+                <v-card-subtitle class="pa-0" align="center">OU</v-card-subtitle>
                 <v-row class="pa-0" justify="center">
                     <v-col cols="10">
-                        <v-btn color="blue darken-2" rounded outlined block>Login with Facebook</v-btn>
+                        <v-btn color="blue darken-2" rounded outlined block>Se connecter avec Facebook</v-btn>
                     </v-col>
                 </v-row>
             </v-card>
@@ -58,31 +58,35 @@
       surname: '',
       first_name: '',
       pseudo: '',
-      mdp: '',
+      password: '',
       email: '',
       tel: '',
       surnameRules: [
-        v => !!v || 'Surname is required',
-        v => /^[a-zA-Z -]{3,20}$/.test(v) || 'Surname must be valid',
+        v => !!v || 'Nom requis',
+        v => v.length >= 2 || 'Nom trop court',
+        v => /^[a-zA-Z -éèç]+$/.test(v) || 'Nom invalide'
       ],
       first_nameRules: [
-        v => !!v || 'First name is required',
-        v => /^[a-zA-Z -]{3,20}$/.test(v) || 'First name must be valid',
+        v => !!v || 'Prénom requis',
+        v => v.length >= 2 || 'Prénom trop court',
+        v => /^[a-zA-Z -éèç]+$/.test(v) || 'Prénom invalide'
       ],
       pseudoRules: [
-        v => !!v || 'Pseudo is required',
-        v => /^[a-zA-Z0-9 _-]{3,20}$/.test(v) || 'Pseudo must be valid (letters, numbers, space, "_" and "-" only)',
+        v => !!v || 'Pseudo requis',
+        v => v.length >= 2 || 'Pseudo trop court',
+        v => /^[a-zA-Z0-9 _-éèç]+$/.test(v) || 'Pseudo invalide (lettres, nombres, espace, "_" et "-" seulement)'
       ],
-      mdpRules: [
-        v => !!v || 'Password is required',
+      passwordRules: [
+        v => !!v || 'Mot de passe requis',
+        v => v.length >= 8 || 'Mot de passe trop court'
       ],
       emailRules: [
-        v => !!v || 'E-mail is required',
-        v => /^[a-zA-Z0-9._-]+@[a-z0-9._-]{2,}\.[a-z]{2,4}$/.test(v) || 'E-mail must be valid',
+        v => !!v || 'E-mail requis',
+        v => /^[a-zA-Z0-9._-]+@[a-z0-9._-]{2,}\.[a-z]{2,4}$/.test(v) || 'E-mail invalide'
       ],
       telRules: [
-        v => !!v || 'Phone number is required',
-        v => /^(0[1-8])(?:[ -]?([0-9]{2})){4}$/.test(v) || 'Phone number must be valid (can use space or "-" as separator like in 06-66-66-66-66)',
+        v => !!v || 'Numéro de téléphone requis',
+        v => /^(0[1-8])(?:[ -]?([0-9]{2})){4}$/.test(v) || 'Numéro de téléphone invalide (vous pouvez utilisé "-" ou des espaces comme séparateur (06-66-66-66-66)'
       ],
     }),
   }

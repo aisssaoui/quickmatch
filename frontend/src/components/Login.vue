@@ -12,10 +12,10 @@
                     <v-card-title align="center">Connexion à Quick Match</v-card-title>
                 </v-layout>
                     <v-col class="py-0" cols="4" md="12">
-                        <v-text-field v-model="username" :rules="usernameRules" :counter="15" label="Nom d'utilisateur" required outlined filled></v-text-field>
+                        <v-text-field v-model="pseudo" :rules="pseudoRules" :counter="20" label="Pseudo" required outlined filled></v-text-field>
                     </v-col>
                     <v-col class="py-0" cols="6" md="12">
-                        <v-text-field v-model="password" :rules="passwordRules" label="Mot de passe" type="password" required outlined filled></v-text-field>
+                        <v-text-field v-model="password" :rules="passwordRules" :counter="20" label="Mot de passe" type="password" required outlined filled></v-text-field>
                     </v-col>
                 </v-form>
                 <v-row class="pa-0" align="center" justify="center">
@@ -38,7 +38,7 @@
                 </v-row>
             </v-card>
             <v-card class="mx-10" raised width="25%">
-                
+
                 <v-layout justify-center="true">
                     <v-card-title align="center">Pas encore inscrit(e) ?</v-card-title>
                 </v-layout>
@@ -62,20 +62,20 @@
 </template>
 
 <script>
-
-export default {
-    data: () => ({
-        valid: false,
-        username: '',
-        usernameRules: [
-            v => !!v || 'Nom d\'utilisateur requis',
-            v => v.length <= 15 || 'Le nom d\'utilisateur est trop long',
-        ],
-        password: '',
-        passwordRules: [
-            v => !!v || 'Mot de passe requis',
-            v => v.length >= 8 || 'Mot de passe trop court'
-        ]
-    }) 
-}
+  export default {
+      data: () => ({
+          valid: false,
+          pseudo: '',
+          pseudoRules: [
+              v => !!v || 'Pseudo requis',
+              v => v.length >= 2 || 'Pseudo trop court',
+              v => /^[a-zA-Z0-9 _-éèç]+$/.test(v) || 'Pseudo invalide (lettres, nombres, espace, "_" et "-" seulement)'
+          ],
+          password: '',
+          passwordRules: [
+              v => !!v || 'Mot de passe requis',
+              v => v.length >= 8 || 'Mot de passe trop court'
+          ]
+      })
+  }
 </script>

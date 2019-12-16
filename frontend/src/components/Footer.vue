@@ -6,7 +6,7 @@
         {{ link }}
       </v-btn>
 
-      <v-col class="black py-4 text-center white--text" cols="12">   
+      <v-col class="black py-4 text-center white--text" cols="12">
         {{ new Date().getFullYear() }} — <strong>Quick Match</strong>
       </v-col>
 
@@ -18,11 +18,11 @@
   export default {
     data: () => ({
       links: [
-        'Home',
-        'About Us',
-        'Team',
+        'Accueil',
+        'A propos de nous',
+        'Equipe',
         'Services',
-        'Contact Us',
+        'Nous contacter',
       ],
     }),
   }
