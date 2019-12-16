@@ -1,18 +1,18 @@
 TRUNCATE TABLE Player, Club, Slot, Invitation, Meet, Player_Belong_Club, Meet_Sheet, Invitation_For_Meet CASCADE;
 
-INSERT INTO Player (surname, first_name, mail_address, phone_number, scored_goals, conceded_goals, matches_played, victories)
-	VALUES ('Chataigner', 'Johan', 'Chataigner@gmail.com', '0600000000', 1, 0, 1, 1),
-				 ('Genty', 'Laurent', 'Genty@gmail.com', '0600000001', 2, 1, 1, 0),
-         ('Issaoui', 'Ali', 'Issaoui@gmail.com', '0600000002', 2, 2, 1, 0),
-         ('Abderrahmane', 'Faiz', 'Abderrahmane@gmail.com', '0600000003', 0, 0, 1, 1),
-         ('Rosay', 'Maxime', 'Rosay@gmail.com', '0600000004', 2, 2, 1, 0),
-         ('Hala', 'Mehdi', 'Hala@gmail.com', '0600000005', 2, 1, 1, 0),
-         ('Faverge', 'Mathieu', 'Faverge@gmail.com', '0600000006', 100, 0, 1, 1),
-         ('Delarue', 'Tony', 'Delarue@gmail.com', '0600000007', 101, 0, 1, 1),
-         ('Meline', 'Raphael', 'Meline@gmail.com', '0600000008', 1, 2, 1, 0),
-         ('Danquigny', 'Antoine', 'Danquigny@gmail.com', '0600000009', 1000, 0, 1, 1);
+INSERT INTO Player (surname, first_name, pseudo, mdp, mail_address, phone_number, scored_goals, conceded_goals, matches_played, victories)
+	VALUES ('Chataigner', 'Johan', 'cj', 'mdpcj', 'Chataigner@gmail.com', '0600000000', 1, 0, 1, 1),
+				 ('Genty', 'Laurent', 'gl', 'mdpgl', 'Genty@gmail.com', '0600000001', 2, 1, 1, 0),
+         ('Issaoui', 'Ali', 'ia', 'mdpia', 'Issaoui@gmail.com', '0600000002', 2, 2, 1, 0),
+         ('Abderrahmane', 'Faiz', 'af', 'mdpaf', 'Abderrahmane@gmail.com', '0600000003', 0, 0, 1, 1),
+         ('Rosay', 'Maxime', 'rm', 'mdprm', 'Rosay@gmail.com', '0600000004', 2, 2, 1, 0),
+         ('Hala', 'Mehdi', 'hm', 'mdphm', 'Hala@gmail.com', '0600000005', 2, 1, 1, 0),
+         ('Faverge', 'Mathieu', 'fm', 'mdpfm', 'Faverge@gmail.com', '0600000006', 100, 0, 1, 1),
+         ('Delarue', 'Tony', 'dt', 'mdpdt', 'Delarue@gmail.com', '0600000007', 101, 0, 1, 1),
+         ('Meline', 'Raphael', 'mr', 'mdpmr', 'Meline@gmail.com', '0600000008', 1, 2, 1, 0),
+         ('Danquigny', 'Antoine', 'da', 'mdpda', 'Danquigny@gmail.com', '0600000009', 1000, 0, 1, 1);
 
-INSERT INTO Club (title, creation_date, private)
+INSERT INTO Club (club_name, creation_date, private_club)
 	VALUES ('Inria', '2019-11-16 17:00:00', FALSE),
 				 ('Enseirb', '2019-11-16 17:00:00', FALSE),
          ('Gars', '2019-11-16 17:00:00', FALSE),
