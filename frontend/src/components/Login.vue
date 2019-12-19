@@ -92,7 +92,6 @@ export default {
           this.findUser(); // méthode initiale
       },
       OnGoogleAuthFail (error) {
-          this.findUser(); // méthode initiale
           console.log(error);
       },
       findUser() {
