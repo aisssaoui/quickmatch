@@ -66,6 +66,10 @@ app.get(
   "/dbcontrol/api/v1/Players/ma:mail_address",
   _player2.default.getByMail
 );
+app.get(
+  "/dbcontrol/api/v1/Players/ma_stat:mail_address",
+  _player2.default.getByMailStat
+);
 app.get("/dbcontrol/api/v1/Players/id:id", _player2.default.getByID);
 //app.put("/dbcontrol/api/v1/Players/:mail_adress", _player2.default.update);
 app.delete("/dbcontrol/api/v1/Players/:mail_address", _player2.default.delete);

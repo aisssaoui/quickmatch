@@ -1,12 +1,12 @@
 <template>
-  <v-footer color="black" padless>
+  <v-footer color="#20003c" padless>
     <v-row justify="center">
       
       <v-btn v-for="link in links" :key="link.text" :to="link.route" color="white" text rounded class="my-2">
         {{ link.text }}
       </v-btn>
 
-      <v-col class="black py-4 text-center white--text" cols="12">
+      <v-col class="py-4 pt-1 text-center white--text" cols="12" padding-top="0px">
         {{ new Date().getFullYear() }} — <strong>Quick Match ©</strong>
       </v-col>
 

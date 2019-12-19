@@ -242,6 +242,65 @@ var Player = {
   })(),
 
   /**
+   * Get A Player Stat per match
+   * @param {object} req
+   * @param {object} res
+   * @returns {object} player object
+   */
+  getByMailStat: (function() {
+    var _ref30 = _asyncToGenerator(
+      /*#__PURE__*/ regeneratorRuntime.mark(function _callee20(req, res) {
+        var findAllQuery, _ref40, rows, rowCount;
+
+        return regeneratorRuntime.wrap(
+          function _callee20$(_context20) {
+            while (1) {
+              switch ((_context20.prev = _context20.next)) {
+                case 0:
+                  findAllQuery = "SELECT M.won, M.scored_goals, M.conceded_goals FROM player P JOIN meet_sheet M ON P.id=M.player WHERE mail_address = $1";
+                  _context20.prev = 1;
+                  _context20.next = 4;
+                  return _db2.default.query(findAllQuery);
+
+                case 4:
+                  _ref40 = _context20.sent;
+                  rows = _ref40.rows;
+                  rowCount = _ref40.rowCount;
+                  return _context20.abrupt(
+                    "return",
+                    res.status(200).send({ rows: rows, rowCount: rowCount })
+                  );
+
+                case 10:
+                  _context20.prev = 10;
+                  _context20.t0 = _context20["catch"](1);
+                  return _context20.abrupt(
+                    "return",
+                    res.status(400).send(_context20.t0)
+                  );
+
+                case 13:
+                case "end":
+                  return _context20.stop();
+              }
+            }
+          },
+          _callee20,
+          this,
+          [[1, 10]]
+        );
+      })
+    );
+
+    function getByMailStat(_x30, _x40) {
+      return _ref30.apply(this, arguments);
+    }
+
+    return getByMailStat;
+  })(),
+
+
+  /**
    * Get A Player
    * @param {object} req
    * @param {object} res
