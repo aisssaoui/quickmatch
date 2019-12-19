@@ -1,5 +1,5 @@
 <template>
-    <v-container fluid>
+    <v-container fluid v-if="!isSignedIn">
         <v-row justify="center" align="center">
             <v-col cols="1">
                 <v-img src="../assets/logo.png" alt="Quick Match logo"></v-img>
@@ -27,7 +27,7 @@
                 <v-row align="center" justify="center">
                     <v-col cols="10">
                         <button></button>
-                        <v-btn color="green lighten-1" rounded outlined block>Se connecter avec Google</v-btn>
+                        <v-btn v-google-signin-button="clientId" color="green lighten-1" rounded outlined block>Se connecter avec Google</v-btn>
                     </v-col>
                 </v-row>
                 <v-card-subtitle class="pa-0" align="center">OU</v-card-subtitle>
@@ -62,20 +62,60 @@
 </template>
 
 <script>
-  export default {
-      data: () => ({
-          valid: false,
-          pseudo: '',
-          pseudoRules: [
-              v => !!v || 'Pseudo requis',
-              v => v.length >= 2 || 'Pseudo trop court',
-              v => /^[a-zA-Z0-9 _-éèç]+$/.test(v) || 'Pseudo invalide (lettres, nombres, espace, "_" et "-" seulement)'
-          ],
-          password: '',
-          passwordRules: [
-              v => !!v || 'Mot de passe requis',
-              v => v.length >= 8 || 'Mot de passe trop court'
-          ]
-      })
-  }
+import GoogleSignInButton from '../main.js';
+import store from "../store";
+import axios from "axios";
+import router from "../router";
+
+export default {
+  directives: {
+      GoogleSignInButton
+  },
+  data: () => ({
+      clientId: '864617003210-1dr6nsvputhjv59l5b3633sslri4vdjd.apps.googleusercontent.com',
+      valid: false,
+      pseudo: '',
+      pseudoRules: [
+          v => !!v || 'Pseudo requis',
+          v => v.length >= 2 || 'Pseudo trop court',
+          v => /^[a-zA-Z0-9 _-éèç]+$/.test(v) || 'Pseudo invalide (lettres, nombres, espace, "_" et "-" seulement)'
+      ],
+      password: '',
+      passwordRules: [
+          v => !!v || 'Mot de passe requis',
+          v => v.length >= 8 || 'Mot de passe trop court'
+      ]
+  }),
+  methods: {
+      OnGoogleAuthSuccess (googleUser) {
+          store.dispatch("setGoogleUser",googleUser);
+          this.findUser(); // méthode initiale
+      },
+      OnGoogleAuthFail (error) {
+          this.findUser(); // méthode initiale
+          console.log(error);
+      },
+      findUser() {
+          axios
+              .get("http://fama6831.odns.fr/dbcontrol/api/v1/Players/" + store.getters.email)
+              .then(response => {
+                  store.dispatch("hasAccount");
+                  router.push("/"); // redirection vers la page d'accueil
+              })
+              .catch(e => {
+                  router.push("/createAccount");
+          });
+      },
+      logout() {
+          store.dispatch("logout");
+          router.push("/disconnected");
+      }
+},
+computed: {
+    isSignedIn: function() {
+        this.$store.dispatch("isSignedIn");
+        return store.getters.isSignedIn;
+    }
+}
+}
 </script>

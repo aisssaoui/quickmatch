@@ -37,26 +37,26 @@
           </template>
           <span>Invitations</span>
         </v-tooltip>
-        
+
         <v-divider vertical></v-divider>
 
         <v-tooltip bottom>
           <template v-slot:activator="{ on }">
-            <v-btn to='/login' v-if="!isLoggedIn" v-on="on" text>
+            <v-btn to='/login' v-if="!isSignedIn" v-on="on" text>
               <v-icon dark left>mdi-login</v-icon>
             </v-btn>
           </template>
           <span>Se connecter</span>
         </v-tooltip>
-            
+
         <v-tooltip bottom open-on-hover>
-          <template v-slot:activator="{ on }">  
-            <v-btn v-if="isLoggedIn" v-on:click="logout" v-on="on" text>
+          <template v-slot:activator="{ on }">
+            <v-btn v-if="isSignedIn" v-on:click="logout()" v-on="on" text>
               <v-icon dark left>mdi-logout</v-icon>
             </v-btn>
           </template>
           <span>Se déconnecter</span>
-        </v-tooltip>       
+        </v-tooltip>
 
     </v-app-bar>
 </template>
@@ -67,17 +67,17 @@ import store from "../store";
 export default {
     methods: {
       logout: function() {
-        store.dispatch('logout')
-        this.$router.push('/')
+        store.dispatch("logout")
+        router.push('/')
       },
       login: function() {
-        store.dispatch('login')
-        this.$router.push('/login')
+        router.push('/login')
       }
     },
     computed: {
-      isLoggedIn() {
-        return this.$store.getters.isLoggedIn;
+      isSignedIn() {
+        store.dispatch("isSignedIn");
+        return store.getters.isSignedIn;
       }
     }
 };

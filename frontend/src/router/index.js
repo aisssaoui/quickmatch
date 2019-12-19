@@ -11,6 +11,7 @@ import Stat from '../components/Stat'
 import Match from '../components/Match'
 import Team from '../components/Team'
 import AboutUs from '../components/AboutUs'
+import CreateAccount from '../components/CreateAccount'
 import ContactUs from '../components/ContactUs'
 
 Vue.use(Router)
@@ -19,6 +20,7 @@ export default new Router({
     routes: [
         { name: 'home',         path: '/',              component: Home },
         { name: 'login',        path: '/login',         component: Login },
+        { name: 'createAccount',        path: '/createAccount',         component: CreateAccount },
         { name: 'signin',       path: '/signin',        component: Signin },
         { name: 'profile',      path: '/profile/:id',   component: Profile },
         { name: 'invitation',   path: '/invitation',    component: Invitation },
