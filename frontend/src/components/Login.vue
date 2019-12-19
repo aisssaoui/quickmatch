@@ -37,7 +37,7 @@
         </v-form>
         <v-row class="pa-0" align="center" justify="center">
           <v-col class="pt-0" cols="10">
-            <v-btn rounded outlined block>Connexion</v-btn>
+            <v-btn rounded outlined block v-on:click="login">Connexion</v-btn>
           </v-col>
         </v-row>
         <v-divider></v-divider>
@@ -139,6 +139,10 @@ export default {
     logout() {
       store.dispatch("logout");
       router.push("/disconnected");
+    },
+    login() {
+      store.dispatch("login");
+      router.push("/");
     }
   },
   computed: {

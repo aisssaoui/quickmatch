@@ -20,8 +20,9 @@
       </v-list-item>
 
       <v-card-actions>
-        <v-btn text color="deep-purple accent-4">Editer mon profil</v-btn>
-        <v-btn text color="deep-purple accent-4">Partager</v-btn>
+        <v-btn text color="deep-purple accent-4"
+          >Editer mon profil <v-icon> mdi-pencil-outline</v-icon></v-btn
+        >
       </v-card-actions>
     </v-card>
     <br />
@@ -66,7 +67,7 @@
         </v-list-item-content>
       </v-list-item>
 
-      <v-list-item two-line>
+      <!-- <v-list-item two-line>
         <v-list-item-content>
           <v-list-item-title class="font-weight-bold"
             >Buts marqués</v-list-item-title
@@ -108,9 +109,8 @@
             {{ playerToShow.victories }}
           </v-list-item-subtitle>
         </v-list-item-content>
-      </v-list-item>
+      </v-list-item> -->
     </v-card>
-    <br /><br />
   </div>
 </template>
 
