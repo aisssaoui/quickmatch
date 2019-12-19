@@ -1,5 +1,5 @@
 <template>
-    <div v-if="isSignedIn">
+    <div v-if="!isSignedIn">
       <v-text>vous n'êtes pas connecté</v-text>
     </div>
 
