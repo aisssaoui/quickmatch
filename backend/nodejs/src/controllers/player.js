@@ -178,7 +178,7 @@ var Player = {
    * @param {object} res
    * @returns {object} player object
    */
-  getOne: (function() {
+  getByMail: (function() {
     var _ref5 = _asyncToGenerator(
       /*#__PURE__*/ regeneratorRuntime.mark(function _callee3(req, res) {
         var text, _ref6, rows;
@@ -239,6 +239,75 @@ var Player = {
     }
 
     return getOne;
+  })(),
+
+  /**
+   * Get A Player
+   * @param {object} req
+   * @param {object} res
+   * @returns {object} player object
+   */
+  getByID: (function() {
+    var _ref5 = _asyncToGenerator(
+      /*#__PURE__*/ regeneratorRuntime.mark(function _callee3(req, res) {
+        var text, _ref6, rows;
+
+        return regeneratorRuntime.wrap(
+          function _callee3$(_context3) {
+            while (1) {
+              switch ((_context3.prev = _context3.next)) {
+                case 0:
+                  text = "SELECT * FROM player WHERE id = $1";
+                  _context3.prev = 1;
+                  _context3.next = 4;
+                  return _db2.default.query(text, [req.params.id]);
+
+                case 4:
+                  _ref6 = _context3.sent;
+                  rows = _ref6.rows;
+
+                  if (rows[0]) {
+                    _context3.next = 8;
+                    break;
+                  }
+
+                  return _context3.abrupt(
+                    "return",
+                    res.status(404).send({ message: "player not found" })
+                  );
+
+                case 8:
+                  return _context3.abrupt(
+                    "return",
+                    res.status(200).send(rows[0])
+                  );
+
+                case 11:
+                  _context3.prev = 11;
+                  _context3.t0 = _context3["catch"](1);
+                  return _context3.abrupt(
+                    "return",
+                    res.status(400).send(_context3.t0)
+                  );
+
+                case 14:
+                case "end":
+                  return _context3.stop();
+              }
+            }
+          },
+          _callee3,
+          this,
+          [[1, 11]]
+        );
+      })
+    );
+
+    function getByID(_x5, _x6) {
+      return _ref5.apply(this, arguments);
+    }
+
+    return getByID;
   })(),
 
   /**
