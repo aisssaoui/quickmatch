@@ -39,7 +39,7 @@ var _slot2 = _interopRequireDefault(_slot);
 // var _player_belong_club2 = _interopRequireDefault(_player_belong_club);
 
 function _interopRequireDefault(obj) {
-  return obj && obj.__esModule ? obj : { default: obj };  
+  return obj && obj.__esModule ? obj : { default: obj };
 }
 
 _dotenv2.default.config();
@@ -62,9 +62,9 @@ app.get("/test", function(req, res) {
 // Table player
 app.post("/dbcontrol/api/v1/Players", _player2.default.create);
 app.get("/dbcontrol/api/v1/Players", _player2.default.getAll);
-app.get("/dbcontrol/api/v1/Players/:mail_adress", _player2.default.getOne);
+app.get("/dbcontrol/api/v1/Players/:mail_address", _player2.default.getOne);
 //app.put("/dbcontrol/api/v1/Players/:mail_adress", _player2.default.update);
-app.delete("/dbcontrol/api/v1/Players/:mail_adress", _player2.default.delete);
+app.delete("/dbcontrol/api/v1/Players/:mail_address", _player2.default.delete);
 
 // Table club
 app.post("/dbcontrol/api/v1/Clubs", _club2.default.create);
@@ -103,9 +103,15 @@ app.delete("/dbcontrol/api/v1/Slots/:id", _slot2.default.delete);
 // Table meet_sheet
 app.post("/dbcontrol/api/v1/MeetsSheet", _meet_sheet2.default.create);
 app.get("/dbcontrol/api/v1/MeetsSheet", _meet_sheet2.default.getAll);
-app.get("/dbcontrol/api/v1/MeetsSheet/:player_mail_adress", _meet_sheet2.default.getOne);
+app.get(
+  "/dbcontrol/api/v1/MeetsSheet/:player_mail_address",
+  _meet_sheet2.default.getOne
+);
 //app.put("/dbcontrol/api/v1/MeetsSheet/:player_mail_adress", _meet_sheet2.default.update);
-app.delete("/dbcontrol/api/v1/MeetsSheet/:player_mail_adress", _meet_sheet2.default.delete);
+app.delete(
+  "/dbcontrol/api/v1/MeetsSheet/:player_mail_address",
+  _meet_sheet2.default.delete
+);
 
 // Table meet
 app.post("/dbcontrol/api/v1/Meets", _meet2.default.create);
@@ -113,7 +119,6 @@ app.get("/dbcontrol/api/v1/Meets", _meet2.default.getAll);
 app.get("/dbcontrol/api/v1/Meets/:id", _meet2.default.getOne);
 // app.put("/dbcontrol/api/v1/Meets/:id", _meet2.default.update);
 app.delete("/dbcontrol/api/v1/Meets/:id", _meet2.default.delete);
-
 
 app.listen(3000);
 console.log("app running on port ", 3000);

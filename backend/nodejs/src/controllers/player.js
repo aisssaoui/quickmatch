@@ -65,11 +65,11 @@ var Player = {
               switch ((_context.prev = _context.next)) {
                 case 0:
                   text =
-                    "INSERT INTO Player (surname, first_name, mail_adress, phone_number, pseudo, mdp)\n\t    VALUES($1, $2, $3, $4, $5, $6)\n        returning *";
+                    "INSERT INTO Player (surname, first_name, mail_address, phone_number, pseudo, mdp)\n\t    VALUES($1, $2, $3, $4, $5, $6)\n        returning *";
                   values = [
                     req.body.surname,
                     req.body.first_name,
-                    req.body.mail_adress,
+                    req.body.mail_address,
                     req.body.phone_number,
                     req.body.pseudo,
                     req.body.mdp
@@ -188,10 +188,10 @@ var Player = {
             while (1) {
               switch ((_context3.prev = _context3.next)) {
                 case 0:
-                  text = "SELECT * FROM player WHERE mail_adress = $1";
+                  text = "SELECT * FROM player WHERE mail_address = $1";
                   _context3.prev = 1;
                   _context3.next = 4;
-                  return _db2.default.query(text, [req.params.mail_adress]);
+                  return _db2.default.query(text, [req.params.mail_address]);
 
                 case 4:
                   _ref6 = _context3.sent;
@@ -257,9 +257,9 @@ var Player = {
             while (1) {
               switch ((_context4.prev = _context4.next)) {
                 case 0:
-                  findOneQuery = "SELECT * FROM player WHERE mail_adress=$1";
+                  findOneQuery = "SELECT * FROM player WHERE mail_address=$1";
                   updateOneQuery =
-                    "UPDATE player\n      SET surname=$1,first_name=$2,mail_adress=$3,phone_number=$4\n      WHERE id=$5 returning *";
+                    "UPDATE player\n      SET surname=$1,first_name=$2,mail_address=$3,phone_number=$4\n      WHERE id=$5 returning *";
                   _context4.prev = 2;
                   _context4.next = 5;
                   return _db2.default.query(findOneQuery, [req.params.id]);
@@ -282,7 +282,7 @@ var Player = {
                   values = [
                     req.body.surname || rows[0].surname,
                     req.body.first_name || rows[0].first_name,
-                    req.body.mail_adress || rows[0].mail_adress,
+                    req.body.mail_address || rows[0].mail_address,
                     req.body.phone_number || rows[0].phone_number,
                     req.params.id
                   ];
@@ -340,10 +340,13 @@ var Player = {
             while (1) {
               switch ((_context5.prev = _context5.next)) {
                 case 0:
-                  deleteQuery = "DELETE FROM player WHERE mail_adress=$1 returning *";
+                  deleteQuery =
+                    "DELETE FROM player WHERE mail_address=$1 returning *";
                   _context5.prev = 1;
                   _context5.next = 4;
-                  return _db2.default.query(deleteQuery, [req.params.mail_adress]);
+                  return _db2.default.query(deleteQuery, [
+                    req.params.mail_address
+                  ]);
 
                 case 4:
                   _ref10 = _context5.sent;
