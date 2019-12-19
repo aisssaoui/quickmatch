@@ -1,5 +1,5 @@
 <template>
-    <v-app-bar class="pa-0 ma-0" app color="black" dark>
+    <v-app-bar class="pa-0 ma-0" app color="#20003c" dark>
 
         <v-btn to="/" text>
           <v-icon dark left>mdi-home-circle</v-icon>
