@@ -62,7 +62,11 @@ app.get("/test", function(req, res) {
 // Table player
 app.post("/dbcontrol/api/v1/Players", _player2.default.create);
 app.get("/dbcontrol/api/v1/Players", _player2.default.getAll);
-app.get("/dbcontrol/api/v1/Players/:mail_address", _player2.default.getOne);
+app.get(
+  "/dbcontrol/api/v1/Players/ma:mail_address",
+  _player2.default.getByMail
+);
+app.get("/dbcontrol/api/v1/Players/id:id", _player2.default.getByID);
 //app.put("/dbcontrol/api/v1/Players/:mail_adress", _player2.default.update);
 app.delete("/dbcontrol/api/v1/Players/:mail_address", _player2.default.delete);
 
