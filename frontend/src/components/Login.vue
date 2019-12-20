@@ -130,6 +130,7 @@ export default {
         )
         .then(response => {
           store.dispatch("hasAccount");
+          store.dispatch("setID");
           router.push("/"); // redirection vers la page d'accueil
         })
         .catch(e => {
