@@ -127,7 +127,7 @@ export default {
 
   async created() {
     const player = await axios.get(
-      "http://localhost:3000/dbcontrol/api/v1/players/id" + this.id,
+      "http://fama6831.odns.fr/dbcontrol/api/v1/players/id" + this.id,
       {
         responseType: "json"
       }

@@ -5,11 +5,11 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    id: 6,
+    id: 0,
     givenName: "",
     name: "", // nom complet
     surname: "",
-    email: "none", // can't be empty
+    email: "abderrahmane.faiz.50@gmail.com", // can't be empty
     nickname: "",
     isSignedIn: false,
     connectionDate: Object,
@@ -58,6 +58,14 @@ export default new Vuex.Store({
     },
     hasAccount(state) {
       state.hasAccount = true;
+    },
+    setID(state) {
+      console.log("YESS");
+      const player = axios.get(
+        "http://fama6831.odns.fr/dbcontrol/api/v1/players/ma" + state.email,
+        { ResponseType: "json" }
+      );
+      state.id = player.data.id;
     }
   },
   actions: {
@@ -72,6 +80,9 @@ export default new Vuex.Store({
     },
     logout(commit) {
       this.commit("logout");
+    },
+    setID(state) {
+      this.commit("setID");
     }
   },
   getters: {
