@@ -1,5 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
+import axios from "axios";
 
 Vue.use(Vuex);
 
@@ -9,7 +10,7 @@ export default new Vuex.Store({
     givenName: "",
     name: "", // nom complet
     surname: "",
-    email: "abderrahmane.faiz.50@gmail.com", // can't be empty
+    email: "none", // can't be empty
     nickname: "",
     isSignedIn: false,
     connectionDate: Object,
@@ -59,9 +60,8 @@ export default new Vuex.Store({
     hasAccount(state) {
       state.hasAccount = true;
     },
-    setID(state) {
-      console.log("YESS");
-      const player = axios.get(
+    async setID(state) {
+      const player = await axios.get(
         "http://fama6831.odns.fr/dbcontrol/api/v1/players/ma" + state.email,
         { ResponseType: "json" }
       );

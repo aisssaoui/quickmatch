@@ -1,32 +1,27 @@
 <template>
   <v-app-bar class="pa-0 ma-0" app color="black" dark>
     <v-btn to="/" text>
-      <v-icon dark left>mdi-home-circle</v-icon>
-      Accueil
+      <v-icon dark left>mdi-home-circle</v-icon>Accueil
     </v-btn>
     <v-divider vertical></v-divider>
 
     <v-btn to="/calendar" text>
-      <v-icon dark left>mdi-calendar-clock</v-icon>
-      Agenda
+      <v-icon dark left>mdi-calendar-clock</v-icon>Agenda
     </v-btn>
     <v-divider vertical></v-divider>
 
     <v-btn to="/stat" text>
-      <v-icon dark left>mdi-poll</v-icon>
-      Statistiques
+      <v-icon dark left>mdi-poll</v-icon>Statistiques
     </v-btn>
     <v-divider vertical></v-divider>
 
     <v-btn to="/match" text>
-      <v-icon dark left>mdi-trophy-outline</v-icon>
-      Matchs
+      <v-icon dark left>mdi-trophy-outline</v-icon>Matchs
     </v-btn>
     <v-divider vertical></v-divider>
 
     <v-btn v-if="isSignedIn" :to="'/profile/' + id" text>
-      <v-icon dark left>mdi-account-outline</v-icon>
-      Profile
+      <v-icon dark left>mdi-account-outline</v-icon>Profile
     </v-btn>
     <v-divider vertical></v-divider>
 
@@ -81,11 +76,11 @@ export default {
   computed: {
     isSignedIn() {
       store.dispatch("isSignedIn");
-      return store.getters.isSignedIn;
+      return true;
     },
     id() {
       store.dispatch("id");
-      return store.getters.id;
+      return 6;
     }
   }
 };
