@@ -76,11 +76,11 @@ export default {
   computed: {
     isSignedIn() {
       store.dispatch("isSignedIn");
-      return true;
+      return store.getters.isSignedIn;
     },
     id() {
       store.dispatch("id");
-      return 6;
+      return store.getters.id;
     }
   }
 };
