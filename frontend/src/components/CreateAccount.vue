@@ -69,7 +69,7 @@ export default {
       firstName: "",
       pseudo: "",
       mailAddress: "",
-      phone_number: "none",
+      phone_number: null,
       mdp: "stocked by Google",
       response: "",
       pseudoRules: [
