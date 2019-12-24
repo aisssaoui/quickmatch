@@ -71,7 +71,7 @@ app.get(
   _player2.default.getByMailStat
 );
 app.get("/dbcontrol/api/v1/Players/id:id", _player2.default.getByID);
-//app.put("/dbcontrol/api/v1/Players/:mail_adress", _player2.default.update);
+app.put("/dbcontrol/api/v1/Players/id:id", _player2.default.update);
 app.delete("/dbcontrol/api/v1/Players/:mail_address", _player2.default.delete);
 
 // Table club

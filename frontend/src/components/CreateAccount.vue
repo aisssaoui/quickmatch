@@ -47,9 +47,7 @@
         </v-form>
         <v-row class="pa-0" align="center" justify="center">
           <v-col class="pt-0" cols="10">
-            <v-btn v-on:click="createAccount()" rounded outlined block
-              >Créer !</v-btn
-            >
+            <v-btn v-on:click="createAccount()" rounded outlined block>Créer !</v-btn>
           </v-col>
         </v-row>
       </v-card>
@@ -72,6 +70,7 @@ export default {
       phone_number: null,
       mdp: "stocked by Google",
       response: "",
+      avatar: "",
       pseudoRules: [
         v => !!v || "Pseudo requis",
         v => v.length >= 2 || "Pseudo trop court",
@@ -102,7 +101,8 @@ export default {
           first_name: this.firstName,
           mdp: this.mdp,
           phone_number: this.phone_number,
-          mail_address: this.mailAddress
+          mail_address: this.mailAddress,
+          avatar: this.avatar
         })
         .then(response => {
           this.response = response.data;
@@ -120,6 +120,7 @@ export default {
     this.surname = store.getters.surname;
     this.firstName = store.getters.givenName;
     this.mailAddress = store.getters.email;
+    this.avatar = store.getters.imageUrl;
   }
 };
 </script>

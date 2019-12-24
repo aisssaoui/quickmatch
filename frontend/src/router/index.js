@@ -13,6 +13,7 @@ import Team from "../components/Team";
 import AboutUs from "../components/AboutUs";
 import CreateAccount from "../components/CreateAccount";
 import ContactUs from "../components/ContactUs";
+import EditProfile from "../components/EditProfile";
 
 Vue.use(Router);
 
@@ -29,7 +30,8 @@ export default new Router({
     { name: "match", path: "/match", component: Match },
     { name: "team", path: "/team", component: Team },
     { name: "aboutus", path: "/aboutus", component: AboutUs },
-    { name: "contactus", path: "/contactus", component: ContactUs }
+    { name: "contactus", path: "/contactus", component: ContactUs },
+    { name: "editprofile", path: "/EditProfile/:id", component: EditProfile }
   ],
   mode: "history"
 });

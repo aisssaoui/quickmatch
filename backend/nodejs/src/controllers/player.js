@@ -257,7 +257,8 @@ var Player = {
             while (1) {
               switch ((_context20.prev = _context20.next)) {
                 case 0:
-                  findAllQuery = "SELECT M.won, M.scored_goals, M.conceded_goals FROM player P JOIN meet_sheet M ON P.id=M.player WHERE mail_address = $1";
+                  findAllQuery =
+                    "SELECT M.won, M.scored_goals, M.conceded_goals FROM player P JOIN meet_sheet M ON P.id=M.player WHERE mail_address = $1";
                   _context20.prev = 1;
                   _context20.next = 4;
                   return _db2.default.query(findAllQuery);
@@ -298,7 +299,6 @@ var Player = {
 
     return getByMailStat;
   })(),
-
 
   /**
    * Get A Player
@@ -385,9 +385,9 @@ var Player = {
             while (1) {
               switch ((_context4.prev = _context4.next)) {
                 case 0:
-                  findOneQuery = "SELECT * FROM player WHERE mail_address=$1";
+                  findOneQuery = "SELECT * FROM player WHERE id=$1";
                   updateOneQuery =
-                    "UPDATE player\n      SET surname=$1,first_name=$2,mail_address=$3,phone_number=$4\n      WHERE id=$5 returning *";
+                    "UPDATE player\n      SET pseudo=$1, surname=$2,first_name=$3,mail_address=$4,phone_number=$5, bio=$6\n      WHERE id=$7 returning *";
                   _context4.prev = 2;
                   _context4.next = 5;
                   return _db2.default.query(findOneQuery, [req.params.id]);
@@ -408,10 +408,12 @@ var Player = {
 
                 case 9:
                   values = [
+                    req.body.pseudo || rows[0].pseudo,
                     req.body.surname || rows[0].surname,
                     req.body.first_name || rows[0].first_name,
                     req.body.mail_address || rows[0].mail_address,
                     req.body.phone_number || rows[0].phone_number,
+                    req.body.bio || rows[0].bio,
                     req.params.id
                   ];
                   _context4.next = 12;

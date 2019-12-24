@@ -12,6 +12,7 @@ export default new Vuex.Store({
     surname: "",
     email: "none", // can't be empty
     nickname: "",
+    imageUrl: "",
     isSignedIn: false,
     connectionDate: Object,
     expirationDate: Object,
@@ -30,6 +31,7 @@ export default new Vuex.Store({
       state.name = state.profile.getName();
       state.surname = state.profile.getFamilyName();
       state.email = state.profile.getEmail();
+      state.imageUrl = state.profile.getImageUrl();
       state.isSignedIn = state.googleUser.isSignedIn();
       state.expirationTimer = state.googleUser.getAuthResponse().expires_in;
       /*** Setting expiration timer ***/
@@ -109,6 +111,9 @@ export default new Vuex.Store({
     },
     id: function(state) {
       return state.id;
+    },
+    imageUrl: function(state) {
+      return state.imageUrl;
     }
   }
 });
