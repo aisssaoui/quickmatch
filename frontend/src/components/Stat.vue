@@ -96,7 +96,9 @@
 </template>
 
 <script>
+import store from "../store";
 import axios from "axios";
+import router from "../router";
 
 export default {
   data() {
@@ -122,6 +124,12 @@ export default {
       }
     );
     this.playerStatToShow = playerStat.data.rows;
+  },
+  computed: {
+    isSignedIn: function() {
+      this.$store.dispatch("isSignedIn");
+      return store.getters.isSignedIn;
+    }
   }
 };
 </script>

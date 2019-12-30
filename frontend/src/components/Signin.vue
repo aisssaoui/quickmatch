@@ -31,7 +31,7 @@
                 </v-form>
                 <v-row class="pa-0" align="center" justify="center">
                     <v-col class="pt-0" cols="10">
-                        <v-btn rounded outlined block>Se connecter</v-btn>
+                        <v-btn rounded outlined block v-on:click="login">Se connecter</v-btn>
                     </v-col>
                 </v-row>
                 <v-divider></v-divider>
@@ -52,6 +52,10 @@
 </template>
 
 <script>
+  import store from "../store";
+  import axios from "axios";
+  import router from "../router";
+
   export default {
     data: () => ({
       valid: false,
@@ -64,17 +68,17 @@
       surnameRules: [
         v => !!v || 'Nom requis',
         v => v.length >= 2 || 'Nom trop court',
-        v => /^[a-zA-Z -éèç]+$/.test(v) || 'Nom invalide'
+        v => /^[a-zA-Z \-éèçîïœžâêôàûùâãäåæçëìíîïðñòóôõúûüýö]+$/.test(v) || 'Nom invalide'
       ],
       first_nameRules: [
         v => !!v || 'Prénom requis',
         v => v.length >= 2 || 'Prénom trop court',
-        v => /^[a-zA-Z -éèç]+$/.test(v) || 'Prénom invalide'
+        v => /^[a-zA-Z \-éèçîïœžâêôàûùâãäåæçëìíîïðñòóôõúûüýö]+$/.test(v) || 'Prénom invalide'
       ],
       pseudoRules: [
         v => !!v || 'Pseudo requis',
         v => v.length >= 2 || 'Pseudo trop court',
-        v => /^[a-zA-Z0-9 _-éèç]+$/.test(v) || 'Pseudo invalide (lettres, nombres, espace, "_" et "-" seulement)'
+        v => /^[a-zA-Z0-9 _\-éèçîïœžâêôàûùâãäåæçëìíîïðñòóôõúûüýö]+$/.test(v) || 'Pseudo invalide (lettres, nombres, espace, "_" et "-" seulement)'
       ],
       passwordRules: [
         v => !!v || 'Mot de passe requis',
@@ -89,5 +93,18 @@
         v => /^(0[1-8])(?:[ -]?([0-9]{2})){4}$/.test(v) || 'Numéro de téléphone invalide (vous pouvez utilisé "-" ou des espaces comme séparateur (06-66-66-66-66)'
       ],
     }),
+    methods: {
+      login() {
+        axios
+          .post("http://fama6831.odns.fr/dbcontrol/api/v1/Players")
+          .then(response => {
+            store.dispatch("login");
+            router.push("/");
+          })
+          .catch(e => {
+            router.push("/createAccount");
+          });
+      }
+    }
   }
 </script>

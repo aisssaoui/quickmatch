@@ -75,19 +75,19 @@ export default {
         v => !!v || "Pseudo requis",
         v => v.length >= 2 || "Pseudo trop court",
         v =>
-          /^[a-zA-Z0-9 _-éèç]+$/.test(v) ||
+          /^[a-zA-Z0-9 _\-éèçîïœžâêôàûùâãäåæçëìíîïðñòóôõúûüýö]+$/.test(v) ||
           'Pseudo invalide (lettres, nombres, espace, "_" et "-" seulement)'
       ],
       surnameRules: [
         v => !!v || "Nom requis",
         v =>
-          /^[a-zA-Z -éèçîïœžâêôàûùâãäåæçëìíîïðñòóôõúûüýö]+$/.test(v) ||
+          /^[a-zA-Z \-éèçîïœžâêôàûùâãäåæçëìíîïðñòóôõúûüýö]+$/.test(v) ||
           'Nom invalide (lettres (avec ou sans accent), espace, et "-" seulement)'
       ],
       firstNameRules: [
         v => !!v || "Prénom requis",
         v =>
-          /^[a-zA-Z- éèçîïœžâêôàûùâãäåæçëìíîïðñòóôõúûüýö]+$/.test(v) ||
+          /^[a-zA-Z\- éèçîïœžâêôàûùâãäåæçëìíîïðñòóôõúûüýö]+$/.test(v) ||
           'Prénom invalide (lettres (avec ou sans accent), espace, et "-" seulement)'
       ]
     };

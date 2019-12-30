@@ -235,6 +235,64 @@ var Club = {
   })(),
 
   /**
+   * Get All clubs
+   * @param {object} req
+   * @param {object} res
+   * @returns {object} clubs array
+   */
+  getAllForOneUser: (function() {
+    var _ref30 = _asyncToGenerator(
+      /*#__PURE__*/ regeneratorRuntime.mark(function _callee2(req, res) {
+        var findAllForOneUserQuery, _ref40, rows, rowCount;
+
+        return regeneratorRuntime.wrap(
+          function _callee2$(_context20) {
+            while (1) {
+              switch ((_context20.prev = _context20.next)) {
+                case 0:
+                  findAllForOneUserQuery = "SELECT C.club_name, C.creation_date, C.private_club, PBC.is_admin FROM Club C JOIN Player_Belong_Club PBC ON C.id=PBC.club JOIN Player P ON PBC.player=P.id";
+                  _context20.prev = 1;
+                  _context20.next = 4;
+                  return _db2.default.query(findAllForOneUserQuery);
+
+                case 4:
+                  _ref40 = _context20.sent;
+                  rows = _ref40.rows;
+                  rowCount = _ref40.rowCount;
+                  return _context20.abrupt(
+                    "return",
+                    res.status(200).send({ rows: rows, rowCount: rowCount })
+                  );
+
+                case 10:
+                  _context20.prev = 10;
+                  _context20.t0 = _context20["catch"](1);
+                  return _context20.abrupt(
+                    "return",
+                    res.status(400).send(_context20.t0)
+                  );
+
+                case 13:
+                case "end":
+                  return _context20.stop();
+              }
+            }
+          },
+          _callee2,
+          this,
+          [[1, 10]]
+        );
+      })
+    );
+
+    function getAll(_x30, _x40) {
+      return _ref30.apply(this, arguments);
+    }
+
+    return getAllForOneUser;
+  })(),
+
+  /**
    * Update A Club
    * @param {object} req
    * @param {object} res

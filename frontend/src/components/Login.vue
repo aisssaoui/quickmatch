@@ -105,7 +105,7 @@ export default {
       v => !!v || "Pseudo requis",
       v => v.length >= 2 || "Pseudo trop court",
       v =>
-        /^[a-zA-Z0-9 _-éèç]+$/.test(v) ||
+        /^[a-zA-Z0-9 _\-éèçîïœžâêôàûùâãäåæçëìíîïðñòóôõúûüýö]+$/.test(v) ||
         'Pseudo invalide (lettres, nombres, espace, "_" et "-" seulement)'
     ],
     password: "",
@@ -142,8 +142,18 @@ export default {
       router.push("/disconnected");
     },
     login() {
-      store.dispatch("login");
-      router.push("/");
+      axios
+        .get(
+          "http://fama6831.odns.fr/dbcontrol/api/v1/Players/ma" +
+            store.getters.email
+        )
+        .then(response => {
+          store.dispatch("login");
+          router.push("/");
+        })
+        .catch(e => {
+          router.push("/createAccount");
+        });
     }
   },
   computed: {

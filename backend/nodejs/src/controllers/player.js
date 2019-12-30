@@ -65,7 +65,7 @@ var Player = {
               switch ((_context.prev = _context.next)) {
                 case 0:
                   text =
-                    "INSERT INTO Player (surname, first_name, mail_address, phone_number, pseudo, mdp, avatar)\n\t    VALUES($1, $2, $3, $4, $5, $6, $7)\n        returning *";
+                    "INSERT INTO Player (surname, first_name, mail_address, phone_number, pseudo, mdp)\n\t VALUES($1, $2, $3, $4, $5, $6)\n RETURNING *";
                   values = [
                     req.body.surname,
                     req.body.first_name,

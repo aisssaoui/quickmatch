@@ -25,6 +25,11 @@
     </v-btn>
     <v-divider vertical></v-divider>
 
+    <v-btn v-if="isSignedIn" :to="'/club/' + id" text>
+      <v-icon dark left>mdi-account-outline</v-icon>Profile
+    </v-btn>
+    <v-divider vertical></v-divider>
+
     <v-spacer></v-spacer>
 
     <v-divider vertical></v-divider>

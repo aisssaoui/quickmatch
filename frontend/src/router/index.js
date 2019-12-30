@@ -14,6 +14,7 @@ import AboutUs from "../components/AboutUs";
 import CreateAccount from "../components/CreateAccount";
 import ContactUs from "../components/ContactUs";
 import EditProfile from "../components/EditProfile";
+import Club from "../components/Club";
 
 Vue.use(Router);
 
@@ -31,7 +32,8 @@ export default new Router({
     { name: "team", path: "/team", component: Team },
     { name: "aboutus", path: "/aboutus", component: AboutUs },
     { name: "contactus", path: "/contactus", component: ContactUs },
-    { name: "editprofile", path: "/EditProfile/:id", component: EditProfile }
+    { name: "editprofile", path: "/EditProfile/:id", component: EditProfile },
+    { name: "club", path: "/Club/:id", component: Club }
   ],
   mode: "history"
 });
