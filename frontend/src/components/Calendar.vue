@@ -88,7 +88,6 @@
 import axios from "axios";
 import moment from "moment";
 
-
 export default {
   data: () => ({
     today: Date(),
@@ -100,9 +99,18 @@ export default {
       day: "Day",
       "4day": "4 Days"
     },
-    daysOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+    daysOfWeek: [
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+      "Sunday"
+    ],
     slotsTable: {},
     invitationsTable: {},
+    //id: this.$route.params.id,
     playersTable: {},
     start: null,
     end: null,
@@ -160,7 +168,7 @@ export default {
         timeZone: "UTC",
         month: "long"
       });
-    },
+    }
   },
   mounted() {
     this.$refs.calendar.checkChange();
@@ -176,48 +184,61 @@ export default {
       this.playersTable = response.data;
     },
     showSlots: function() {
-
       let playerList = [];
       let playerNameList = [];
 
-      for(let i = 0; i < this.slotsTable.rowCount; i++){
-        const dayINeed = this.daysOfWeek.indexOf(this.slotsTable.rows[i].repeat_day) + 1; 
+      for (let i = 0; i < this.slotsTable.rowCount; i++) {
+        const dayINeed =
+          this.daysOfWeek.indexOf(this.slotsTable.rows[i].repeat_day) + 1;
         const today = moment().isoWeekday();
         let gameDate = "";
 
-        if (today <= dayINeed) { 
+        if (today <= dayINeed) {
           gameDate = moment().isoWeekday(dayINeed);
-        }
-        else {
-          gameDate = moment().add(1, 'weeks').isoWeekday(dayINeed);
+        } else {
+          gameDate = moment()
+            .add(1, "weeks")
+            .isoWeekday(dayINeed);
         }
 
         playerList = [];
 
-        for(let j = 0; j < this.invitationsTable.rowCount; j++){
-          if(this.invitationsTable.rows[j].slot == this.slotsTable.rows[i].id){
+        for (let j = 0; j < this.invitationsTable.rowCount; j++) {
+          if (
+            this.invitationsTable.rows[j].slot == this.slotsTable.rows[i].id
+          ) {
             playerList.push(this.invitationsTable.rows[j].player);
           }
         }
 
-
-        for(let j = 0; j < playerList.length; j++){
-            for(let k = 0; k < this.playersTable.rowCount; k++){
-              if(this.playersTable.rows[k].id == playerList[j]){
-                playerNameList.push(this.playersTable.rows[k].pseudo);
-              }
+        for (let j = 0; j < playerList.length; j++) {
+          for (let k = 0; k < this.playersTable.rowCount; k++) {
+            if (this.playersTable.rows[k].id == playerList[j]) {
+              playerNameList.push([
+                this.playersTable.rows[k].pseudo,
+                this.playersTable.rows[k].id
+              ]);
             }
           }
+        }
 
-        console.log(playerNameList);
-
-        this.events.push({
-          name: "Match n° " + this.slotsTable.rows[i].id,
-          details:"Joueurs : " + playerNameList.join(", "),
-          start: gameDate.format("YYYY-MM-DD") + " " + this.slotsTable.rows[i].start_hour,
-          end: gameDate.format("YYYY-MM-DD") + " " + this.slotsTable.rows[i].end_hour,
-          color: "purple"
-        })
+        for (let k = 0; k < playerNameList.length; k++) {
+          if (playerNameList[k][1] == this.id) {
+            this.events.push({
+              name: "Match n° " + this.slotsTable.rows[i].id,
+              details: "Joueurs : " + playerNameList + ", ",
+              start:
+                gameDate.format("YYYY-MM-DD") +
+                " " +
+                this.slotsTable.rows[i].start_hour,
+              end:
+                gameDate.format("YYYY-MM-DD") +
+                " " +
+                this.slotsTable.rows[i].end_hour,
+              color: "purple"
+            });
+          }
+        }
       }
     },
     viewDay({ date }) {
@@ -253,11 +274,11 @@ export default {
       nativeEvent.stopPropagation();
     },
     updateRange({ start, end }) {
-        this.start = start;
-        this.end = end;
+      this.start = start;
+      this.end = end;
     },
     nth(d) {
-        return d > 3 && d < 21
+      return d > 3 && d < 21
         ? "th"
         : ["th", "st", "nd", "rd", "th", "th", "th", "th", "th", "th"][d % 10];
     }
@@ -285,8 +306,6 @@ export default {
     this.setInvitationsTable(invitation_Table);
     this.setPlayersTable(player_Table);
     this.showSlots();
-    console.log(this.events);
-    
   }
 };
 </script>
