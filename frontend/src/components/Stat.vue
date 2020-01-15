@@ -1,81 +1,79 @@
 <template>
-  <!-- <div v-if="!isSignedIn">
-      <v-text>vous n'êtes pas connecté</v-text>
-    </div>
-
-  <div v-else>-->
   <div>
-    <br />
-    <br />
-    <br />
-    <v-card class="mx-auto" max-width="800" tile>
-      <v-list-item two-line>
-        <v-list-item-content>
-          <v-list-item-title class="font-weight-bold">Nom</v-list-item-title>
-          <v-list-item-subtitle class="headline">{{ playerToShow.surname }}</v-list-item-subtitle>
-        </v-list-item-content>
-      </v-list-item>
-
-      <v-list-item two-line>
-        <v-list-item-content>
-          <v-list-item-title class="font-weight-bold">Prénom</v-list-item-title>
-          <v-list-item-subtitle class="headline">{{ playerToShow.first_name }}</v-list-item-subtitle>
-        </v-list-item-content>
-      </v-list-item>
-
-      <v-list-item two-line>
-        <v-list-item-content>
-          <v-list-item-title class="font-weight-bold">Nombre de but(s)</v-list-item-title>
-          <v-list-item-subtitle class="headline">{{ playerToShow.scored_goals }}</v-list-item-subtitle>
-        </v-list-item-content>
-      </v-list-item>
-
-      <v-list-item two-line>
-        <v-list-item-content>
-          <v-list-item-title class="font-weight-bold">Nombre de but(s) encaissé(s)</v-list-item-title>
-          <v-list-item-subtitle class="headline">{{ playerToShow.conceded_goals }}</v-list-item-subtitle>
-        </v-list-item-content>
-      </v-list-item>
-
-      <v-list-item two-line>
-        <v-list-item-content>
-          <v-list-item-title class="font-weight-bold">Nombre de match joué(s)</v-list-item-title>
-          <v-list-item-subtitle class="headline">{{ playerToShow.matches_played }}</v-list-item-subtitle>
-        </v-list-item-content>
-      </v-list-item>
-
-      <v-list-item two-line>
-        <v-list-item-content>
-          <v-list-item-title class="font-weight-bold">Nombre de victoire(s)</v-list-item-title>
-          <v-list-item-subtitle class="headline">{{ playerToShow.victories }}</v-list-item-subtitle>
-        </v-list-item-content>
-      </v-list-item>
-
-      <hr />
-
-      <div v-for="(row, index) in playerStatToShow" :key="row.id">
+    <div v-if="isSignedIn">
+      <br />
+      <br />
+      <br />
+      <v-card class="mx-auto" max-width="800" tile>
         <v-list-item two-line>
           <v-list-item-content>
-            <v-list-item-title class="font-weight-bold">Résultat du match {{ index }}</v-list-item-title>
-            <v-list-item-subtitle class="headline">{{ row.won }}</v-list-item-subtitle>
+            <v-list-item-title class="font-weight-bold">Nom</v-list-item-title>
+            <v-list-item-subtitle class="headline">{{ playerToShow.surname }}</v-list-item-subtitle>
+          </v-list-item-content>
+        </v-list-item>
+
+        <v-list-item two-line>
+          <v-list-item-content>
+            <v-list-item-title class="font-weight-bold">Prénom</v-list-item-title>
+            <v-list-item-subtitle class="headline">{{ playerToShow.first_name }}</v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
 
         <v-list-item two-line>
           <v-list-item-content>
             <v-list-item-title class="font-weight-bold">Nombre de but(s)</v-list-item-title>
-            <v-list-item-subtitle class="headline">{{ row.scored_goals }}</v-list-item-subtitle>
+            <v-list-item-subtitle class="headline">{{ playerToShow.scored_goals }}</v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
 
         <v-list-item two-line>
           <v-list-item-content>
             <v-list-item-title class="font-weight-bold">Nombre de but(s) encaissé(s)</v-list-item-title>
-            <v-list-item-subtitle class="headline">{{ row.conceded_goals }}</v-list-item-subtitle>
+            <v-list-item-subtitle class="headline">{{ playerToShow.conceded_goals }}</v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
-      </div>
-    </v-card>
+
+        <v-list-item two-line>
+          <v-list-item-content>
+            <v-list-item-title class="font-weight-bold">Nombre de match joué(s)</v-list-item-title>
+            <v-list-item-subtitle class="headline">{{ playerToShow.matches_played }}</v-list-item-subtitle>
+          </v-list-item-content>
+        </v-list-item>
+
+        <v-list-item two-line>
+          <v-list-item-content>
+            <v-list-item-title class="font-weight-bold">Nombre de victoire(s)</v-list-item-title>
+            <v-list-item-subtitle class="headline">{{ playerToShow.victories }}</v-list-item-subtitle>
+          </v-list-item-content>
+        </v-list-item>
+
+        <hr />
+
+        <div v-for="(row, index) in playerStatToShow" :key="row.id">
+          <v-list-item two-line>
+            <v-list-item-content>
+              <v-list-item-title class="font-weight-bold">Résultat du match {{ index }}</v-list-item-title>
+              <v-list-item-subtitle class="headline">{{ row.won }}</v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
+
+          <v-list-item two-line>
+            <v-list-item-content>
+              <v-list-item-title class="font-weight-bold">Nombre de but(s)</v-list-item-title>
+              <v-list-item-subtitle class="headline">{{ row.scored_goals }}</v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
+
+          <v-list-item two-line>
+            <v-list-item-content>
+              <v-list-item-title class="font-weight-bold">Nombre de but(s) encaissé(s)</v-list-item-title>
+              <v-list-item-subtitle class="headline">{{ row.conceded_goals }}</v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
+        </div>
+      </v-card>
+    </div>
+    <WorkInProgress v-else></WorkInProgress>
   </div>
 </template>
 
@@ -83,8 +81,12 @@
 import store from "../store";
 import axios from "axios";
 import router from "../router";
+import WorkInProgress from "./WorkInProgress";
 
 export default {
+  components: {
+    WorkInProgress
+  },
   data() {
     return {
       id: this.$route.params.id,
@@ -103,8 +105,8 @@ export default {
     this.playerStatToShow = playerStat.data.rows;
   },
   computed: {
-    isSignedIn: function() {
-      this.$store.dispatch("isSignedIn");
+    isSignedIn() {
+      store.dispatch("isSignedIn");
       return store.getters.isSignedIn;
     }
   }

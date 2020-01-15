@@ -25,15 +25,19 @@ export default new Router({
     { name: "createAccount", path: "/createAccount", component: CreateAccount },
     { name: "signin", path: "/signin", component: Signin },
     { name: "profile", path: "/profile/:id", component: Profile },
+    { name: "profileWiki", path: "/profile", component: Profile },
     { name: "invitation", path: "/invitation", component: Invitation },
     { name: "calendar", path: "/calendar/:id", component: Calendar },
+    { name: "calendarWiki", path: "/calendar", component: Calendar },
     { name: "stat", path: "/stat/:id", component: Stat },
+    { name: "statWiki", path: "/stat/", component: Stat },
     { name: "match", path: "/match", component: Match },
     { name: "team", path: "/team", component: Team },
     { name: "aboutus", path: "/aboutus", component: AboutUs },
     { name: "contactus", path: "/contactus", component: ContactUs },
     { name: "editprofile", path: "/EditProfile/:id", component: EditProfile },
-    { name: "club", path: "/Club/:id", component: Club }
+    { name: "club", path: "/Club/:id", component: Club },
+    { name: "clubWiki", path: "/Club", component: Club }
   ],
   mode: "history"
 });
