@@ -65,7 +65,7 @@ var Player = {
               switch ((_context.prev = _context.next)) {
                 case 0:
                   text =
-                    "INSERT INTO Player (surname, first_name, mail_address, phone_number, pseudo, mdp)\n\t VALUES($1, $2, $3, $4, $5, $6)\n RETURNING *";
+                    "INSERT INTO Player (surname, first_name, mail_address, phone_number, pseudo, mdp, avatar)\n\t VALUES($1, $2, $3, $4, $5, $6, $7)\n RETURNING *";
                   values = [
                     req.body.surname,
                     req.body.first_name,
@@ -92,7 +92,7 @@ var Player = {
                   _context.t0 = _context["catch"](2);
                   return _context.abrupt(
                     "return",
-                    res.status(400).send(_context.t0)
+                    res.status(200).send(_context.t0)
                   );
 
                 case 13:
@@ -205,7 +205,7 @@ var Player = {
 
                   return _context3.abrupt(
                     "return",
-                    res.status(404).send({ message: "player not found" })
+                    res.status(200).send({ message: "player not found" })
                   );
 
                 case 8:
@@ -333,7 +333,7 @@ var Player = {
 
                   return _context3.abrupt(
                     "return",
-                    res.status(404).send({ message: "player not found" })
+                    res.status(200).send({ message: "player not found" })
                   );
 
                 case 8:
@@ -432,7 +432,7 @@ var Player = {
                   _context4.t0 = _context4["catch"](2);
                   return _context4.abrupt(
                     "return",
-                    res.status(400).send(_context4.t0)
+                    res.status(200).send(_context4.t0)
                   );
 
                 case 19:
