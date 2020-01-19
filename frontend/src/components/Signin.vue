@@ -106,7 +106,6 @@
           this.findUser(); // méthode initiale
         },
         OnGoogleAuthFail(error) {
-          store.dispatch("hasAccount");
           console.log(error);
         },
         findUser() {

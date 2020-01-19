@@ -48,10 +48,12 @@ export default new Vuex.Store({
     expirationTimer: 0,
     googleUser: Object,
     profile: Object,
-    hasAccount: false
+    hasAccount: false,
+    cookieCheck: false // to avoid multiple checkings (infinite loop)
   },
   mutations: {
     setGoogleUser(state, googleUser) {
+      state.cookieCheck = true;
       state.googleUser = googleUser;
       state.profile = googleUser.getBasicProfile();
       state.givenName = state.profile.getGivenName();
@@ -70,14 +72,17 @@ export default new Vuex.Store({
 
     },
     isSignedIn(state) {
-        var cookieExpiration = getCookie('quickmatchExpiration');
-        var cookieId = getCookie('quickmatchId');
-        if( cookieId != null && cookieExpiration != null) {
-            state.expirationDate = new Date(cookieExpiration);
-            state.id = cookieId;
-            state.hasAccount = true;
-            console.log("Cookie expiration: " + cookieExpiration);
-            console.log("Cookie Id: " + cookieId);
+        if (state.cookieCheck == false) {
+            state.cookieCheck = true;
+            var cookieExpiration = getCookie('quickmatchExpiration');
+            var cookieId = getCookie('quickmatchId');
+            if( cookieId != null && cookieExpiration != null) {
+                state.expirationDate = new Date(cookieExpiration);
+                state.id = cookieId;
+                state.hasAccount = true;
+        }
+    }
+        if (state.hasAccount == true){
             var now = new Date();
             state.isSignedIn = now < state.expirationDate;
         } else {
@@ -87,13 +92,15 @@ export default new Vuex.Store({
     logout(state) {
       state.hasAccount = false;
       state.isSignedIn = false;
+      var end = new Date();
+      end.setTime(end.getTime() - 1);
+      /* cookie deletion */
+      setCookie('quickmatchExpiration',state.expirationDate,end,'/','quickmatch.fr',false);
+      setCookie('quickmatchId',state.id,end,'/','quickmatch.fr',false);
     },
     hasAccount(state) {
       state.hasAccount = true;
-
-      /* cookie creation */
       setCookie('quickmatchExpiration',state.expirationDate,state.expirationDate,'/','quickmatch.fr',false);
-      /* *************** */
     },
     async setID(state) {
       const player = await axios.get(

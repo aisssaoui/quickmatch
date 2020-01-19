@@ -67,6 +67,7 @@
 
 <script>
 import store from "../store";
+import router from "../router";
 
 export default {
   methods: {
@@ -81,7 +82,6 @@ export default {
   computed: {
     isSignedIn() {
       store.dispatch("isSignedIn");
-      console.log("appbar: isSignedIn:" + store.getters.isSignedIn);
       return store.getters.isSignedIn;
     },
     id() {
