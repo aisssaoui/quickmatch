@@ -4,6 +4,35 @@ import axios from "axios";
 
 Vue.use(Vuex);
 
+/* Cookies administration */
+
+function setCookie(name, value, expire, path, domain, security){
+    document.cookie = name + ' = ' + escape(value) + '  ' +
+               ((expire == undefined) ? '' : ('; expires = ' + expire.toUTCString())) +
+               ((path == undefined) ? '' : ('; path = ' + path)) +
+               ((domain == undefined) ? '' : ('; domain = ' + domain)) +
+               ((security == true) ? '; secure' : '');
+   }
+
+function getCookie(name){
+    if(document.cookie.length == 0)
+      return 'zero';
+
+    var regSepCookie = new RegExp('(; )', 'g');
+    var cookies = document.cookie.split(regSepCookie);
+
+    for(var i = 0; i < cookies.length; i++){
+      var regInfo = new RegExp('=', 'g');
+      var infos = cookies[i].split(regInfo);
+      if(infos[0] == name){
+        return unescape(infos[1]);
+      }
+    }
+    return null;
+  }
+
+/* ********************* */
+
 export default new Vuex.Store({
   state: {
     id: 0,
@@ -19,12 +48,10 @@ export default new Vuex.Store({
     expirationTimer: 0,
     googleUser: Object,
     profile: Object,
-    flag: false, // to detect if googleUser is filled or not
     hasAccount: false
   },
   mutations: {
     setGoogleUser(state, googleUser) {
-      state.flag = true;
       state.googleUser = googleUser;
       state.profile = googleUser.getBasicProfile();
       state.givenName = state.profile.getGivenName();
@@ -40,27 +67,33 @@ export default new Vuex.Store({
       state.expirationDate.setSeconds(
         state.connectionDate.getSeconds() + state.expirationTimer
       );
+
     },
     isSignedIn(state) {
-      if (state.flag && state.hasAccount) {
-        var now = new Date();
-        state.isSignedIn = now < state.expirationDate;
-        if (!state.isSignedIn) {
-          state.flag = false;
-          state.googleUser.disconnect();
+        var cookieExpiration = getCookie('quickmatchExpiration');
+        var cookieId = getCookie('quickmatchId');
+        if( cookieId != null && cookieExpiration != null) {
+            state.expirationDate = new Date(cookieExpiration);
+            state.id = cookieId;
+            state.hasAccount = true;
+            console.log("Cookie expiration: " + cookieExpiration);
+            console.log("Cookie Id: " + cookieId);
+            var now = new Date();
+            state.isSignedIn = now < state.expirationDate;
+        } else {
+            state.isSignedIn = false;
         }
-      } else {
-        state.isSignedIn = false;
-      }
     },
     logout(state) {
       state.hasAccount = false;
-      state.flag = false;
       state.isSignedIn = false;
-      state.googleUser.disconnect();
     },
     hasAccount(state) {
       state.hasAccount = true;
+
+      /* cookie creation */
+      setCookie('quickmatchExpiration',state.expirationDate,state.expirationDate,'/','quickmatch.fr',false);
+      /* *************** */
     },
     async setID(state) {
       const player = await axios.get(
@@ -68,6 +101,7 @@ export default new Vuex.Store({
         { ResponseType: "json" }
       );
       state.id = player.data.id;
+      setCookie('quickmatchId',state.id,state.expirationDate,'/','quickmatch.fr',false);
     }
   },
   actions: {

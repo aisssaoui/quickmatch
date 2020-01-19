@@ -54,14 +54,6 @@
             >
           </v-col>
         </v-row>
-        <v-card-subtitle class="pa-0" align="center">OU</v-card-subtitle>
-        <v-row class="pa-0" justify="center">
-          <v-col cols="10">
-            <v-btn color="blue darken-2" rounded outlined block
-              >Se connecter avec Facebook</v-btn
-            >
-          </v-col>
-        </v-row>
       </v-card>
       <v-card class="mx-10" raised width="25%">
         <v-layout justify-center="true">

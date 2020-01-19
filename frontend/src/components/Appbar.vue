@@ -81,6 +81,7 @@ export default {
   computed: {
     isSignedIn() {
       store.dispatch("isSignedIn");
+      console.log("appbar: isSignedIn:" + store.getters.isSignedIn);
       return store.getters.isSignedIn;
     },
     id() {

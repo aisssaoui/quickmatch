@@ -12,14 +12,14 @@
           <v-layout row wrap align-center>
             <v-flex v-if="i==0" class="text-center">
               <p class="display-4 white--text" style="text-shadow: 1px 1px 7px #16002d;">QuickMatch</p>
-              <v-btn
+              <v-btn v-if="!isSignedIn"
                 to="/login"
                 large
                 color="#e3e3e3"
                 style="border: 1px solid #20003c;"
                 class="black--text"
               >Se connecter</v-btn>
-              <v-btn to="/signin" large color="#20003c" style="border: 1px solid grey;">S'inscrire</v-btn>
+              <v-btn v-if="!isSignedIn" to="/signin" large color="#20003c" style="border: 1px solid grey;">S'inscrire</v-btn>
             </v-flex>
             <v-flex v-if="i==1" class="text-center">
               <p class="display-4 white--text" style="text-shadow: 1px 1px 7px #16002d;">Statistiques</p>
@@ -71,7 +71,7 @@
         </div>
       </div>
     </v-container>
-    
+
     <hr style="width:50%; margin: auto;" color="#20003c" size="1px"/>
 
     <v-container id="team">
@@ -99,6 +99,7 @@
 </template>
 
 <script>
+import store from "../store";
 export default {
   data: () => ({
     items: [
@@ -113,14 +114,20 @@ export default {
       { src: require("../assets/google.png"), route: "/" },
       { src: require("../assets/youtube.png"), route: "/" }
     ]
-  })
+}),
+computed: {
+  isSignedIn: function() {
+    this.$store.dispatch("isSignedIn");
+    return store.getters.isSignedIn;
+  }
+}
 };
 </script>
 
 <style>
 .social {
     position: relative;
-    left: 30%; 
+    left: 30%;
     right: 30%;
 
 }
