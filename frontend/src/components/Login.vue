@@ -54,14 +54,6 @@
             >
           </v-col>
         </v-row>
-        <v-card-subtitle class="pa-0" align="center">OU</v-card-subtitle>
-        <v-row class="pa-0" justify="center">
-          <v-col cols="10">
-            <v-btn color="blue darken-2" rounded outlined block
-              >Se connecter avec Facebook</v-btn
-            >
-          </v-col>
-        </v-row>
       </v-card>
       <v-card class="mx-10" raised width="25%">
         <v-layout justify-center="true">
@@ -129,12 +121,16 @@ export default {
             store.getters.email
         )
         .then(response => {
-          store.dispatch("hasAccount");
-          store.dispatch("setID");
-          router.push("/"); // redirection vers la page d'accueil
+            if (Object.keys(response.data).length <= 1) {
+                router.push("/createAccount");
+            }else{
+                store.dispatch("hasAccount");
+                store.dispatch("setID");
+                router.push("/"); // redirection vers la page d'accueil
+            }
         })
         .catch(e => {
-          router.push("/createAccount");
+            console.log(e);
         });
     },
     logout() {

@@ -37,13 +37,14 @@
                 <v-divider></v-divider>
                 <v-row align="center" justify="center">
                     <v-col cols="10">
-                        <v-btn color="green lighten-1" rounded outlined block>Se connecter avec Google</v-btn>
-                    </v-col>
-                </v-row>
-                <v-card-subtitle class="pa-0" align="center">OU</v-card-subtitle>
-                <v-row class="pa-0" justify="center">
-                    <v-col cols="10">
-                        <v-btn color="blue darken-2" rounded outlined block>Se connecter avec Facebook</v-btn>
+                        <v-btn
+                          v-google-signin-button="clientId"
+                          color="green lighten-1"
+                          rounded
+                          outlined
+                          block
+                          >Se connecter avec Google</v-btn
+                        >
                     </v-col>
                 </v-row>
             </v-card>
@@ -52,12 +53,18 @@
 </template>
 
 <script>
+  import GoogleSignInButton from "../main.js";
   import store from "../store";
   import axios from "axios";
   import router from "../router";
 
   export default {
+      directives: {
+        GoogleSignInButton
+      },
     data: () => ({
+      clientId:
+        "864617003210-1dr6nsvputhjv59l5b3633sslri4vdjd.apps.googleusercontent.com",
       valid: false,
       surname: '',
       first_name: '',
@@ -94,6 +101,50 @@
       ],
     }),
     methods: {
+        OnGoogleAuthSuccess(googleUser) {
+          store.dispatch("setGoogleUser", googleUser);
+          this.findUser(); // méthode initiale
+        },
+        OnGoogleAuthFail(error) {
+          console.log(error);
+        },
+        findUser() {
+          axios
+            .get(
+              "http://fama6831.odns.fr/dbcontrol/api/v1/Players/ma" +
+                store.getters.email
+            )
+            .then(response => {
+                if (Object.keys(response.data).length <= 1) {
+                    router.push("/createAccount");
+                }else{
+                    store.dispatch("hasAccount");
+                    store.dispatch("setID");
+                    router.push("/"); // redirection vers la page d'accueil
+                }
+            })
+            .catch(e => {
+                console.log(e);
+            });
+        },
+        logout() {
+          store.dispatch("logout");
+          router.push("/disconnected");
+        },
+        login() {
+          axios
+            .get(
+              "http://fama6831.odns.fr/dbcontrol/api/v1/Players/ma" +
+                store.getters.email
+            )
+            .then(response => {
+              store.dispatch("login");
+              router.push("/");
+            })
+            .catch(e => {
+              router.push("/createAccount");
+            });
+        }/*
       login() {
         axios
           .post("http://fama6831.odns.fr/dbcontrol/api/v1/Players")
@@ -104,7 +155,7 @@
           .catch(e => {
             router.push("/createAccount");
           });
-      }
+      }*/
     }
   }
 </script>
