@@ -66,10 +66,63 @@
     <v-container id="propos">
       <div class="row text-center padding">
         <div class="col-12">
-          <p class="headline font-weight-medium">A PROPOS DE NOUS</p>
-            <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent non congue neque. Vestibulum viverra erat at efficitur auctor. Curabitur pulvinar luctus ante in faucibus. Nam egestas vulputate quam ut eleifend. Proin orci nunc, venenatis sit amet ultrices vel, maximus sed nisl. Proin nec auctor purus, eget scelerisque mi. Duis vulputate pellentesque felis, nec porta arcu iaculis non.</div>
+          <p class="headline font-weight-medium">A PROPOS DE L'APPLICATION</p>
+            <div>
+              Qui n'a toujours pas rêvé d'organiser toutes ses activités avec ses amis avec un seul clic ?
+              Avec QuickMatch, proposez et organisez des rencontres sportives entre vous très facilement !
+
+              QuickMatch est très facile d'utilisation :
+              <v-card
+                class="ma-2"
+                tile
+              >
+                <v-list-item two-line>
+                  <v-list-item-content>
+                    <v-list-item-title> <v-icon>mdi-human-handsup</v-icon> <strong>Créez des groupes</strong></v-list-item-title>
+                    <v-list-item-subtitle>Rassemblez vos amis dans des groupes privés afin de pouvoir jouer entre vous !</v-list-item-subtitle>
+                  </v-list-item-content>
+                </v-list-item>
+
+                <v-list-item two-line>
+                  <v-list-item-content>
+                    <v-list-item-title> <v-icon>mdi-calendar</v-icon> <strong>Proposez des horaires</strong></v-list-item-title>
+                    <v-list-item-subtitle>Une personne peut proposer des horaires hebdomadaires de parties afin que tout le monde sache toutes les semaiens à quelles heures se trouvent jouent les parties !</v-list-item-subtitle>
+                  </v-list-item-content>
+                </v-list-item>
+
+                <v-list-item two-line>
+                  <v-list-item-content>
+                    <v-list-item-title> <v-icon>mdi-soccer</v-icon> <strong>Jouez</strong></v-list-item-title>
+                    <v-list-item-subtitle>Il vous suffit juste d'accepter les invitations à des horaires qui vous conviennent et le tour est joué !
+                      Ensuite, remplissez vos feuilles de statistiques personnalisées !
+                    </v-list-item-subtitle>
+                  </v-list-item-content>
+                </v-list-item>
+
+                <v-list-item two-line>
+                  <v-list-item-content>
+                    <v-list-item-title> <v-icon>mdi-format-list-bulleted</v-icon> <strong>Consultez vos statistiques</strong></v-list-item-title>
+                    <v-list-item-subtitle>Essayez d'être le meilleur en comparant vos statistiques de chaque match dans un historique complet regroupant toutes vos performances !
+                    </v-list-item-subtitle>
+                  </v-list-item-content>
+                </v-list-item>
+                </v-card>
+            </div>
+            
+            Le but de cette application est de vous proposer un système d'organisation simple permettant d'organiser vos rencontres sportives de la plus facile des manières !
         </div>
       </div>
+      <v-row
+      class="mb-6"
+      justify="center"
+    >
+      <v-col class="pa-md-4" lg="2" md="auto" sd="auto">
+        <v-btn class="row wrap align-center" small color="primary" to="/login">Se connecter</v-btn>
+      </v-col>
+      <v-col class="pa-md-4" lg="2" md="auto" sd="auto">
+        <v-btn class="row wrap align-center" small color="primary" to="/signin">S'inscrire</v-btn>
+      </v-col>
+    </v-row>
     </v-container>
     
     <hr style="width:50%; margin: auto;" color="#20003c" size="1px"/>
@@ -78,19 +131,21 @@
       <div class="row text-center padding">
         <div class="col-12">
           <p class="headline font-weight-medium">EQUIPE</p>
-          <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent non congue neque. Vestibulum viverra erat at efficitur auctor. Curabitur pulvinar luctus ante in faucibus. Nam egestas vulputate quam ut eleifend. Proin orci nunc, venenatis sit amet ultrices vel, maximus sed nisl. Proin nec auctor purus, eget scelerisque mi. Duis vulputate pellentesque felis, nec porta arcu iaculis non.</div>
+          Composée de d'élèves de l'ENSEIRB-Matmeca, cette application gratuite a pout but d'aider les sportifs de l'INRIA et des autres universités, d'organiser leurs rencontres sportives.
         </div>
       </div>
     </v-container>
+
     <hr style="width:50%; margin: auto;" color="#20003c" size="1px"/>
+
     <v-container id="connect">
       <div class="row text-center">
         <div class="col-12">
           <p class="headline font-weight-medium">NOUS CONTACTER</p>
         </div>
         <v-container fluid fill-height class="col-12 social">
-              <a v-for="item in socials" :key="item.src" :to="item.route">
-                <v-img class="img" v-bind:src="item.src" width="50px" height="50px"></v-img>
+              <a v-for="item in socials" :key="item" :to="item.route">
+                <v-icon> {{item.icon}} </v-icon>
               </a>
         </v-container>
       </div>
@@ -107,11 +162,11 @@ export default {
       { src: require("../assets/basket.jpg") }
     ],
     socials: [
-      { src: require("../assets/fb.png"), route: "/" },
-      { src: require("../assets/twitter.png"), route: "/" },
-      { src: require("../assets/instagram.png"), route: "/" },
-      { src: require("../assets/google.png"), route: "/" },
-      { src: require("../assets/youtube.png"), route: "/" }
+      { route: "/", icon:"mdi-facebook-box"},
+      { route: "/", icon:"mdi-twitter-box" },
+      { route: "/", icon:"mdi-instagram" },
+      { route: "/", icon:"mdi-google-plus" },
+      { route: "/", icon:"mdi-play" }
     ]
   })
 };
