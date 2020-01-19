@@ -118,7 +118,6 @@ export default {
     ],
     slotsTable: {},
     invitationsTable: {},
-    //id: this.$route.params.id,
     playersTable: {},
     start: null,
     end: null,
@@ -146,6 +145,10 @@ export default {
     isSignedIn() {
       store.dispatch("isSignedIn");
       return store.getters.isSignedIn;
+    },
+    id() {
+      store.dispatch("id");
+      return store.getters.id;
     },
     title() {
       const { start, end } = this;

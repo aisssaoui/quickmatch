@@ -1,21 +1,21 @@
 <template>
-  <div>
+  <div v-if="isSignedIn">
     <br />
     <br />
     <v-card class="mx-auto" max-width="800" tile>
       <v-list-item three-line>
         <v-list-item-content>
-          <v-list-item-title class="display-2">Modifie ton profile !</v-list-item-title>
+          <v-list-item-title class="display-2">Modifie ton profil !</v-list-item-title>
           <v-list-item-subtitle>
             <v-text-field label="Bio" v-model="playerToShow.bio"></v-text-field>
           </v-list-item-subtitle>
         </v-list-item-content>
-
-        <v-list-item-avatar size="80">
+        <v-list-item-avatar>
           <img id="avatar" />
         </v-list-item-avatar>
       </v-list-item>
     </v-card>
+
     <br />
     <v-card class="mx-auto" max-width="800" tile>
       <v-list-item two-line>
@@ -87,10 +87,11 @@
 
 <script>
 import axios from "axios";
+import store from "../store";
 
 export default {
   data: () => ({
-    id: 0,
+    dialog: false,
     psdoErr: 0,
     mailErr: 0,
     phnmErr: 0,
@@ -135,13 +136,13 @@ export default {
       this.psdoErr = 0;
       this.mailErr = 0;
       this.phnmErr = 0;
-      if (err.constraint == "player_pseudo_key") {
+      if (err.detail.includes("pseudo")) {
         this.psdoErr = 1;
       }
-      if (err.constraint == "player_mail_address_key") {
+      if (err.detail.includes("mail_address")) {
         this.mailErr = 1;
       }
-      if (err.constraint == "player_phone_number_key") {
+      if (err.detail.includes("phone_number")) {
         this.phnmErr = 1;
       }
     },
@@ -159,10 +160,13 @@ export default {
         }
       );
       if (apiRep.data.name != "error") {
-        this.$router.push({ path: `/profile/${this.id}` });
+        this.$router.push({ path: `/profile` });
       } else {
         this.ShowError(apiRep.data);
       }
+    },
+    refreshPic: function() {
+      document.getElementById("avatar").src = this.playerToShow.avatar;
     }
   },
 
@@ -176,6 +180,17 @@ export default {
     );
     this.playerToShow = player.data;
     document.getElementById("avatar").src = this.playerToShow.avatar;
+  },
+
+  computed: {
+    isSignedIn() {
+      store.dispatch("isSignedIn");
+      return store.getters.isSignedIn;
+    },
+    id() {
+      store.dispatch("id");
+      return store.getters.id;
+    }
   }
 };
 </script>
