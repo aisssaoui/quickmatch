@@ -65,7 +65,7 @@ var Player = {
               switch ((_context.prev = _context.next)) {
                 case 0:
                   text =
-                    "INSERT INTO Player (surname, first_name, mail_address, phone_number, pseudo, mdp)\n\t VALUES($1, $2, $3, $4, $5, $6)\n RETURNING *";
+                    "INSERT INTO Player (surname, first_name, mail_address, phone_number, pseudo, mdp, avatar)\n\t VALUES($1, $2, $3, $4, $5, $6, $7)\n RETURNING *";
                   values = [
                     req.body.surname,
                     req.body.first_name,
@@ -92,7 +92,7 @@ var Player = {
                   _context.t0 = _context["catch"](2);
                   return _context.abrupt(
                     "return",
-                    res.status(400).send(_context.t0)
+                    res.status(200).send(_context.t0)
                   );
 
                 case 13:
@@ -205,7 +205,7 @@ var Player = {
 
                   return _context3.abrupt(
                     "return",
-                    res.status(404).send({ message: "player not found" })
+                    res.status(200).send({ message: "player not found" })
                   );
 
                 case 8:
@@ -333,7 +333,7 @@ var Player = {
 
                   return _context3.abrupt(
                     "return",
-                    res.status(404).send({ message: "player not found" })
+                    res.status(200).send({ message: "player not found" })
                   );
 
                 case 8:
@@ -388,7 +388,7 @@ var Player = {
                 case 0:
                   findOneQuery = "SELECT * FROM player WHERE id=$1";
                   updateOneQuery =
-                    "UPDATE player\n      SET pseudo=$1, surname=$2,first_name=$3,mail_address=$4,phone_number=$5, bio=$6\n      WHERE id=$7 returning *";
+                    "UPDATE player\n      SET pseudo=$1, surname=$2,first_name=$3,mail_address=$4,phone_number=$5, bio=$6, avatar=$7\n      WHERE id=$8 returning *";
                   _context4.prev = 2;
                   _context4.next = 5;
                   return _db2.default.query(findOneQuery, [req.params.id]);
@@ -415,6 +415,7 @@ var Player = {
                     req.body.mail_address || rows[0].mail_address,
                     req.body.phone_number || rows[0].phone_number,
                     req.body.bio || rows[0].bio,
+                    req.body.avatar || rows[0].avatar,
                     req.params.id
                   ];
                   _context4.next = 12;
@@ -432,7 +433,7 @@ var Player = {
                   _context4.t0 = _context4["catch"](2);
                   return _context4.abrupt(
                     "return",
-                    res.status(400).send(_context4.t0)
+                    res.status(200).send(_context4.t0)
                   );
 
                 case 19:

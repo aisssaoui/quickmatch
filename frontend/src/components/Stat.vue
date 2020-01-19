@@ -89,7 +89,6 @@ export default {
   },
   data() {
     return {
-      id: this.$route.params.id,
       playerToShow: {},
       playerStatToShow: {}
     };
@@ -108,6 +107,10 @@ export default {
     isSignedIn() {
       store.dispatch("isSignedIn");
       return store.getters.isSignedIn;
+    },
+    id() {
+      store.dispatch("id");
+      return store.getters.id;
     }
   }
 };
