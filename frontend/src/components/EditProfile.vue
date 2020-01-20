@@ -149,7 +149,7 @@ export default {
     updatePlayer: async function() {
       let apiRep = null;
       apiRep = await axios.put(
-        "http://fama6831.odns.fr/dbcontrol/api/v1/players/id" + this.id,
+        "https://fama6831.odns.fr/dbcontrol/api/v1/players/id" + this.id,
         {
           bio: this.playerToShow.bio,
           surname: this.playerToShow.surname,
@@ -173,7 +173,7 @@ export default {
   async created() {
     this.id = this.$route.params.id;
     const player = await axios.get(
-      "http://fama6831.odns.fr/dbcontrol/api/v1/players/id" + this.id,
+      "https://fama6831.odns.fr/dbcontrol/api/v1/players/id" + this.id,
       {
         responseType: "json"
       }
