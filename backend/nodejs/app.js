@@ -78,6 +78,8 @@ app.delete("/dbcontrol/api/v1/Players/:mail_address", _player2.default.delete);
 app.post("/dbcontrol/api/v1/Clubs", _club2.default.create);
 app.get("/dbcontrol/api/v1/Clubs", _club2.default.getAll);
 app.get("/dbcontrol/api/v1/Clubs/:id", _club2.default.getOne);
+app.get("/dbcontrol/api/v1/Clubs/in/:id", _club2.default.getAllForOneUser);
+app.get("/dbcontrol/api/v1/Clubs/not_in/:id", _club2.default.getAllForOneUser);
 //app.put("/dbcontrol/api/v1/Clubs/:id", _club2.default.update);
 app.delete("/dbcontrol/api/v1/Clubs/:id", _club2.default.delete);
 

@@ -65,10 +65,13 @@ var Club = {
               switch ((_context.prev = _context.next)) {
                 case 0:
                   text =
-                    "INSERT INTO Club (club_name, private_club)\n\t    VALUES($1, $2)\n        returning *";
+                    "INSERT INTO Club (club_name, private_club) VALUES($1, $2) returning Club.id";
                   values = [req.body.club_name, req.body.private_club];
                   _context.prev = 2;
                   _context.next = 5;
+                  values = [req.params.id, _db2.default.query(text, values)];
+                  text =
+                    "INSERT INTO Player_Belong_Club (player, club, is_admin) VALUES($1, $2, true) returning *"
                   return _db2.default.query(text, values);
 
                 case 5:
@@ -240,7 +243,7 @@ var Club = {
    * @param {object} res
    * @returns {object} clubs array
    */
-  getAllForOneUser: (function() {
+  getAllInForOneUser: (function() {
     var _ref30 = _asyncToGenerator(
       /*#__PURE__*/ regeneratorRuntime.mark(function _callee2(req, res) {
         var findAllForOneUserQuery, _ref40, rows, rowCount;
@@ -250,7 +253,7 @@ var Club = {
             while (1) {
               switch ((_context20.prev = _context20.next)) {
                 case 0:
-                  findAllForOneUserQuery = "SELECT C.club_name, C.creation_date, C.private_club, PBC.is_admin FROM Club C JOIN Player_Belong_Club PBC ON C.id=PBC.club JOIN Player P ON PBC.player=P.id";
+                  findAllForOneUserQuery = "SELECT C.club_name, C.creation_date, C.private_club, PBC.is_admin FROM Club C JOIN Player_Belong_Club PBC ON C.id=PBC.club JOIN Player P ON PBC.player=P.id WHERE P.id = $1";
                   _context20.prev = 1;
                   _context20.next = 4;
                   return _db2.default.query(findAllForOneUserQuery);
@@ -285,11 +288,69 @@ var Club = {
       })
     );
 
-    function getAll(_x30, _x40) {
+    function getAllInForOneUser(_x30, _x40) {
       return _ref30.apply(this, arguments);
     }
 
-    return getAllForOneUser;
+    return getAllInForOneUser;
+  })(),
+
+  /**
+   * Get All clubs
+   * @param {object} req
+   * @param {object} res
+   * @returns {object} clubs array
+   */
+  getAllNotInForOneUser: (function() {
+    var _ref30 = _asyncToGenerator(
+      /*#__PURE__*/ regeneratorRuntime.mark(function _callee2(req, res) {
+        var findAllForOneUserQuery, _ref40, rows, rowCount;
+
+        return regeneratorRuntime.wrap(
+          function _callee2$(_context20) {
+            while (1) {
+              switch ((_context20.prev = _context20.next)) {
+                case 0:
+                  findAllForOneUserQuery = "SELECT C.club_name, C.creation_date, C.private_club, PBC.is_admin FROM Club C JOIN Player_Belong_Club PBC ON C.id=PBC.club JOIN Player P ON PBC.player=P.id WHERE P.id != $1";
+                  _context20.prev = 1;
+                  _context20.next = 4;
+                  return _db2.default.query(findAllForOneUserQuery);
+
+                case 4:
+                  _ref40 = _context20.sent;
+                  rows = _ref40.rows;
+                  rowCount = _ref40.rowCount;
+                  return _context20.abrupt(
+                    "return",
+                    res.status(200).send({ rows: rows, rowCount: rowCount })
+                  );
+
+                case 10:
+                  _context20.prev = 10;
+                  _context20.t0 = _context20["catch"](1);
+                  return _context20.abrupt(
+                    "return",
+                    res.status(400).send(_context20.t0)
+                  );
+
+                case 13:
+                case "end":
+                  return _context20.stop();
+              }
+            }
+          },
+          _callee2,
+          this,
+          [[1, 10]]
+        );
+      })
+    );
+
+    function getAllNotInForOneUser(_x30, _x40) {
+      return _ref30.apply(this, arguments);
+    }
+
+    return getAllNotInForOneUser;
   })(),
 
   /**
