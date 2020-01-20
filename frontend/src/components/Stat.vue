@@ -125,14 +125,13 @@ export default {
   },
   data() {
     return {
-      id: this.$route.params.id,
       playerToShow: {},
       playerStatToShow: {}
     };
   },
   async created() {
     const player = await axios.get(
-      "http://fama6831.odns.fr/dbcontrol/api/v1/players/id" + this.id,
+      "https://fama6831.odns.fr/dbcontrol/api/v1/players/id" + this.id,
       {
         responseType: "json"
       }
@@ -144,6 +143,10 @@ export default {
     isSignedIn() {
       store.dispatch("isSignedIn");
       return store.getters.isSignedIn;
+    },
+    id() {
+      store.dispatch("id");
+      return store.getters.id;
     }
   }
 };

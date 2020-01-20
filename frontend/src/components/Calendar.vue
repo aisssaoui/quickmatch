@@ -118,7 +118,6 @@ export default {
     ],
     slotsTable: {},
     invitationsTable: {},
-    //id: this.$route.params.id,
     playersTable: {},
     start: null,
     end: null,
@@ -146,6 +145,10 @@ export default {
     isSignedIn() {
       store.dispatch("isSignedIn");
       return store.getters.isSignedIn;
+    },
+    id() {
+      store.dispatch("id");
+      return store.getters.id;
     },
     title() {
       const { start, end } = this;
@@ -297,19 +300,19 @@ export default {
   },
   async created() {
     const slot_Table = await axios.get(
-      "http://fama6831.odns.fr/dbcontrol/api/v1/Slots",
+      "https://fama6831.odns.fr/dbcontrol/api/v1/Slots",
       {
         responseType: "json"
       }
     );
     const invitation_Table = await axios.get(
-      "http://fama6831.odns.fr/dbcontrol/api/v1/Invitations",
+      "https://fama6831.odns.fr/dbcontrol/api/v1/Invitations",
       {
         responseType: "json"
       }
     );
     const player_Table = await axios.get(
-      "http://fama6831.odns.fr/dbcontrol/api/v1/Players",
+      "https://fama6831.odns.fr/dbcontrol/api/v1/Players",
       {
         responseType: "json"
       }
