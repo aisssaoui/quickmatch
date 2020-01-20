@@ -72,7 +72,7 @@
               ></v-checkbox>
             </v-col>
           </v-form>
-          <v-btn rounded align="left" color="#666" v-on:click="create_club">Créer le club</v-btn>
+          <v-btn class="btn" rounded align="left" color="#666" v-on:click="create_club">Créer le club</v-btn>
           <br><br>
         </v-card>
       </div>
@@ -104,7 +104,7 @@
               </v-list-item-content>
             </v-list-item>
 
-            <v-btn rounded color="#666" v-on:click="join_club">Demander à rejoindre</v-btn>
+            <v-btn class="btn" rounded color="#666" v-on:click="join_club">Demander à rejoindre</v-btn>
             <br><br>
           </div>
         </v-card>
@@ -117,6 +117,10 @@
 </template>
 
 <style>
+  .btn{
+    float: right;
+    margin-right: 2%
+  }
   #vos_clubs{
     width: 45%;
     margin-top: 2%;
