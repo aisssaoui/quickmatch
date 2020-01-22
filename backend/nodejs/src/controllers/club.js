@@ -253,7 +253,7 @@ var Club = {
             while (1) {
               switch ((_context20.prev = _context20.next)) {
                 case 0:
-                  findAllForOneUserQuery = "SELECT C.club_name, C.creation_date, C.private_club, PBC.is_admin FROM Club C JOIN Player_Belong_Club PBC ON C.id=PBC.club JOIN Player P ON PBC.player=P.id WHERE P.id = $1";
+                  findAllForOneUserQuery = "SELECT C.id, C.club_name, C.creation_date, C.private_club, PBC.is_admin FROM Club C JOIN Player_Belong_Club PBC ON C.id=PBC.club JOIN Player P ON PBC.player=P.id WHERE P.id = $1";
                   _context20.prev = 1;
                   _context20.next = 4;
                   return _db2.default.query(findAllForOneUserQuery);
@@ -311,7 +311,7 @@ var Club = {
             while (1) {
               switch ((_context20.prev = _context20.next)) {
                 case 0:
-                  findAllForOneUserQuery = "SELECT C.club_name, C.creation_date, C.private_club, PBC.is_admin FROM Club C JOIN Player_Belong_Club PBC ON C.id=PBC.club JOIN Player P ON PBC.player=P.id WHERE P.id != $1";
+                  findAllForOneUserQuery = "SELECT C.id, C.club_name, C.creation_date, C.private_club, PBC.is_admin FROM Club C JOIN Player_Belong_Club PBC ON C.id=PBC.club JOIN Player P ON PBC.player=P.id WHERE P.id != $1";
                   _context20.prev = 1;
                   _context20.next = 4;
                   return _db2.default.query(findAllForOneUserQuery);
@@ -501,6 +501,75 @@ var Club = {
     }
 
     return _delete;
+  })(),
+
+  /**
+   * Delete A Club
+   * @param {object} req
+   * @param {object} res
+   * @returns {void} return statuc code 204
+   */
+  leaveClub: (function() {
+    var _ref9 = _asyncToGenerator(
+      /*#__PURE__*/ regeneratorRuntime.mark(function _callee5(req, res) {
+        var deleteQuery, _ref10, rows;
+
+        return regeneratorRuntime.wrap(
+          function _callee5$(_context5) {
+            while (1) {
+              switch ((_context5.prev = _context5.next)) {
+                case 0:
+                  deleteQuery = "DELETE FROM Player_Belong_Club WHERE player=$1 AND club=$2 returning *";
+                  _context5.prev = 1;
+                  _context5.next = 4;
+                  return _db2.default.query(deleteQuery, [req.params.id_player, req.params.id_club]);
+
+                case 4:
+                  _ref10 = _context5.sent;
+                  rows = _ref10.rows;
+
+                  if (rows[0]) {
+                    _context5.next = 8;
+                    break;
+                  }
+
+                  return _context5.abrupt(
+                    "return",
+                    res.status(404).send({ message: "club not found" })
+                  );
+
+                case 8:
+                  return _context5.abrupt(
+                    "return",
+                    res.status(204).send({ message: "deleted" })
+                  );
+
+                case 11:
+                  _context5.prev = 11;
+                  _context5.t0 = _context5["catch"](1);
+                  return _context5.abrupt(
+                    "return",
+                    res.status(400).send(_context5.t0)
+                  );
+
+                case 14:
+                case "end":
+                  return _context5.stop();
+              }
+            }
+          },
+          _callee5,
+          this,
+          [[1, 11]]
+        );
+      })
+    );
+
+    function _leaveClub(_x9, _x10) {
+      return _ref9.apply(this, arguments);
+    }
+
+    return _leaveClub;
   })()
 };
 

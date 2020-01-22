@@ -82,6 +82,7 @@ app.get("/dbcontrol/api/v1/Clubs/in/:id", _club2.default.getAllForOneUser);
 app.get("/dbcontrol/api/v1/Clubs/not_in/:id", _club2.default.getAllForOneUser);
 //app.put("/dbcontrol/api/v1/Clubs/:id", _club2.default.update);
 app.delete("/dbcontrol/api/v1/Clubs/:id", _club2.default.delete);
+app.delete("/dbcontrol/api/v1/Clubs/:id_player/:id_club", _club2.default.leaveClub);
 
 // Table invitation
 app.post("/dbcontrol/api/v1/Invitations", _invitation2.default.create);
