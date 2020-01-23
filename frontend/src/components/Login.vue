@@ -117,7 +117,7 @@ export default {
     findUser() {
       axios
         .get(
-          "https://fama6831.odns.fr/dbcontrol/api/v1/Players/ma" +
+          "//fama6831.odns.fr/dbcontrol/api/v1/Players/ma" +
             store.getters.email
         )
         .then(response => {
@@ -140,7 +140,7 @@ export default {
     login() {
       axios
         .get(
-          "https://fama6831.odns.fr/dbcontrol/api/v1/Players/ma" +
+          "//fama6831.odns.fr/dbcontrol/api/v1/Players/ma" +
             store.getters.email
         )
         .then(response => {

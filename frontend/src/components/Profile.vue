@@ -115,7 +115,7 @@ export default {
     updatePic: async function() {
       let apiRep = null;
       apiRep = await axios.put(
-        "https://fama6831.odns.fr/dbcontrol/api/v1/players/id" + this.id,
+        "//fama6831.odns.fr/dbcontrol/api/v1/players/id" + this.id,
         {
           avatar: this.playerToShow.avatar
         }
@@ -130,7 +130,7 @@ export default {
 
   async created() {
     const player = await axios.get(
-      "https://fama6831.odns.fr/dbcontrol/api/v1/players/id" + this.id,
+      "//fama6831.odns.fr/dbcontrol/api/v1/players/id" + this.id,
       {
         responseType: "json"
       }

@@ -111,7 +111,7 @@
         findUser() {
           axios
             .get(
-              "https://fama6831.odns.fr/dbcontrol/api/v1/Players/ma" +
+              "//fama6831.odns.fr/dbcontrol/api/v1/Players/ma" +
                 store.getters.email
             )
             .then(response => {
@@ -134,7 +134,7 @@
         login() {
           axios
             .get(
-              "https://fama6831.odns.fr/dbcontrol/api/v1/Players/ma" +
+              "//fama6831.odns.fr/dbcontrol/api/v1/Players/ma" +
                 store.getters.email
             )
             .then(response => {
@@ -147,7 +147,7 @@
         }/*
       login() {
         axios
-          .post("https://fama6831.odns.fr/dbcontrol/api/v1/Players")
+          .post("//fama6831.odns.fr/dbcontrol/api/v1/Players")
           .then(response => {
             store.dispatch("login");
             router.push("/");

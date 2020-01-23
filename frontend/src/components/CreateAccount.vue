@@ -95,7 +95,7 @@ export default {
   methods: {
     createAccount: function() {
       axios
-        .post("https://fama6831.odns.fr/dbcontrol/api/v1/Players/", {
+        .post("//fama6831.odns.fr/dbcontrol/api/v1/Players/", {
           pseudo: this.pseudo,
           surname: this.surname,
           first_name: this.firstName,
