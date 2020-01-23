@@ -4,14 +4,16 @@
       <v-col>
         <v-sheet height="64">
           <v-toolbar flat color="white">
-            <v-btn outlined class="mr-4" @click="setToday">Today</v-btn>
+            <v-btn outlined class="mr-4" @click="setToday">Aujourd'hui</v-btn>
+            <v-btn outlined class="mr-4" to="CreateMatch">Créer match</v-btn>
+            <v-spacer></v-spacer>
             <v-btn fab text small @click="prev">
               <v-icon small>mdi-chevron-left</v-icon>
             </v-btn>
+            <v-toolbar-title>{{ title }}</v-toolbar-title>
             <v-btn fab text small @click="next">
               <v-icon small>mdi-chevron-right</v-icon>
             </v-btn>
-            <v-toolbar-title>{{ title }}</v-toolbar-title>
             <v-spacer></v-spacer>
             <v-menu bottom right>
               <template v-slot:activator="{ on }">
@@ -22,16 +24,16 @@
               </template>
               <v-list>
                 <v-list-item @click="type = 'day'">
-                  <v-list-item-title>Day</v-list-item-title>
+                  <v-list-item-title>Jour</v-list-item-title>
                 </v-list-item>
                 <v-list-item @click="type = 'week'">
-                  <v-list-item-title>Week</v-list-item-title>
+                  <v-list-item-title>Semaine</v-list-item-title>
                 </v-list-item>
                 <v-list-item @click="type = 'month'">
-                  <v-list-item-title>Month</v-list-item-title>
+                  <v-list-item-title>Mois</v-list-item-title>
                 </v-list-item>
                 <v-list-item @click="type = '4day'">
-                  <v-list-item-title>4 days</v-list-item-title>
+                  <v-list-item-title>4 jours</v-list-item-title>
                 </v-list-item>
               </v-list>
             </v-menu>
@@ -102,10 +104,10 @@ export default {
     focus: Date(),
     type: "month",
     typeToLabel: {
-      month: "Month",
-      week: "Week",
-      day: "Day",
-      "4day": "4 Days"
+      month: "Mois",
+      week: "Semaine",
+      day: "Jour",
+      "4day": "4 jours"
     },
     daysOfWeek: [
       "Monday",
