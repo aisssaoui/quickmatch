@@ -102,13 +102,6 @@ app.get("/dbcontrol/api/v1/Slots/:id", _slot2.default.getOne);
 //app.put("/dbcontrol/api/v1/Slots/:id", _slot2.default.update);
 app.delete("/dbcontrol/api/v1/Slots/:id", _slot2.default.delete);
 
-// Table player_belong_club
-// app.post("/dbcontrol/api/v1/PlayersBelongClub", _player_belong_club2.default.create);
-// app.get("/dbcontrol/api/v1/PlayersBelongClub", _player_belong_club2.default.getAll);
-// app.get("/dbcontrol/api/v1/PlayersBelongClub/:player", _player_belong_club2.default.getOne);
-// app.put("/dbcontrol/api/v1/PlayersBelongClub/:player", _player_belong_club2.default.update);
-// app.delete("/dbcontrol/api/v1/PlayersBelongClub/:player", _player_belong_club2.default.delete);
-
 // Table meet_sheet
 app.post("/dbcontrol/api/v1/MeetsSheet", _meet_sheet2.default.create);
 app.get("/dbcontrol/api/v1/MeetsSheet", _meet_sheet2.default.getAll);
@@ -129,6 +122,7 @@ app.get("/dbcontrol/api/v1/Meets/:id", _meet2.default.getOne);
 // app.put("/dbcontrol/api/v1/Meets/:id", _meet2.default.update);
 app.delete("/dbcontrol/api/v1/Meets/:id", _meet2.default.delete);
 
+// Table player_belong_club
 app.get(
   "/dbcontrol/api/v1/PlayerClubs/pid:id",
   _player_belong_club2.default.getPlayerAdminClubs
