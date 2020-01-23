@@ -61,7 +61,7 @@ export default {
 
   async created() {
     const clubs = await axios.get(
-      "//fama6831.odns.fr/dbcontrol/api/v1/Clubs/id" + this.id,
+      "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/Clubs/id" + this.id,
       {
         responseType: "json"
       }
