@@ -16,7 +16,7 @@
         </v-list-item>
 
         <v-card-actions>
-          <v-btn text color="deep-purple accent-4" :to="'/EditProfile/' + id">
+          <v-btn text color="deep-purple accent-4" :to="'/EditProfile'">
             Editer mon profil
             <v-icon>mdi-pencil-outline</v-icon>
           </v-btn>
