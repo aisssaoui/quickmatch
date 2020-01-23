@@ -47,7 +47,9 @@
         </v-form>
         <v-row class="pa-0" align="center" justify="center">
           <v-col class="pt-0" cols="10">
-            <v-btn v-on:click="createAccount()" rounded outlined block>Créer !</v-btn>
+            <v-btn v-on:click="createAccount()" rounded outlined block
+              >Créer !</v-btn
+            >
           </v-col>
         </v-row>
       </v-card>
@@ -95,7 +97,7 @@ export default {
   methods: {
     createAccount: function() {
       axios
-        .post("https://fama6831.odns.fr/dbcontrol/api/v1/Players/", {
+        .post("http://fama6831.odns.fr/dbcontrol/api/v1/Players/", {
           pseudo: this.pseudo,
           surname: this.surname,
           first_name: this.firstName,

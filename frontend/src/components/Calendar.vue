@@ -300,19 +300,19 @@ export default {
   },
   async created() {
     const slot_Table = await axios.get(
-      "https://fama6831.odns.fr/dbcontrol/api/v1/Slots",
+      "http://fama6831.odns.fr/dbcontrol/api/v1/Slots",
       {
         responseType: "json"
       }
     );
     const invitation_Table = await axios.get(
-      "https://fama6831.odns.fr/dbcontrol/api/v1/Invitations",
+      "http://fama6831.odns.fr/dbcontrol/api/v1/Invitations",
       {
         responseType: "json"
       }
     );
     const player_Table = await axios.get(
-      "https://fama6831.odns.fr/dbcontrol/api/v1/Players",
+      "http://fama6831.odns.fr/dbcontrol/api/v1/Players",
       {
         responseType: "json"
       }

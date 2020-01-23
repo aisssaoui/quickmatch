@@ -1,4 +1,3 @@
-
 "use strict";
 
 var _express = require("express");
@@ -36,8 +35,8 @@ var _meet_sheet2 = _interopRequireDefault(_meet_sheet);
 var _slot = require("./src/controllers/slot");
 var _slot2 = _interopRequireDefault(_slot);
 
-// var _player_belong_club = require("./src/controllers/player_belong_club");
-// var _player_belong_club2 = _interopRequireDefault(_player_belong_club);
+var _player_belong_club = require("./src/controllers/player_belong_club");
+var _player_belong_club2 = _interopRequireDefault(_player_belong_club);
 
 function _interopRequireDefault(obj) {
   return obj && obj.__esModule ? obj : { default: obj };
@@ -102,6 +101,7 @@ app.get("/dbcontrol/api/v1/Slots", _slot2.default.getAll);
 app.get("/dbcontrol/api/v1/Slots/:id", _slot2.default.getOne);
 //app.put("/dbcontrol/api/v1/Slots/:id", _slot2.default.update);
 app.delete("/dbcontrol/api/v1/Slots/:id", _slot2.default.delete);
+
 // Table player_belong_club
 // app.post("/dbcontrol/api/v1/PlayersBelongClub", _player_belong_club2.default.create);
 // app.get("/dbcontrol/api/v1/PlayersBelongClub", _player_belong_club2.default.getAll);
@@ -128,6 +128,15 @@ app.get("/dbcontrol/api/v1/Meets", _meet2.default.getAll);
 app.get("/dbcontrol/api/v1/Meets/:id", _meet2.default.getOne);
 // app.put("/dbcontrol/api/v1/Meets/:id", _meet2.default.update);
 app.delete("/dbcontrol/api/v1/Meets/:id", _meet2.default.delete);
+
+app.get(
+  "/dbcontrol/api/v1/PlayerClubs/pid:id",
+  _player_belong_club2.default.getPlayerAdminClubs
+);
+app.get(
+  "/dbcontrol/api/v1/PlayerClubs/cid:cid",
+  _player_belong_club2.default.getPlayerClubsByClubID
+);
 
 app.listen(3000);
 console.log("app running on port ", 3000);

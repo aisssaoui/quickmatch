@@ -6,10 +6,9 @@
     <br />
     <v-card class="mx-auto" max-width="1000" tile>
       <br />
-      <span
-        v-if="Err"
-        style="color : red; font-size: 25px;margin: 15px;"
-      >Merci de renseigner tous les champs</span>
+      <span v-if="Err" style="color : red; font-size: 25px;margin: 15px;"
+        >Merci de renseigner tous les champs</span
+      >
 
       <v-list-item two-line>
         <v-list-item-content>
@@ -89,35 +88,71 @@
       </v-list-item>
 
       <v-list-item>
-        <v-list-item-title class="font-weight-bold">Jour de répétition:</v-list-item-title>
+        <v-list-item-title class="font-weight-bold"
+          >Jour de répétition:</v-list-item-title
+        >
       </v-list-item>
 
       <v-list-item>
         <v-list-item>
-          <v-checkbox v-model="selected" label="Lundi" value="Monday"></v-checkbox>
+          <v-checkbox
+            v-model="selected"
+            label="Lundi"
+            value="Monday"
+          ></v-checkbox>
         </v-list-item>
         <v-list-item>
-          <v-checkbox v-model="selected" label="Mardi" value="Tuesday"></v-checkbox>
+          <v-checkbox
+            v-model="selected"
+            label="Mardi"
+            value="Tuesday"
+          ></v-checkbox>
         </v-list-item>
         <v-list-item>
-          <v-checkbox v-model="selected" label="Mercredi" value="Wednesday"></v-checkbox>
+          <v-checkbox
+            v-model="selected"
+            label="Mercredi"
+            value="Wednesday"
+          ></v-checkbox>
         </v-list-item>
         <v-list-item>
-          <v-checkbox v-model="selected" label="Jeudi" value="Thursday"></v-checkbox>
+          <v-checkbox
+            v-model="selected"
+            label="Jeudi"
+            value="Thursday"
+          ></v-checkbox>
         </v-list-item>
         <v-list-item>
-          <v-checkbox v-model="selected" label="Vendredi" value="Friday"></v-checkbox>
+          <v-checkbox
+            v-model="selected"
+            label="Vendredi"
+            value="Friday"
+          ></v-checkbox>
         </v-list-item>
         <v-list-item>
-          <v-checkbox v-model="selected" label="Samedi" value="Saturday"></v-checkbox>
+          <v-checkbox
+            v-model="selected"
+            label="Samedi"
+            value="Saturday"
+          ></v-checkbox>
         </v-list-item>
         <v-list-item>
-          <v-checkbox v-model="selected" label="Dimanche" value="Sunday"></v-checkbox>
+          <v-checkbox
+            v-model="selected"
+            label="Dimanche"
+            value="Sunday"
+          ></v-checkbox>
         </v-list-item>
       </v-list-item>
 
       <v-card-actions>
-        <v-btn text class="title" color="deep-purple accent-4" v-on:click="CreateMatch">Créer !</v-btn>
+        <v-btn
+          text
+          class="title"
+          color="deep-purple accent-4"
+          v-on:click="CreateMatch"
+          >Créer !</v-btn
+        >
       </v-card-actions>
     </v-card>
   </div>
@@ -158,7 +193,7 @@ export default {
       }
       let apiRep1 = null;
       apiRep1 = await axios.get(
-        "https://fama6831.odns.fr/dbcontrol/api/v1/playerClubs/cid" + cid,
+        "http://fama6831.odns.fr/dbcontrol/api/v1/playerClubs/cid" + cid,
         {
           responseType: "json"
         }
@@ -174,7 +209,7 @@ export default {
       for (let i = 0; i < this.selected.length; i++) {
         let apiRep = null;
         apiRep = await axios.post(
-          "https://fama6831.odns.fr/dbcontrol/api/v1/slots/",
+          "http://fama6831.odns.fr/dbcontrol/api/v1/slots/",
           {
             start_hour: ts,
             end_hour: te,
@@ -194,7 +229,7 @@ export default {
         for (let j = 0; j < playersInv.length; j++) {
           let apiRep2 = null;
           apiRep2 = await axios.post(
-            "https://fama6831.odns.fr/dbcontrol/api/v1/Invitations",
+            "http://fama6831.odns.fr/dbcontrol/api/v1/Invitations",
             {
               slot_id: slotsId[i],
               player_id: playersInv[j],
@@ -210,7 +245,7 @@ export default {
 
   async created() {
     const player_clubs = await axios.get(
-      "https://fama6831.odns.fr/dbcontrol/api/v1/playerClubs/pid" + this.id,
+      "http://fama6831.odns.fr/dbcontrol/api/v1/playerClubs/pid" + this.id,
       {
         responseType: "json"
       }
@@ -231,5 +266,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>
