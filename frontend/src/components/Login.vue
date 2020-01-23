@@ -50,8 +50,7 @@
               rounded
               outlined
               block
-              >Se connecter avec Google</v-btn
-            >
+            >Se connecter avec Google</v-btn>
           </v-col>
         </v-row>
       </v-card>
@@ -117,20 +116,20 @@ export default {
     findUser() {
       axios
         .get(
-          "https://fama6831.odns.fr/dbcontrol/api/v1/Players/ma" +
+          "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/players/ma" +
             store.getters.email
         )
         .then(response => {
-            if (Object.keys(response.data).length <= 1) {
-                router.push("/createAccount");
-            }else{
-                store.dispatch("hasAccount");
-                store.dispatch("setID");
-                router.push("/"); // redirection vers la page d'accueil
-            }
+          if (Object.keys(response.data).length <= 1) {
+            router.push("/createAccount");
+          } else {
+            store.dispatch("hasAccount");
+            store.dispatch("setID");
+            router.push("/"); // redirection vers la page d'accueil
+          }
         })
         .catch(e => {
-            console.log(e);
+          console.log(e);
         });
     },
     logout() {
@@ -140,7 +139,7 @@ export default {
     login() {
       axios
         .get(
-          "https://fama6831.odns.fr/dbcontrol/api/v1/Players/ma" +
+          "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/players/ma" +
             store.getters.email
         )
         .then(response => {

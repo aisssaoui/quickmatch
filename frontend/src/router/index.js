@@ -15,6 +15,7 @@ import CreateAccount from "../components/CreateAccount";
 import ContactUs from "../components/ContactUs";
 import EditProfile from "../components/EditProfile";
 import Club from "../components/Club";
+import CreateMatch from "../components/CreateMatch";
 
 Vue.use(Router);
 
@@ -32,9 +33,9 @@ export default new Router({
     { name: "team", path: "/team", component: Team },
     { name: "aboutus", path: "/aboutus", component: AboutUs },
     { name: "contactus", path: "/contactus", component: ContactUs },
-    { name: "editprofile", path: "/EditProfile/:id", component: EditProfile },
+    { name: "editprofile", path: "/EditProfile", component: EditProfile },
     { name: "club", path: "/Club", component: Club },
-    { path: "/dbcontrol/api/v1/:table" }
+    { name: "createMatch", path: "/CreateMatch", component: CreateMatch }
   ],
   mode: "history"
 });

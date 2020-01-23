@@ -16,7 +16,7 @@
         </v-list-item>
 
         <v-card-actions>
-          <v-btn text color="deep-purple accent-4" :to="'/EditProfile/' + id">
+          <v-btn text color="deep-purple accent-4" :to="'/EditProfile'">
             Editer mon profil
             <v-icon>mdi-pencil-outline</v-icon>
           </v-btn>
@@ -115,7 +115,7 @@ export default {
     updatePic: async function() {
       let apiRep = null;
       apiRep = await axios.put(
-        "https://fama6831.odns.fr/dbcontrol/api/v1/players/id" + this.id,
+        "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/players/id" + this.id,
         {
           avatar: this.playerToShow.avatar
         }
@@ -130,7 +130,7 @@ export default {
 
   async created() {
     const player = await axios.get(
-      "https://fama6831.odns.fr/dbcontrol/api/v1/players/id" + this.id,
+      "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/players/id" + this.id,
       {
         responseType: "json"
       }

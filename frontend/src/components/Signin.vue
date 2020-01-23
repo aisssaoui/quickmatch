@@ -1,62 +1,108 @@
 <template>
-    <v-container fluid>
-        <v-layout row wrap align-center="true" justify-center="true">
-            <v-card class="mx-10" raised width="25%">
-                <v-form v-model="valid" >
-                    <v-row class="pa-0" justify="center" align="center">
-                      <v-col align="center" cols="5">
-                          <v-img src="../assets/logo.png" alt="Quick Match logo"></v-img>Inscription
-                      </v-col>
-                    </v-row>
-                    <v-col class="py-0" cols="6" md="12">
-                        <v-text-field v-model="surname" :rules="surnameRules" :counter="20" label="Nom" required outlined filled></v-text-field>
-                    </v-col>
-                    <v-col class="py-0" cols="6" md="12">
-                        <v-text-field v-model="first_name" :rules="first_nameRules" :counter="20" label="Prénom" required outlined filled></v-text-field>
-                    </v-col>
-                    <v-col class="py-0" cols="6" md="12">
-                        <v-text-field v-model="pseudo" :rules="pseudoRules" :counter="20" label="Pseudo" required outlined filled></v-text-field>
-                    </v-col>
-                    <v-col class="py-0" cols="6" md="12">
-                        <v-text-field v-model="password" :rules="passwordRules" :counter="20" label="Mot de passe" type="password" required outlined filled></v-text-field>
-                    </v-col>
-                    <v-col class="py-0" cols="6" md="12">
-                        <v-text-field v-model="email" :rules="emailRules" :counter="50" label="E-mail" required outlined filled></v-text-field>
-                    </v-col>
-                    <v-col class="py-0" cols="6" md="12">
-                        <v-text-field v-model="tel" :rules="telRules" :counter="14" label="Numéro de téléphone" required outlined filled></v-text-field>
-                    </v-col>
-
-
-                </v-form>
-                <v-row class="pa-0" align="center" justify="center">
-                    <v-col class="pt-0" cols="10">
-                        <v-btn rounded outlined block v-on:click="login">Se connecter</v-btn>
-                    </v-col>
-                </v-row>
-                <v-divider></v-divider>
-                <v-row align="center" justify="center">
-                    <v-col cols="10">
-                        <v-btn
-                          v-google-signin-button="clientId"
-                          color="green lighten-1"
-                          rounded
-                          outlined
-                          block
-                          >Se connecter avec Google</v-btn
-                        >
-                    </v-col>
-                </v-row>
-            </v-card>
-        </v-layout>
-    </v-container>
+  <v-container fluid>
+    <v-layout row wrap align-center="true" justify-center="true">
+      <v-card class="mx-10" raised width="25%">
+        <v-form v-model="valid">
+          <v-row class="pa-0" justify="center" align="center">
+            <v-col align="center" cols="5">
+              <v-img src="../assets/logo.png" alt="Quick Match logo"></v-img>Inscription
+            </v-col>
+          </v-row>
+          <v-col class="py-0" cols="6" md="12">
+            <v-text-field
+              v-model="surname"
+              :rules="surnameRules"
+              :counter="20"
+              label="Nom"
+              required
+              outlined
+              filled
+            ></v-text-field>
+          </v-col>
+          <v-col class="py-0" cols="6" md="12">
+            <v-text-field
+              v-model="first_name"
+              :rules="first_nameRules"
+              :counter="20"
+              label="Prénom"
+              required
+              outlined
+              filled
+            ></v-text-field>
+          </v-col>
+          <v-col class="py-0" cols="6" md="12">
+            <v-text-field
+              v-model="pseudo"
+              :rules="pseudoRules"
+              :counter="20"
+              label="Pseudo"
+              required
+              outlined
+              filled
+            ></v-text-field>
+          </v-col>
+          <v-col class="py-0" cols="6" md="12">
+            <v-text-field
+              v-model="password"
+              :rules="passwordRules"
+              :counter="20"
+              label="Mot de passe"
+              type="password"
+              required
+              outlined
+              filled
+            ></v-text-field>
+          </v-col>
+          <v-col class="py-0" cols="6" md="12">
+            <v-text-field
+              v-model="email"
+              :rules="emailRules"
+              :counter="50"
+              label="E-mail"
+              required
+              outlined
+              filled
+            ></v-text-field>
+          </v-col>
+          <v-col class="py-0" cols="6" md="12">
+            <v-text-field
+              v-model="tel"
+              :rules="telRules"
+              :counter="14"
+              label="Numéro de téléphone"
+              required
+              outlined
+              filled
+            ></v-text-field>
+          </v-col>
+        </v-form>
+        <v-row class="pa-0" align="center" justify="center">
+          <v-col class="pt-0" cols="10">
+            <v-btn rounded outlined block v-on:click="login">Se connecter</v-btn>
+          </v-col>
+        </v-row>
+        <v-divider></v-divider>
+        <v-row align="center" justify="center">
+          <v-col cols="10">
+            <v-btn
+              v-google-signin-button="clientId"
+              color="green lighten-1"
+              rounded
+              outlined
+              block
+            >Se connecter avec Google</v-btn>
+          </v-col>
+        </v-row>
+      </v-card>
+    </v-layout>
+  </v-container>
 </template>
 
 <script>
-  import GoogleSignInButton from "../main.js";
-  import store from "../store";
-  import axios from "axios";
-  import router from "../router";
+import GoogleSignInButton from "../main.js";
+import store from "../store";
+import axios from "axios";
+import router from "../router";
 
   export default {
       directives: {
@@ -111,7 +157,7 @@
         findUser() {
           axios
             .get(
-              "https://fama6831.odns.fr/dbcontrol/api/v1/Players/ma" +
+              "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/Players/ma" +
                 store.getters.email
             )
             .then(response => {
@@ -134,7 +180,7 @@
         login() {
           axios
             .get(
-              "https://fama6831.odns.fr/dbcontrol/api/v1/Players/ma" +
+              "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/Players/ma" +
                 store.getters.email
             )
             .then(response => {
@@ -147,7 +193,7 @@
         }/*
       login() {
         axios
-          .post("https://fama6831.odns.fr/dbcontrol/api/v1/Players")
+          .post("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/Players")
           .then(response => {
             store.dispatch("login");
             router.push("/");
@@ -156,6 +202,6 @@
             router.push("/createAccount");
           });
       }*/
-    }
   }
+};
 </script>
