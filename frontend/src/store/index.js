@@ -120,7 +120,7 @@ export default new Vuex.Store({
     },
     async setID(state) {
       const player = await axios.get(
-        "http://fama6831.odns.fr/dbcontrol/api/v1/players/ma" + state.email,
+        "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/players/ma" + state.email,
         { ResponseType: "json" }
       );
       state.id = player.data.id;

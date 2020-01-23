@@ -104,106 +104,96 @@ import store from "../store";
 import axios from "axios";
 import router from "../router";
 
-export default {
-  directives: {
-    GoogleSignInButton
-  },
-  data: () => ({
-    clientId:
-      "864617003210-1dr6nsvputhjv59l5b3633sslri4vdjd.apps.googleusercontent.com",
-    valid: false,
-    surname: "",
-    first_name: "",
-    pseudo: "",
-    password: "",
-    email: "",
-    tel: "",
-    surnameRules: [
-      v => !!v || "Nom requis",
-      v => v.length >= 2 || "Nom trop court",
-      v =>
-        /^[a-zA-Z \-éèçîïœžâêôàûùâãäåæçëìíîïðñòóôõúûüýö]+$/.test(v) ||
-        "Nom invalide"
-    ],
-    first_nameRules: [
-      v => !!v || "Prénom requis",
-      v => v.length >= 2 || "Prénom trop court",
-      v =>
-        /^[a-zA-Z \-éèçîïœžâêôàûùâãäåæçëìíîïðñòóôõúûüýö]+$/.test(v) ||
-        "Prénom invalide"
-    ],
-    pseudoRules: [
-      v => !!v || "Pseudo requis",
-      v => v.length >= 2 || "Pseudo trop court",
-      v =>
-        /^[a-zA-Z0-9 _\-éèçîïœžâêôàûùâãäåæçëìíîïðñòóôõúûüýö]+$/.test(v) ||
-        'Pseudo invalide (lettres, nombres, espace, "_" et "-" seulement)'
-    ],
-    passwordRules: [
-      v => !!v || "Mot de passe requis",
-      v => v.length >= 8 || "Mot de passe trop court"
-    ],
-    emailRules: [
-      v => !!v || "E-mail requis",
-      v =>
-        /^[a-zA-Z0-9._-]+@[a-z0-9._-]{2,}\.[a-z]{2,4}$/.test(v) ||
-        "E-mail invalide"
-    ],
-    telRules: [
-      v => !!v || "Numéro de téléphone requis",
-      v =>
-        /^(0[1-8])(?:[ -]?([0-9]{2})){4}$/.test(v) ||
-        'Numéro de téléphone invalide (vous pouvez utilisé "-" ou des espaces comme séparateur (06-66-66-66-66)'
-    ]
-  }),
-  methods: {
-    OnGoogleAuthSuccess(googleUser) {
-      store.dispatch("setGoogleUser", googleUser);
-      this.findUser(); // méthode initiale
-    },
-    OnGoogleAuthFail(error) {
-      console.log(error);
-    },
-    findUser() {
-      axios
-        .get(
-          "http://fama6831.odns.fr/dbcontrol/api/v1/Players/ma" +
-            store.getters.email
-        )
-        .then(response => {
-          if (Object.keys(response.data).length <= 1) {
-            router.push("/createAccount");
-          } else {
-            store.dispatch("hasAccount");
-            store.dispatch("setID");
-            router.push("/"); // redirection vers la page d'accueil
-          }
-        })
-        .catch(e => {
-          console.log(e);
-        });
-    },
-    logout() {
-      store.dispatch("logout");
-      router.push("/disconnected");
-    },
-    login() {
-      axios
-        .get(
-          "http://fama6831.odns.fr/dbcontrol/api/v1/Players/ma" +
-            store.getters.email
-        )
-        .then(response => {
-          store.dispatch("login");
-          router.push("/");
-        })
-        .catch(e => {
-          router.push("/createAccount");
-        });
-    } /*
+  export default {
+      directives: {
+        GoogleSignInButton
+      },
+    data: () => ({
+      clientId:
+        "864617003210-1dr6nsvputhjv59l5b3633sslri4vdjd.apps.googleusercontent.com",
+      valid: false,
+      surname: '',
+      first_name: '',
+      pseudo: '',
+      password: '',
+      email: '',
+      tel: '',
+      surnameRules: [
+        v => !!v || 'Nom requis',
+        v => v.length >= 2 || 'Nom trop court',
+        v => /^[a-zA-Z \-éèçîïœžâêôàûùâãäåæçëìíîïðñòóôõúûüýö]+$/.test(v) || 'Nom invalide'
+      ],
+      first_nameRules: [
+        v => !!v || 'Prénom requis',
+        v => v.length >= 2 || 'Prénom trop court',
+        v => /^[a-zA-Z \-éèçîïœžâêôàûùâãäåæçëìíîïðñòóôõúûüýö]+$/.test(v) || 'Prénom invalide'
+      ],
+      pseudoRules: [
+        v => !!v || 'Pseudo requis',
+        v => v.length >= 2 || 'Pseudo trop court',
+        v => /^[a-zA-Z0-9 _\-éèçîïœžâêôàûùâãäåæçëìíîïðñòóôõúûüýö]+$/.test(v) || 'Pseudo invalide (lettres, nombres, espace, "_" et "-" seulement)'
+      ],
+      passwordRules: [
+        v => !!v || 'Mot de passe requis',
+        v => v.length >= 8 || 'Mot de passe trop court'
+      ],
+      emailRules: [
+        v => !!v || 'E-mail requis',
+        v => /^[a-zA-Z0-9._-]+@[a-z0-9._-]{2,}\.[a-z]{2,4}$/.test(v) || 'E-mail invalide'
+      ],
+      telRules: [
+        v => !!v || 'Numéro de téléphone requis',
+        v => /^(0[1-8])(?:[ -]?([0-9]{2})){4}$/.test(v) || 'Numéro de téléphone invalide (vous pouvez utilisé "-" ou des espaces comme séparateur (06-66-66-66-66)'
+      ],
+    }),
+    methods: {
+        OnGoogleAuthSuccess(googleUser) {
+          store.dispatch("setGoogleUser", googleUser);
+          this.findUser(); // méthode initiale
+        },
+        OnGoogleAuthFail(error) {
+          console.log(error);
+        },
+        findUser() {
+          axios
+            .get(
+              "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/Players/ma" +
+                store.getters.email
+            )
+            .then(response => {
+                if (Object.keys(response.data).length <= 1) {
+                    router.push("/createAccount");
+                }else{
+                    store.dispatch("hasAccount");
+                    store.dispatch("setID");
+                    router.push("/"); // redirection vers la page d'accueil
+                }
+            })
+            .catch(e => {
+                console.log(e);
+            });
+        },
+        logout() {
+          store.dispatch("logout");
+          router.push("/disconnected");
+        },
+        login() {
+          axios
+            .get(
+              "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/Players/ma" +
+                store.getters.email
+            )
+            .then(response => {
+              store.dispatch("login");
+              router.push("/");
+            })
+            .catch(e => {
+              router.push("/createAccount");
+            });
+        }/*
       login() {
         axios
-          .post("https://fama6831.odns.fr/dbcontrol/api/v1/Players")
+          .post("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/Players")
           .then(response => {
             store.dispatch("login");
             router.push("/");
