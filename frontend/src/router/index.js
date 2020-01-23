@@ -33,7 +33,7 @@ export default new Router({
     { name: "team", path: "/team", component: Team },
     { name: "aboutus", path: "/aboutus", component: AboutUs },
     { name: "contactus", path: "/contactus", component: ContactUs },
-    { name: "editprofile", path: "/EditProfile/:id", component: EditProfile },
+    { name: "editprofile", path: "/EditProfile", component: EditProfile },
     { name: "club", path: "/Club", component: Club },
     { name: "createMatch", path: "/CreateMatch", component: CreateMatch }
   ],

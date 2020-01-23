@@ -163,7 +163,8 @@ export default {
       }
       let apiRep1 = null;
       apiRep1 = await axios.get(
-        "http://fama6831.odns.fr/dbcontrol/api/v1/playerClubs/cid" + cid,
+        "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/playerClubs/cid" +
+          cid,
         {
           responseType: "json"
         }
@@ -179,7 +180,7 @@ export default {
       for (let i = 0; i < this.selected.length; i++) {
         let apiRep = null;
         apiRep = await axios.post(
-          "http://fama6831.odns.fr/dbcontrol/api/v1/slots/",
+          "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/slots/",
           {
             start_hour: ts,
             end_hour: te,
@@ -199,7 +200,7 @@ export default {
         for (let j = 0; j < playersInv.length; j++) {
           let apiRep2 = null;
           apiRep2 = await axios.post(
-            "http://fama6831.odns.fr/dbcontrol/api/v1/Invitations",
+            "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/Invitations",
             {
               slot_id: slotsId[i],
               player_id: playersInv[j],
@@ -215,7 +216,8 @@ export default {
 
   async created() {
     const player_clubs = await axios.get(
-      "http://fama6831.odns.fr/dbcontrol/api/v1/playerClubs/pid" + this.id,
+      "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/playerClubs/pid" +
+        this.id,
       {
         responseType: "json"
       }

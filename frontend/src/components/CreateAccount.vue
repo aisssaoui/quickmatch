@@ -1,4 +1,4 @@
-https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/<template>
+<template>
   <v-container fluid>
     <v-row justify="center" align="center">
       <v-col cols="1">
@@ -47,9 +47,7 @@ https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/<template>
         </v-form>
         <v-row class="pa-0" align="center" justify="center">
           <v-col class="pt-0" cols="10">
-            <v-btn v-on:click="createAccount()" rounded outlined block
-              >Créer !</v-btn
-            >
+            <v-btn v-on:click="createAccount()" rounded outlined block>Créer !</v-btn>
           </v-col>
         </v-row>
       </v-card>
