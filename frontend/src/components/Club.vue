@@ -250,7 +250,7 @@ export default {
         {
           club: id,
           player: this.id,
-          is_admin: true
+          is_admin: false
         }
       );
       alert("vous avez rejoins le club " + name);
