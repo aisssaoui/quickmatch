@@ -216,7 +216,7 @@ export default {
 
   async created() {
     const player_clubs = await axios.get(
-      "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/playerClubs/pid" +
+      "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/playerClubs/paid" +
         this.id,
       {
         responseType: "json"

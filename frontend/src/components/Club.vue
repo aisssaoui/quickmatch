@@ -156,7 +156,6 @@ import store from "../store";
 import axios from "axios";
 import router from "../router";
 import WorkInProgress from "./WorkInProgress";
-
 export default {
   components: {
     WorkInProgress
@@ -164,28 +163,31 @@ export default {
   data() {
     return {
       clubsInToShow: {},
-      clubsNotInToShow: {}
+      clubsNotInToShow: {},
+      valid: false,
+      club_name: null,
+      private_club: false,
+      club_nameRules: [
+        v => !!v || "Nom de club requis",
+        v => v.length >= 2 || "Nom de club trop court",
+        v =>
+          /^[a-zA-Z \-éèçîïœžâêôàûùâãäåæçëìíîïðñòóôõúûüýö]+$/.test(v) ||
+          "Nom de club invalide"
+      ]
     };
   },
-  valid: false,
-  club_name: '',
-  private_club: '',
-  club_nameRules: [
-    v => !!v || 'Nom de club requis',
-    v => v.length >= 2 || 'Nom de club trop court',
-    v => /^[a-zA-Z \-éèçîïœžâêôàûùâãäåæçëìíîïðñòóôõúûüýö]+$/.test(v) || 'Nom de club invalide'
-  ],
-
   async created() {
     const clubs_in = await axios.get(
-      "https://fama6831.odns.fr/dbcontrol/api/v1/Clubs/in/id" + this.id,
+      "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/PlayerClubs/pid" +
+        this.id,
       {
         responseType: "json"
       }
     );
     this.clubsInToShow = clubs_in.data.rows;
     const clubs_not_in = await axios.get(
-      "http://fama6831.odns.fr/dbcontrol/api/v1/Clubs/not_in/id" + this.id,
+      "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/PlayerClubs/npid" +
+        this.id,
       {
         responseType: "json"
       }
@@ -203,32 +205,76 @@ export default {
     }
   },
   methods: {
-    create_club() {
-      axios
-        .post(
-          "/dbcontrol/api/v1/Clubs"
-        )
-        .then(response => {
-          alert("club crée");
-        })
-        .catch(e => {
-          alert("échec de la création du club");
-        });
+    async create_club() {
+      let apiRep = null;
+      apiRep = await axios.post(
+        "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/Clubs",
+        {
+          club_name: this.club_name,
+          private_club: this.private_club
+        }
+      );
+      let cid = apiRep.data.id;
+
+      let apiRep1 = null;
+      apiRep1 = await axios.post(
+        "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/PlayerClubs",
+        {
+          club: cid,
+          player: this.id,
+          is_admin: true
+        }
+      );
+      alert("Club " + this.club_name + " créé !");
+      this.$router.go();
     },
-    join_club() {
-      alert("vous avez rejoins le club");
+    async join_club(id, name) {
+      console.log(id);
+      let apiRep1 = null;
+      apiRep1 = await axios.post(
+        "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/PlayerClubs",
+        {
+          club: id,
+          player: this.id,
+          is_admin: false
+        }
+      );
+      alert("vous avez rejoins le club " + name);
+      this.$router.go();
     },
-    leave_club(id, club_name) {
-      axios
+    async leave_club(cid, club_name) {
+      let apiRep = await axios.get(
+        "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/PlayerClubsCount/" +
+          cid,
+        {
+          responseType: "json"
+        }
+      );
+      let nb = apiRep.data.nb;
+
+      await axios
         .delete(
-          "/dbcontrol/api/v1/Clubs"
+          "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/PlayerClubs/" +
+            cid +
+            "&" +
+            this.id
         )
         .then(response => {
           alert("Vous avez quitté le club " + club_name);
         })
         .catch(e => {
-          alert("Echec, veuillez réessayer, si le problème persiste, réessayer plus tard");
+          alert(
+            "Echec, veuillez réessayer, si le problème persiste, réessayer plus tard"
+          );
         });
+
+      if (nb == 1) {
+        await axios.delete(
+          "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/Clubs/" + cid
+        );
+      }
+
+      this.$router.go();
     }
   }
 };

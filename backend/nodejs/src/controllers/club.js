@@ -65,13 +65,10 @@ var Club = {
               switch ((_context.prev = _context.next)) {
                 case 0:
                   text =
-                    "INSERT INTO Club (club_name, private_club) VALUES($1, $2) returning Club.id";
+                    "INSERT INTO Club (club_name, private_club)\n\t    VALUES($1, $2)\n        returning *";
                   values = [req.body.club_name, req.body.private_club];
                   _context.prev = 2;
                   _context.next = 5;
-                  values = [req.params.id, _db2.default.query(text, values)];
-                  text =
-                    "INSERT INTO Player_Belong_Club (player, club, is_admin) VALUES($1, $2, true) returning *"
                   return _db2.default.query(text, values);
 
                 case 5:
@@ -238,122 +235,6 @@ var Club = {
   })(),
 
   /**
-   * Get All clubs
-   * @param {object} req
-   * @param {object} res
-   * @returns {object} clubs array
-   */
-  getAllInForOneUser: (function() {
-    var _ref30 = _asyncToGenerator(
-      /*#__PURE__*/ regeneratorRuntime.mark(function _callee2(req, res) {
-        var findAllForOneUserQuery, _ref40, rows, rowCount;
-
-        return regeneratorRuntime.wrap(
-          function _callee2$(_context20) {
-            while (1) {
-              switch ((_context20.prev = _context20.next)) {
-                case 0:
-                  findAllForOneUserQuery = "SELECT C.id, C.club_name, C.creation_date, C.private_club, PBC.is_admin FROM Club C JOIN Player_Belong_Club PBC ON C.id=PBC.club JOIN Player P ON PBC.player=P.id WHERE P.id = $1";
-                  _context20.prev = 1;
-                  _context20.next = 4;
-                  return _db2.default.query(findAllForOneUserQuery);
-
-                case 4:
-                  _ref40 = _context20.sent;
-                  rows = _ref40.rows;
-                  rowCount = _ref40.rowCount;
-                  return _context20.abrupt(
-                    "return",
-                    res.status(200).send({ rows: rows, rowCount: rowCount })
-                  );
-
-                case 10:
-                  _context20.prev = 10;
-                  _context20.t0 = _context20["catch"](1);
-                  return _context20.abrupt(
-                    "return",
-                    res.status(400).send(_context20.t0)
-                  );
-
-                case 13:
-                case "end":
-                  return _context20.stop();
-              }
-            }
-          },
-          _callee2,
-          this,
-          [[1, 10]]
-        );
-      })
-    );
-
-    function getAllInForOneUser(_x30, _x40) {
-      return _ref30.apply(this, arguments);
-    }
-
-    return getAllInForOneUser;
-  })(),
-
-  /**
-   * Get All clubs
-   * @param {object} req
-   * @param {object} res
-   * @returns {object} clubs array
-   */
-  getAllNotInForOneUser: (function() {
-    var _ref30 = _asyncToGenerator(
-      /*#__PURE__*/ regeneratorRuntime.mark(function _callee2(req, res) {
-        var findAllForOneUserQuery, _ref40, rows, rowCount;
-
-        return regeneratorRuntime.wrap(
-          function _callee2$(_context20) {
-            while (1) {
-              switch ((_context20.prev = _context20.next)) {
-                case 0:
-                  findAllForOneUserQuery = "SELECT C.id, C.club_name, C.creation_date, C.private_club, PBC.is_admin FROM Club C JOIN Player_Belong_Club PBC ON C.id=PBC.club JOIN Player P ON PBC.player=P.id WHERE P.id != $1";
-                  _context20.prev = 1;
-                  _context20.next = 4;
-                  return _db2.default.query(findAllForOneUserQuery);
-
-                case 4:
-                  _ref40 = _context20.sent;
-                  rows = _ref40.rows;
-                  rowCount = _ref40.rowCount;
-                  return _context20.abrupt(
-                    "return",
-                    res.status(200).send({ rows: rows, rowCount: rowCount })
-                  );
-
-                case 10:
-                  _context20.prev = 10;
-                  _context20.t0 = _context20["catch"](1);
-                  return _context20.abrupt(
-                    "return",
-                    res.status(400).send(_context20.t0)
-                  );
-
-                case 13:
-                case "end":
-                  return _context20.stop();
-              }
-            }
-          },
-          _callee2,
-          this,
-          [[1, 10]]
-        );
-      })
-    );
-
-    function getAllNotInForOneUser(_x30, _x40) {
-      return _ref30.apply(this, arguments);
-    }
-
-    return getAllNotInForOneUser;
-  })(),
-
-  /**
    * Update A Club
    * @param {object} req
    * @param {object} res
@@ -501,75 +382,6 @@ var Club = {
     }
 
     return _delete;
-  })(),
-
-  /**
-   * Delete A Club
-   * @param {object} req
-   * @param {object} res
-   * @returns {void} return statuc code 204
-   */
-  leaveClub: (function() {
-    var _ref9 = _asyncToGenerator(
-      /*#__PURE__*/ regeneratorRuntime.mark(function _callee5(req, res) {
-        var deleteQuery, _ref10, rows;
-
-        return regeneratorRuntime.wrap(
-          function _callee5$(_context5) {
-            while (1) {
-              switch ((_context5.prev = _context5.next)) {
-                case 0:
-                  deleteQuery = "DELETE FROM Player_Belong_Club WHERE player=$1 AND club=$2 returning *";
-                  _context5.prev = 1;
-                  _context5.next = 4;
-                  return _db2.default.query(deleteQuery, [req.params.id_player, req.params.id_club]);
-
-                case 4:
-                  _ref10 = _context5.sent;
-                  rows = _ref10.rows;
-
-                  if (rows[0]) {
-                    _context5.next = 8;
-                    break;
-                  }
-
-                  return _context5.abrupt(
-                    "return",
-                    res.status(404).send({ message: "club not found" })
-                  );
-
-                case 8:
-                  return _context5.abrupt(
-                    "return",
-                    res.status(204).send({ message: "deleted" })
-                  );
-
-                case 11:
-                  _context5.prev = 11;
-                  _context5.t0 = _context5["catch"](1);
-                  return _context5.abrupt(
-                    "return",
-                    res.status(400).send(_context5.t0)
-                  );
-
-                case 14:
-                case "end":
-                  return _context5.stop();
-              }
-            }
-          },
-          _callee5,
-          this,
-          [[1, 11]]
-        );
-      })
-    );
-
-    function _leaveClub(_x9, _x10) {
-      return _ref9.apply(this, arguments);
-    }
-
-    return _leaveClub;
   })()
 };
 
