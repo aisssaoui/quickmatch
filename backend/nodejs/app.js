@@ -62,17 +62,12 @@ app.get("/test", function(req, res) {
 // Table player
 app.post("/dbcontrol/api/v1/Players", _player2.default.create);
 app.get("/dbcontrol/api/v1/Players", _player2.default.getAll);
-app.get(
-  "/dbcontrol/api/v1/Players/ma:mail_address",
-  _player2.default.getByMail
-);
-app.get(
-  "/dbcontrol/api/v1/Players/ma_stat:mail_address",
-  _player2.default.getByMailStat
-);
+app.get("/dbcontrol/api/v1/Players/ma:mail_address", _player2.default.getByMail);
+app.get("/dbcontrol/api/v1/Players/ma_stat:mail_address", _player2.default.getByMailStat);
 app.get("/dbcontrol/api/v1/Players/id:id", _player2.default.getByID);
 app.put("/dbcontrol/api/v1/Players/id:id", _player2.default.update);
 app.delete("/dbcontrol/api/v1/Players/:mail_address", _player2.default.delete);
+
 
 //Table club
 app.post("/dbcontrol/api/v1/Clubs", _club2.default.create);
@@ -110,10 +105,7 @@ app.get(
   _meet_sheet2.default.getOne
 );
 //app.put("/dbcontrol/api/v1/MeetsSheet/:player_mail_adress", _meet_sheet2.default.update);
-app.delete(
-  "/dbcontrol/api/v1/MeetsSheet/:player_mail_address",
-  _meet_sheet2.default.delete
-);
+app.delete("/dbcontrol/api/v1/MeetsSheet/:player_mail_address", _meet_sheet2.default.delete);
 
 // Table meet
 app.post("/dbcontrol/api/v1/Meets", _meet2.default.create);
@@ -123,35 +115,14 @@ app.get("/dbcontrol/api/v1/Meets/:id", _meet2.default.getOne);
 app.delete("/dbcontrol/api/v1/Meets/:id", _meet2.default.delete);
 
 // Table player_belong_club
-app.get(
-  "/dbcontrol/api/v1/PlayerClubs/paid:id",
-  _player_belong_club2.default.getPlayerAdminClubs
-);
-app.get(
-  "/dbcontrol/api/v1/PlayerClubs/pid:id",
-  _player_belong_club2.default.getPlayerClubsByPlayerID
-);
-app.get(
-  "/dbcontrol/api/v1/PlayerClubs/npid:id",
-  _player_belong_club2.default.NgetPlayerClubsByPlayerID
-);
-app.get(
-  "/dbcontrol/api/v1/PlayerClubs/cid:id",
-  _player_belong_club2.default.getPlayerClubsByClubID
-);
-app.post(
-  "/dbcontrol/api/v1/PlayerClubs",
-  _player_belong_club2.default.addPlayerToClub
-);
-app.delete(
-  "/dbcontrol/api/v1/PlayerClubs/:cid&:pid",
-  _player_belong_club2.default.deletePlayerFromClub
-);
+app.get("/dbcontrol/api/v1/PlayerClubs/paid:id", _player_belong_club2.default.getPlayerAdminClubs);
+app.get("/dbcontrol/api/v1/PlayerClubs/pid:id", _player_belong_club2.default.getPlayerClubsByPlayerID);
+app.get("/dbcontrol/api/v1/PlayerClubs/npid:id", _player_belong_club2.default.NgetPlayerClubsByPlayerID);
+app.get("/dbcontrol/api/v1/PlayerClubs/cid:id", _player_belong_club2.default.getPlayerClubsByClubID);
+app.post("/dbcontrol/api/v1/PlayerClubs", _player_belong_club2.default.addPlayerToClub);
+app.delete("/dbcontrol/api/v1/PlayerClubs/:cid&:pid", _player_belong_club2.default.deletePlayerFromClub);
 app.get("/dbcontrol/api/v1/PlayerClubs", _player_belong_club2.default.getAll);
-app.get(
-  "/dbcontrol/api/v1/playerClubsCount/:id",
-  _player_belong_club2.default.getCount
-);
+app.get("/dbcontrol/api/v1/playerClubsCount/:id", _player_belong_club2.default.getCount);
 
 app.listen(3000);
 console.log("app running on port ", 3000);
