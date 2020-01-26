@@ -48,7 +48,7 @@
                 </v-list-item>
 
                 <div v-if="row.is_admin">
-                  <v-btn class="btn" rounded color="#666" v-on:click="switch_menu=true;name_club_switch=row.club_name;id_club_switch=row.id">gérer le club</v-btn>
+                  <v-btn class="btn" rounded color="#666" v-on:click="manage_club(row.club_name, row.id)">gérer le club</v-btn>
                   <br><br>
                 </div>
 
@@ -136,7 +136,7 @@
                 </v-list-item-content>
               </v-list-item>
 
-              <v-btn class="btn" rounded color="#666" v-on:click="switch_menu=false">retourner au menu club</v-btn>
+              <v-btn class="btn" rounded color="#666" v-on:click="return_to_main_menu()">retourner au menu club</v-btn>
               <br><br>
 
               <div v-for="row in playersInClub" :key="row.id">
@@ -320,7 +320,7 @@ export default {
     };
   },
   async created() {
-    const clubs_in = await axios.get(
+    var clubs_in = await axios.get(
       "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/PlayerClubs/pid" +
         this.id,
       {
@@ -328,7 +328,7 @@ export default {
       }
     );
     this.clubsInToShow = clubs_in.data.rows;
-    const clubs_not_in = await axios.get(
+    var clubs_not_in = await axios.get(
       "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/PlayerClubs/npid" +
         this.id,
       {
@@ -458,6 +458,26 @@ export default {
         .catch(e => {
           alert("Echec, veuillez réessayer, si le problème persiste, réessayer plus tard");
         });
+    },
+    async manage_club(club_name, cid){
+      this.switch_menu = true;
+      this.name_club_switch = club_name;
+      this.id_club_switch = id;
+      var players_in = await axios
+        .get("https://dbcontrol/api/v1/PlayerClubs/cid" + cid, {responseType: "json"});
+      this.playersInClub = players_in.data.rows;
+      var players_not_in = await axios
+        .get("https://dbcontrol/api/v1/PlayerClubs/ncid" + cid, {responseType: "json"});
+      this.playersNotInClub = players_not_in.data.rows;
+    },
+    async return_to_main_menu(){
+      this.switch_menu = false;
+      clubs_in = await axios
+        .get("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/PlayerClubs/pid" + this.id, {responseType: "json"});
+      this.clubsInToShow = clubs_in.data.rows;
+      clubs_not_in = await axios
+        .get("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/PlayerClubs/npid" + this.id, {responseType: "json"});
+      this.clubsNotInToShow = clubs_not_in.data.rows;
     },
   }
 };

@@ -118,6 +118,7 @@ app.get("/dbcontrol/api/v1/PlayerClubs/paid:id", _player_belong_club2.default.ge
 app.get("/dbcontrol/api/v1/PlayerClubs/pid:id", _player_belong_club2.default.getPlayerClubsByPlayerID);
 app.get("/dbcontrol/api/v1/PlayerClubs/npid:id", _player_belong_club2.default.NgetPlayerClubsByPlayerID);
 app.get("/dbcontrol/api/v1/PlayerClubs/cid:id", _player_belong_club2.default.getPlayerClubsByClubID);
+app.get("/dbcontrol/api/v1/PlayerClubs/ncid:id", _player_belong_club2.default.NgetPlayerClubsByClubID);
 app.post("/dbcontrol/api/v1/PlayerClubs", _player_belong_club2.default.addPlayerToClub);
 app.delete("/dbcontrol/api/v1/PlayerClubs/:cid&:pid", _player_belong_club2.default.deletePlayerFromClub);
 app.get("/dbcontrol/api/v1/PlayerClubs", _player_belong_club2.default.getAll);

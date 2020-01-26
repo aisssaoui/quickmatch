@@ -106,7 +106,59 @@ var player_belong_club = {
               switch ((_context2.prev = _context2.next)) {
                 case 0:
                   text =
-                    "SELECT * FROM player_belong_club P INNER JOIN club C on P.club = C.id WHERE club=$1";
+                    "SELECT P.id, P.surname, P.first_name, P.pseudo, PBC.is_admin FROM player_belong_club PBC INNER JOIN player P ON P.id = PBC.player WHERE club = $1";
+                  _context2.prev = 1;
+                  _context2.next = 4;
+                  return _db2.default.query(text, [req.params.id]);
+
+                case 4:
+                  _ref4 = _context2.sent;
+                  rows = _ref4.rows;
+                  rowCount = _ref4.rowCount;
+                  return _context2.abrupt(
+                    "return",
+                    res.status(200).send({ rows: rows, rowCount: rowCount })
+                  );
+
+                case 10:
+                  _context2.prev = 10;
+                  _context2.t0 = _context2["catch"](1);
+                  return _context2.abrupt(
+                    "return",
+                    res.status(400).send(_context2.t0)
+                  );
+
+                case 13:
+                case "end":
+                  return _context2.stop();
+              }
+            }
+          },
+          _callee2,
+          this,
+          [[1, 10]]
+        );
+      })
+    );
+
+    function getPlayerClubsByClubID(_x3, _x4) {
+      return _ref3.apply(this, arguments);
+    }
+
+    return getPlayerClubsByClubID;
+  })(),
+  NgetPlayerClubsByClubID: (function() {
+    var _ref3 = _asyncToGenerator(
+      /*#__PURE__*/ regeneratorRuntime.mark(function _callee2(req, res) {
+        var text, _ref4, rows, rowCount;
+
+        return regeneratorRuntime.wrap(
+          function _callee2$(_context2) {
+            while (1) {
+              switch ((_context2.prev = _context2.next)) {
+                case 0:
+                  text =
+                    "SELECT P.id, P.surname, P.first_name, P.pseudo, PBC.is_admin FROM player_belong_club PBC INNER JOIN player P ON P.id = PBC.player WHERE PBC.club != $1";
                   _context2.prev = 1;
                   _context2.next = 4;
                   return _db2.default.query(text, [req.params.id]);
