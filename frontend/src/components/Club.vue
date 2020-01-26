@@ -167,20 +167,8 @@ export default {
   },
   data() {
     return {
-      clubsInToShow: [
-        {"club_name": "justice league", "creation_date": "1970-01-01 00:00:01", "private_club": true, "is_admin": true},
-        {"club_name": "tortue ninja", "creation_date": "1970-01-01 00:00:02", "private_club": true, "is_admin": true},
-        {"club_name": "lyoko", "creation_date": "1970-01-01 00:00:03", "private_club": false, "is_admin": true},
-        {"club_name": "doroté", "creation_date": "1970-01-01 00:00:04", "private_club": true, "is_admin": true}
-      ],
-      clubsNotInToShow: [
-        {"club_name": "avengers", "creation_date": "1971-01-01 00:00:01"},
-        {"club_name": "scrabble", "creation_date": "1970-01-01 20:00:02"},
-        {"club_name": "x-men", "creation_date": "1970-01-01 20:00:03"},
-        {"club_name": "enseirb", "creation_date": "1970-01-01 20:00:04"},
-        {"club_name": "inria", "creation_date": "1970-01-01 20:00:05"},
-        {"club_name": "cnrs", "creation_date": "1970-01-01 20:00:06"}
-      ],
+      clubsInToShow: {},
+      clubsNotInToShow: {},
       valid: false,
       club_name: null,
       private_club: false,
@@ -301,13 +289,3 @@ export default {
   }
 };
 </script>
-
-
-Slt, au nv de Stat, j'ai rajouté le scroll pour la partie "stat de vos dernier match", et pour pouvoir identifié le match (plutôt que les match 1, match 2, ...), j'ai mis la date et le lieux
-voilà un aperçu, je voulais savoir si ça aller ou si il y a des choses à changer/rajouter
-
-Sinon au nv de Club pareil j'ai rajouté le scroll pour "vos clubs" et "rejoindre un club", et il n'y a que des club publique qu'on peut rejoindre, ça donne ça
-Par contre je me rappelle plus, si jamais le dernier admin d'un club le quitte mais qu'il y a encore des membres, on détruit le club ou on élit un nouvel admin au pif
-pour l'instant j'ai considéré qu'on devait le détruire, mais j'affiche qd même un message pour prévenir et on peut confirmer ou refuser
-
-Si tout est bon, dite le comme ça je push sur le site pour tester

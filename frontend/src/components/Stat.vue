@@ -127,13 +127,8 @@ export default {
   },
   data() {
     return {
-      playerToShow: {"surname": "olive", "first_name": "tom", "scored_goals": 5, "conceded_goals": 2, "matches_played": 4, "victories": 3},
-      playerStatToShow: [
-        {"won": true, "scored_goals": 1, "conceded_goals": 1, "precise_date": "1971-01-01 01:00:01", "location": "jardin"},
-        {"won": true, "scored_goals": 2, "conceded_goals": 0, "precise_date": "1971-01-01 07:00:01", "location": "salle foot INRIA"},
-        {"won": false, "scored_goals": 0, "conceded_goals": 1, "precise_date": "1971-01-01 02:00:01", "location": "salle foot mixte bordeaux"},
-        {"won": true, "scored_goals": 2, "conceded_goals": 0, "precise_date": "1971-01-01 03:00:01", "location": "chez faverge"},
-      ]
+      playerToShow: {},
+      playerStatToShow: {}
     };
   },
   async created() {
