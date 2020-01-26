@@ -426,7 +426,7 @@ export default {
     },
     async promote_to_admin(pid, cid, pseudo){
       await axios
-        .post("/dbcontrol/api/v1/PlayerClubsPromoteToAdmin/" + pid + "&" + cid);
+        .post("/dbcontrol/api/v1/PlayerClubsPromoteToAdmin/" + pid + "&" + cid)
         .then(response => {
           alert("Vous avez promu admin " + pseudo);
         })
