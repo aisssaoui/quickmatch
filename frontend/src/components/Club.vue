@@ -48,7 +48,7 @@
                 </v-list-item>
 
                 <div v-if="row.is_admin">
-                  <v-btn class="btn" rounded color="#666" v-on:click="switch_menu=true;name_club_switch=row.club_name">gérer le club</v-btn>
+                  <v-btn class="btn" rounded color="#666" v-on:click="switch_menu=true;name_club_switch=row.club_name;id_club_switch=row.id">gérer le club</v-btn>
                   <br><br>
                 </div>
 
@@ -164,7 +164,7 @@
                 </v-list-item>
 
                 <div v-if="! row.is_admin">
-                  <v-btn class="btn" rounded color="#666" >nommer admin</v-btn>
+                  <v-btn class="btn" rounded color="#666" v-on:click="promote_to_admin(row.id, id_club_switch, row.pseudo)">nommer admin</v-btn>
                   <br><br>
 
                   <v-btn class="btn" rounded color="#666" >supprimer</v-btn>
@@ -207,6 +207,9 @@
                     <v-list-item-subtitle class="headline">{{ row.pseudo }}</v-list-item-subtitle>
                   </v-list-item-content>
                 </v-list-item>
+
+                <v-btn class="btn" rounded color="#666" >ajouter</v-btn>
+                <br><br>
               </div>
             </v-card>
           </div>
@@ -421,6 +424,16 @@ export default {
 
       this.$router.go();
     },
+    async promote_to_admin(pid, cid, pseudo){
+      await axios
+        .post("/dbcontrol/api/v1/PlayerClubsPromoteToAdmin/" + pid + "&" + cid);
+        .then(response => {
+          alert("Vous avez promu admin " + pseudo);
+        })
+        .catch(e => {
+          alert("Echec, veuillez réessayer, si le problème persiste, réessayer plus tard");
+        });
+    }
   }
 };
 </script>

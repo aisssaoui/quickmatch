@@ -482,7 +482,59 @@ var player_belong_club = {
     }
 
     return getCount;
-  })()
+  })(),
+  promoteToAdmin: (function() {
+    var _ref9 = _asyncToGenerator(
+      /*#__PURE__*/ regeneratorRuntime.mark(function _callee5(req, res) {
+        var text, values, _ref10, rows;
+
+        return regeneratorRuntime.wrap(
+          function _callee5$(_context5) {
+            while (1) {
+              switch ((_context5.prev = _context5.next)) {
+                case 0:
+                  text =
+                    "UPDATE player_belong_club P SET P.is_admin = true WHERE P.player = $1 AND P.club = $2";
+                  values = [req.params.pid, req.params.cid];
+                  _context5.prev = 2;
+                  _context5.next = 5;
+                  return _db2.default.query(text, values);
+
+                case 5:
+                  _ref10 = _context5.sent;
+                  rows = _ref10.rows;
+                  return _context5.abrupt(
+                    "return",
+                    res.status(201).send(rows[0])
+                  );
+
+                case 10:
+                  _context5.prev = 10;
+                  _context5.t0 = _context5["catch"](2);
+                  return _context5.abrupt(
+                    "return",
+                    res.status(400).send(_context5.t0)
+                  );
+
+                case 13:
+                case "end":
+                  return _context5.stop();
+              }
+            }
+          },
+          _callee5,
+          this,
+          [[2, 10]]
+        );
+      })
+    );
+
+    function promoteToAdmin(_x9, _x10) {
+      return _ref9.apply(this, arguments);
+    }
+
+    return promoteToAdmin;
+  })(),
 };
 
 exports.default = player_belong_club;
