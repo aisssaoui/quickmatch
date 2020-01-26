@@ -46,6 +46,16 @@
                 </v-list-item-content>
               </v-list-item>
 
+              <div v-if="row.is_admin">
+                <v-btn class="btn" rounded color="#666" v-on:click="addPlayer" v-if="row.is_admin">Ajouter un joueur</v-btn>
+                <br><br>
+              </div>
+
+              <div v-if="row.is_admin">
+                <v-btn class="btn" rounded color="#666" v-on:click="addPlayer">Liste des joueurs</v-btn>
+                <br><br>
+              </div>
+
               <v-btn class="btn" rounded color="#666" v-on:click="leave_club(row.id, row.club_name, row.is_admin)">Quitter le club</v-btn>
               <br><br>
             </div>
@@ -167,8 +177,20 @@ export default {
   },
   data() {
     return {
-      clubsInToShow: {},
-      clubsNotInToShow: {},
+      clubsInToShow: [
+        {"club_name": "justice league", "creation_date": "1970-01-01 00:00:01", "private_club": true, "is_admin": false},
+        {"club_name": "tortue ninja", "creation_date": "1970-01-01 00:00:02", "private_club": true, "is_admin": true},
+        {"club_name": "lyoko", "creation_date": "1970-01-01 00:00:03", "private_club": false, "is_admin": false},
+        {"club_name": "doroté", "creation_date": "1970-01-01 00:00:04", "private_club": true, "is_admin": false}
+      ],
+      clubsNotInToShow: [
+        {"club_name": "avengers", "creation_date": "1971-01-01 00:00:01"},
+        {"club_name": "scrabble", "creation_date": "1970-01-01 20:00:01"},
+        {"club_name": "scrabble", "creation_date": "1970-01-01 20:00:01"},
+        {"club_name": "scrabble", "creation_date": "1970-01-01 20:00:01"},
+        {"club_name": "scrabble", "creation_date": "1970-01-01 20:00:01"},
+        {"club_name": "scrabble", "creation_date": "1970-01-01 20:00:01"}
+      ],
       valid: false,
       club_name: null,
       private_club: false,
@@ -285,7 +307,7 @@ export default {
       }
 
       this.$router.go();
-    }
+    },
   }
 };
 </script>
