@@ -210,7 +210,7 @@ var player_belong_club = {
               switch ((_context4.prev = _context4.next)) {
                 case 0:
                   text =
-                    "Select * from club where club_name in ((SELECT club_name FROM player_belong_club P INNER JOIN club C on P.club = C.id) EXCEPT (SELECT club_name FROM player_belong_club P INNER JOIN club C on P.club = C.id WHERE player=$1))";
+                    "SELECT C.id, C.club_name, C.creation_date FROM player_belong_club P INNER JOIN club C on P.club = C.id WHERE player!=$1 AND private_club='false'";
                   _context4.prev = 1;
                   _context4.next = 4;
                   return _db2.default.query(text, [req.params.id]);
@@ -420,7 +420,7 @@ var player_belong_club = {
 
     return getAll;
   })(),
-  getCount: (function() {
+  getCountAdmin: (function() {
     var _ref15 = _asyncToGenerator(
       /*#__PURE__*/ regeneratorRuntime.mark(function _callee8(req, res) {
         var text, _ref16, rows;
@@ -431,10 +431,10 @@ var player_belong_club = {
               switch ((_context8.prev = _context8.next)) {
                 case 0:
                   text =
-                    "select club, count(*) as nb from player_belong_club where club=$1 group by club ;";
+                    "SELECT COUNT(*) as nb FROM player_belong_club WHERE club=$1 AND is_admin='true'";
                   _context8.prev = 1;
                   _context8.next = 4;
-                  return _db2.default.query(text, [req.params.id]);
+                  return _db2.default.query(text, [req.params.cid]);
 
                 case 4:
                   _ref16 = _context8.sent;

@@ -63,11 +63,10 @@ app.get("/test", function(req, res) {
 app.post("/dbcontrol/api/v1/Players", _player2.default.create);
 app.get("/dbcontrol/api/v1/Players", _player2.default.getAll);
 app.get("/dbcontrol/api/v1/Players/ma:mail_address", _player2.default.getByMail);
-app.get("/dbcontrol/api/v1/Players/ma_stat:mail_address", _player2.default.getByMailStat);
+app.get("/dbcontrol/api/v1/Players/stat:id", _player2.default.getPlayerStat);
 app.get("/dbcontrol/api/v1/Players/id:id", _player2.default.getByID);
 app.put("/dbcontrol/api/v1/Players/id:id", _player2.default.update);
 app.delete("/dbcontrol/api/v1/Players/:mail_address", _player2.default.delete);
-
 
 //Table club
 app.post("/dbcontrol/api/v1/Clubs", _club2.default.create);
@@ -122,7 +121,7 @@ app.get("/dbcontrol/api/v1/PlayerClubs/cid:id", _player_belong_club2.default.get
 app.post("/dbcontrol/api/v1/PlayerClubs", _player_belong_club2.default.addPlayerToClub);
 app.delete("/dbcontrol/api/v1/PlayerClubs/:cid&:pid", _player_belong_club2.default.deletePlayerFromClub);
 app.get("/dbcontrol/api/v1/PlayerClubs", _player_belong_club2.default.getAll);
-app.get("/dbcontrol/api/v1/playerClubsCount/:id", _player_belong_club2.default.getCount);
+app.get("/dbcontrol/api/v1/playerClubsCountAdmin/:cid", _player_belong_club2.default.getCountAdmin);
 
 app.listen(3000);
 console.log("app running on port ", 3000);

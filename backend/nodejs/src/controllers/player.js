@@ -248,7 +248,7 @@ var Player = {
    * @param {object} res
    * @returns {object} player object
    */
-  getByMailStat: (function() {
+  getPlayerStat: (function() {
     var _ref30 = _asyncToGenerator(
       /*#__PURE__*/ regeneratorRuntime.mark(function _callee20(req, res) {
         var findAllQuery, _ref40, rows, rowCount;
@@ -258,11 +258,11 @@ var Player = {
             while (1) {
               switch ((_context20.prev = _context20.next)) {
                 case 0:
-                  findAllQuery =
-                    "SELECT M.won, M.scored_goals, M.conceded_goals FROM player P JOIN meet_sheet M ON P.id=M.player WHERE mail_address = $1";
+                  text =
+                    "SELECT MS.won, MS.scored_goals, MS.conceded_goals, M.precise_date, M.location FROM Meet_sheet MS JOIN Meet M ON MS.Meet = M.id WHERE MS.player = $1";
                   _context20.prev = 1;
                   _context20.next = 4;
-                  return _db2.default.query(findAllQuery);
+                  return _db2.default.query(text, [req.params.id]);
 
                 case 4:
                   _ref40 = _context20.sent;
@@ -294,11 +294,11 @@ var Player = {
       })
     );
 
-    function getByMailStat(_x30, _x40) {
+    function getPlayerStat(_x30, _x40) {
       return _ref30.apply(this, arguments);
     }
 
-    return getByMailStat;
+    return getPlayerStat;
   })(),
 
   /**

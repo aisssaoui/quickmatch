@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="isSignedIn">
+    <div v-if="!isSignedIn">
       <!-- ///////////////////////////////////////////////////////////////// -->
       <div id="stat_glob">
         <v-card max-width="800" dark color="#000">
@@ -63,12 +63,12 @@
             </v-list-item-content>
           </v-list-item>
 
-          <div v-for="(row, index) in playerStatToShow" :key="row.id">
+          <div v-for="row in playerStatToShow" :key="row.id">
             <hr>
 
             <v-list-item two-line>
               <v-list-item-content>
-                <v-list-item-title class="font-weight-bold">Résultat du match {{ index }}</v-list-item-title>
+                <v-list-item-title class="font-weight-bold">Résultat du match du {{ row.precise_date }} à : {{ row.location }}</v-list-item-title>
                 <v-list-item-subtitle v-if="row.won" class="headline">victoire</v-list-item-subtitle>
                 <v-list-item-subtitle v-else class="headline">défaite</v-list-item-subtitle>
               </v-list-item-content>
@@ -110,6 +110,8 @@
     margin-right: 2%;
     margin-bottom: 2%;
     float: right;
+    height: 660px;
+    overflow: scroll;
   }
 </style>
 
@@ -125,8 +127,13 @@ export default {
   },
   data() {
     return {
-      playerToShow: {},
-      playerStatToShow: {}
+      playerToShow: {"surname": "olive", "first_name": "tom", "scored_goals": 5, "conceded_goals": 2, "matches_played": 4, "victories": 3},
+      playerStatToShow: [
+        {"won": true, "scored_goals": 1, "conceded_goals": 1, "precise_date": "1971-01-01 01:00:01", "location": "jardin"},
+        {"won": true, "scored_goals": 2, "conceded_goals": 0, "precise_date": "1971-01-01 07:00:01", "location": "salle foot INRIA"},
+        {"won": false, "scored_goals": 0, "conceded_goals": 1, "precise_date": "1971-01-01 02:00:01", "location": "salle foot mixte bordeaux"},
+        {"won": true, "scored_goals": 2, "conceded_goals": 0, "precise_date": "1971-01-01 03:00:01", "location": "chez faverge"},
+      ]
     };
   },
   async created() {
@@ -137,6 +144,12 @@ export default {
       }
     );
     this.playerToShow = player.data;
+    const playerStat = await axios.get(
+      "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/players/stat" + this.id,
+      {
+        responseType: "json"
+      }
+    );
     this.playerStatToShow = playerStat.data.rows;
   },
   computed: {
