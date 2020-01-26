@@ -278,32 +278,10 @@ export default {
   },
   data() {
     return {
-      clubsInToShow: [
-        {"club_name": "justice league", "creation_date": "1970-01-01 00:00:01", "private_club": true, "is_admin": false},
-        {"club_name": "tortue ninja", "creation_date": "1970-01-01 00:00:02", "private_club": true, "is_admin": true},
-        {"club_name": "lyoko", "creation_date": "1970-01-01 00:00:03", "private_club": false, "is_admin": false},
-        {"club_name": "doroté", "creation_date": "1970-01-01 00:00:04", "private_club": true, "is_admin": true}
-      ],
-      clubsNotInToShow: [
-        {"club_name": "avengers", "creation_date": "1971-01-01 00:00:01"},
-        {"club_name": "scrabble", "creation_date": "1970-01-01 20:00:01"},
-        {"club_name": "scrabble", "creation_date": "1970-01-01 20:00:01"},
-        {"club_name": "scrabble", "creation_date": "1970-01-01 20:00:01"},
-        {"club_name": "scrabble", "creation_date": "1970-01-01 20:00:01"},
-        {"club_name": "scrabble", "creation_date": "1970-01-01 20:00:01"}
-      ],
-      playersInClub: [
-        {"surname": "wayne", "first_name": "bruce", "pseudo": "batman", "is_admin": false},
-        {"surname": "michael", "first_name": "bay", "pseudo": "BOUUUUUUM", "is_admin": true},
-        {"surname": "kent", "first_name": "clark", "pseudo": "superman", "is_admin": false},
-        {"surname": "pi", "first_name": "ka", "pseudo": "chu", "is_admin": true},
-      ],
-      playersNotInClub: [
-        {"surname": "ragnar", "first_name": "lodbrok", "pseudo": "odin"},
-        {"surname": "bond", "first_name": "james", "pseudo": "007"},
-        {"surname": "god of", "first_name": "war", "pseudo": "kratos"},
-        {"surname": "a", "first_name": "b", "pseudo": "ab"},
-      ],
+      clubsInToShow: {},
+      clubsNotInToShow: {},
+      playersInClub: {},
+      playersNotInClub: {},
       valid: false,
       club_name: null,
       private_club: false,
