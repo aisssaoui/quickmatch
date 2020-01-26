@@ -328,13 +328,21 @@ export default {
   methods: {
     async create_club() {
       let apiRep = null;
-      apiRep = await axios.post(
-        "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/Clubs",
-        {
-          club_name: this.club_name,
-          private_club: this.private_club
-        }
-      );
+      apiRep = await axios
+        .post(
+          "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/Clubs",
+          {
+            club_name: this.club_name,
+            private_club: this.private_club
+          })
+        .catch(e => {
+          if (name_already_exist(this.club_name)){
+            alert("un club porte déjà le même nom, choisissez-en un autre");
+          }
+          else{
+            alert("Echec, veuillez réessayer, si le problème persiste, réessayer plus tard");
+          }
+        });
       let cid = apiRep.data.id;
 
       let apiRep1 = null;
@@ -456,6 +464,19 @@ export default {
       clubs_not_in = await axios
         .get("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/PlayerClubs/npid" + this.id, {responseType: "json"});
       this.clubsNotInToShow = clubs_not_in.data.rows;
+    },
+    name_already_exist(club_name){
+      for (var row_in in clubsInToShow){
+        if (row_in["club_name"] == club_name){
+          return true;
+        }
+      }
+      for (var row_not_in in clubsNotInToShow){
+        if (row_not_in["club_name"] == club_name){
+          return true;
+        }
+      }
+      return false;
     },
   }
 };
