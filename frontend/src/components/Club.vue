@@ -208,7 +208,7 @@
                   </v-list-item-content>
                 </v-list-item>
 
-                <v-btn class="btn" rounded color="#666" >ajouter</v-btn>
+                <v-btn class="btn" rounded color="#666" v-on:click="add_to_club(row.id, id_club_switch, row.pseudo)">ajouter</v-btn>
                 <br><br>
               </div>
             </v-card>
@@ -426,7 +426,7 @@ export default {
     },
     async promote_to_admin(pid, cid, pseudo){
       await axios
-        .post("/dbcontrol/api/v1/PlayerClubsPromoteToAdmin/" + pid + "&" + cid)
+        .post("https://dbcontrol/api/v1/PlayerClubsPromoteToAdmin/" + pid + "&" + cid)
         .then(response => {
           alert("Vous avez promu admin " + pseudo);
         })
@@ -436,9 +436,24 @@ export default {
     },
     async delete_from_club(pid, cid, pseudo){
       await axios
-        .delete("/dbcontrol/api/v1/PlayerClubs/" + cid + "&" + pid)
+        .delete("https://dbcontrol/api/v1/PlayerClubs/" + cid + "&" + pid)
         .then(response => {
           alert("Vous avez renvoyer " + pseudo + " du club " + name_club_switch);
+        })
+        .catch(e => {
+          alert("Echec, veuillez réessayer, si le problème persiste, réessayer plus tard");
+        });
+    },
+    async add_to_club(pid, cid, pseudo){
+      await axios
+        .post("https://dbcontrol/api/v1/PlayerClubs/",
+          {
+            club: cid,
+            player: pid,
+            is_admin: false
+          })
+        .then(response => {
+          alert("Vous avez ajouter " + pseudo + " au club " + name_club_switch);
         })
         .catch(e => {
           alert("Echec, veuillez réessayer, si le problème persiste, réessayer plus tard");
