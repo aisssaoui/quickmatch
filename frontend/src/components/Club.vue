@@ -167,7 +167,7 @@
                   <v-btn class="btn" rounded color="#666" v-on:click="promote_to_admin(row.id, id_club_switch, row.pseudo)">nommer admin</v-btn>
                   <br><br>
 
-                  <v-btn class="btn" rounded color="#666" >supprimer</v-btn>
+                  <v-btn class="btn" rounded color="#666" v-on:click="delete_from_club(row.id, id_club_switch, row.pseudo)">supprimer</v-btn>
                   <br><br>
                 </div>
               </div>
@@ -433,7 +433,17 @@ export default {
         .catch(e => {
           alert("Echec, veuillez réessayer, si le problème persiste, réessayer plus tard");
         });
-    }
+    },
+    async delete_from_club(pid, cid, pseudo){
+      await axios
+        .delete("/dbcontrol/api/v1/PlayerClubs/" + cid + "&" + pid)
+        .then(response => {
+          alert("Vous avez renvoyer " + pseudo + " du club " + name_club_switch);
+        })
+        .catch(e => {
+          alert("Echec, veuillez réessayer, si le problème persiste, réessayer plus tard");
+        });
+    },
   }
 };
 </script>
