@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="!isSignedIn">
+    <div v-if="isSignedIn">
       <!-- ///////////////////////////////////////////////////////////////// -->
       <div id="stat_glob">
         <v-card max-width="800" dark color="#000">
