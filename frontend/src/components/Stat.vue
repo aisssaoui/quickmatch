@@ -63,28 +63,40 @@
             </v-list-item-content>
           </v-list-item>
 
-          <div v-for="row in playerStatToShow" :key="row.id">
+          <div v-if="playerStatToShow.length == 0">
+            <div v-for="row in playerStatToShow" :key="row.id">
+              <hr>
+
+              <v-list-item two-line>
+                <v-list-item-content>
+                  <v-list-item-title class="font-weight-bold">Résultat du match du {{ row.precise_date }} à : {{ row.location }}</v-list-item-title>
+                  <v-list-item-subtitle v-if="row.won" class="headline">victoire</v-list-item-subtitle>
+                  <v-list-item-subtitle v-else class="headline">défaite</v-list-item-subtitle>
+                </v-list-item-content>
+              </v-list-item>
+
+              <v-list-item two-line>
+                <v-list-item-content>
+                  <v-list-item-title class="font-weight-bold">Nombre de but(s)</v-list-item-title>
+                  <v-list-item-subtitle class="headline">{{ row.scored_goals }}</v-list-item-subtitle>
+                </v-list-item-content>
+              </v-list-item>
+
+              <v-list-item two-line>
+                <v-list-item-content>
+                  <v-list-item-title class="font-weight-bold">Nombre de but(s) encaissé(s)</v-list-item-title>
+                  <v-list-item-subtitle class="headline">{{ row.conceded_goals }}</v-list-item-subtitle>
+                </v-list-item-content>
+              </v-list-item>
+            </div>
+          </div>
+
+          <div v-else>
             <hr>
 
             <v-list-item two-line>
               <v-list-item-content>
-                <v-list-item-title class="font-weight-bold">Résultat du match du {{ row.precise_date }} à : {{ row.location }}</v-list-item-title>
-                <v-list-item-subtitle v-if="row.won" class="headline">victoire</v-list-item-subtitle>
-                <v-list-item-subtitle v-else class="headline">défaite</v-list-item-subtitle>
-              </v-list-item-content>
-            </v-list-item>
-
-            <v-list-item two-line>
-              <v-list-item-content>
-                <v-list-item-title class="font-weight-bold">Nombre de but(s)</v-list-item-title>
-                <v-list-item-subtitle class="headline">{{ row.scored_goals }}</v-list-item-subtitle>
-              </v-list-item-content>
-            </v-list-item>
-
-            <v-list-item two-line>
-              <v-list-item-content>
-                <v-list-item-title class="font-weight-bold">Nombre de but(s) encaissé(s)</v-list-item-title>
-                <v-list-item-subtitle class="headline">{{ row.conceded_goals }}</v-list-item-subtitle>
+                <v-list-item-title class="font-weight-bold">Vous n'avez pas encore joué de match</v-list-item-title>
               </v-list-item-content>
             </v-list-item>
           </div>
