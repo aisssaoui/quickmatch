@@ -54,7 +54,7 @@ var player_belong_club = {
               switch ((_context.prev = _context.next)) {
                 case 0:
                   text =
-                    "SELECT * FROM player_belong_club P INNER JOIN club C on P.club = C.id WHERE player = $1 AND is_admin = 'true' ";
+                    "SELECT * FROM player_belong_club P INNER JOIN club C on P.club = C.id WHERE player = $1 AND is_admin = 'true'";
                   _context.prev = 1;
                   _context.next = 4;
                   return _db2.default.query(text, [req.params.id]);
@@ -106,7 +106,7 @@ var player_belong_club = {
               switch ((_context2.prev = _context2.next)) {
                 case 0:
                   text =
-                    "SELECT P.id, P.surname, P.first_name, P.pseudo, PBC.is_admin FROM player_belong_club PBC INNER JOIN player P ON P.id = PBC.player WHERE PCB.club = $1";
+                    "SELECT P.id, P.surname, P.first_name, P.pseudo, PBC.is_admin FROM player_belong_club PBC INNER JOIN player P ON P.id = PBC.player WHERE PBC.club = $1";
                   _context2.prev = 1;
                   _context2.next = 4;
                   return _db2.default.query(text, [req.params.id]);
@@ -158,7 +158,7 @@ var player_belong_club = {
               switch ((_context9.prev = _context9.next)) {
                 case 0:
                   text =
-                    "SELECT P.id, P.surname, P.first_name, P.pseudo, PBC.is_admin FROM player_belong_club PBC INNER JOIN player P ON P.id = PBC.player WHERE P.id not in (SELECT PCB.player FROM player_belong_club PBC WHERE PBC.club = $1)";
+                    "SELECT P.id, P.surname, P.first_name, P.pseudo, PBC.is_admin FROM player_belong_club PBC INNER JOIN player P ON P.id = PBC.player WHERE P.id not in (SELECT PBC.player FROM player_belong_club PBC WHERE PBC.club = $1)";
                   _context9.prev = 1;
                   _context9.next = 4;
                   return _db2.default.query(text, [req.params.id]);

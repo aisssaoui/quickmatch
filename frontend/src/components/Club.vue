@@ -464,6 +464,7 @@ export default {
         .get("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/PlayerClubs/cid" + cid, {responseType: "json"})
         .catch(e => {
           alert(e);
+          console.log(e);
         });
       alert("first passed");
       this.playersInClub = players_in.data.rows;
