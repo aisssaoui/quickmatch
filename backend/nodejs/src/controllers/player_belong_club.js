@@ -148,53 +148,53 @@ var player_belong_club = {
     return getPlayerClubsByClubID;
   })(),
   NgetPlayerClubsByClubID: (function() {
-    var _ref3 = _asyncToGenerator(
-      /*#__PURE__*/ regeneratorRuntime.mark(function _callee2(req, res) {
-        var text, _ref4, rows, rowCount;
+    var _ref17 = _asyncToGenerator(
+      /*#__PURE__*/ regeneratorRuntime.mark(function _callee9(req, res) {
+        var text, _ref18, rows, rowCount;
 
         return regeneratorRuntime.wrap(
-          function _callee2$(_context2) {
+          function _callee9$(_context9) {
             while (1) {
-              switch ((_context2.prev = _context2.next)) {
+              switch ((_context9.prev = _context9.next)) {
                 case 0:
                   text =
                     "SELECT P.id, P.surname, P.first_name, P.pseudo, PBC.is_admin FROM player_belong_club PBC INNER JOIN player P ON P.id = PBC.player WHERE P.id not in (SELECT PCB.player FROM player_belong_club PBC WHERE PBC.club = $1)";
-                  _context2.prev = 1;
-                  _context2.next = 4;
+                  _context9.prev = 1;
+                  _context9.next = 4;
                   return _db2.default.query(text, [req.params.id]);
 
                 case 4:
-                  _ref4 = _context2.sent;
-                  rows = _ref4.rows;
-                  rowCount = _ref4.rowCount;
-                  return _context2.abrupt(
+                  _ref18 = _context9.sent;
+                  rows = _ref18.rows;
+                  rowCount = _ref18.rowCount;
+                  return _context9.abrupt(
                     "return",
                     res.status(200).send({ rows: rows, rowCount: rowCount })
                   );
 
                 case 10:
-                  _context2.prev = 10;
-                  _context2.t0 = _context2["catch"](1);
-                  return _context2.abrupt(
+                  _context9.prev = 10;
+                  _context9.t0 = _context9["catch"](1);
+                  return _context9.abrupt(
                     "return",
-                    res.status(400).send(_context2.t0)
+                    res.status(400).send(_context9.t0)
                   );
 
                 case 13:
                 case "end":
-                  return _context2.stop();
+                  return _context9.stop();
               }
             }
           },
-          _callee2,
+          _callee9,
           this,
           [[1, 10]]
         );
       })
     );
 
-    function getPlayerClubsByClubID(_x3, _x4) {
-      return _ref3.apply(this, arguments);
+    function getPlayerClubsByClubID(_x17, _x18) {
+      return _ref17.apply(this, arguments);
     }
 
     return getPlayerClubsByClubID;
@@ -536,41 +536,41 @@ var player_belong_club = {
     return getCount;
   })(),
   promoteToAdmin: (function() {
-    var _ref9 = _asyncToGenerator(
+    var _ref19 = _asyncToGenerator(
       /*#__PURE__*/ regeneratorRuntime.mark(function _callee5(req, res) {
-        var text, values, _ref10, rows;
+        var text, values, _ref20, rows;
 
         return regeneratorRuntime.wrap(
-          function _callee5$(_context5) {
+          function _callee10$(_context10) {
             while (1) {
-              switch ((_context5.prev = _context5.next)) {
+              switch ((_context10.prev = _context10.next)) {
                 case 0:
                   text =
                     "UPDATE player_belong_club P SET P.is_admin = true WHERE P.player = $1 AND P.club = $2";
                   values = [req.params.pid, req.params.cid];
-                  _context5.prev = 2;
-                  _context5.next = 5;
+                  _context10.prev = 2;
+                  _context10.next = 5;
                   return _db2.default.query(text, values);
 
                 case 5:
-                  _ref10 = _context5.sent;
-                  rows = _ref10.rows;
-                  return _context5.abrupt(
+                  _ref20 = _context10.sent;
+                  rows = _ref20.rows;
+                  return _context10.abrupt(
                     "return",
                     res.status(201).send(rows[0])
                   );
 
                 case 10:
-                  _context5.prev = 10;
-                  _context5.t0 = _context5["catch"](2);
-                  return _context5.abrupt(
+                  _context10.prev = 10;
+                  _context10.t0 = _context10["catch"](2);
+                  return _context10.abrupt(
                     "return",
-                    res.status(400).send(_context5.t0)
+                    res.status(400).send(_context10.t0)
                   );
 
                 case 13:
                 case "end":
-                  return _context5.stop();
+                  return _context10.stop();
               }
             }
           },
@@ -581,8 +581,8 @@ var player_belong_club = {
       })
     );
 
-    function promoteToAdmin(_x9, _x10) {
-      return _ref9.apply(this, arguments);
+    function promoteToAdmin(_x19, _x20) {
+      return _ref19.apply(this, arguments);
     }
 
     return promoteToAdmin;

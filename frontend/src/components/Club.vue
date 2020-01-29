@@ -86,6 +86,17 @@
               </v-form>
               <v-btn class="btn" rounded align="left" color="#666" v-on:click="create_club">Créer le club</v-btn>
               <br><br>
+
+              <div v-for="row in playersInClub" :key="row.id">
+                <hr>
+
+                <v-list-item two-line>
+                  <v-list-item-content>
+                    <v-list-item-title class="font-weight-bold">azerty</v-list-item-title>
+                    <v-list-item-subtitle class="headline">{{ row.surname }}</v-list-item-subtitle>
+                  </v-list-item-content>
+                </v-list-item>
+              </div>
             </v-card>
           </div>
 
@@ -413,7 +424,7 @@ export default {
     },
     async promote_to_admin(pid, cid, pseudo){
       await axios
-        .post("https://dbcontrol/api/v1/PlayerClubsPromoteToAdmin/" + pid + "&" + cid)
+        .post("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/PlayerClubsPromoteToAdmin/" + pid + "&" + cid)
         .then(response => {
           alert("Vous avez promu admin " + pseudo);
         })
@@ -423,7 +434,7 @@ export default {
     },
     async delete_from_club(pid, cid, pseudo){
       await axios
-        .delete("https://dbcontrol/api/v1/PlayerClubs/" + cid + "&" + pid)
+        .delete("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/PlayerClubs/" + cid + "&" + pid)
         .then(response => {
           alert("Vous avez renvoyer " + pseudo + " du club " + name_club_switch);
         })
@@ -433,7 +444,7 @@ export default {
     },
     async add_to_club(pid, cid, pseudo){
       await axios
-        .post("https://dbcontrol/api/v1/PlayerClubs/",
+        .post("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/PlayerClubs/",
           {
             club: cid,
             player: pid,
@@ -449,25 +460,26 @@ export default {
     async manage_club(club_name, cid){
       this.name_club_switch = club_name;
       this.id_club_switch = cid;
-      var players_in = await axios
+      let players_in = await axios
         .get("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/PlayerClubs/cid" + cid, {responseType: "json"})
         .catch(e => {
           alert(e);
         });
+      alert("first passed");
       this.playersInClub = players_in.data.rows;
-      var players_not_in = await axios
+      let players_not_in = await axios
         .get("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/PlayerClubs/ncid" + cid, {responseType: "json"});
       this.playersNotInClub = players_not_in.data.rows;
       this.switch_menu = true;
     },
     async return_to_main_menu(){
-      this.switch_menu = false;
-      clubs_in = await axios
+      let clubs_in = await axios
         .get("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/PlayerClubs/pid" + this.id, {responseType: "json"});
       this.clubsInToShow = clubs_in.data.rows;
-      clubs_not_in = await axios
+      let clubs_not_in = await axios
         .get("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/PlayerClubs/npid" + this.id, {responseType: "json"});
       this.clubsNotInToShow = clubs_not_in.data.rows;
+      this.switch_menu = false;
     },
     name_already_exist(club_name){
       for (var row_in in this.clubsInToShow){
