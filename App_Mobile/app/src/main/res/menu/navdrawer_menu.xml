@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/matchsFragment"
+        android:icon="@drawable/ic_match"
+        android:title="@string/matches_string" />
+    <item
+        android:id="@+id/statsFragment"
+        android:icon="@drawable/ic_stat"
+        android:title="@string/stats_string" />
+    <item
+        android:id="@+id/clubFragment"
+        android:icon="@drawable/ic_club"
+        android:title="@string/club_string" />
+    <item
+        android:id="@+id/agendaFragment"
+        android:icon="@drawable/ic_agenda"
+        android:title="@string/agenda_string" />
+    <item
+        android:id="@+id/settingsFragment"
+        android:icon="@drawable/ic_settings"
+        android:title="@string/settings_string" />
+</menu>

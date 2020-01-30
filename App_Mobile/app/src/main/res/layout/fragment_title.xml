@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout  xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.example.quickmatch.title.TitleFragmentViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/design_default_color_primary"
+        tools:context=".title.TitleFragmentUI">
+
+    <ImageView
+        android:id="@+id/title_logo"
+        android:layout_width="207dp"
+        android:layout_height="143dp"
+        android:layout_marginTop="180dp"
+        android:layout_marginBottom="20dp"
+        android:background="@color/design_default_color_primary"
+        android:contentDescription="@string/desc_logo"
+        android:src="@mipmap/ic_launcher"
+        app:layout_constraintBottom_toTopOf="@+id/textView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@mipmap/ic_launcher"
+        tools:srcCompat="@mipmap/ic_launcher" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="389dp"
+        android:lineSpacingExtra="14sp"
+        android:text="@string/text_app_desc"
+        android:textAlignment="center"
+        android:textColor="@android:color/background_light"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title_logo"
+        tools:text="@string/text_app_desc" />
+
+
+    <Button
+        android:id="@+id/button_title_login"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/button_width_constraint"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="@dimen/button_width_constraint"
+        android:background="@android:color/background_light"
+        android:text="@string/text_login"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <Button
+        android:id="@+id/button_title_signin"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/button_width_constraint"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="@dimen/button_width_constraint"
+        android:background="@android:color/background_light"
+        android:text="@string/text_signin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_title_login" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
