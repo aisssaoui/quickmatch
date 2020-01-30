@@ -63,13 +63,18 @@
             </v-list-item-content>
           </v-list-item>
 
-          <div v-if="playerStatToShow.length == 0">
+          <div>
+            <p>{{ playerStatToShow }}</p>
+            <p>{{ playerToShow }}</p>
+          </div>
+
+          <div v-if="playerStatToShow.length != 0">
             <div v-for="row in playerStatToShow" :key="row.id">
               <hr>
 
               <v-list-item two-line>
                 <v-list-item-content>
-                  <v-list-item-title class="font-weight-bold">Résultat du match du {{ row.precise_date }} à : {{ row.location }}</v-list-item-title>
+                  <v-list-item-title class="font-weight-bold">Résultat du match du {{ new Date(row.precise_date).toLocaleDateString('fr-FR') }} à "{{ row.location }}"</v-list-item-title>
                   <v-list-item-subtitle v-if="row.won" class="headline">victoire</v-list-item-subtitle>
                   <v-list-item-subtitle v-else class="headline">défaite</v-list-item-subtitle>
                 </v-list-item-content>
@@ -91,9 +96,9 @@
             </div>
           </div>
 
+
           <div v-else>
             <hr>
-
             <v-list-item two-line>
               <v-list-item-content>
                 <v-list-item-title class="font-weight-bold">Vous n'avez pas encore joué de match</v-list-item-title>
@@ -144,19 +149,32 @@ export default {
     };
   },
   async created() {
-    const player = await axios.get(
-      "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/players/id" + this.id,
-      {
-        responseType: "json"
-      }
-    );
+    const player = await axios
+      .get(
+        "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/players/id" + this.id,
+        {
+          responseType: "json"
+        }
+      )
+      .catch(e => {
+        alert("Une erreur s'est produite, nous allons rafraichir la page, si le problème persiste, quittez la page");
+        this.$router.go();
+      });
     this.playerToShow = player.data;
-    const playerStat = await axios.get(
-      "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/players/stat" + this.id,
-      {
-        responseType: "json"
-      }
-    );
+    const playerStat = await axios
+      .get(
+        "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/players/stat" + this.id,
+        {
+          responseType: "json"
+        }
+      )
+      .then(response => {
+        alert("stat passe");
+      })
+      .catch(e => {
+        alert("Une erreur s'est produite, nous allons rafraichir la page, si le problème persiste, quittez la page");
+        this.$router.go();
+      });
     this.playerStatToShow = playerStat.data.rows;
   },
   computed: {

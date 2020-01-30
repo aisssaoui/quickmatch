@@ -546,8 +546,8 @@ var player_belong_club = {
               switch ((_context10.prev = _context10.next)) {
                 case 0:
                   text =
-                    "UPDATE player_belong_club P SET P.is_admin = true WHERE P.player = $1 AND P.club = $2";
-                  values = [req.params.pid, req.params.cid];
+                    "UPDATE player_belong_club SET is_admin = TRUE WHERE player = $1 AND club = $2";
+                  values = [req.body.pid, req.body.cid];
                   _context10.prev = 2;
                   _context10.next = 5;
                   return _db2.default.query(text, values);

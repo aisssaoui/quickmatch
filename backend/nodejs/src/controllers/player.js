@@ -259,7 +259,7 @@ var Player = {
               switch ((_context20.prev = _context20.next)) {
                 case 0:
                   text =
-                    "SELECT MS.won, MS.scored_goals, MS.conceded_goals, M.precise_date, M.location FROM Meet_sheet MS JOIN Meet M ON MS.Meet = M.id WHERE MS.player = $1";
+                    "SELECT MS.won, MS.scored_goals, MS.conceded_goals, M.precise_date, M.location FROM Meet_sheet MS JOIN Meet M ON MS.meet = M.id WHERE MS.player = $1";
                   _context20.prev = 1;
                   _context20.next = 4;
                   return _db2.default.query(text, [req.params.id]);

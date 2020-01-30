@@ -14,46 +14,58 @@
               </v-list-item>
 
 
-              <div v-for="row in clubsInToShow" :key="row.id">
-                <hr>
+              <div v-if="clubsInToShow.length != 0">
+                <div v-for="row in clubsInToShow" :key="row.id">
+                  <hr>
 
-                <v-list-item two-line>
-                  <v-list-item-content>
-                    <v-list-item-title class="font-weight-bold">Nom du Club</v-list-item-title>
-                    <v-list-item-subtitle class="headline">{{ row.club_name }}</v-list-item-subtitle>
-                  </v-list-item-content>
-                </v-list-item>
+                  <v-list-item two-line>
+                    <v-list-item-content>
+                      <v-list-item-title class="font-weight-bold">Nom du Club</v-list-item-title>
+                      <v-list-item-subtitle class="headline">{{ row.club_name }}</v-list-item-subtitle>
+                    </v-list-item-content>
+                  </v-list-item>
 
-                <v-list-item two-line>
-                  <v-list-item-content>
-                    <v-list-item-title class="font-weight-bold">Date de création</v-list-item-title>
-                    <v-list-item-subtitle class="headline">{{ row.creation_date }}</v-list-item-subtitle>
-                  </v-list-item-content>
-                </v-list-item>
+                  <v-list-item two-line>
+                    <v-list-item-content>
+                      <v-list-item-title class="font-weight-bold">Date de création</v-list-item-title>
+                      <v-list-item-subtitle class="headline">{{ new Date(row.creation_date).toLocaleDateString('fr-FR') }}</v-list-item-subtitle>
+                    </v-list-item-content>
+                  </v-list-item>
 
-                <v-list-item two-line>
-                  <v-list-item-content>
-                    <v-list-item-title class="font-weight-bold">Club privé</v-list-item-title>
-                    <v-list-item-subtitle v-if="row.private_club" class="headline">oui</v-list-item-subtitle>
-                    <v-list-item-subtitle v-else class="headline">non</v-list-item-subtitle>
-                  </v-list-item-content>
-                </v-list-item>
+                  <v-list-item two-line>
+                    <v-list-item-content>
+                      <v-list-item-title class="font-weight-bold">Club privé</v-list-item-title>
+                      <v-list-item-subtitle v-if="row.private_club" class="headline">oui</v-list-item-subtitle>
+                      <v-list-item-subtitle v-else class="headline">non</v-list-item-subtitle>
+                    </v-list-item-content>
+                  </v-list-item>
 
-                <v-list-item two-line>
-                  <v-list-item-content>
-                    <v-list-item-title class="font-weight-bold">Administrateur</v-list-item-title>
-                    <v-list-item-subtitle v-if="row.is_admin" class="headline">oui</v-list-item-subtitle>
-                    <v-list-item-subtitle v-else class="headline">non</v-list-item-subtitle>
-                  </v-list-item-content>
-                </v-list-item>
+                  <v-list-item two-line>
+                    <v-list-item-content>
+                      <v-list-item-title class="font-weight-bold">Administrateur</v-list-item-title>
+                      <v-list-item-subtitle v-if="row.is_admin" class="headline">oui</v-list-item-subtitle>
+                      <v-list-item-subtitle v-else class="headline">non</v-list-item-subtitle>
+                    </v-list-item-content>
+                  </v-list-item>
 
-                <div v-if="row.is_admin">
-                  <v-btn class="btn" rounded color="#666" v-on:click="manage_club(row.club_name, row.id)">gérer le club</v-btn>
+                  <div v-if="row.is_admin">
+                    <v-btn class="btn" rounded color="#666" v-on:click="manage_club(row.club_name, row.id)">gérer le club</v-btn>
+                    <br><br>
+                  </div>
+
+                  <v-btn class="btn" rounded color="#666" v-on:click="leave_club(row.id, row.club_name, row.is_admin)">Quitter le club</v-btn>
                   <br><br>
                 </div>
+              </div>
 
-                <v-btn class="btn" rounded color="#666" v-on:click="leave_club(row.id, row.club_name, row.is_admin)">Quitter le club</v-btn>
-                <br><br>
+
+              <div v-else>
+                <hr>
+                <v-list-item two-line>
+                  <v-list-item-content>
+                    <v-list-item-title class="font-weight-bold">Vous n'êtes dans aucun club</v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
               </div>
             </v-card>
           </div>
@@ -69,34 +81,12 @@
                   </v-list-item-content>
                 </v-list-item>
                 <v-col class="py-0" cols="4" md="12">
-                  <v-text-field
-                  v-model="club_name"
-                  :rules="club_nameRules"
-                  :counter="50"
-                  label="Nom du club"
-                  required
-                  outlined
-                  filled
-                  ></v-text-field>
-                  <v-checkbox
-                  v-model="private_club"
-                  label="Club privé"
-                  ></v-checkbox>
+                  <v-text-field v-model="club_name" :rules="club_nameRules" :counter="50" label="Nom du club" required outlined filled></v-text-field>
+                  <v-checkbox v-model="private_club" label="Club privé"></v-checkbox>
                 </v-col>
               </v-form>
               <v-btn class="btn" rounded align="left" color="#666" v-on:click="create_club">Créer le club</v-btn>
               <br><br>
-
-              <div v-for="row in playersInClub" :key="row.id">
-                <hr>
-
-                <v-list-item two-line>
-                  <v-list-item-content>
-                    <v-list-item-title class="font-weight-bold">azerty</v-list-item-title>
-                    <v-list-item-subtitle class="headline">{{ row.surname }}</v-list-item-subtitle>
-                  </v-list-item-content>
-                </v-list-item>
-              </div>
             </v-card>
           </div>
 
@@ -109,26 +99,38 @@
               </v-list-item>
 
 
-              <div v-for="row in clubsNotInToShow" :key="row.id">
+              <div v-if="clubsNotInToShow.length != 0">
+                <div v-for="row in clubsNotInToShow" :key="row.id">
+                  <hr>
+
+                  <v-list-item two-line>
+                    <v-list-item-content>
+                      <v-list-item-title class="font-weight-bold">Nom du Club</v-list-item-title>
+                      <v-list-item-subtitle class="headline">{{ row.club_name }}</v-list-item-subtitle>
+                    </v-list-item-content>
+                  </v-list-item>
+
+
+                  <v-list-item two-line>
+                    <v-list-item-content>
+                      <v-list-item-title class="font-weight-bold">Date de création</v-list-item-title>
+                      <v-list-item-subtitle class="headline">{{ new Date(row.creation_date).toLocaleDateString('fr-FR') }}</v-list-item-subtitle>
+                    </v-list-item-content>
+                  </v-list-item>
+
+                  <v-btn class="btn" rounded color="#666" v-on:click="join_club(row.id, row.club_name)">Demander à rejoindre</v-btn>
+                  <br><br>
+                </div>
+              </div>
+
+
+              <div v-else>
                 <hr>
-
                 <v-list-item two-line>
                   <v-list-item-content>
-                    <v-list-item-title class="font-weight-bold">Nom du Club</v-list-item-title>
-                    <v-list-item-subtitle class="headline">{{ row.club_name }}</v-list-item-subtitle>
+                    <v-list-item-title class="font-weight-bold">Aucun club disponible</v-list-item-title>
                   </v-list-item-content>
                 </v-list-item>
-
-
-                <v-list-item two-line>
-                  <v-list-item-content>
-                    <v-list-item-title class="font-weight-bold">Date de création</v-list-item-title>
-                    <v-list-item-subtitle class="headline">{{ row.creation_date }}</v-list-item-subtitle>
-                  </v-list-item-content>
-                </v-list-item>
-
-                <v-btn class="btn" rounded color="#666" v-on:click="join_club(row.id, row.club_name)">Demander à rejoindre</v-btn>
-                <br><br>
               </div>
             </v-card>
           </div>
@@ -195,32 +197,45 @@
                 </v-list-item-content>
               </v-list-item>
 
-              <div v-for="row in playersNotInClub" :key="row.id">
+
+              <div v-if="playersNotInClub.length != 0">
+                <div v-for="row in playersNotInClub" :key="row.id">
+                  <hr>
+
+                  <v-list-item two-line>
+                    <v-list-item-content>
+                      <v-list-item-title class="font-weight-bold">Nom du joueur</v-list-item-title>
+                      <v-list-item-subtitle class="headline">{{ row.surname }}</v-list-item-subtitle>
+                    </v-list-item-content>
+                  </v-list-item>
+
+                  <v-list-item two-line>
+                    <v-list-item-content>
+                      <v-list-item-title class="font-weight-bold">Prénom du joueur</v-list-item-title>
+                      <v-list-item-subtitle class="headline">{{ row.first_name }}</v-list-item-subtitle>
+                    </v-list-item-content>
+                  </v-list-item>
+
+                  <v-list-item two-line>
+                    <v-list-item-content>
+                      <v-list-item-title class="font-weight-bold">Pseudo du joueur</v-list-item-title>
+                      <v-list-item-subtitle class="headline">{{ row.pseudo }}</v-list-item-subtitle>
+                    </v-list-item-content>
+                  </v-list-item>
+
+                  <v-btn class="btn" rounded color="#666" v-on:click="add_to_club(row.id, id_club_switch, row.pseudo)">ajouter</v-btn>
+                  <br><br>
+                </div>
+              </div>
+
+
+              <div v-else>
                 <hr>
-
                 <v-list-item two-line>
                   <v-list-item-content>
-                    <v-list-item-title class="font-weight-bold">Nom du joueur</v-list-item-title>
-                    <v-list-item-subtitle class="headline">{{ row.surname }}</v-list-item-subtitle>
+                    <v-list-item-title class="font-weight-bold">Aucun joueur disponible</v-list-item-title>
                   </v-list-item-content>
                 </v-list-item>
-
-                <v-list-item two-line>
-                  <v-list-item-content>
-                    <v-list-item-title class="font-weight-bold">Prénom du joueur</v-list-item-title>
-                    <v-list-item-subtitle class="headline">{{ row.first_name }}</v-list-item-subtitle>
-                  </v-list-item-content>
-                </v-list-item>
-
-                <v-list-item two-line>
-                  <v-list-item-content>
-                    <v-list-item-title class="font-weight-bold">Pseudo du joueur</v-list-item-title>
-                    <v-list-item-subtitle class="headline">{{ row.pseudo }}</v-list-item-subtitle>
-                  </v-list-item-content>
-                </v-list-item>
-
-                <v-btn class="btn" rounded color="#666" v-on:click="add_to_club(row.id, id_club_switch, row.pseudo)">ajouter</v-btn>
-                <br><br>
               </div>
             </v-card>
           </div>
@@ -309,21 +324,31 @@ export default {
     };
   },
   async created() {
-    var clubs_in = await axios.get(
-      "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/PlayerClubs/pid" +
-        this.id,
-      {
-        responseType: "json"
-      }
-    );
+    var clubs_in = await axios
+      .get(
+        "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/PlayerClubs/pid" +
+          this.id,
+        {
+          responseType: "json"
+        }
+      )
+      .catch(e => {
+        alert("Une erreur s'est produite, nous allons rafraichir la page, si le problème persiste, quittez la page");
+        this.$router.go();
+      });
     this.clubsInToShow = clubs_in.data.rows;
-    var clubs_not_in = await axios.get(
-      "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/PlayerClubs/npid" +
-        this.id,
-      {
-        responseType: "json"
-      }
-    );
+    var clubs_not_in = await axios
+      .get(
+        "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/PlayerClubs/npid" +
+          this.id,
+        {
+          responseType: "json"
+        }
+      )
+      .catch(e => {
+        alert("Une erreur s'est produite, nous allons rafraichir la page, si le problème persiste, quittez la page");
+        this.$router.go();
+      });
     this.clubsNotInToShow = clubs_not_in.data.rows;
   },
   computed: {
@@ -358,19 +383,24 @@ export default {
         });
       let cid = apiRep.data.id;
       let apiRep1 = null;
-      apiRep1 = await axios.post(
-        "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/PlayerClubs",
-        {
-          club: cid,
-          player: this.id,
-          is_admin: true
-        }
-      );
-      alert("Club " + this.club_name + " créé !");
-      this.$router.go();
+      apiRep1 = await axios
+        .post(
+          "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/PlayerClubs",
+          {
+            club: cid,
+            player: this.id,
+            is_admin: true
+          }
+        )
+        .then(response => {
+          alert("Club " + this.club_name + " créé !");
+          this.$router.go();
+        })
+        .catch(e => {
+          alert("Echec, veuillez réessayer, si le problème persiste, réessayer plus tard");
+        });
     },
     async join_club(cid, club_name) {
-      console.log(cid);
       let apiRep1 = null;
       apiRep1 = await axios.post(
         "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/PlayerClubs",
@@ -379,18 +409,28 @@ export default {
           player: this.id,
           is_admin: false
         }
-      );
-      alert("vous avez rejoins le club " + club_name);
+      )
+      .then(response => {
+        alert("Vous avez rejoins le club " + club_name);
+      })
+      .catch(e => {
+        alert("Echec, veuillez réessayer, si le problème persiste, réessayer plus tard");
+      });
       this.$router.go();
     },
     async leave_club(cid, club_name, is_admin) {
-      let apiRep = await axios.get(
-        "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/PlayerClubsCountAdmin/" +
-          cid,
-        {
-          responseType: "json"
-        }
-      );
+      let apiRep = await axios
+        .get(
+          "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/PlayerClubsCountAdmin/" +
+            cid,
+          {
+            responseType: "json"
+          }
+        )
+        .catch(e => {
+          alert("Echec, veuillez réessayer, si le problème persiste, réessayer plus tard");
+          this.$router.go();
+        });
       let nb = apiRep.data.nb;
       let destroy_club = true;
 
@@ -424,22 +464,29 @@ export default {
     },
     async promote_to_admin(pid, cid, pseudo){
       await axios
-        .post("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/PlayerClubsPromoteToAdmin/" + pid + "&" + cid)
+        .post("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/PlayerClubsPromoteToAdmin",
+          {
+            pid: pid,
+            cid: cid
+          }
+        )
         .then(response => {
           alert("Vous avez promu admin " + pseudo);
         })
         .catch(e => {
-          alert("Echec, veuillez réessayer, si le problème persiste, réessayer plus tard");
+          alert(e);
         });
     },
     async delete_from_club(pid, cid, pseudo){
       await axios
         .delete("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/PlayerClubs/" + cid + "&" + pid)
         .then(response => {
-          alert("Vous avez renvoyer " + pseudo + " du club " + name_club_switch);
+          alert("Vous avez renvoyer " + pseudo + " du club " + this.name_club_switch);
+          this.manage_club(this.name_club_switch, this.id_club_switch);
         })
         .catch(e => {
           alert("Echec, veuillez réessayer, si le problème persiste, réessayer plus tard");
+          this.$router.go();
         });
     },
     async add_to_club(pid, cid, pseudo){
@@ -451,10 +498,12 @@ export default {
             is_admin: false
           })
         .then(response => {
-          alert("Vous avez ajouter " + pseudo + " au club " + name_club_switch);
+          alert("Vous avez ajouter " + pseudo + " au club " + this.name_club_switch);
+          this.manage_club(this.name_club_switch, this.id_club_switch);
         })
         .catch(e => {
           alert("Echec, veuillez réessayer, si le problème persiste, réessayer plus tard");
+          this.$router.go();
         });
     },
     async manage_club(club_name, cid){
@@ -463,22 +512,33 @@ export default {
       let players_in = await axios
         .get("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/PlayerClubs/cid" + cid, {responseType: "json"})
         .catch(e => {
-          alert(e);
-          console.log(e);
+          alert("Une erreur s'est produite, nous allons rafraichir la page, si le problème persiste, quittez la page");
+          this.$router.go();
         });
-      alert("first passed");
       this.playersInClub = players_in.data.rows;
       let players_not_in = await axios
-        .get("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/PlayerClubs/ncid" + cid, {responseType: "json"});
+        .get("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/PlayerClubs/ncid" + cid, {responseType: "json"})
+        .catch(e => {
+          alert("Une erreur s'est produite, nous allons rafraichir la page, si le problème persiste, quittez la page");
+          this.$router.go();
+        });
       this.playersNotInClub = players_not_in.data.rows;
       this.switch_menu = true;
     },
     async return_to_main_menu(){
       let clubs_in = await axios
-        .get("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/PlayerClubs/pid" + this.id, {responseType: "json"});
+        .get("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/PlayerClubs/pid" + this.id, {responseType: "json"})
+        .catch(e => {
+          alert("Une erreur s'est produite, nous allons rafraichir la page, si le problème persiste, quittez la page");
+          this.$router.go();
+        });
       this.clubsInToShow = clubs_in.data.rows;
       let clubs_not_in = await axios
-        .get("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/PlayerClubs/npid" + this.id, {responseType: "json"});
+        .get("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/PlayerClubs/npid" + this.id, {responseType: "json"})
+        .catch(e => {
+          alert("Une erreur s'est produite, nous allons rafraichir la page, si le problème persiste, quittez la page");
+          this.$router.go();
+        });
       this.clubsNotInToShow = clubs_not_in.data.rows;
       this.switch_menu = false;
     },
