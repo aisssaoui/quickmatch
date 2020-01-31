@@ -99,10 +99,7 @@ app.delete("/dbcontrol/api/v1/Slots/:id", _slot2.default.delete);
 // Table meet_sheet
 app.post("/dbcontrol/api/v1/MeetsSheet", _meet_sheet2.default.create);
 app.get("/dbcontrol/api/v1/MeetsSheet", _meet_sheet2.default.getAll);
-app.get(
-  "/dbcontrol/api/v1/MeetsSheet/:player_mail_address",
-  _meet_sheet2.default.getOne
-);
+app.get("/dbcontrol/api/v1/MeetsSheet/:player_mail_address", _meet_sheet2.default.getOne);
 //app.put("/dbcontrol/api/v1/MeetsSheet/:player_mail_adress", _meet_sheet2.default.update);
 app.delete("/dbcontrol/api/v1/MeetsSheet/:player_mail_address", _meet_sheet2.default.delete);
 
