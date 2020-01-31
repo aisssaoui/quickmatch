@@ -4,12 +4,13 @@ import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterF
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import kotlinx.coroutines.Deferred
+import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.create
 import retrofit2.http.GET
 
-private const val BASE_URL = "https://dbcontrol.quickmatch.fr/dbcontrol/"
+private const val BASE_URL = "https://dbcontrol.quickmatch.fr/"
 
 // Create Moshi object
 private val moshi = Moshi.Builder()
@@ -25,7 +26,7 @@ private val retrofit = Retrofit.Builder()
 
 interface DatabaseApiService {
 
-    @GET("/")
+    @GET("dbcontrol")
     fun testConnection() : Deferred<TestObject>
 
 }

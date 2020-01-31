@@ -13,7 +13,6 @@ import androidx.navigation.fragment.findNavController
 import com.example.quickmatch.R
 import com.example.quickmatch.databinding.FragmentTitleBinding
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.fragment_title.*
 
 class TitleFragmentUI : Fragment() {
 
@@ -25,6 +24,26 @@ class TitleFragmentUI : Fragment() {
 
         binding.viewModel = viewModel
 
+        // Snackbars for connexion test result display to the user
+        val snackbarError: Snackbar = Snackbar
+                .make(activity!!.findViewById(android.R.id.content), "La connexion au serveur a échoué", Snackbar.LENGTH_INDEFINITE)
+                .setAction("Réessayer") {
+                    viewModel.tryToConnect()
+                }
+
+        val snackbarLoading: Snackbar = Snackbar
+                .make(activity!!.findViewById(android.R.id.content), "Connexion au serveur en cours", Snackbar.LENGTH_SHORT)
+
+        val snackbarDone: Snackbar = Snackbar
+                .make(activity!!.findViewById(android.R.id.content), "Connexion au serveur réussie", Snackbar.LENGTH_LONG)
+
+        val snackbarFailure: Snackbar = Snackbar
+                .make(activity!!.findViewById(android.R.id.content), "Le test de connexion a échoué", Snackbar.LENGTH_INDEFINITE)
+                .setAction("Réessayer") {
+                    viewModel.tryToConnect()
+                }
+
+        // Navigation to login or signin fragments
         binding.buttonTitleLogin.setOnClickListener {
             findNavController().navigate(TitleFragmentUIDirections.actionTitleFragmentToLoginFragmentUI())
         }
@@ -33,34 +52,17 @@ class TitleFragmentUI : Fragment() {
             findNavController().navigate(TitleFragmentUIDirections.actionTitleFragmentToSigninFragmentUI())
         }
 
-        viewModel.connectionEstablished.observe(this, Observer {
+        // Allow layout to observe directly view model live datas
+        binding.lifecycleOwner = this
+
+        // Show connexion status
+        viewModel.status.observe(this, Observer {
             when(it) {
-                ConnectionStatus.LOADING -> Snackbar.make(
-                        activity!!.findViewById(android.R.id.content),
-                        "Connexion avec le serveur en cours",
-                        Snackbar.LENGTH_SHORT
-                ).show()
-
-                ConnectionStatus.ERROR -> Snackbar.make(
-                        activity!!.findViewById(android.R.id.content),
-                        "La connexion avec le serveur a échoué",
-                        Snackbar.LENGTH_SHORT
-                ).show()
-
-                ConnectionStatus.DONE -> Snackbar.make(
-                        activity!!.findViewById(android.R.id.content),
-                        "Connexion avec le serveur établie",
-                        Snackbar.LENGTH_SHORT
-                ).show()
-
-                else -> Snackbar.make(
-                        activity!!.findViewById(android.R.id.content),
-                        "Echec du test",
-                        Snackbar.LENGTH_SHORT
-                ).show()
+                ConnectionStatus.LOADING -> snackbarLoading.show()
+                ConnectionStatus.ERROR -> snackbarError.show()
+                ConnectionStatus.DONE -> snackbarDone.show()
+                else -> snackbarFailure.show()
             }
-            viewModel.doneTryingToConnect()
-
         })
 
         return binding.root

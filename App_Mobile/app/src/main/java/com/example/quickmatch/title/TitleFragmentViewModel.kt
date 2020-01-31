@@ -1,59 +1,49 @@
 package com.example.quickmatch.title
 
-import android.util.Log
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.quickmatch.network.DatabaseApi
-import com.example.quickmatch.network.TestObject
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.*
-import java.lang.Exception
 
-enum class ConnectionStatus { DONE, LOADING, ERROR }
+enum class ConnectionStatus { DONE, ERROR, LOADING }
 
 class TitleFragmentViewModel : ViewModel() {
 
-    // Connection status property (private mutable and public)
-    private val _connectionEstablished = MutableLiveData<ConnectionStatus>()
-    val connectionEstablished : LiveData<ConnectionStatus>
-        get() = _connectionEstablished
-
     // Create coroutine job and scope
-    val viewModelJob = Job()
-    val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
+    private var viewModelJob = Job()
+
+    // Uses main thread coz retrofit works itself on background threads
+    private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
+
+    // Connection status property (private mutable and public)
+    private val _status = MutableLiveData<ConnectionStatus>()
+    val status : LiveData<ConnectionStatus>
+        get() = _status
 
     init {
         tryToConnect()
     }
 
-    private fun tryToConnect() {
+    fun tryToConnect() {
 
         coroutineScope.launch {
+            var resultDeferred = DatabaseApi.retrofitService.testConnection() // work on a background thread
 
-            Log.i("TitleFragmentViewModel", "Before call")
-            val futureResult = DatabaseApi.retrofitService.testConnection()
-            Log.i("TitleFragmentViewModel", "After call")
-
-            /* For some reasons it doesn't make it inside the try catch */
             try {
-                _connectionEstablished.value = ConnectionStatus.LOADING
-                Log.i("TitleFragmentViewModel", "Loading")
-                var result = futureResult.await()
-                Log.i("TitleFragmentViewModel", "After await")
-                _connectionEstablished.value = ConnectionStatus.DONE
-                Log.i("TitleFragmentViewModel", result.message)
 
-            } catch (e: Exception) {
-                _connectionEstablished.value = ConnectionStatus.ERROR
-                Log.i("TitleFragmentViewModel", e.message!!)
+                _status.value = ConnectionStatus.LOADING
+                var result = resultDeferred.await() // waiting result without blocking main thread
+                _status.value = ConnectionStatus.DONE
+
+            } catch (t: Throwable) {
+
+                _status.value = ConnectionStatus.ERROR
+
             }
         }
-
-    }
-
-
-    fun doneTryingToConnect() {
-        _connectionEstablished.value = null
     }
 
     override fun onCleared() {
