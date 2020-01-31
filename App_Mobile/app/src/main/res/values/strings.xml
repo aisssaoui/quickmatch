@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">Quick Match</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="matches_string">Matchs</string>
+    <string name="stats_string">Stats</string>
+    <string name="club_string">Clubs</string>
+    <string name="agenda_string">Agenda</string>
+    <string name="settings_string">Settings</string>
+    <string name="desc_logo">Logo QuickMatch</string>
+    <string name="text_app_desc">Organisez vos matchs d\'un seul clic !</string>
+    <string name="text_login">Se connecter</string>
+    <string name="text_signin">S\'inscrire</string>
+    <string name="text_desc_login">Connexion à Quick Match</string>
+    <string name="text_login_google">Se connecter avec Google</string>
+    <string name="hint_password">Mot de passe</string>
+    <string name="hint_mail">Adresse mail</string>
+    <string name="text_forgot_password">Mot de passe oublié ?</string>
+    <string name="text_desc_signin">S\'inscrire à Quick Match</string>
+    <string name="hint_confirm_password">Confimez votre mot de passe</string>
+    <string name="hint_phone_number">N° de téléphone</string>
+    <string name="hint_pseudo">Pseudo</string>
+    <string name="hint_firstname">Prénom</string>
+    <string name="hint_name">Nom</string>
+    <string name="text_signin_google">S\'inscrire avec Google</string>
+</resources>
