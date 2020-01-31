@@ -158,7 +158,7 @@ var player_belong_club = {
               switch ((_context9.prev = _context9.next)) {
                 case 0:
                   text =
-                    "SELECT P.id, P.surname, P.first_name, P.pseudo, PBC.is_admin FROM player_belong_club PBC INNER JOIN player P ON P.id = PBC.player WHERE P.id not in (SELECT PBC.player FROM player_belong_club PBC WHERE PBC.club = $1)";
+                    "SELECT DISTINCT P.id, P.surname, P.first_name, P.pseudo FROM player_belong_club PBC INNER JOIN player P ON P.id = PBC.player WHERE P.id NOT IN (SELECT PBC.player FROM player_belong_club PBC WHERE PBC.club = $1)";
                   _context9.prev = 1;
                   _context9.next = 4;
                   return _db2.default.query(text, [req.params.id]);

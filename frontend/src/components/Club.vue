@@ -453,6 +453,7 @@ export default {
           })
           .catch(e => {
             alert("Echec, veuillez réessayer, si le problème persiste, réessayer plus tard");
+            this.$router.go();
           });
         if (nb == 1 && is_admin){
           await axios
@@ -464,7 +465,7 @@ export default {
     },
     async promote_to_admin(pid, cid, pseudo){
       await axios
-        .post("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/PlayerClubsPromoteToAdmin",
+        .put("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/PlayerClubsPromoteToAdmin",
           {
             pid: pid,
             cid: cid
@@ -472,9 +473,10 @@ export default {
         )
         .then(response => {
           alert("Vous avez promu admin " + pseudo);
+          this.manage_club(this.name_club_switch, this.id_club_switch);
         })
         .catch(e => {
-          alert(e);
+          alert("Echec, veuillez réessayer, si le problème persiste, réessayer plus tard");
         });
     },
     async delete_from_club(pid, cid, pseudo){

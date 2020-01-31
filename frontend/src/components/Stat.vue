@@ -63,12 +63,9 @@
             </v-list-item-content>
           </v-list-item>
 
-          <div>
-            <p>{{ playerStatToShow }}</p>
-            <p>{{ playerToShow }}</p>
-          </div>
 
           <div v-if="playerStatToShow.length != 0">
+            <p>debug, contenu de playerStatToShow : {{ playerStatToShow }}</p>
             <div v-for="row in playerStatToShow" :key="row.id">
               <hr>
 
