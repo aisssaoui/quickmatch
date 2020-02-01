@@ -159,7 +159,7 @@ const player_belong_club = {
    */
   async getCountAdmin(req, res) {
     const text =
-      "SELECT COUNT(*) AS nb FROM player_belong_club WHERE club = $1 AND is_admin = TRUE";
+      "SELECT COUNT(*) AS nb FROM player_belong_club WHERE club = $1 AND is_admin = TRUE GROUP BY club";
     try {
       const { rows } = await db.query(text, [req.params.id]);
       if (!rows[0]) {

@@ -65,7 +65,6 @@
 
 
           <div v-if="playerStatToShow.length != 0">
-            <p>debug, contenu de playerStatToShow : {{ playerStatToShow }}</p>
             <div v-for="row in playerStatToShow" :key="row.id">
               <hr>
 
@@ -154,8 +153,10 @@ export default {
         }
       )
       .catch(e => {
-        alert("Une erreur s'est produite, nous allons rafraichir la page, si le problème persiste, quittez la page");
-        this.$router.go();
+        if (this.isSignedIn()){
+          alert("Une erreur s'est produite, nous allons rafraichir la page, si le problème persiste, quittez la page");
+          this.$router.go();
+        }
       });
     this.playerToShow = player.data;
     const playerStat = await axios
@@ -165,12 +166,11 @@ export default {
           responseType: "json"
         }
       )
-      .then(response => {
-        alert("stat passe");
-      })
       .catch(e => {
-        alert("Une erreur s'est produite, nous allons rafraichir la page, si le problème persiste, quittez la page");
-        this.$router.go();
+        if (this.isSignedIn()){
+          alert("Une erreur s'est produite, nous allons rafraichir la page, si le problème persiste, quittez la page");
+          this.$router.go();
+        }
       });
     this.playerStatToShow = playerStat.data.rows;
   },

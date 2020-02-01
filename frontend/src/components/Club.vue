@@ -333,8 +333,10 @@ export default {
         }
       )
       .catch(e => {
-        alert("Une erreur s'est produite, nous allons rafraichir la page, si le problème persiste, quittez la page");
-        this.$router.go();
+        if (this.isSignedIn()){
+          alert("Une erreur s'est produite, nous allons rafraichir la page, si le problème persiste, quittez la page");
+          this.$router.go();
+        }
       });
     this.clubsInToShow = clubs_in.data.rows;
     var clubs_not_in = await axios
@@ -346,8 +348,10 @@ export default {
         }
       )
       .catch(e => {
-        alert("Une erreur s'est produite, nous allons rafraichir la page, si le problème persiste, quittez la page");
-        this.$router.go();
+        if (this.isSignedIn()){
+          alert("Une erreur s'est produite, nous allons rafraichir la page, si le problème persiste, quittez la page");
+          this.$router.go();
+        }
       });
     this.clubsNotInToShow = clubs_not_in.data.rows;
   },

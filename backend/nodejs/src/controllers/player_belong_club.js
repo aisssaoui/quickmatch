@@ -410,7 +410,7 @@ var player_belong_club = {
         while (1) {
           switch (_context9.prev = _context9.next) {
             case 0:
-              text = "SELECT COUNT(*) AS nb FROM player_belong_club WHERE club = $1 AND is_admin = TRUE";
+              text = "SELECT COUNT(*) AS nb FROM player_belong_club WHERE club = $1 AND is_admin = TRUE GROUP BY club";
               _context9.prev = 1;
               _context9.next = 4;
               return _db2.default.query(text, [req.params.id]);
