@@ -418,28 +418,19 @@ var player_belong_club = {
             case 4:
               _ref18 = _context9.sent;
               rows = _ref18.rows;
-
-              if (rows[0]) {
-                _context9.next = 8;
-                break;
-              }
-
-              return _context9.abrupt("return", res.status(404).send({ message: "no one found in this club" }));
-
-            case 8:
               return _context9.abrupt("return", res.status(200).send(rows[0]));
 
-            case 11:
-              _context9.prev = 11;
+            case 9:
+              _context9.prev = 9;
               _context9.t0 = _context9["catch"](1);
               return _context9.abrupt("return", res.status(400).send(_context9.t0));
 
-            case 14:
+            case 12:
             case "end":
               return _context9.stop();
           }
         }
-      }, _callee9, this, [[1, 11]]);
+      }, _callee9, this, [[1, 9]]);
     }));
 
     function getCountAdmin(_x17, _x18) {
@@ -473,28 +464,19 @@ var player_belong_club = {
             case 5:
               _ref20 = _context10.sent;
               rows = _ref20.rows;
-
-              if (rows[0]) {
-                _context10.next = 9;
-                break;
-              }
-
-              return _context10.abrupt("return", res.status(404).send({ message: "club not found" }));
-
-            case 9:
               return _context10.abrupt("return", res.status(200).send(rows[0]));
 
-            case 12:
-              _context10.prev = 12;
+            case 10:
+              _context10.prev = 10;
               _context10.t0 = _context10["catch"](2);
               return _context10.abrupt("return", res.status(400).send(_context10.t0));
 
-            case 15:
+            case 13:
             case "end":
               return _context10.stop();
           }
         }
-      }, _callee10, this, [[2, 12]]);
+      }, _callee10, this, [[2, 10]]);
     }));
 
     function promoteToAdmin(_x19, _x20) {
