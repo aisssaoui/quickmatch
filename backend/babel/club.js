@@ -12,7 +12,7 @@ const Club = {
   async create(req, res) {
     const text = `INSERT INTO Club (club_name, private_club)
 	    VALUES($1, $2)
-        returning *`;
+        RETURNING *`;
     const values = [req.body.club_name, req.body.private_club];
 
     try {
@@ -22,6 +22,7 @@ const Club = {
       return res.status(400).send(error);
     }
   },
+
   /**
    * Get All clubs
    * @param {object} req
@@ -37,6 +38,7 @@ const Club = {
       return res.status(400).send(error);
     }
   },
+
   /**
    * Get A Club
    * @param {object} req
@@ -55,6 +57,7 @@ const Club = {
       return res.status(400).send(error);
     }
   },
+
   /**
    * Update A Club
    * @param {object} req
@@ -65,7 +68,7 @@ const Club = {
     const findOneQuery = "SELECT * FROM club WHERE id=$1";
     const updateOneQuery = `UPDATE club
       SET club_name=$1,private_club=$2
-      WHERE id=$3 returning *`;
+      WHERE id=$3 RETURNING *`;
     try {
       const { rows } = await db.query(findOneQuery, [req.params.id]);
       if (!rows[0]) {
@@ -82,6 +85,7 @@ const Club = {
       return res.status(400).send(err);
     }
   },
+
   /**
    * Delete A Club
    * @param {object} req
@@ -89,7 +93,7 @@ const Club = {
    * @returns {void} return statuc code 204
    */
   async delete(req, res) {
-    const deleteQuery = "DELETE FROM club WHERE id=$1 returning *";
+    const deleteQuery = "DELETE FROM club WHERE id=$1 RETURNING *";
     try {
       const { rows } = await db.query(deleteQuery, [req.params.id]);
       if (!rows[0]) {

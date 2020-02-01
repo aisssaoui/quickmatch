@@ -33,7 +33,7 @@ var Club = {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              text = "INSERT INTO Club (club_name, private_club)\n\t    VALUES($1, $2)\n        returning *";
+              text = "INSERT INTO Club (club_name, private_club)\n\t    VALUES($1, $2)\n        RETURNING *";
               values = [req.body.club_name, req.body.private_club];
               _context.prev = 2;
               _context.next = 5;
@@ -63,6 +63,7 @@ var Club = {
 
     return create;
   }(),
+
 
   /**
    * Get All clubs
@@ -108,6 +109,7 @@ var Club = {
 
     return getAll;
   }(),
+
 
   /**
    * Get A Club
@@ -162,6 +164,7 @@ var Club = {
     return getOne;
   }(),
 
+
   /**
    * Update A Club
    * @param {object} req
@@ -177,7 +180,7 @@ var Club = {
           switch (_context4.prev = _context4.next) {
             case 0:
               findOneQuery = "SELECT * FROM club WHERE id=$1";
-              updateOneQuery = "UPDATE club\n      SET club_name=$1,private_club=$2\n      WHERE id=$3 returning *";
+              updateOneQuery = "UPDATE club\n      SET club_name=$1,private_club=$2\n      WHERE id=$3 RETURNING *";
               _context4.prev = 2;
               _context4.next = 5;
               return _db2.default.query(findOneQuery, [req.params.id]);
@@ -222,6 +225,7 @@ var Club = {
     return update;
   }(),
 
+
   /**
    * Delete A Club
    * @param {object} req
@@ -236,7 +240,7 @@ var Club = {
         while (1) {
           switch (_context5.prev = _context5.next) {
             case 0:
-              deleteQuery = "DELETE FROM club WHERE id=$1 returning *";
+              deleteQuery = "DELETE FROM club WHERE id=$1 RETURNING *";
               _context5.prev = 1;
               _context5.next = 4;
               return _db2.default.query(deleteQuery, [req.params.id]);
