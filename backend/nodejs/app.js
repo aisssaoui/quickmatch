@@ -120,7 +120,7 @@ app.post("/dbcontrol/api/v1/PlayerClubs", _player_belong_club2.default.addPlayer
 app.delete("/dbcontrol/api/v1/PlayerClubs/:cid&:pid", _player_belong_club2.default.deletePlayerFromClub);
 app.get("/dbcontrol/api/v1/PlayerClubs", _player_belong_club2.default.getAll);
 app.get("/dbcontrol/api/v1/playerClubsCountAdmin/:cid", _player_belong_club2.default.getCountAdmin);
-app.put("/dbcontrol/api/v1/PlayerClubsPromoteToAdmin", _player_belong_club2.default.promoteToAdmin);
+app.put("/dbcontrol/api/v1/PlayerClubsPromoteToAdmin/:pid&:cid", _player_belong_club2.default.promoteToAdmin);
 
 app.listen(3000);
 console.log("app running on port ", 3000);

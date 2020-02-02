@@ -423,10 +423,8 @@ export default {
       this.$router.go();
     },
     async leave_club(cid, club_name, is_admin) {
-      let apiRep = await axios
-        .get(
-          "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/PlayerClubsCountAdmin/" +
-            cid,
+      let count_admin = await axios
+        .get("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/PlayerClubsCountAdmin/" + cid,
           {
             responseType: "json"
           }
@@ -435,7 +433,7 @@ export default {
           alert("Echec, veuillez réessayer, si le problème persiste, réessayer plus tard");
           this.$router.go();
         });
-      let nb = apiRep.data.nb;
+      let nb = count_admin.data.rows[0]["nb"];
       let destroy_club = true;
 
       if (nb == 1 && is_admin) {
@@ -462,19 +460,16 @@ export default {
         if (nb == 1 && is_admin){
           await axios
             .delete("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/Clubs/" + cid)
-            .then("Le club " + club_name + " a été détruit");
+            .then(response => {
+              alert("Le club " + club_name + " a été détruit");
+            });
         }
       }
       this.$router.go();
     },
     async promote_to_admin(pid, cid, pseudo){
       await axios
-        .put("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/PlayerClubsPromoteToAdmin",
-          {
-            pid: pid,
-            cid: cid
-          }
-        )
+        .put("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/PlayerClubsPromoteToAdmin/" + pid + "&" + cid)
         .then(response => {
           alert("Vous avez promu admin " + pseudo);
           this.manage_club(this.name_club_switch, this.id_club_switch);

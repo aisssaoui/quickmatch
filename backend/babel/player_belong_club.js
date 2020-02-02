@@ -161,8 +161,8 @@ const player_belong_club = {
     const text =
       "SELECT COUNT(*) AS nb FROM player_belong_club WHERE club = $1 AND is_admin = TRUE GROUP BY club";
     try {
-      const { rows } = await db.query(text, [req.params.id]);
-      return res.status(200).send(rows[0]);
+      const { rows, rowCount } = await db.query(text, [req.params.cid]);
+      return res.status(200).send({ rows, rowCount });
     } catch (error) {
       return res.status(400).send(error);
     }
@@ -178,11 +178,11 @@ const player_belong_club = {
     const text =
       "UPDATE player_belong_club SET is_admin = TRUE WHERE player = $1 AND club = $2 RETURNING *";
       const values = [
-        req.body.pid,
-        req.body.cid
+        req.params.pid,
+        req.params.cid
       ];
     try {
-      const { rows } = await db.query(text, [req.params.id]);
+      const { rows } = await db.query(text, values);
       return res.status(200).send(rows[0]);
     } catch (error) {
       return res.status(400).send(error);

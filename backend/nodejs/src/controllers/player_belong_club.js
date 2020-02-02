@@ -404,7 +404,7 @@ var player_belong_club = {
    */
   getCountAdmin: function () {
     var _ref17 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee9(req, res) {
-      var text, _ref18, rows;
+      var text, _ref18, rows, rowCount;
 
       return regeneratorRuntime.wrap(function _callee9$(_context9) {
         while (1) {
@@ -413,24 +413,25 @@ var player_belong_club = {
               text = "SELECT COUNT(*) AS nb FROM player_belong_club WHERE club = $1 AND is_admin = TRUE GROUP BY club";
               _context9.prev = 1;
               _context9.next = 4;
-              return _db2.default.query(text, [req.params.id]);
+              return _db2.default.query(text, [req.params.cid]);
 
             case 4:
               _ref18 = _context9.sent;
               rows = _ref18.rows;
-              return _context9.abrupt("return", res.status(200).send(rows[0]));
+              rowCount = _ref18.rowCount;
+              return _context9.abrupt("return", res.status(200).send({ rows: rows, rowCount: rowCount }));
 
-            case 9:
-              _context9.prev = 9;
+            case 10:
+              _context9.prev = 10;
               _context9.t0 = _context9["catch"](1);
               return _context9.abrupt("return", res.status(400).send(_context9.t0));
 
-            case 12:
+            case 13:
             case "end":
               return _context9.stop();
           }
         }
-      }, _callee9, this, [[1, 9]]);
+      }, _callee9, this, [[1, 10]]);
     }));
 
     function getCountAdmin(_x17, _x18) {
@@ -456,10 +457,10 @@ var player_belong_club = {
           switch (_context10.prev = _context10.next) {
             case 0:
               text = "UPDATE player_belong_club SET is_admin = TRUE WHERE player = $1 AND club = $2 RETURNING *";
-              values = [req.body.pid, req.body.cid];
+              values = [req.params.pid, req.params.cid];
               _context10.prev = 2;
               _context10.next = 5;
-              return _db2.default.query(text, [req.params.id]);
+              return _db2.default.query(text, values);
 
             case 5:
               _ref20 = _context10.sent;
