@@ -228,7 +228,6 @@ var sha512 = require('js-sha512');
                 { ResponseType: "json" }
             );
             var newPassword = sha512(this.password + player.data.id);
-            console.log(newPassword);
             let apiRep = null;
             apiRep = await axios.put(
                 "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/players/id" + player.data.id,
