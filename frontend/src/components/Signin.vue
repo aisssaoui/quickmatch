@@ -198,16 +198,16 @@ var sha512 = require('js-sha512');
       },
         login: async function() {
             let apiRep = null;
-            this.password = this.hash();
+            let tmp = this.hash();
             apiRep = await axios.post(
                 "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/players/",
                 {
                   pseudo: this.pseudo,
                   surname: this.surname,
                   first_name: this.first_name,
-                  mdp: this.password,
+                  mdp: tmp,
                   phone_number: this.tel,
-                  mail_address: this.email,
+                  mail_adress: this.email,
                   avatar: this.avatar
                 }
             ).catch(e => {
@@ -225,12 +225,18 @@ var sha512 = require('js-sha512');
             }
         },
         updatePassword : async function() {
-            var newPassword = sha512(this.password + store.getters.id);
+            let player = await axios.get(
+                "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/players/ma" +
+                  this.email,
+                { ResponseType: "json" }
+            );
+            var newPassword = sha512(this.password + player.data.id);
+            console.log(newPassword);
             let apiRep = null;
             apiRep = await axios.put(
-                "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/players/id" + store.getters.id,
+                "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/players/id" + player.data.id,
                 {
-                    mdp: this.newPassword
+                    mdp: newPassword
                 }
             );
             if (apiRep.data.name != "error") {

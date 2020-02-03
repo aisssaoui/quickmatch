@@ -82,6 +82,7 @@ import GoogleSignInButton from "../main.js";
 import store from "../store";
 import axios from "axios";
 import router from "../router";
+var sha512 = require('js-sha512');
 
 export default {
   directives: {
@@ -133,6 +134,10 @@ export default {
       store.dispatch("logout");
       router.push("/disconnected");
     },
+    passwordCheck(apiPassword,id) {
+        var hashedPassword = sha512(this.password + id);
+        return hashedPassword === apiPassword;
+    },
     login() {
       axios
         .get(
@@ -140,7 +145,7 @@ export default {
             this.email
         )
         .then(response => {
-            if (passwordCheck(response.data.mdp,response.data.id)) {
+            if (this.passwordCheck(response.data.mdp,response.data.id)) {
                 store.dispatch("setEmail",this.email);
                 store.dispatch("hasAccount");
                 store.dispatch("setID");
@@ -153,10 +158,6 @@ export default {
             alert("Email ou mot de passe invalide !");
         });
     }
-  },
-  passwordCheck(apiPassword,id) {
-      var hashedPassword = sha512(this.password + id);
-      return hashedPassword === apiPassword;
   },
   computed: {
     isSignedIn: function() {

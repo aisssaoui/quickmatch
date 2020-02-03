@@ -110,8 +110,8 @@ const Player = {
   async update(req, res) {
     const findOneQuery = "SELECT * FROM player WHERE id = $1";
     const updateOneQuery = `UPDATE player
-      SET pseudo = $1, surname = $2, first_name = $3, mail_address = $4, phone_number = $5, bio=$6, avatar=$7
-      WHERE id = $8 RETURNING *`;
+      SET pseudo = $1, surname = $2, first_name = $3, mail_address = $4, phone_number = $5, bio=$6, avatar=$7, mdp=$8
+      WHERE id = $9 RETURNING *`;
     try {
       const { rows } = await db.query(findOneQuery, [req.params.id]);
       if (!rows[0]) {
@@ -125,6 +125,7 @@ const Player = {
         req.body.phone_number || rows[0].phone_number,
         req.body.bio || rows[0].bio,
         req.body.avatar || rows[0].avatar,
+        req.body.mdp || rows[0].mdp,
         req.params.id
       ];
       const response = await db.query(updateOneQuery, values);

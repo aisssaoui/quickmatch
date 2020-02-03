@@ -280,7 +280,7 @@ var Player = {
           switch (_context6.prev = _context6.next) {
             case 0:
               findOneQuery = "SELECT * FROM player WHERE id = $1";
-              updateOneQuery = "UPDATE player\n      SET pseudo = $1, surname = $2, first_name = $3, mail_address = $4, phone_number = $5, bio=$6, avatar=$7\n      WHERE id = $8 RETURNING *";
+              updateOneQuery = "UPDATE player\n      SET pseudo = $1, surname = $2, first_name = $3, mail_address = $4, phone_number = $5, bio=$6, avatar=$7, mdp=$8\n      WHERE id = $9 RETURNING *";
               _context6.prev = 2;
               _context6.next = 5;
               return _db2.default.query(findOneQuery, [req.params.id]);
@@ -297,7 +297,7 @@ var Player = {
               return _context6.abrupt("return", res.status(404).send({ message: "player not found" }));
 
             case 9:
-              values = [req.body.pseudo || rows[0].pseudo, req.body.surname || rows[0].surname, req.body.first_name || rows[0].first_name, req.body.mail_address || rows[0].mail_address, req.body.phone_number || rows[0].phone_number, req.body.bio || rows[0].bio, req.body.avatar || rows[0].avatar, req.params.id];
+              values = [req.body.pseudo || rows[0].pseudo, req.body.surname || rows[0].surname, req.body.first_name || rows[0].first_name, req.body.mail_address || rows[0].mail_address, req.body.phone_number || rows[0].phone_number, req.body.bio || rows[0].bio, req.body.avatar || rows[0].avatar, req.body.mdp || rows[0].mdp, req.params.id];
               _context6.next = 12;
               return _db2.default.query(updateOneQuery, values);
 

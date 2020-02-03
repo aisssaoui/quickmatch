@@ -130,6 +130,7 @@ export default new Vuex.Store({
         { ResponseType: "json" }
       );
       state.id = player.data.id;
+      console.log("store" + state.id);
       setCookie(
         "quickmatchId",
         state.id,

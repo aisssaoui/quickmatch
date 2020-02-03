@@ -111,7 +111,7 @@ export default {
               first_name: this.firstName,
               mdp: this.mdp,
               phone_number: this.phone_number,
-              mail_address: this.mailAddress,
+              mail_adress: this.mailAddress,
               avatar: this.avatar
           });
           if (apiRep.data.name != "error") {
