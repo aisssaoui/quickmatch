@@ -27,7 +27,7 @@ const Player = {
       const { rows } = await db.query(text, values);
       return res.status(201).send(rows[0]);
     } catch (error) {
-      return res.status(400).send(error);
+      return res.status(200).send(error);
     }
   },
 
@@ -43,7 +43,7 @@ const Player = {
       const { rows, rowCount } = await db.query(findAllQuery);
       return res.status(200).send({ rows, rowCount });
     } catch (error) {
-      return res.status(400).send(error);
+      return res.status(200).send(error);
     }
   },
 
@@ -58,11 +58,11 @@ const Player = {
     try {
       const { rows } = await db.query(text, [req.params.id]);
       if (!rows[0]) {
-        return res.status(404).send({ message: "player not found" });
+        return res.status(200).send({ message: "player not found" });
       }
       return res.status(200).send(rows[0]);
     } catch (error) {
-      return res.status(400).send(error);
+      return res.status(200).send(error);
     }
   },
 
@@ -77,11 +77,11 @@ const Player = {
     try {
       const { rows } = await db.query(text, [req.params.mail_address]);
       if (!rows[0]) {
-        return res.status(404).send({ message: "player not found" });
+        return res.status(202).send({ message: "player not found" });
       }
       return res.status(200).send(rows[0]);
     } catch (error) {
-      return res.status(400).send(error);
+      return res.status(202).send(error);
     }
   },
 
@@ -115,7 +115,7 @@ const Player = {
     try {
       const { rows } = await db.query(findOneQuery, [req.params.id]);
       if (!rows[0]) {
-        return res.status(404).send({ message: "player not found" });
+        return res.status(200).send({ message: "player not found" });
       }
       const values = [
         req.body.pseudo || rows[0].pseudo,
@@ -131,7 +131,7 @@ const Player = {
       const response = await db.query(updateOneQuery, values);
       return res.status(200).send(response.rows[0]);
     } catch (err) {
-      return res.status(400).send(err);
+      return res.status(200).send(err);
     }
   },
 

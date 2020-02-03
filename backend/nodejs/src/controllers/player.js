@@ -47,7 +47,7 @@ var Player = {
             case 10:
               _context.prev = 10;
               _context.t0 = _context["catch"](2);
-              return _context.abrupt("return", res.status(400).send(_context.t0));
+              return _context.abrupt("return", res.status(200).send(_context.t0));
 
             case 13:
             case "end":
@@ -93,7 +93,7 @@ var Player = {
             case 10:
               _context2.prev = 10;
               _context2.t0 = _context2["catch"](1);
-              return _context2.abrupt("return", res.status(400).send(_context2.t0));
+              return _context2.abrupt("return", res.status(200).send(_context2.t0));
 
             case 13:
             case "end":
@@ -139,7 +139,7 @@ var Player = {
                 break;
               }
 
-              return _context3.abrupt("return", res.status(404).send({ message: "player not found" }));
+              return _context3.abrupt("return", res.status(200).send({ message: "player not found" }));
 
             case 8:
               return _context3.abrupt("return", res.status(200).send(rows[0]));
@@ -147,7 +147,7 @@ var Player = {
             case 11:
               _context3.prev = 11;
               _context3.t0 = _context3["catch"](1);
-              return _context3.abrupt("return", res.status(400).send(_context3.t0));
+              return _context3.abrupt("return", res.status(200).send(_context3.t0));
 
             case 14:
             case "end":
@@ -193,7 +193,7 @@ var Player = {
                 break;
               }
 
-              return _context4.abrupt("return", res.status(404).send({ message: "player not found" }));
+              return _context4.abrupt("return", res.status(200).send({ message: "player not found" }));
 
             case 8:
               return _context4.abrupt("return", res.status(200).send(rows[0]));
@@ -201,7 +201,7 @@ var Player = {
             case 11:
               _context4.prev = 11;
               _context4.t0 = _context4["catch"](1);
-              return _context4.abrupt("return", res.status(400).send(_context4.t0));
+              return _context4.abrupt("return", res.status(200).send(_context4.t0));
 
             case 14:
             case "end":
@@ -294,7 +294,7 @@ var Player = {
                 break;
               }
 
-              return _context6.abrupt("return", res.status(404).send({ message: "player not found" }));
+              return _context6.abrupt("return", res.status(200).send({ message: "player not found" }));
 
             case 9:
               values = [req.body.pseudo || rows[0].pseudo, req.body.surname || rows[0].surname, req.body.first_name || rows[0].first_name, req.body.mail_address || rows[0].mail_address, req.body.phone_number || rows[0].phone_number, req.body.bio || rows[0].bio, req.body.avatar || rows[0].avatar, req.body.mdp || rows[0].mdp, req.params.id];
@@ -308,7 +308,7 @@ var Player = {
             case 16:
               _context6.prev = 16;
               _context6.t0 = _context6["catch"](2);
-              return _context6.abrupt("return", res.status(400).send(_context6.t0));
+              return _context6.abrupt("return", res.status(200).send(_context6.t0));
 
             case 19:
             case "end":
