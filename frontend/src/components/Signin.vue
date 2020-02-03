@@ -210,9 +210,7 @@ var sha512 = require('js-sha512');
                   mail_adress: this.email,
                   avatar: this.avatar
                 }
-            ).catch(e => {
-                console.log(e);
-            });
+            );
             if (apiRep.data.name != "error") {
                 store.dispatch("setEmail",this.email);
                 store.dispatch("hasAccount");
@@ -220,8 +218,7 @@ var sha512 = require('js-sha512');
                 this.updatePassword();
                 router.push("/");
             } else {
-              this.creationError(apiRep.data);
-              console.log(apiRep);
+                this.creationError(apiRep.data);
             }
         },
         updatePassword : async function() {
