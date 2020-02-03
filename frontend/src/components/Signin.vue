@@ -68,9 +68,8 @@
             <v-text-field
               v-model="tel"
               :rules="telRules"
-              :counter="14"
-              label="Numéro de téléphone"
-              required
+              :counter="10"
+              label="Numéro de téléphone (optionnel)"
               outlined
               filled
             ></v-text-field>
@@ -103,6 +102,7 @@ import GoogleSignInButton from "../main.js";
 import store from "../store";
 import axios from "axios";
 import router from "../router";
+var sha512 = require('js-sha512');
 
   export default {
       directives: {
@@ -112,12 +112,13 @@ import router from "../router";
       clientId:
         "864617003210-1dr6nsvputhjv59l5b3633sslri4vdjd.apps.googleusercontent.com",
       valid: false,
-      surname: '',
-      first_name: '',
-      pseudo: '',
-      password: '',
-      email: '',
-      tel: '',
+      surname: "",
+      first_name: "",
+      pseudo: "",
+      password: "",
+      email: "",
+      tel: "",
+      avatar: "",
       surnameRules: [
         v => !!v || 'Nom requis',
         v => v.length >= 2 || 'Nom trop court',
@@ -142,8 +143,7 @@ import router from "../router";
         v => /^[a-zA-Z0-9._-]+@[a-z0-9._-]{2,}\.[a-z]{2,4}$/.test(v) || 'E-mail invalide'
       ],
       telRules: [
-        v => !!v || 'Numéro de téléphone requis',
-        v => /^(0[1-8])(?:[ -]?([0-9]{2})){4}$/.test(v) || 'Numéro de téléphone invalide (vous pouvez utilisé "-" ou des espaces comme séparateur (06-66-66-66-66)'
+        v => v.length == 0 || /^(0[1-8])(([0-9]{2})){4}$/.test(v) || 'Numéro de téléphone invalide (exemple: 0600000000) ou laisser vide'
       ],
     }),
     methods: {
@@ -177,31 +177,71 @@ import router from "../router";
           store.dispatch("logout");
           router.push("/disconnected");
         },
-        login() {
-          axios
-            .get(
-              "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/Players/ma" +
-                store.getters.email
-            )
-            .then(response => {
-              store.dispatch("login");
-              router.push("/");
-            })
-            .catch(e => {
-              router.push("/createAccount");
+        creationError: function(err) {
+          if (err.detail.includes("pseudo")) {
+              alert("Pseudo déjà existant ! Veuillez en saisir un nouveau.");
+              return;
+          }
+          if (err.detail.includes("mail_address")) {
+              alert("Email déjà existante ! Veuillez en saisir une nouvelle.");
+              return;
+          }
+          if (err.detail.includes("phone_number")) {
+              alert("Numéro de téléphone déjà existant ! Veuillez en saisir un nouveau.");
+              return;
+          }
+          alert("La création du compte a échoué, veuillez réessayer ultérieurement.")
+      },
+      hash: function() {
+          var newPassword = sha512(this.password);
+          return newPassword;
+      },
+        login: async function() {
+            let apiRep = null;
+            this.password = this.hash();
+            apiRep = await axios.post(
+                "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/players/",
+                {
+                  pseudo: this.pseudo,
+                  surname: this.surname,
+                  first_name: this.first_name,
+                  mdp: this.password,
+                  phone_number: this.tel,
+                  mail_address: this.email,
+                  avatar: this.avatar
+                }
+            ).catch(e => {
+                console.log(e);
             });
-        }/*
-      login() {
-        axios
-          .post("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/Players")
-          .then(response => {
-            store.dispatch("login");
-            router.push("/");
-          })
-          .catch(e => {
-            router.push("/createAccount");
-          });
-      }*/
+            if (apiRep.data.name != "error") {
+                store.dispatch("setEmail",this.email);
+                store.dispatch("hasAccount");
+                store.dispatch("setID");
+                this.updatePassword();
+                router.push("/");
+            } else {
+              this.creationError(apiRep.data);
+              console.log(apiRep);
+            }
+        },
+        updatePassword : async function() {
+            var newPassword = sha512(this.password + store.getters.id);
+            let apiRep = null;
+            apiRep = await axios.put(
+                "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/players/id" + store.getters.id,
+                {
+                    mdp: this.newPassword
+                }
+            );
+            if (apiRep.data.name != "error") {
+                // update ok
+            }else{
+                console.log("update de mdp ratée");
+            }
+        },
+  },
+  created: function() {
+      alert("Pour des raisons de sécurité, nous vous recommandons la connexion via un compte Google.");
   }
 };
 </script>

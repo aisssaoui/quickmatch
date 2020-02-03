@@ -108,7 +108,7 @@
                 </v-list-item>
                 </v-card>
             </div>
-            
+
             Le but de cette application est de vous proposer un système d'organisation simple permettant d'organiser vos rencontres sportives de la plus facile des manières !
         </div>
       </div>
@@ -117,10 +117,10 @@
       justify="center"
     >
       <v-col class="pa-md-4" lg="2" md="auto" sd="auto">
-        <v-btn class="row wrap align-center" small color="primary" to="/login">Se connecter</v-btn>
+        <v-btn v-if="!isSignedIn" class="row wrap align-center" small color="primary" to="/login">Se connecter</v-btn>
       </v-col>
       <v-col class="pa-md-4" lg="2" md="auto" sd="auto">
-        <v-btn class="row wrap align-center" small color="primary" to="/signin">S'inscrire</v-btn>
+        <v-btn v-if="!isSignedIn" class="row wrap align-center" small color="primary" to="/signin">S'inscrire</v-btn>
       </v-col>
     </v-row>
     </v-container>

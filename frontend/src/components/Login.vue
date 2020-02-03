@@ -13,10 +13,10 @@
           </v-layout>
           <v-col class="py-0" cols="4" md="12">
             <v-text-field
-              v-model="pseudo"
-              :rules="pseudoRules"
-              :counter="20"
-              label="Pseudo"
+              v-model="email"
+              :rules="emailRules"
+              :counter="50"
+              label="E-mail"
               required
               outlined
               filled
@@ -91,13 +91,10 @@ export default {
     clientId:
       "864617003210-1dr6nsvputhjv59l5b3633sslri4vdjd.apps.googleusercontent.com",
     valid: false,
-    pseudo: "",
-    pseudoRules: [
-      v => !!v || "Pseudo requis",
-      v => v.length >= 2 || "Pseudo trop court",
-      v =>
-        /^[a-zA-Z0-9 _\-éèçîïœžâêôàûùâãäåæçëìíîïðñòóôõúûüýö]+$/.test(v) ||
-        'Pseudo invalide (lettres, nombres, espace, "_" et "-" seulement)'
+    email: "",
+    emailRules: [
+      v => !!v || 'E-mail requis',
+      v => /^[a-zA-Z0-9._-]+@[a-z0-9._-]{2,}\.[a-z]{2,4}$/.test(v) || 'E-mail invalide'
     ],
     password: "",
     passwordRules: [
@@ -140,16 +137,26 @@ export default {
       axios
         .get(
           "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/players/ma" +
-            store.getters.email
+            this.email
         )
         .then(response => {
-          store.dispatch("login");
-          router.push("/");
+            if (passwordCheck(response.data.mdp,response.data.id)) {
+                store.dispatch("setEmail",this.email);
+                store.dispatch("hasAccount");
+                store.dispatch("setID");
+                router.push("/");
+            }else{
+                alert("Email ou mot de passe invalide !");
+            }
         })
         .catch(e => {
-          router.push("/createAccount");
+            alert("Email ou mot de passe invalide !");
         });
     }
+  },
+  passwordCheck(apiPassword,id) {
+      var hashedPassword = sha512(this.password + id);
+      return hashedPassword === apiPassword;
   },
   computed: {
     isSignedIn: function() {

@@ -93,27 +93,34 @@ export default {
     };
   },
   methods: {
-    createAccount: function() {
-      axios
-        .post("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/players/", {
-          pseudo: this.pseudo,
-          surname: this.surname,
-          first_name: this.firstName,
-          mdp: this.mdp,
-          phone_number: this.phone_number,
-          mail_address: this.mailAddress,
-          avatar: this.avatar
-        })
-        .then(response => {
-          this.response = response.data;
-          store.dispatch("hasAccount");
-          store.dispatch("setID");
-          router.push("/");
-        })
-        .catch(e => {
-          // création impossible
-          console.error(e);
-        });
+      creationError: function(err) {
+        if (err.detail.includes("pseudo")) {
+            alert("Pseudo déjà existant ! Veuillez en saisir un nouveau.");
+            return;
+        }else{
+            alert("La création du compte a échoué, veuillez réessayer ultérieurement.")
+        }
+    },
+    createAccount: async function() {
+        let apiRep = null;
+        apiRep = await axios.post(
+            "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/players/",
+            {
+              pseudo: this.pseudo,
+              surname: this.surname,
+              first_name: this.firstName,
+              mdp: this.mdp,
+              phone_number: this.phone_number,
+              mail_address: this.mailAddress,
+              avatar: this.avatar
+          });
+          if (apiRep.data.name != "error") {
+              store.dispatch("hasAccount");
+              store.dispatch("setID");
+              router.push("/");
+          } else {
+              this.creationError(apiRep.data);
+          }
     }
   },
   created: function() {
