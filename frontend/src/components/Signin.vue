@@ -196,34 +196,60 @@ var sha512 = require('js-sha512');
           var newPassword = sha512(this.password);
           return newPassword;
       },
+      checkEntries: function() {
+          if(this.surname.length < 2 || this.surname.length > 20) {
+              alert("Le nom doit faire entre 2 et 20 caractères.");
+              return false;
+          }
+          if(this.first_name.length < 2 || this.first_name.length > 20) {
+              alert("Le prénom doit faire entre 2 et 20 caractères.");
+              return false;
+          }
+          if(this.pseudo.length < 2 || this.pseudo.length > 20) {
+              alert("Le pseudo doit faire entre 2 et 20 caractères.");
+              return false;
+          }
+          if(this.mdp.length < 8 || this.mdp.length > 50) {
+              alert("Le mot de passe doit faire entre 8 et 50 caractères.");
+              return false;
+          }
+          if(this.email.length < 6 || this.email.length > 50) {
+              alert("L'adresse mail doit faire entre 6 et 50 caractères.");
+              return false;
+          }
+      },
         login: async function() {
             let apiRep = null;
             let tmp = this.hash();
+            if (this.checkEntries() == false) {
+                return;
+            }else{
             if (this.tel === "") {
                 this.tel = null;
             }
-            apiRep = await axios.post(
-                "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/players/",
-                {
-                  pseudo: this.pseudo,
-                  surname: this.surname,
-                  first_name: this.first_name,
-                  mdp: tmp,
-                  phone_number: this.tel,
-                  mail_adress: this.email,
-                  avatar: this.avatar
+                apiRep = await axios.post(
+                    "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/players/",
+                    {
+                        pseudo: this.pseudo,
+                        surname: this.surname,
+                        first_name: this.first_name,
+                        mdp: tmp,
+                        phone_number: this.tel,
+                        mail_adress: this.email,
+                        avatar: this.avatar
+                    }
+                );
+                if (apiRep.data.name != "error") {
+                    store.dispatch("setEmail",this.email);
+                    store.dispatch("hasAccount");
+                    store.dispatch("setID");
+                    this.updatePassword();
+                    router.push("/");
+                } else {
+                    this.creationError(apiRep.data);
                 }
-            );
-            if (apiRep.data.name != "error") {
-                store.dispatch("setEmail",this.email);
-                store.dispatch("hasAccount");
-                store.dispatch("setID");
-                this.updatePassword();
-                router.push("/");
-            } else {
-                this.creationError(apiRep.data);
+                this.tel = "";
             }
-            this.tel = "";
         },
         updatePassword : async function() {
             let player = await axios.get(
