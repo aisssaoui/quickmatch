@@ -198,7 +198,7 @@ var sha512 = require('js-sha512');
       },
       checkEntries: function() {
           if(this.surname.length < 2 || this.surname.length > 20) {
-              alert("Veuillez entrer un nom plus long.");
+              alert("Le nom doit faire entre 2 et 20 caractères.");
               return false;
           }
           if(this.first_name.length < 2 || this.first_name.length > 20) {
