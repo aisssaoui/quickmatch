@@ -166,6 +166,61 @@ var invitation_for_meet = {
   })(),
 
   /**
+   * Get All invitation_for_meets rows
+   * @param {object} req
+   * @param {object} res
+   * @returns {object} invitation_for_meets array
+   */
+  getAllRows: (function() {
+    var _ref5 = _asyncToGenerator(
+      /*#__PURE__*/ regeneratorRuntime.mark(function _callee3(req, res) {
+        var findAllQuery, a;
+        return regeneratorRuntime.wrap(
+          function _callee3$(_context3) {
+            while (1) {
+              switch ((_context3.prev = _context3.next)) {
+                case 0:
+                  findAllQuery = "SELECT * FROM invitation_for_meet";
+                  _context3.prev = 1;
+                  _context3.next = 4;
+                  return _db2.default.query(findAllQuery);
+
+                case 4:
+                  a = _context3.sent;
+                  return _context3.abrupt(
+                    "return",
+                    res.status(200).send(a.rows)
+                  );
+
+                case 8:
+                  _context3.prev = 8;
+                  _context3.t0 = _context3["catch"](1);
+                  return _context3.abrupt(
+                    "return",
+                    res.status(200).send(_context3.t0)
+                  );
+
+                case 11:
+                case "end":
+                  return _context3.stop();
+              }
+            }
+          },
+          _callee3,
+          this,
+          [[1, 8]]
+        );
+      })
+    );
+
+    function getAllRows(_x5, _x6) {
+      return _ref5.apply(this, arguments);
+    }
+
+    return getAllRows;
+  })(),
+
+  /**
    * Get A invitation_for_meet
    * @param {object} req
    * @param {object} res
@@ -181,10 +236,14 @@ var invitation_for_meet = {
             while (1) {
               switch ((_context3.prev = _context3.next)) {
                 case 0:
-                  text = "SELECT * FROM invitation_for_meet WHERE invitation = $1 and meet = $2";
+                  text =
+                    "SELECT * FROM invitation_for_meet WHERE invitation = $1 and meet = $2";
                   _context3.prev = 1;
                   _context3.next = 4;
-                  return _db2.default.query(text, [req.params.invitation_id, req.params.meet_id]);
+                  return _db2.default.query(text, [
+                    req.params.invitation_id,
+                    req.params.meet_id
+                  ]);
 
                 case 4:
                   _ref6 = _context3.sent;
@@ -197,7 +256,9 @@ var invitation_for_meet = {
 
                   return _context3.abrupt(
                     "return",
-                    res.status(404).send({ message: "invitation_for_meet not found" })
+                    res
+                      .status(404)
+                      .send({ message: "invitation_for_meet not found" })
                   );
 
                 case 8:
@@ -250,7 +311,8 @@ var invitation_for_meet = {
             while (1) {
               switch ((_context4.prev = _context4.next)) {
                 case 0:
-                  findOneQuery = "SELECT * FROM invitation_for_meet WHERE invitation_id=$3 and meet_id=$4";
+                  findOneQuery =
+                    "SELECT * FROM invitation_for_meet WHERE invitation_id=$3 and meet_id=$4";
                   updateOneQuery =
                     "UPDATE invitation_for_meet\n      SET invitation_id=$1,meet_id=$2\n      WHERE invitation_id=$3 and meet_id=$4 returning *";
                   _context4.prev = 2;
@@ -268,13 +330,17 @@ var invitation_for_meet = {
 
                   return _context4.abrupt(
                     "return",
-                    res.status(404).send({ message: "invitation_for_meet not found" })
+                    res
+                      .status(404)
+                      .send({ message: "invitation_for_meet not found" })
                   );
 
                 case 9:
                   values = [
-                    req.body.invitation_for_meet_name || rows[0].invitation_for_meet_name,
-                    req.body.private_invitation_for_meet || rows[0].private_invitation_for_meet,
+                    req.body.invitation_for_meet_name ||
+                      rows[0].invitation_for_meet_name,
+                    req.body.private_invitation_for_meet ||
+                      rows[0].private_invitation_for_meet,
                     req.params.id
                   ];
                   _context4.next = 12;
@@ -331,10 +397,14 @@ var invitation_for_meet = {
             while (1) {
               switch ((_context5.prev = _context5.next)) {
                 case 0:
-                  deleteQuery = "DELETE FROM invitation_for_meet WHERE invitation_id=$3 and meet_id=$4 returning *";
+                  deleteQuery =
+                    "DELETE FROM invitation_for_meet WHERE invitation_id=$3 and meet_id=$4 returning *";
                   _context5.prev = 1;
                   _context5.next = 4;
-                  return _db2.default.query(deleteQuery, [req.params.invitation_id, req.params.meet_id]);
+                  return _db2.default.query(deleteQuery, [
+                    req.params.invitation_id,
+                    req.params.meet_id
+                  ]);
 
                 case 4:
                   _ref10 = _context5.sent;
@@ -347,7 +417,9 @@ var invitation_for_meet = {
 
                   return _context5.abrupt(
                     "return",
-                    res.status(404).send({ message: "invitation_for_meet not found" })
+                    res
+                      .status(404)
+                      .send({ message: "invitation_for_meet not found" })
                   );
 
                 case 8:

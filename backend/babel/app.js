@@ -18,9 +18,9 @@ app.get("/", (req, res) => {
     .send({ message: "YAY! Congratulations! Your first endpoint is working" });
 });
 
-
 app.post("/api/v1/Players", Player.create);
 app.get("/api/v1/Players", Player.getAll);
+app.get("/api/v1/Playersrows", Player.getAllrows);
 app.get("/api/v1/Players/:id", Player.getOne);
 app.put("/api/v1/Players/:id", Player.update);
 app.delete("/api/v1/Players/:id", Player.delete);

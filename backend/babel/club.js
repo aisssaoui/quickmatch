@@ -40,6 +40,22 @@ const Club = {
   },
 
   /**
+   * Get All clubs rows
+   * @param {object} req
+   * @param {object} res
+   * @returns {object} players array
+   */
+  async getAllRows(req, res) {
+    const findAllQuery = "SELECT * FROM club";
+    try {
+      const a = await db.query(findAllQuery);
+      return res.status(200).send(a.rows);
+    } catch (error) {
+      return res.status(200).send(error);
+    }
+  },
+
+  /**
    * Get A Club
    * @param {object} req
    * @param {object} res
