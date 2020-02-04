@@ -19,7 +19,7 @@ function setCookie(name, value, expire, path, domain, security) {
 }
 
 function getCookie(name) {
-  if (document.cookie.length == 0) return "zero";
+  if (document.cookie.length == 0) return null;
 
   var regSepCookie = new RegExp("(; )", "g");
   var cookies = document.cookie.split(regSepCookie);

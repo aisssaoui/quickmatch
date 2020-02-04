@@ -199,6 +199,9 @@ var sha512 = require('js-sha512');
         login: async function() {
             let apiRep = null;
             let tmp = this.hash();
+            if (this.tel === "") {
+                this.tel = null;
+            }
             apiRep = await axios.post(
                 "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/players/",
                 {
@@ -220,6 +223,7 @@ var sha512 = require('js-sha512');
             } else {
                 this.creationError(apiRep.data);
             }
+            this.tel = "";
         },
         updatePassword : async function() {
             let player = await axios.get(
@@ -238,7 +242,7 @@ var sha512 = require('js-sha512');
             if (apiRep.data.name != "error") {
                 // update ok
             }else{
-                console.log("update de mdp ratée");
+                console.error("updatePassword failed");
             }
         },
   },
