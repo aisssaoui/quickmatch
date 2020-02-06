@@ -250,7 +250,7 @@ export default {
           let color = "red"
           let waiting = 0;
           let playing = 0;
-          for (let j = 0; j < this.tableMeet[i].rowCount; j++) {
+          for (let j = 0; j < tableMeet[i].rowCount; j++) {
             if (tableMeet[i].rows[j].status == true)
               playing++;
             else if (tableMeet[i].rows[j].status == false)
@@ -266,7 +266,7 @@ export default {
             }
             console.log(color)
             this.events.push({
-              name: "Match n° " + this.byPlayerTable.rows[i].meet,
+              name: "Match à " + this.byPlayerTable.rows[i].location,
               details: "Joueurs : ",
               start:
                 gameDate.format("YYYY-MM-DD") +
