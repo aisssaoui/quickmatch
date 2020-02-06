@@ -23,6 +23,8 @@ class TitleFragmentUI : Fragment() {
         val viewModel = ViewModelProviders.of(this).get(TitleFragmentViewModel::class.java)
 
         binding.viewModel = viewModel
+        binding.buttonTitleSignin.visibility = View.INVISIBLE
+        binding.buttonTitleLogin.visibility = View.INVISIBLE
 
         // Snackbars for connexion test result display to the user
         val snackbarError: Snackbar = Snackbar
@@ -60,7 +62,11 @@ class TitleFragmentUI : Fragment() {
             when(it) {
                 ConnectionStatus.LOADING -> snackbarLoading.show()
                 ConnectionStatus.ERROR -> snackbarError.show()
-                ConnectionStatus.DONE -> snackbarDone.show()
+                ConnectionStatus.DONE -> {
+                    snackbarDone.show()
+                    binding.buttonTitleSignin.visibility = View.VISIBLE
+                    binding.buttonTitleLogin.visibility = View.VISIBLE
+                }
                 else -> snackbarFailure.show()
             }
         })

@@ -24,4 +24,6 @@
     <string name="hint_firstname">Prénom</string>
     <string name="hint_name">Nom</string>
     <string name="text_signin_google">S\'inscrire avec Google</string>
+    <string name="test_text">Test</string>
+    <string name="text_login_status">Login Status</string>
 </resources>

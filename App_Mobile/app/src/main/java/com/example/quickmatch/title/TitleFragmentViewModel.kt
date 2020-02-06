@@ -1,12 +1,17 @@
 package com.example.quickmatch.title
 
+import android.util.Log
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.quickmatch.network.DatabaseApi
+import com.example.quickmatch.network.PlayerObject
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.*
+import retrofit2.Call
+import retrofit2.Response
+import javax.security.auth.callback.Callback
 
 enum class ConnectionStatus { DONE, ERROR, LOADING }
 
@@ -23,8 +28,13 @@ class TitleFragmentViewModel : ViewModel() {
     val status : LiveData<ConnectionStatus>
         get() = _status
 
+    private val _listPlayers = MutableLiveData<List<PlayerObject>>()
+    val listPlayers : LiveData<List<PlayerObject>>
+        get() = _listPlayers
+
     init {
         tryToConnect()
+        /*getPlayersList()*/
     }
 
     fun tryToConnect() {
@@ -44,6 +54,27 @@ class TitleFragmentViewModel : ViewModel() {
 
             }
         }
+    }
+
+    fun getPlayersList() {
+
+        coroutineScope.launch {
+
+            val listResultDeferred = DatabaseApi.retrofitService.getAllPlayers()
+
+            try {
+
+                val result = listResultDeferred.await()
+                _listPlayers.value = result
+
+            } catch (t: Throwable) {
+
+                Log.i("TitleFragmentViewModel", t.message)
+
+            }
+
+        }
+
     }
 
     override fun onCleared() {

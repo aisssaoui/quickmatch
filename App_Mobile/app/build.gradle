@@ -80,12 +80,16 @@ dependencies {
     // Recycler View
     implementation "androidx.recyclerview:recyclerview:$version_recyclerview"
 
-    //Tests
+    // Tests
     implementation 'com.android.support:support-v4:29.+'
     implementation 'android.arch.lifecycle:extensions:1.1.1'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+
+    // Google play
+    implementation 'com.google.android.gms:play-services-auth:17.0.0'
+
 
 
 }

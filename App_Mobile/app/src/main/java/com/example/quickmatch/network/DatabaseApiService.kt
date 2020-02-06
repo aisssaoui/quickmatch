@@ -9,6 +9,8 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.create
 import retrofit2.http.GET
+import retrofit2.http.Path
+import retrofit2.http.Query
 
 private const val BASE_URL = "https://dbcontrol.quickmatch.fr/"
 
@@ -28,6 +30,12 @@ interface DatabaseApiService {
 
     @GET("dbcontrol")
     fun testConnection() : Deferred<TestObject>
+
+    @GET("dbcontrol/api/v1/Players")
+    fun getAllPlayers() : Deferred<List<PlayerObject>>
+
+    @GET("dbcontrol/api/v1/Players/ma{mail_address}")
+    fun getPlayerByMail(@Path("mail_address") mailAddress : String) : Deferred<PlayerObject>
 
 }
 

@@ -52,6 +52,9 @@
         <action
             android:id="@+id/action_loginFragmentUI_to_signinFragmentUI"
             app:destination="@id/signinFragmentUI" />
+        <action
+            android:id="@+id/action_loginFragmentUI_to_homeFragmentUI"
+            app:destination="@id/homeFragmentUI" />
     </fragment>
     <fragment
         android:id="@+id/signinFragmentUI"
@@ -62,4 +65,8 @@
             android:id="@+id/action_signinFragmentUI_to_loginFragmentUI"
             app:destination="@id/loginFragmentUI" />
     </fragment>
+    <fragment
+        android:id="@+id/homeFragmentUI"
+        android:name="com.example.quickmatch.home.HomeFragmentUI"
+        android:label="HomeFragmentUI" />
 </navigation>
