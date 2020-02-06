@@ -19,7 +19,7 @@ function setCookie(name, value, expire, path, domain, security) {
 }
 
 function getCookie(name) {
-  if (document.cookie.length == 0) return "zero";
+  if (document.cookie.length == 0) return null;
 
   var regSepCookie = new RegExp("(; )", "g");
   var cookies = document.cookie.split(regSepCookie);
@@ -87,6 +87,11 @@ export default new Vuex.Store({
       if (state.hasAccount == true) {
         var now = new Date();
         state.isSignedIn = now < state.expirationDate;
+        if (state.isSignedIn == false) {
+            state.hasAccount = false;
+            alert("Votre session a expiré.");
+            document.location.reload(true);
+        }
       } else {
         state.isSignedIn = false;
       }
@@ -133,7 +138,13 @@ export default new Vuex.Store({
         "quickmatch.fr",
         false
       );
-    }
+  },
+  setEmail(state, mail) {
+      state.email = mail;
+      state.connectionDate = new Date();
+      state.expirationDate = new Date();
+      state.expirationDate.setSeconds(state.connectionDate.getSeconds() + 3600);
+  }
   },
   actions: {
     setGoogleUser(commit, googleUser) {
@@ -148,8 +159,11 @@ export default new Vuex.Store({
     logout(commit) {
       this.commit("logout");
     },
-    setID(state) {
+    setID(commit) {
       this.commit("setID");
+    },
+    setEmail(commit, mail) {
+        this.commit("setEmail",mail);
     }
   },
   getters: {

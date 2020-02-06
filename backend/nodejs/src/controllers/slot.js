@@ -66,9 +66,11 @@ var Slot = {
                 case 0:
                   text =
                     "INSERT INTO slot (start_hour, end_hour, repeat_day)\n\t    VALUES($1, $2, $3)\n        returning *";
-                  values = [req.body.start_hour,
-                   req.body.end_hour,
-                   req.body.repeat_day];
+                  values = [
+                    req.body.start_hour,
+                    req.body.end_hour,
+                    req.body.repeat_day
+                  ];
                   _context.prev = 2;
                   _context.next = 5;
                   return _db2.default.query(text, values);
@@ -165,6 +167,61 @@ var Slot = {
     }
 
     return getAll;
+  })(),
+
+  /**
+   * Get All slots rows
+   * @param {object} req
+   * @param {object} res
+   * @returns {object} slots array
+   */
+  getAllRows: (function() {
+    var _ref5 = _asyncToGenerator(
+      /*#__PURE__*/ regeneratorRuntime.mark(function _callee3(req, res) {
+        var findAllQuery, a;
+        return regeneratorRuntime.wrap(
+          function _callee3$(_context3) {
+            while (1) {
+              switch ((_context3.prev = _context3.next)) {
+                case 0:
+                  findAllQuery = "SELECT * FROM slot";
+                  _context3.prev = 1;
+                  _context3.next = 4;
+                  return _db2.default.query(findAllQuery);
+
+                case 4:
+                  a = _context3.sent;
+                  return _context3.abrupt(
+                    "return",
+                    res.status(200).send(a.rows)
+                  );
+
+                case 8:
+                  _context3.prev = 8;
+                  _context3.t0 = _context3["catch"](1);
+                  return _context3.abrupt(
+                    "return",
+                    res.status(200).send(_context3.t0)
+                  );
+
+                case 11:
+                case "end":
+                  return _context3.stop();
+              }
+            }
+          },
+          _callee3,
+          this,
+          [[1, 8]]
+        );
+      })
+    );
+
+    function getAllRows(_x5, _x6) {
+      return _ref5.apply(this, arguments);
+    }
+
+    return getAllRows;
   })(),
 
   /**

@@ -45,7 +45,6 @@ function _asyncToGenerator(fn) {
     });
   };
 }
-//import uuidv4 from 'uuid/v4';
 
 var Meet_sheet = {
   /**
@@ -66,11 +65,13 @@ var Meet_sheet = {
                 case 0:
                   text =
                     "INSERT INTO meet_sheet (player, meet, scored_goals, conceded_goals, won)\n\t    VALUES($1, $2, $3, $4, $5)\n        returning *";
-                  values = [req.body.player_mail_adress,
-                   req.body.meet_id, 
-                   req.body.scored_goals, 
-                   req.body.conceded_goals, 
-                   req.body.won];
+                  values = [
+                    req.body.player_mail_adress,
+                    req.body.meet_id,
+                    req.body.scored_goals,
+                    req.body.conceded_goals,
+                    req.body.won
+                  ];
                   _context.prev = 2;
                   _context.next = 5;
                   return _db2.default.query(text, values);
@@ -170,6 +171,61 @@ var Meet_sheet = {
   })(),
 
   /**
+   * Get All meet_sheets rows
+   * @param {object} req
+   * @param {object} res
+   * @returns {object} meet_sheet array
+   */
+  getAllRows: (function() {
+    var _ref5 = _asyncToGenerator(
+      /*#__PURE__*/ regeneratorRuntime.mark(function _callee3(req, res) {
+        var findAllQuery, a;
+        return regeneratorRuntime.wrap(
+          function _callee3$(_context3) {
+            while (1) {
+              switch ((_context3.prev = _context3.next)) {
+                case 0:
+                  findAllQuery = "SELECT * FROM meet_sheet";
+                  _context3.prev = 1;
+                  _context3.next = 4;
+                  return _db2.default.query(findAllQuery);
+
+                case 4:
+                  a = _context3.sent;
+                  return _context3.abrupt(
+                    "return",
+                    res.status(200).send(a.rows)
+                  );
+
+                case 8:
+                  _context3.prev = 8;
+                  _context3.t0 = _context3["catch"](1);
+                  return _context3.abrupt(
+                    "return",
+                    res.status(200).send(_context3.t0)
+                  );
+
+                case 11:
+                case "end":
+                  return _context3.stop();
+              }
+            }
+          },
+          _callee3,
+          this,
+          [[1, 8]]
+        );
+      })
+    );
+
+    function getAllRows(_x5, _x6) {
+      return _ref5.apply(this, arguments);
+    }
+
+    return getAllRows;
+  })(),
+
+  /**
    * Get A meet_sheet
    * @param {object} req
    * @param {object} res
@@ -188,7 +244,9 @@ var Meet_sheet = {
                   text = "SELECT * FROM meet_sheet WHERE player = $1";
                   _context3.prev = 1;
                   _context3.next = 4;
-                  return _db2.default.query(text, [req.params.player_mail_adress]);
+                  return _db2.default.query(text, [
+                    req.params.player_mail_adress
+                  ]);
 
                 case 4:
                   _ref6 = _context3.sent;
@@ -244,8 +302,8 @@ var Meet_sheet = {
    * @param {object} res
    * @returns {object} updated meet_sheet
    */
-  update: (function() { // TO DO
-
+  update: (function() {
+    // TO DO
   })(),
 
   /**
@@ -264,10 +322,13 @@ var Meet_sheet = {
             while (1) {
               switch ((_context5.prev = _context5.next)) {
                 case 0:
-                  deleteQuery = "DELETE FROM meet_sheet WHERE player=$1 returning *";
+                  deleteQuery =
+                    "DELETE FROM meet_sheet WHERE player=$1 returning *";
                   _context5.prev = 1;
                   _context5.next = 4;
-                  return _db2.default.query(deleteQuery, [req.params.player_mail_adress]);
+                  return _db2.default.query(deleteQuery, [
+                    req.params.player_mail_adress
+                  ]);
 
                 case 4:
                   _ref10 = _context5.sent;

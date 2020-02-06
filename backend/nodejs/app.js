@@ -66,13 +66,11 @@ app.get(
   "/dbcontrol/api/v1/Players/ma:mail_address",
   _player2.default.getByMail
 );
-app.get(
-  "/dbcontrol/api/v1/Players/ma_stat:mail_address",
-  _player2.default.getByMailStat
-);
+app.get("/dbcontrol/api/v1/Players/stat:id", _player2.default.getPlayerStat);
 app.get("/dbcontrol/api/v1/Players/id:id", _player2.default.getByID);
 app.put("/dbcontrol/api/v1/Players/id:id", _player2.default.update);
 app.delete("/dbcontrol/api/v1/Players/:mail_address", _player2.default.delete);
+app.get("/dbcontrol/api/v1/PlayersRows", _player2.default.getAllRows);
 
 //Table club
 app.post("/dbcontrol/api/v1/Clubs", _club2.default.create);
@@ -80,6 +78,7 @@ app.get("/dbcontrol/api/v1/Clubs", _club2.default.getAll);
 app.get("/dbcontrol/api/v1/Clubs/:id", _club2.default.getOne);
 //app.put("/dbcontrol/api/v1/Clubs/:id", _club2.default.update);
 app.delete("/dbcontrol/api/v1/Clubs/:id", _club2.default.delete);
+app.get("/dbcontrol/api/v1/ClubsRows", _club2.default.getAllRows);
 
 // Table invitation
 app.post("/dbcontrol/api/v1/Invitations", _invitation2.default.create);
@@ -87,6 +86,7 @@ app.get("/dbcontrol/api/v1/Invitations", _invitation2.default.getAll);
 app.get("/dbcontrol/api/v1/Invitations/:id", _invitation2.default.getOne);
 //app.put("/dbcontrol/api/v1/Invitations/:id", _invitation2.default.update);
 app.delete("/dbcontrol/api/v1/Invitations/:id", _invitation2.default.delete);
+app.get("/dbcontrol/api/v1/InvitationsRows", _invitation2.default.getAllRows);
 
 // Table invitation_for_meet
 // app.post("/dbcontrol/api/v1/InvitationForMeet", _invitation_for_meet2.default.create);
@@ -94,6 +94,7 @@ app.delete("/dbcontrol/api/v1/Invitations/:id", _invitation2.default.delete);
 // app.get("/dbcontrol/api/v1/InvitationForMeet/:id", _invitation_for_meet2.default.getOne);
 // app.put("/dbcontrol/api/v1/InvitationForMeet/:id", _invitation_for_meet2.default.update);
 // app.delete("/dbcontrol/api/v1/InvitationForMeet/:id", _invitation_for_meet2.default.delete);
+//app.get("/dbcontrol/api/v1/Playersrows", _player2.default.getAllRows);
 
 // Table slot
 app.post("/dbcontrol/api/v1/Slots", _slot2.default.create);
@@ -101,6 +102,7 @@ app.get("/dbcontrol/api/v1/Slots", _slot2.default.getAll);
 app.get("/dbcontrol/api/v1/Slots/:id", _slot2.default.getOne);
 //app.put("/dbcontrol/api/v1/Slots/:id", _slot2.default.update);
 app.delete("/dbcontrol/api/v1/Slots/:id", _slot2.default.delete);
+app.get("/dbcontrol/api/v1/SlotsRows", _slot2.default.getAllRows);
 
 // Table meet_sheet
 app.post("/dbcontrol/api/v1/MeetsSheet", _meet_sheet2.default.create);
@@ -114,6 +116,7 @@ app.delete(
   "/dbcontrol/api/v1/MeetsSheet/:player_mail_address",
   _meet_sheet2.default.delete
 );
+app.get("/dbcontrol/api/v1/MeetsSheetRows", _meet_sheet2.default.getAllRows);
 
 // Table meet
 app.post("/dbcontrol/api/v1/Meets", _meet2.default.create);
@@ -121,6 +124,7 @@ app.get("/dbcontrol/api/v1/Meets", _meet2.default.getAll);
 app.get("/dbcontrol/api/v1/Meets/:id", _meet2.default.getOne);
 // app.put("/dbcontrol/api/v1/Meets/:id", _meet2.default.update);
 app.delete("/dbcontrol/api/v1/Meets/:id", _meet2.default.delete);
+app.get("/dbcontrol/api/v1/MeetsRows", _meet2.default.getAllRows);
 
 // Table player_belong_club
 app.get(
@@ -139,6 +143,10 @@ app.get(
   "/dbcontrol/api/v1/PlayerClubs/cid:id",
   _player_belong_club2.default.getPlayerClubsByClubID
 );
+app.get(
+  "/dbcontrol/api/v1/PlayerClubs/ncid:id",
+  _player_belong_club2.default.NgetPlayerClubsByClubID
+);
 app.post(
   "/dbcontrol/api/v1/PlayerClubs",
   _player_belong_club2.default.addPlayerToClub
@@ -149,8 +157,16 @@ app.delete(
 );
 app.get("/dbcontrol/api/v1/PlayerClubs", _player_belong_club2.default.getAll);
 app.get(
-  "/dbcontrol/api/v1/playerClubsCount/:id",
-  _player_belong_club2.default.getCount
+  "/dbcontrol/api/v1/playerClubsCountAdmin/:cid",
+  _player_belong_club2.default.getCountAdmin
+);
+app.put(
+  "/dbcontrol/api/v1/PlayerClubsPromoteToAdmin/:pid&:cid",
+  _player_belong_club2.default.promoteToAdmin
+);
+app.get(
+  "/dbcontrol/api/v1/PlayerClubsRows",
+  _player_belong_club2.default.getAllRows
 );
 
 app.listen(3000);

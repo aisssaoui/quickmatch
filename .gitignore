@@ -2,7 +2,9 @@
 
 .DS_Store
 node_modules
-/dist
+
+frontend/dist
+backend/babel/build
 
 # local env files
 .env.local

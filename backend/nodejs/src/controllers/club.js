@@ -65,7 +65,7 @@ var Club = {
               switch ((_context.prev = _context.next)) {
                 case 0:
                   text =
-                    "INSERT INTO Club (club_name, private_club)\n\t    VALUES($1, $2)\n        returning *";
+                    "INSERT INTO Club (club_name, private_club)\n\t    VALUES($1, $2)\n        RETURNING *";
                   values = [req.body.club_name, req.body.private_club];
                   _context.prev = 2;
                   _context.next = 5;
@@ -166,55 +166,41 @@ var Club = {
   })(),
 
   /**
-   * Get A Club
+   * Get All clubs rows
    * @param {object} req
    * @param {object} res
-   * @returns {object} club object
+   * @returns {object} clubs array
    */
-  getOne: (function() {
+  getAllRows: (function() {
     var _ref5 = _asyncToGenerator(
       /*#__PURE__*/ regeneratorRuntime.mark(function _callee3(req, res) {
-        var text, _ref6, rows;
-
+        var findAllQuery, a;
         return regeneratorRuntime.wrap(
           function _callee3$(_context3) {
             while (1) {
               switch ((_context3.prev = _context3.next)) {
                 case 0:
-                  text = "SELECT * FROM club WHERE id = $1";
+                  findAllQuery = "SELECT * FROM club";
                   _context3.prev = 1;
                   _context3.next = 4;
-                  return _db2.default.query(text, [req.params.id]);
+                  return _db2.default.query(findAllQuery);
 
                 case 4:
-                  _ref6 = _context3.sent;
-                  rows = _ref6.rows;
-
-                  if (rows[0]) {
-                    _context3.next = 8;
-                    break;
-                  }
-
+                  a = _context3.sent;
                   return _context3.abrupt(
                     "return",
-                    res.status(404).send({ message: "club not found" })
+                    res.status(200).send(a.rows)
                   );
 
                 case 8:
-                  return _context3.abrupt(
-                    "return",
-                    res.status(200).send(rows[0])
-                  );
-
-                case 11:
-                  _context3.prev = 11;
+                  _context3.prev = 8;
                   _context3.t0 = _context3["catch"](1);
                   return _context3.abrupt(
                     "return",
-                    res.status(400).send(_context3.t0)
+                    res.status(200).send(_context3.t0)
                   );
 
-                case 14:
+                case 11:
                 case "end":
                   return _context3.stop();
               }
@@ -222,13 +208,82 @@ var Club = {
           },
           _callee3,
           this,
+          [[1, 8]]
+        );
+      })
+    );
+
+    function getAllRows(_x5, _x6) {
+      return _ref5.apply(this, arguments);
+    }
+
+    return getAllRows;
+  })(),
+
+  /**
+   * Get A Club
+   * @param {object} req
+   * @param {object} res
+   * @returns {object} club object
+   */
+  getOne: (function() {
+    var _ref6 = _asyncToGenerator(
+      /*#__PURE__*/ regeneratorRuntime.mark(function _callee4(req, res) {
+        var text, _ref7, rows;
+
+        return regeneratorRuntime.wrap(
+          function _callee4$(_context4) {
+            while (1) {
+              switch ((_context4.prev = _context4.next)) {
+                case 0:
+                  text = "SELECT * FROM club WHERE id = $1";
+                  _context4.prev = 1;
+                  _context4.next = 4;
+                  return _db2.default.query(text, [req.params.id]);
+
+                case 4:
+                  _ref7 = _context4.sent;
+                  rows = _ref7.rows;
+
+                  if (rows[0]) {
+                    _context4.next = 8;
+                    break;
+                  }
+
+                  return _context4.abrupt(
+                    "return",
+                    res.status(404).send({ message: "club not found" })
+                  );
+
+                case 8:
+                  return _context4.abrupt(
+                    "return",
+                    res.status(200).send(rows[0])
+                  );
+
+                case 11:
+                  _context4.prev = 11;
+                  _context4.t0 = _context4["catch"](1);
+                  return _context4.abrupt(
+                    "return",
+                    res.status(400).send(_context4.t0)
+                  );
+
+                case 14:
+                case "end":
+                  return _context4.stop();
+              }
+            }
+          },
+          _callee4,
+          this,
           [[1, 11]]
         );
       })
     );
 
-    function getOne(_x5, _x6) {
-      return _ref5.apply(this, arguments);
+    function getOne(_x7, _x8) {
+      return _ref6.apply(this, arguments);
     }
 
     return getOne;
@@ -241,32 +296,32 @@ var Club = {
    * @returns {object} updated Club
    */
   update: (function() {
-    var _ref7 = _asyncToGenerator(
-      /*#__PURE__*/ regeneratorRuntime.mark(function _callee4(req, res) {
-        var findOneQuery, updateOneQuery, _ref8, rows, values, response;
+    var _ref8 = _asyncToGenerator(
+      /*#__PURE__*/ regeneratorRuntime.mark(function _callee5(req, res) {
+        var findOneQuery, updateOneQuery, _ref9, rows, values, response;
 
         return regeneratorRuntime.wrap(
-          function _callee4$(_context4) {
+          function _callee5$(_context5) {
             while (1) {
-              switch ((_context4.prev = _context4.next)) {
+              switch ((_context5.prev = _context5.next)) {
                 case 0:
                   findOneQuery = "SELECT * FROM club WHERE id=$1";
                   updateOneQuery =
-                    "UPDATE club\n      SET club_name=$1,private_club=$2\n      WHERE id=$3 returning *";
-                  _context4.prev = 2;
-                  _context4.next = 5;
+                    "UPDATE club\n      SET club_name=$1,private_club=$2\n      WHERE id=$3 RETURNING *";
+                  _context5.prev = 2;
+                  _context5.next = 5;
                   return _db2.default.query(findOneQuery, [req.params.id]);
 
                 case 5:
-                  _ref8 = _context4.sent;
-                  rows = _ref8.rows;
+                  _ref9 = _context5.sent;
+                  rows = _ref9.rows;
 
                   if (rows[0]) {
-                    _context4.next = 9;
+                    _context5.next = 9;
                     break;
                   }
 
-                  return _context4.abrupt(
+                  return _context5.abrupt(
                     "return",
                     res.status(404).send({ message: "club not found" })
                   );
@@ -277,39 +332,39 @@ var Club = {
                     req.body.private_club || rows[0].private_club,
                     req.params.id
                   ];
-                  _context4.next = 12;
+                  _context5.next = 12;
                   return _db2.default.query(updateOneQuery, values);
 
                 case 12:
-                  response = _context4.sent;
-                  return _context4.abrupt(
+                  response = _context5.sent;
+                  return _context5.abrupt(
                     "return",
                     res.status(200).send(response.rows[0])
                   );
 
                 case 16:
-                  _context4.prev = 16;
-                  _context4.t0 = _context4["catch"](2);
-                  return _context4.abrupt(
+                  _context5.prev = 16;
+                  _context5.t0 = _context5["catch"](2);
+                  return _context5.abrupt(
                     "return",
-                    res.status(400).send(_context4.t0)
+                    res.status(400).send(_context5.t0)
                   );
 
                 case 19:
                 case "end":
-                  return _context4.stop();
+                  return _context5.stop();
               }
             }
           },
-          _callee4,
+          _callee5,
           this,
           [[2, 16]]
         );
       })
     );
 
-    function update(_x7, _x8) {
-      return _ref7.apply(this, arguments);
+    function update(_x9, _x10) {
+      return _ref8.apply(this, arguments);
     }
 
     return update;
@@ -322,63 +377,63 @@ var Club = {
    * @returns {void} return statuc code 204
    */
   delete: (function() {
-    var _ref9 = _asyncToGenerator(
-      /*#__PURE__*/ regeneratorRuntime.mark(function _callee5(req, res) {
-        var deleteQuery, _ref10, rows;
+    var _ref10 = _asyncToGenerator(
+      /*#__PURE__*/ regeneratorRuntime.mark(function _callee6(req, res) {
+        var deleteQuery, _ref11, rows;
 
         return regeneratorRuntime.wrap(
-          function _callee5$(_context5) {
+          function _callee6$(_context6) {
             while (1) {
-              switch ((_context5.prev = _context5.next)) {
+              switch ((_context6.prev = _context6.next)) {
                 case 0:
-                  deleteQuery = "DELETE FROM club WHERE id=$1 returning *";
-                  _context5.prev = 1;
-                  _context5.next = 4;
+                  deleteQuery = "DELETE FROM club WHERE id=$1 RETURNING *";
+                  _context6.prev = 1;
+                  _context6.next = 4;
                   return _db2.default.query(deleteQuery, [req.params.id]);
 
                 case 4:
-                  _ref10 = _context5.sent;
-                  rows = _ref10.rows;
+                  _ref11 = _context6.sent;
+                  rows = _ref11.rows;
 
                   if (rows[0]) {
-                    _context5.next = 8;
+                    _context6.next = 8;
                     break;
                   }
 
-                  return _context5.abrupt(
+                  return _context6.abrupt(
                     "return",
                     res.status(404).send({ message: "club not found" })
                   );
 
                 case 8:
-                  return _context5.abrupt(
+                  return _context6.abrupt(
                     "return",
                     res.status(204).send({ message: "deleted" })
                   );
 
                 case 11:
-                  _context5.prev = 11;
-                  _context5.t0 = _context5["catch"](1);
-                  return _context5.abrupt(
+                  _context6.prev = 11;
+                  _context6.t0 = _context6["catch"](1);
+                  return _context6.abrupt(
                     "return",
-                    res.status(400).send(_context5.t0)
+                    res.status(400).send(_context6.t0)
                   );
 
                 case 14:
                 case "end":
-                  return _context5.stop();
+                  return _context6.stop();
               }
             }
           },
-          _callee5,
+          _callee6,
           this,
           [[1, 11]]
         );
       })
     );
 
-    function _delete(_x9, _x10) {
-      return _ref9.apply(this, arguments);
+    function _delete(_x11, _x12) {
+      return _ref10.apply(this, arguments);
     }
 
     return _delete;
