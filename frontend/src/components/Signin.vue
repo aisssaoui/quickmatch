@@ -209,7 +209,7 @@ var sha512 = require('js-sha512');
               alert("Le pseudo doit faire entre 2 et 20 caractères.");
               return false;
           }
-          if(this.mdp.length < 8 || this.mdp.length > 50) {
+          if(this.password.length < 8 || this.password.length > 50) {
               alert("Le mot de passe doit faire entre 8 et 50 caractères.");
               return false;
           }
@@ -220,12 +220,13 @@ var sha512 = require('js-sha512');
       },
         login: async function() {
             let apiRep = null;
-            let tmp = this.hash();
+            let tmp_password = this.hash();
+            var tmp_tel = this.tel;
             if (this.checkEntries() == false) {
                 return;
             }else{
             if (this.tel === "") {
-                this.tel = null;
+                tmp_tel = null;
             }
                 apiRep = await axios.post(
                     "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/players/",
@@ -233,8 +234,8 @@ var sha512 = require('js-sha512');
                         pseudo: this.pseudo,
                         surname: this.surname,
                         first_name: this.first_name,
-                        mdp: tmp,
-                        phone_number: this.tel,
+                        mdp: tmp_password,
+                        phone_number: tmp_tel,
                         mail_adress: this.email,
                         avatar: this.avatar
                     }
