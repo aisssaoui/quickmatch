@@ -89,6 +89,28 @@
       </v-list-item>
 
       <v-list-item>
+        <v-list-item-content>
+          <v-list-item-subtitle class="headline">
+            <v-text-field label="Localisation" v-model="location"></v-text-field>
+          </v-list-item-subtitle>
+        </v-list-item-content>
+      </v-list-item>
+
+      <v-list-item style="width: 900px">
+        <v-subheader>Min et Max de joueurs requis par équipe pour le match</v-subheader>
+        <v-range-slider
+          v-model="range"
+          :max="max"
+          :min="min"
+          ticks="always"
+          tick-size="4"
+          hide-details
+          :tick-labels="ticksLabels"
+          class="align-center"
+        ></v-range-slider>
+      </v-list-item>
+
+      <v-list-item>
         <v-list-item-title class="font-weight-bold">Jour de répétition:</v-list-item-title>
       </v-list-item>
 
@@ -137,7 +159,12 @@ export default {
     menuEnd: false,
     playerClubs_data: {},
     items: [],
-    selected: []
+    selected: [],
+    location: null,
+    min: 5,
+    max: 11,
+    range: [5, 11],
+    ticksLabels: [5, 6, 7, 8, 9, 10, 11]
   }),
 
   methods: {
@@ -150,7 +177,13 @@ export default {
     CreateMatch: async function() {
       this.Err = 0;
 
-      if (!this.select) {
+      if (
+        !this.select ||
+        this.selected.length == 0 ||
+        !this.timeEnd ||
+        !this.timeEnd ||
+        !this.location
+      ) {
         this.Err = 1;
         return;
       }
@@ -170,10 +203,10 @@ export default {
         }
       );
       for (let i = 0; i < apiRep1.data.rowCount; i++) {
-        playersInv.push(apiRep1.data.rows[i].player);
+        playersInv.push(apiRep1.data.rows[i].id);
       }
 
-      //Create Slot
+      //Create Slot (or see if it's already exist ?)
       const ts = this.timeStart;
       const te = this.timeEnd;
       let slotsId = [];
@@ -195,16 +228,42 @@ export default {
         }
       }
 
+      //Create Meet
+      let meetID = null;
+      let apiRep3 = null;
+      apiRep3 = await axios.post(
+        "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/Meets",
+        {
+          location: this.location,
+          precise_date: null,
+          minimal_team_size: this.range[0],
+          maximal_team_size: this.range[1],
+          deletion_date: null
+        }
+      );
+      if (apiRep3.data.name != "error") {
+        meetID = apiRep3.data.id;
+      } else {
+        this.Err = 1;
+        return;
+      }
+
       //Create Invitations
       for (let i = 0; i < slotsId.length; i++) {
         for (let j = 0; j < playersInv.length; j++) {
+          let s = null;
+          if (playersInv[j] == this.id) {
+            s = true;
+          }
           let apiRep2 = null;
           apiRep2 = await axios.post(
             "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/Invitations",
             {
               slot_id: slotsId[i],
               player_id: playersInv[j],
-              event_type: "Match"
+              event_type: "Match",
+              meet_id: meetID,
+              status: s
             }
           );
         }
