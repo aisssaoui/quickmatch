@@ -79,12 +79,6 @@ export default {
     },
     acceptInv: async function(mid) {
       let invID;
-      console.log(
-        "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/CalendarMInv/" +
-          this.id +
-          "/" +
-          mid
-      );
       let apiRep = await axios.get(
         "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/CalendarMInv/" +
           this.id +
@@ -92,9 +86,7 @@ export default {
           mid,
         { responseType: "json" }
       );
-      console.log(apiRep);
       invID = apiRep.data.rows[0].id;
-      console.log(invID);
       await axios.put(
         "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/Invitations/" + invID,
         {
