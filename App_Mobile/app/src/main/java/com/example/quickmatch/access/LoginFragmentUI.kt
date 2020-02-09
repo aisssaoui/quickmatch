@@ -1,7 +1,9 @@
 package com.example.quickmatch.access
 
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,10 +15,18 @@ import androidx.navigation.fragment.findNavController
 
 import com.example.quickmatch.R
 import com.example.quickmatch.databinding.FragmentLoginBinding
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.tasks.Task
 
 /**
  * A simple [Fragment] subclass.
  */
+
+const val RC_SIGN_IN = 1
+
 class LoginFragmentUI : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -26,6 +36,15 @@ class LoginFragmentUI : Fragment() {
         val viewModel = ViewModelProviders.of(this).get(LoginFragmentViewModel::class.java)
 
         binding.viewModel = viewModel
+
+        // Configure sign-in to request the user's ID, email address, and basic
+        // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.web_client_id))
+                .requestEmail()
+                .build()
+
+        val mGoogleSignInClient = GoogleSignIn.getClient(this.context!!, gso)
 
         binding.buttonLoginSignin.setOnClickListener {
             findNavController().navigate(LoginFragmentUIDirections.actionLoginFragmentUIToSigninFragmentUI())
@@ -39,15 +58,53 @@ class LoginFragmentUI : Fragment() {
 
             when (it) {
                 LoginStatus.SUCCESS -> findNavController().navigate(LoginFragmentUIDirections.actionLoginFragmentUIToHomeFragmentUI())
-                LoginStatus.WRONG_PWD -> binding.textLoginStatus.text  = "Mot de passe invalide - Réessayez"
-                LoginStatus.GOOGLE -> binding.textLoginStatus.text  = "Connectez vous avec Google"
+                LoginStatus.WRONG_PWD -> binding.textLoginStatus.text = "Mot de passe invalide - Réessayez"
+                LoginStatus.GOOGLE -> binding.textLoginStatus.text = "Connectez vous avec Google"
                 LoginStatus.NETWORK_ERROR -> binding.textLoginStatus.text = "Erreur réseau..."
-                LoginStatus.UNKNOWN -> binding.textLoginStatus.text  = "Utilisateur inconnu - Inscrivez vous ou réessayez"
+                LoginStatus.UNKNOWN -> binding.textLoginStatus.text = "Utilisateur inconnu - Inscrivez vous ou réessayez"
             }
         })
+
+        binding.buttonLoginGoogle.setOnClickListener {
+            // Start google sign in activity and wait for result
+            startActivityForResult(mGoogleSignInClient.signInIntent, RC_SIGN_IN)
+        }
 
         return binding.root
     }
 
+    private fun updateUI(account: GoogleSignInAccount?) {
+        if (account != null) findNavController().navigate(LoginFragmentUIDirections.actionLoginFragmentUIToHomeFragmentUI())
+    }
 
+    override fun onStart() {
+        super.onStart()
+
+        // Check for existing Google Sign In account, if the user is already signed in
+        // the GoogleSignInAccount will be non-null.
+        val account = GoogleSignIn.getLastSignedInAccount(this.activity)
+        updateUI(account)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        // Get google sign in activity result
+        if (requestCode == RC_SIGN_IN) {
+            val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(data)
+            handleSignInResult(task)
+        }
+    }
+
+    private fun handleSignInResult(task: Task<GoogleSignInAccount>) {
+        try {
+            val account = task.getResult(ApiException::class.java)
+            val idToken = account!!.idToken
+            //TODO Send token to the backend to check its validity
+            updateUI(account)
+        } catch (e: ApiException) {
+            Log.i("LoginFragmentUI", "SignIn failure: " + e.statusCode)
+            updateUI(null)
+        }
+    }
 }

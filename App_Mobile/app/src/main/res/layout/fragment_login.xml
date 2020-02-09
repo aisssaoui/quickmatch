@@ -85,12 +85,14 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/input_login_password" />
 
-        <Button
+
+        <com.google.android.gms.common.SignInButton
             android:id="@+id/button_login_google"
-            android:layout_width="155dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:text="@string/text_login_google"
+            android:layout_marginStart="@dimen/button_width_constraint"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="@dimen/button_width_constraint"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/divider_goole_signin" />
@@ -100,11 +102,11 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/button_width_constraint"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="@dimen/button_width_constraint"
             android:text="@string/text_signin"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/divider_google_signin" />
 
@@ -120,18 +122,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/button_login_login" />
-
-        <View
-            android:id="@+id/divider_google_signin"
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_marginStart="@dimen/divider_width_constraint"
-            android:layout_marginTop="@dimen/divider_top_constraint"
-            android:layout_marginEnd="@dimen/divider_width_constraint"
-            android:background="@android:color/background_light"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/button_login_google" />
 
         <Button
             android:id="@+id/button_login_forgot_pwd"
@@ -158,6 +148,19 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/text_login_title"
             tools:text="@string/text_login_status" />
+
+        <View
+            android:id="@+id/divider_google_signin"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginStart="@dimen/divider_width_constraint"
+            android:layout_marginTop="@dimen/divider_top_constraint"
+            android:layout_marginEnd="@dimen/divider_width_constraint"
+            android:background="@android:color/background_light"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/button_login_google" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

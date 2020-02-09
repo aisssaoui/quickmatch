@@ -42,6 +42,7 @@ class TitleFragmentUI : Fragment() {
         val snackbarFailure: Snackbar = Snackbar
                 .make(activity!!.findViewById(android.R.id.content), "Le test de connexion a échoué", Snackbar.LENGTH_INDEFINITE)
                 .setAction("Réessayer") {
+                    viewModel.resetConnectionStatus()
                     viewModel.tryToConnect()
                 }
 

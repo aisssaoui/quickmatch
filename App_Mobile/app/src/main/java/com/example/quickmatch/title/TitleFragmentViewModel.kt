@@ -34,18 +34,19 @@ class TitleFragmentViewModel : ViewModel() {
 
     init {
         tryToConnect()
-        /*getPlayersList()*/
     }
 
     fun tryToConnect() {
 
         coroutineScope.launch {
             var resultDeferred = DatabaseApi.retrofitService.testConnection() // work on a background thread
-
+            Log.i("TitleFragmentViewModel", "request sent")
             try {
 
                 _status.value = ConnectionStatus.LOADING
+                Log.i("TitleFragmentViewModel", "changed to loading")
                 var result = resultDeferred.await() // waiting result without blocking main thread
+                Log.i("TitleFragmentViewModel", result.message)
                 _status.value = ConnectionStatus.DONE
 
             } catch (t: Throwable) {
@@ -80,5 +81,9 @@ class TitleFragmentViewModel : ViewModel() {
     override fun onCleared() {
         super.onCleared()
         viewModelJob.cancel()
+    }
+
+    fun resetConnectionStatus() {
+        _status.value = null
     }
 }

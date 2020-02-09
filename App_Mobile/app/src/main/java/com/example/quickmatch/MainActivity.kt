@@ -7,6 +7,8 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.example.quickmatch.databinding.ActivityMainBinding
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 
 
 class MainActivity : AppCompatActivity() {
@@ -25,6 +27,7 @@ class MainActivity : AppCompatActivity() {
         NavigationUI.setupActionBarWithNavController(this, navController, drawerLayout)
         NavigationUI.setupWithNavController(binding.navView, navController)
         supportActionBar!!.hide()
+
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -32,5 +35,4 @@ class MainActivity : AppCompatActivity() {
         //replace up button buy drawer button on title screen
         return NavigationUI.navigateUp(navController, drawerLayout)
     }
-
 }
