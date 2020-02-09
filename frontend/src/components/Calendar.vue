@@ -62,17 +62,14 @@
           >
             <v-card color="grey lighten-4" min-width="350px" flat>
               <v-toolbar :color="selectedEvent.color" dark>
-                <v-btn icon>
+                <!-- <v-btn icon>
                   <v-icon>mdi-pencil</v-icon>
-                </v-btn>
+                </v-btn>-->
                 <v-toolbar-title v-html="selectedEvent.name"></v-toolbar-title>
                 <v-spacer></v-spacer>
-                <v-btn icon>
-                  <v-icon>mdi-heart</v-icon>
-                </v-btn>
-                <v-btn icon>
+                <!-- <v-btn icon>
                   <v-icon>mdi-dots-vertical</v-icon>
-                </v-btn>
+                </v-btn>-->
               </v-toolbar>
               <v-card-text>
                 <span v-html="selectedEvent.details"></span>
@@ -94,7 +91,6 @@ import axios from "axios";
 import moment from "moment";
 import WorkInProgress from "./WorkInProgress";
 import store from "../store";
-
 export default {
   components: {
     WorkInProgress
@@ -121,6 +117,8 @@ export default {
     slotsTable: {},
     invitationsTable: {},
     playersTable: {},
+    byPlayerTable: {},
+    byMeetTable: {},
     start: null,
     end: null,
     selectedEvent: {},
@@ -157,18 +155,14 @@ export default {
       if (!start || !end) {
         return "";
       }
-
       const startMonth = this.monthFormatter(start);
       const endMonth = this.monthFormatter(end);
       const suffixMonth = startMonth === endMonth ? "" : endMonth;
-
       const startYear = start.year;
       const endYear = end.year;
       const suffixYear = startYear === endYear ? "" : endYear;
-
       const startDay = start.day + this.nth(start.day);
       const endDay = end.day + this.nth(end.day);
-
       switch (this.type) {
         case "month":
           return `${startMonth} ${startYear}`;
@@ -200,16 +194,57 @@ export default {
     setPlayersTable: function(response) {
       this.playersTable = response.data;
     },
-    showSlots: function() {
-      let playerList = [];
-      let playerNameList = [];
+    setByPlayerTable: function(response) {
+      this.byPlayerTable = response.data;
+    },
+    setByMeetTable: function(response) {
+      this.byMeetTable = response.data;
+    },
+    showSlots: async function() {
+      let byPlayerTable = [];
+      let tableMeet = [];
+      let acceptedTable = [];
+      let declinedTable = [];
+      let meets = [];
+      for (let i = 0; i < this.byPlayerTable.rowCount; i++) {
+        meets.push(this.byPlayerTable.rows[i].meet);
+      }
+      let by_meet_table;
+      let accepted;
+      let declined;
+      for (let i = 0; i < meets.length; i++) {
+        by_meet_table = await axios.get(
+          "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/CalendarBMeet/" +
+            meets[i],
+          {
+            responseType: "json"
+          }
+        );
+        tableMeet.push(by_meet_table.data);
 
-      for (let i = 0; i < this.slotsTable.rowCount; i++) {
+        accepted = await axios.get(
+          "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/CalendarMAccept/" +
+            meets[i],
+          { responseType: "json" }
+        );
+        acceptedTable.push(accepted.data);
+
+        declined = await axios.get(
+          "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/CalendarMDecline/" +
+            meets[i],
+          { responseType: "json" }
+        );
+        declinedTable.push(declined.data);
+      }
+
+      // Retrieve Players of a
+      // Shows the slots
+      for (let i = 0; i < this.byPlayerTable.rowCount; i++) {
+        // Finds the first coming repeat day
         const dayINeed =
-          this.daysOfWeek.indexOf(this.slotsTable.rows[i].repeat_day) + 1;
+          this.daysOfWeek.indexOf(this.byPlayerTable.rows[i].repeat_day) + 1;
         const today = moment().isoWeekday();
         let gameDate = "";
-
         if (today <= dayINeed) {
           gameDate = moment().isoWeekday(dayINeed);
         } else {
@@ -217,45 +252,65 @@ export default {
             .add(1, "weeks")
             .isoWeekday(dayINeed);
         }
-
-        playerList = [];
-
-        for (let j = 0; j < this.invitationsTable.rowCount; j++) {
-          if (
-            this.invitationsTable.rows[j].slot == this.slotsTable.rows[i].id
-          ) {
-            playerList.push(this.invitationsTable.rows[j].player);
+        let color = "red";
+        let waiting = 0;
+        let playing = 0;
+        for (let j = 0; j < tableMeet[i].rowCount; j++) {
+          if (tableMeet[i].rows[j].status == true) playing++;
+          else if (tableMeet[i].rows[j].status == false);
+          else waiting++;
+        }
+        if (playing >= this.byPlayerTable.rows[i].minimal_team_size * 2) {
+          color = "green";
+        } else if (
+          playing + waiting >=
+          this.byPlayerTable.rows[i].minimal_team_size * 2
+        ) {
+          color = "orange";
+        }
+        let dts = "";
+        dts = "<h3> Joueurs ayant accepté:</h3> <ul>";
+        for (let j = 0; j < acceptedTable[i].rowCount; j++) {
+          dts = dts + "<li>" + acceptedTable[i].rows[j].pseudo + "</li>";
+        }
+        dts = dts + "</ul>";
+        if (declinedTable[i].rowCount > 0) {
+          dts = dts + "<br> <h3> Joueurs ayant refusé:</h3> <ul>";
+          for (let j = 0; j < declinedTable[i].rowCount; j++) {
+            dts = dts + "<li>" + declinedTable[i].rows[j].pseudo + "</li>";
+          }
+          dts = dts + "</ul>";
+        }
+        if (waiting > 0) {
+          if (waiting == 1) {
+            dts += "<br> <p> Encore 1 joueur n'a pas encore répondu au match";
+          } else {
+            dts =
+              dts +
+              "<br> <p> Encore " +
+              waiting +
+              " joueurs n'ont pas encore répondu au match";
           }
         }
-
-        for (let j = 0; j < playerList.length; j++) {
-          for (let k = 0; k < this.playersTable.rowCount; k++) {
-            if (this.playersTable.rows[k].id == playerList[j]) {
-              playerNameList.push([
-                this.playersTable.rows[k].pseudo,
-                this.playersTable.rows[k].id
-              ]);
-            }
-          }
-        }
-
-        for (let k = 0; k < playerNameList.length; k++) {
-          if (playerNameList[k][1] == this.id) {
-            this.events.push({
-              name: "Match n° " + this.slotsTable.rows[i].id,
-              details: "Joueurs : " + playerNameList + ", ",
-              start:
-                gameDate.format("YYYY-MM-DD") +
-                " " +
-                this.slotsTable.rows[i].start_hour,
-              end:
-                gameDate.format("YYYY-MM-DD") +
-                " " +
-                this.slotsTable.rows[i].end_hour,
-              color: "purple"
-            });
-          }
-        }
+        this.events.push({
+          name:
+            "Match à " +
+            this.byPlayerTable.rows[i].location +
+            " ~~~ " +
+            playing +
+            "/" +
+            this.byPlayerTable.rows[i].minimal_team_size * 2,
+          details: dts,
+          start:
+            gameDate.format("YYYY-MM-DD") +
+            " " +
+            this.byPlayerTable.rows[i].start_hour,
+          end:
+            gameDate.format("YYYY-MM-DD") +
+            " " +
+            this.byPlayerTable.rows[i].end_hour,
+          color: color
+        });
       }
     },
     viewDay({ date }) {
@@ -280,14 +335,12 @@ export default {
         this.selectedElement = nativeEvent.target;
         setTimeout(() => (this.selectedOpen = true), 10);
       };
-
       if (this.selectedOpen) {
         this.selectedOpen = false;
         setTimeout(open, 10);
       } else {
         open();
       }
-
       nativeEvent.stopPropagation();
     },
     updateRange({ start, end }) {
@@ -319,9 +372,17 @@ export default {
         responseType: "json"
       }
     );
-    this.setSlotsTable(slot_Table);
-    this.setInvitationsTable(invitation_Table);
-    this.setPlayersTable(player_Table);
+    const by_player_table = await axios.get(
+      "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/CalendarBPlayer/" +
+        this.id,
+      {
+        responseType: "json"
+      }
+    );
+    // this.setSlotsTable(slot_Table);
+    // this.setInvitationsTable(invitation_Table);
+    // this.setPlayersTable(player_Table);
+    this.byPlayerTable = by_player_table.data;
     this.showSlots();
   }
 };

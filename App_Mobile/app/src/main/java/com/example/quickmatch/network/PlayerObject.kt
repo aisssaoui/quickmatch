@@ -2,6 +2,7 @@ package com.example.quickmatch.network
 
 import com.squareup.moshi.Json
 
+/* Player created by parsing data (moshi) in the JSON response */
 data class PlayerObject(
         val id : Int,
         val surname : String,
@@ -15,5 +16,6 @@ data class PlayerObject(
         @Json(name = "matches_played") val matchesPlayed : Int,
         val victories : Int,
         val avatar : String?,
-        val bio : String?)
+        val bio : String?
+)
 

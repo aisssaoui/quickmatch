@@ -18,21 +18,25 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        //reach datas in code
+        /* Bind data by using less performances */
         val binding = DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main)
+
         drawerLayout = binding.drawerLayout
 
-        //setup navigation bar, with drawer menu
+        /* Setup the navigation for fragments */
         val navController = this.findNavController(R.id.myNavHostFragment)
+
+        /* Setup navigation bar, with drawer menu */
         NavigationUI.setupActionBarWithNavController(this, navController, drawerLayout)
         NavigationUI.setupWithNavController(binding.navView, navController)
         supportActionBar!!.hide()
 
     }
 
+    /* Called when UP button is called : pop back stack */
     override fun onSupportNavigateUp(): Boolean {
         val navController = this.findNavController(R.id.myNavHostFragment)
-        //replace up button buy drawer button on title screen
+        /* Replace up button by drawer button on title screen */
         return NavigationUI.navigateUp(navController, drawerLayout)
     }
 }
