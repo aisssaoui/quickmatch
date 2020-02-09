@@ -5,14 +5,16 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+        <variable
+            name="viewModel"
+            type="com.example.quickmatch.access.SigninFragmentViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/design_default_color_primary"
-        tools:context=".access.SigninFragmentUI" >
+        android:background="@android:color/holo_green_light"
+        tools:context=".access.SigninFragmentUI">
 
         <TextView
             android:id="@+id/text_signin_tilte"
@@ -24,7 +26,6 @@
             android:textColor="@android:color/background_light"
             android:textSize="24sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/input_signin_name"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -35,16 +36,18 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:ems="10"
             android:hint="@string/hint_name"
             android:inputType="textPersonName"
             android:textAlignment="center"
             android:textColor="@android:color/background_light"
+            android:textColorHint="@android:color/background_light"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/text_signin_tilte" />
+            app:layout_constraintTop_toBottomOf="@+id/text_signin_status" />
 
         <EditText
             android:id="@+id/input_signin_firstname"
@@ -58,6 +61,7 @@
             android:inputType="textPersonName"
             android:textAlignment="center"
             android:textColor="@android:color/background_light"
+            android:textColorHint="@android:color/background_light"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -75,6 +79,7 @@
             android:inputType="textPersonName"
             android:textAlignment="center"
             android:textColor="@android:color/background_light"
+            android:textColorHint="@android:color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -92,6 +97,7 @@
             android:inputType="textPassword"
             android:textAlignment="center"
             android:textColor="@android:color/background_light"
+            android:textColorHint="@android:color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -109,6 +115,7 @@
             android:inputType="textPassword"
             android:textAlignment="center"
             android:textColor="@android:color/background_light"
+            android:textColorHint="@android:color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -126,6 +133,7 @@
             android:inputType="phone"
             android:textAlignment="center"
             android:textColor="@android:color/background_light"
+            android:textColorHint="@android:color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -143,6 +151,7 @@
             android:inputType="textEmailAddress"
             android:textAlignment="center"
             android:textColor="@android:color/background_light"
+            android:textColorHint="@android:color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -194,6 +203,19 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/button_signin_google"
             app:layout_constraintTop_toTopOf="@+id/button_signin_google" />
+
+        <TextView
+            android:id="@+id/text_signin_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:textAlignment="center"
+            android:textColor="@android:color/holo_orange_dark"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_signin_tilte"
+            tools:text="@string/text_signin_status" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -4,7 +4,7 @@ import com.squareup.moshi.Json
 
 /* Player created by parsing data (moshi) in the JSON response */
 data class PlayerObject(
-        val id : Int,
+        val id : Int?,
         val surname : String,
         @Json(name = "first_name") val firstName : String,
         val pseudo : String,

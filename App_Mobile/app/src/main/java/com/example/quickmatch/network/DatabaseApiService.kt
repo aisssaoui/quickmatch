@@ -57,7 +57,7 @@ interface DatabaseApiService {
 
     /* POST REQUESTS */
     @POST("dbcontrol/api/v1/Players")
-    fun addPlayer(player : PlayerObject)
+    fun addPlayer(player : PlayerObject) : Deferred<PlayerObject>
 
     /* PUT REQUESTS */
     @PUT("dbcontrol/api/v1/Players/id{id}")

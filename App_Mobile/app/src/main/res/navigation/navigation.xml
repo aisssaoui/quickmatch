@@ -64,6 +64,9 @@
         <action
             android:id="@+id/action_signinFragmentUI_to_loginFragmentUI"
             app:destination="@id/loginFragmentUI" />
+        <action
+            android:id="@+id/action_signinFragmentUI_to_homeFragmentUI"
+            app:destination="@id/homeFragmentUI" />
     </fragment>
     <fragment
         android:id="@+id/homeFragmentUI"

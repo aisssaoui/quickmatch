@@ -27,4 +27,5 @@
     <string name="test_text">Test</string>
     <string name="text_login_status">Login Status</string>
     <string name="web_client_id">864617003210-662ejk5tbi0ltohjg5q76ssc6b056rvd.apps.googleusercontent.com</string>
+    <string name="text_signin_status">Signin status</string>
 </resources>
