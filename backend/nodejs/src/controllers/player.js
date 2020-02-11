@@ -295,6 +295,74 @@ var Player = {
 
     return getByID;
   })(),
+    /**
+   * Get A Player by his pseudo
+   * @param {object} req
+   * @param {object} res
+   * @returns {object} player object
+   */
+  getByPseudo: (function() {
+    var _ref7 = _asyncToGenerator(
+      /*#__PURE__*/ regeneratorRuntime.mark(function _callee4(req, res) {
+        var text, _ref8, rows;
+
+        return regeneratorRuntime.wrap(
+          function _callee4$(_context4) {
+            while (1) {
+              switch ((_context4.prev = _context4.next)) {
+                case 0:
+                  text = "SELECT * FROM player WHERE pseudo = $1";
+                  _context4.prev = 1;
+                  _context4.next = 4;
+                  return _db2.default.query(text, [req.params.p]);
+
+                case 4:
+                  _ref8 = _context4.sent;
+                  rows = _ref8.rows;
+
+                  if (rows[0]) {
+                    _context4.next = 8;
+                    break;
+                  }
+
+                  return _context4.abrupt(
+                    "return",
+                    res.status(200).send({ message: "player not found" })
+                  );
+
+                case 8:
+                  return _context4.abrupt(
+                    "return",
+                    res.status(200).send(rows[0])
+                  );
+
+                case 11:
+                  _context4.prev = 11;
+                  _context4.t0 = _context4["catch"](1);
+                  return _context4.abrupt(
+                    "return",
+                    res.status(200).send(_context4.t0)
+                  );
+
+                case 14:
+                case "end":
+                  return _context4.stop();
+              }
+            }
+          },
+          _callee4,
+          this,
+          [[1, 11]]
+        );
+      })
+    );
+
+    function getByPseudo(_x7, _x8) {
+      return _ref7.apply(this, arguments);
+    }
+
+    return getByPseudo;
+  })(),
 
   /**
    * Get A Player by his mail address

@@ -65,11 +65,13 @@ var Invitation = {
               switch ((_context.prev = _context.next)) {
                 case 0:
                   text =
-                    "INSERT INTO invitation (slot, player, event_type)\n\t    VALUES($1, $2, $3)\n        returning *";
+                    "INSERT INTO invitation (slot, player, event_type, meet, status)\n\t    VALUES($1, $2, $3, $4, $5)\n        returning *";
                   values = [
                     req.body.slot_id,
                     req.body.player_id,
-                    req.body.event_type
+                    req.body.event_type,
+                    req.body.meet_id,
+                    req.body.status
                   ];
                   _context.prev = 2;
                   _context.next = 5;
@@ -311,7 +313,7 @@ var Invitation = {
                 case 0:
                   findOneQuery = "SELECT * FROM invitation WHERE id=$1";
                   updateOneQuery =
-                    "UPDATE invitation\n      SET slot=$1,player=$2\n      WHERE id=$3 returning *";
+                    "UPDATE invitation\n      SET status=$1\n      WHERE id=$2 returning *";
                   _context4.prev = 2;
                   _context4.next = 5;
                   return _db2.default.query(findOneQuery, [req.params.id]);
@@ -332,8 +334,7 @@ var Invitation = {
 
                 case 9:
                   values = [
-                    req.body.invitation_name || rows[0].invitation_name,
-                    req.body.private_invitation || rows[0].private_invitation,
+                    req.body.status === null ? rows[0].status: req.body.status,
                     req.params.id
                   ];
                   _context4.next = 12;
