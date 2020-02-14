@@ -38,15 +38,12 @@ interface DatabaseApiService {
     /* GET REQUESTS */
     @GET("dbcontrol/api/v1/PlayersRows")
     fun getAllPlayers() : Deferred<List<PlayerObject>>
-
     @GET("dbcontrol/api/v1/Players/ma{mail_address}")
     fun getPlayerByMail(@Path("mail_address") mailAddress : String) : Deferred<PlayerObject>
-
     @GET("dbcontrol/api/v1/Players/id{id}")
     fun getPlayerById(@Path("id") id : Int) : Deferred<PlayerObject>
-
     @GET("dbcontrol/api/v1/Players/stat{id}")
-    fun getPlayerMeetSheetsById(@Path("id") id : Int) : Deferred<List<MeetSheetObject>>
+    fun getPlayerMeetSheetsById(@Path("id") id : Int) : Deferred<List<MeetsSheetObject>>
 
     /* POST REQUESTS */
     @POST("dbcontrol/api/v1/Players")
@@ -65,7 +62,6 @@ interface DatabaseApiService {
     /* GET REQUESTS */
     @GET("dbcontrol/api/v1/ClubsRows")
     fun getAllClubs() : Deferred<List<ClubObject>>
-
     @GET("dbcontrol/api/v1/Clubs/{id}")
     fun getClubById(@Path("id") id : Int) : Deferred<ClubObject>
 
@@ -81,7 +77,6 @@ interface DatabaseApiService {
     /* GET REQUESTS */
     @GET("dbcontrol/api/v1/InvitationsRows")
     fun getAllInvitations() : Deferred<List<InvitationObject>>
-
     @GET("dbcontrol/api/v1/Invitations/{id}")
     fun getInvitationById(@Path("id") id : Int) : Deferred<InvitationObject>
 
@@ -97,7 +92,6 @@ interface DatabaseApiService {
     /* GET REQUESTS */
     @GET("dbcontrol/api/v1/SlotsRows")
     fun getAllSlots() : Deferred<List<SlotObject>>
-
     @GET("dbcontrol/api/v1/Slots/{id}")
     fun getSlotById(@Path("id") id : Int) : Deferred<SlotObject>
 
@@ -110,6 +104,49 @@ interface DatabaseApiService {
     fun deleteSlotById(@Path("id") id : Int)
 
     /* TODO: faire pour les tables : meetsheet, meet, player belong club*/
+
+    /* MEET */
+    /* GET REQUESTS */
+    @GET("dbcontrol/api/v1/MeetsRows")
+    fun getAllMeets() : Deferred<List<MeetObject>>
+    @GET("dbcontrol/api/v1/Meets/{id}")
+    fun getMeetById(@Path("id") id : Int) : Deferred<MeetObject>
+
+    /* POST REQUESTS */
+    @POST("dbcontrol/api/v1/Meets")
+    fun addMeet(meetObject : MeetObject)
+
+    /* DELETE REQUESTS */
+    @DELETE("dbcontrol/api/v1/Meets/{id}")
+    fun deleteMeetById(@Path("id") id : Int)
+
+    /* MEETSHEETS */
+    /* GET REQUESTS */
+    /* TODO: verifier les types pour les lists de meetsheets */
+    @GET("dbcontrol/api/v1/MeetsSheetRows")
+    fun getAllMeetsSheets() : Deferred<List<List<MeetsSheetObject>>>
+    /* TODO: verifier le back pour cette route (ne marche pas atm) */
+    @GET("dbcontrol/api/v1/MeetsSheet/{mail}")
+    fun getMeetsSheetByMail(@Path("id") mail : String) : Deferred<List<MeetsSheetObject>>
+
+    /* POST REQUESTS */
+    @POST("dbcontrol/api/v1/MeetsSheet")
+    fun addMeetsSheet(meetsSheetObject: MeetsSheetObject)
+
+    /* DELETE REQUESTS */
+    @DELETE("dbcontrol/api/v1/MeetsSheet/{mail}")
+    fun deleteMeetsSheetByMail(@Path("mail") mail : String)
+
+    /* PLAYERBELONGCLUB */
+    /* GET REQUESTS */
+    @GET("dbcontrol/api/v1/PlayerClubsRows")
+    fun getPlayerClubs() : Deferred<List<PlayerClubsObject>>
+    /* TODO : rajouter les rows pour chacune des fonctions suivantes (demander à faiz) */
+    @GET("dbcontrol/api/v1/PlayerClubs/paid{id}")
+    fun getClubsByIdAdmin(@Path("id") id : Int) : Deferred<List<PlayerClubsObject>>
+    @GET("dbcontrol/api/v1/PlayerClubs/pid{id}")
+    fun getClubsByIdPlayer(@Path("id") id : Int) : Deferred<List<PlayerClubsObject>>
+
 
 }
 
