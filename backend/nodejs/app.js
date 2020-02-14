@@ -114,11 +114,11 @@ app.get("/dbcontrol/api/v1/SlotsRows", _slot2.default.getAllRows);
 // Table meet_sheet
 app.post("/dbcontrol/api/v1/MeetsSheet", _meet_sheet2.default.create);
 app.get("/dbcontrol/api/v1/MeetsSheet", _meet_sheet2.default.getAll);
-app.get(
-  "/dbcontrol/api/v1/MeetsSheet/:player_mail_address",
-  _meet_sheet2.default.getOne
-);
+app.get("/dbcontrol/api/v1/MeetsSheet/:player_mail_address",_meet_sheet2.default.getOne);
 //app.put("/dbcontrol/api/v1/MeetsSheet/:player_mail_adress", _meet_sheet2.default.update);
+
+/* TODO : meetsheet getone avec l'@ mail ne marche pas */
+
 app.delete(
   "/dbcontrol/api/v1/MeetsSheet/:player_mail_address",
   _meet_sheet2.default.delete

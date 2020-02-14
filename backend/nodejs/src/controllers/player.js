@@ -69,7 +69,7 @@ var Player = {
                   values = [
                     req.body.surname,
                     req.body.first_name,
-                    req.body.mail_adress,
+                    req.body.mail_address,
                     req.body.phone_number,
                     req.body.pseudo,
                     req.body.mdp,
