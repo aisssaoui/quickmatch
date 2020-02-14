@@ -8,16 +8,9 @@ import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.create
+import retrofit2.http.*
 /* HTTP requests*/
 /* TODO: changer les requêtes en HTTPS (afin de fit avec la version web */
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.PUT
-import retrofit2.http.DELETE
-
-
-import retrofit2.http.Path
-import retrofit2.http.Query
 
 /* URL of the private database where data is retrieved */
 private const val BASE_URL = "https://dbcontrol.quickmatch.fr/"
@@ -57,7 +50,7 @@ interface DatabaseApiService {
 
     /* POST REQUESTS */
     @POST("dbcontrol/api/v1/Players")
-    fun addPlayer(player : PlayerObject) : Deferred<PlayerObject>
+    fun addPlayer(@Body player: PlayerObject) : Deferred<PlayerObject>
 
     /* PUT REQUESTS */
     @PUT("dbcontrol/api/v1/Players/id{id}")

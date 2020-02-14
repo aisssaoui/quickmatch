@@ -46,7 +46,7 @@ class SigninFragmentViewModel : ViewModel() {
                 var result = resultDeferred.await()
                 _mailStatus.value  = SigninMailStatus.ACCOUNT_EXISTS
             } catch (t : Throwable) { // Case we get an error
-                Log.i("SigninFragmentViewModel", t.message)
+                Log.i("SigninFragmentViewModel", t.message + "mail")
                 _mailStatus.value = SigninMailStatus.MAIL_VALID
             }
         }
@@ -73,6 +73,7 @@ class SigninFragmentViewModel : ViewModel() {
     fun tryToSignIn(name : String, firstName : String, pseudo : String, mailAddress : String,
                     password : String, passwordCheck: String, phoneNumber : String) {
 
+        Log.i("SigninFragmentViewModel", name)
         //TODO keep in memory which field is empty to help user
 
         //TODO fix an accepted password size
@@ -90,9 +91,11 @@ class SigninFragmentViewModel : ViewModel() {
 
         else {
 
-            var newPlayerObject = PlayerObject(null, name, firstName, pseudo, password, mailAddress, phoneNumber,
+            val newPlayerObject = PlayerObject(null, name, firstName, pseudo, password, mailAddress, phoneNumber,
                     0, 0, 0, 0,
                     null, null )
+
+            Log.i("SigninFragmentViewModel", newPlayerObject.toString())
 
             coroutineScope.launch {
 
@@ -103,7 +106,7 @@ class SigninFragmentViewModel : ViewModel() {
                     _signinStatus.value = SigninStatus.DONE
 
                 } catch (t: Throwable) {
-                    Log.i("SigninFragmentViewModel", t.message)
+                    Log.i("SigninFragmentViewModel", t.message + "post")
                     _signinStatus.value = SigninStatus.NETWORK_ERROR
                 }
             }

@@ -90,6 +90,7 @@ dependencies {
     // Google play
     implementation 'com.google.android.gms:play-services-auth:17.0.0'
 
-
+    // Timber
+    implementation "com.jakewharton.timber:timber:4.7.1"
 
 }

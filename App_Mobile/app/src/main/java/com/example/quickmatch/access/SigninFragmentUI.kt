@@ -2,6 +2,7 @@ package com.example.quickmatch.access
 
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -35,11 +36,14 @@ class SigninFragmentUI : Fragment() {
         }
 
         binding.buttonSigninSignin.setOnClickListener {
-            viewModel.tryToSignIn(binding.inputSigninName.text.toString(), binding.inputSigninFirstname.text.toString(),
-                    binding.inputSigninPseudo.text.toString(), binding.inputSigninMail.text.toString(), binding.inputSigninPwd.text.toString(),
-                    binding.inputSigninConfirmPwd.text.toString(), binding.inputSigninPhone.text.toString())
+            viewModel.tryToSignIn(binding.inputSigninName.text.toString(),
+                    binding.inputSigninFirstname.text.toString(),
+                    binding.inputSigninPseudo.text.toString(),
+                    binding.inputSigninMail.text.toString(),
+                    binding.inputSigninPwd.text.toString(),
+                    binding.inputSigninConfirmPwd.text.toString(),
+                    binding.inputSigninPhone.text.toString())
         }
-
 
         viewModel.signinStatus.observe(this, Observer {
             when (it) {
