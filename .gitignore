@@ -28,3 +28,5 @@ yarn-error.log*
 backend/nodejs/package-lock.json
 frontend/package-lock.json
 LICENSE
+
+App_mobile/local.properties
