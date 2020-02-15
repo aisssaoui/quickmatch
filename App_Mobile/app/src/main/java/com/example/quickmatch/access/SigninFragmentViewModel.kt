@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import com.example.quickmatch.network.DatabaseApi
 import com.example.quickmatch.network.PlayerObject
 import kotlinx.coroutines.*
+import timber.log.Timber
 
 enum class SigninMailStatus { ACCOUNT_EXISTS, MAIL_VALID }
 enum class SigninPseudoStatus { PSEUDO_EXISTS, PSEUDO_VALID }
@@ -73,7 +74,14 @@ class SigninFragmentViewModel : ViewModel() {
     fun tryToSignIn(name : String, firstName : String, pseudo : String, mailAddress : String,
                     password : String, passwordCheck: String, phoneNumber : String) {
 
-        Log.i("SigninFragmentViewModel", name)
+        Timber.i("viewModel " + name)
+        Timber.i("viewModel " + firstName)
+        Timber.i("viewModel " + pseudo)
+        Timber.i("viewModel " + mailAddress)
+        Timber.i("viewModel " + password)
+        Timber.i("viewModel " + passwordCheck)
+        Timber.i("viewModel " + phoneNumber)
+
         //TODO keep in memory which field is empty to help user
 
         //TODO fix an accepted password size
@@ -91,7 +99,7 @@ class SigninFragmentViewModel : ViewModel() {
 
         else {
 
-            val newPlayerObject = PlayerObject(null, name, firstName, pseudo, password, mailAddress, phoneNumber,
+            var newPlayerObject = PlayerObject(null, name, firstName, pseudo, password, mailAddress, phoneNumber,
                     0, 0, 0, 0,
                     null, null )
 
@@ -104,6 +112,7 @@ class SigninFragmentViewModel : ViewModel() {
                 try {
                     var result = resultDeferred.await()
                     _signinStatus.value = SigninStatus.DONE
+                    Timber.i(result.toString())
 
                 } catch (t: Throwable) {
                     Log.i("SigninFragmentViewModel", t.message + "post")

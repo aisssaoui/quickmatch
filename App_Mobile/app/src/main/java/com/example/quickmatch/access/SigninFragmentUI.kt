@@ -15,6 +15,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.quickmatch.R
 import com.example.quickmatch.databinding.FragmentSigninBinding
 import com.example.quickmatch.title.TitleFragmentViewModel
+import timber.log.Timber
 
 /**
  * A simple [Fragment] subclass.
@@ -43,6 +44,14 @@ class SigninFragmentUI : Fragment() {
                     binding.inputSigninPwd.text.toString(),
                     binding.inputSigninConfirmPwd.text.toString(),
                     binding.inputSigninPhone.text.toString())
+
+            Timber.i(binding.inputSigninName.text.toString())
+            Timber.i(binding.inputSigninFirstname.text.toString())
+            Timber.i(binding.inputSigninPseudo.text.toString())
+            Timber.i(binding.inputSigninMail.text.toString())
+            Timber.i(binding.inputSigninPwd.text.toString())
+            Timber.i(binding.inputSigninConfirmPwd.text.toString())
+            Timber.i(binding.inputSigninPhone.text.toString() + "p")
         }
 
         viewModel.signinStatus.observe(this, Observer {
