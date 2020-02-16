@@ -7,7 +7,7 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 data class PlayerObject(
         val id : Int?,
-        @Json(name = "surname") val surname : String,
+        @field:Json(name = "surname") val surname : String,
         @Json(name = "first_name") val firstName : String,
         val pseudo : String,
         @Json(name = "mdp") val password : String,

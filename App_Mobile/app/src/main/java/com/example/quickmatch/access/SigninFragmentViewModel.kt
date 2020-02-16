@@ -47,19 +47,17 @@ class SigninFragmentViewModel : ViewModel() {
                 var result = resultDeferred.await()
                 _mailStatus.value  = SigninMailStatus.ACCOUNT_EXISTS
             } catch (t : Throwable) { // Case we get an error
-                Log.i("SigninFragmentViewModel", t.message + "mail")
+                Timber.i( t.message + "mail")
                 _mailStatus.value = SigninMailStatus.MAIL_VALID
             }
         }
     }
 
-    //TODO finish when backend func is available
-    private fun checkPseudo(mailAddress: String) {
+    private fun checkPseudo(pseudo: String) {
 
-        /*
         coroutineScope.launch {
 
-            var resultDeferred : Deferred<PlayerObject> = DatabaseApi.retrofitService.getPlayerByMail(mailAddress)
+            var resultDeferred : Deferred<PlayerObject> = DatabaseApi.retrofitService.getPlayerByPseudo(pseudo)
 
             try { // Case request gives an existing player
                 var result = resultDeferred.await()
@@ -68,19 +66,14 @@ class SigninFragmentViewModel : ViewModel() {
                 Log.i("SigninFragmentViewModel", t.message)
                 _pseudoStatus.value = SigninPseudoStatus.PSEUDO_VALID
             }
-        }*/
+        }
     }
 
     fun tryToSignIn(name : String, firstName : String, pseudo : String, mailAddress : String,
                     password : String, passwordCheck: String, phoneNumber : String) {
 
-        Timber.i("viewModel " + name)
-        Timber.i("viewModel " + firstName)
-        Timber.i("viewModel " + pseudo)
-        Timber.i("viewModel " + mailAddress)
-        Timber.i("viewModel " + password)
-        Timber.i("viewModel " + passwordCheck)
-        Timber.i("viewModel " + phoneNumber)
+        checkMailAddress(mailAddress)
+        checkPseudo(pseudo)
 
         //TODO keep in memory which field is empty to help user
 
@@ -103,7 +96,7 @@ class SigninFragmentViewModel : ViewModel() {
                     0, 0, 0, 0,
                     null, null )
 
-            Log.i("SigninFragmentViewModel", newPlayerObject.toString())
+            Timber.i(newPlayerObject.toString())
 
             coroutineScope.launch {
 
@@ -115,7 +108,7 @@ class SigninFragmentViewModel : ViewModel() {
                     Timber.i(result.toString())
 
                 } catch (t: Throwable) {
-                    Log.i("SigninFragmentViewModel", t.message + "post")
+                    Timber.i(t.message + "post")
                     _signinStatus.value = SigninStatus.NETWORK_ERROR
                 }
             }

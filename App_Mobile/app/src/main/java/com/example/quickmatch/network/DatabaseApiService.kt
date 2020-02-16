@@ -40,6 +40,8 @@ interface DatabaseApiService {
     fun getAllPlayers() : Deferred<List<PlayerObject>>
     @GET("dbcontrol/api/v1/Players/ma{mail_address}")
     fun getPlayerByMail(@Path("mail_address") mailAddress : String) : Deferred<PlayerObject>
+    @GET("dbcontrol/api/v1/Players/p{pseudo}")
+    fun getPlayerByPseudo(@Path("pseudo") pseudo : String) : Deferred<PlayerObject>
     @GET("dbcontrol/api/v1/Players/id{id}")
     fun getPlayerById(@Path("id") id : Int) : Deferred<PlayerObject>
     @GET("dbcontrol/api/v1/Players/stat{id}")

@@ -1,6 +1,7 @@
 package com.example.quickmatch.access
 
 
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -44,14 +45,6 @@ class SigninFragmentUI : Fragment() {
                     binding.inputSigninPwd.text.toString(),
                     binding.inputSigninConfirmPwd.text.toString(),
                     binding.inputSigninPhone.text.toString())
-
-            Timber.i(binding.inputSigninName.text.toString())
-            Timber.i(binding.inputSigninFirstname.text.toString())
-            Timber.i(binding.inputSigninPseudo.text.toString())
-            Timber.i(binding.inputSigninMail.text.toString())
-            Timber.i(binding.inputSigninPwd.text.toString())
-            Timber.i(binding.inputSigninConfirmPwd.text.toString())
-            Timber.i(binding.inputSigninPhone.text.toString() + "p")
         }
 
         viewModel.signinStatus.observe(this, Observer {
@@ -62,6 +55,20 @@ class SigninFragmentUI : Fragment() {
                 SigninStatus.WRONG_PASSWORD_SIZE -> binding.textSigninStatus.text = "Format de mot de passe incorrect"
                 SigninStatus.DONE -> findNavController().navigate(SigninFragmentUIDirections.actionSigninFragmentUIToHomeFragmentUI())
             }
+        })
+
+        viewModel.mailStatus.observe(this, Observer {
+            if (it == SigninMailStatus.ACCOUNT_EXISTS)
+                binding.inputSigninMail.setTextColor(Color.RED)
+            else
+                binding.inputSigninMail.setTextColor(Color.WHITE)
+        })
+
+        viewModel.pseudoStatus.observe(this, Observer {
+            if (it == SigninPseudoStatus.PSEUDO_EXISTS)
+                binding.inputSigninPseudo.setTextColor(Color.RED)
+            else
+                binding.inputSigninPseudo.setTextColor(Color.WHITE)
         })
 
         return binding.root

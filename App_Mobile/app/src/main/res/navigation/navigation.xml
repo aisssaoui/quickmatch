@@ -51,7 +51,8 @@
         tools:layout="@layout/fragment_login" >
         <action
             android:id="@+id/action_loginFragmentUI_to_signinFragmentUI"
-            app:destination="@id/signinFragmentUI" />
+            app:destination="@id/signinFragmentUI"
+            app:popUpTo="@+id/titleFragment" />
         <action
             android:id="@+id/action_loginFragmentUI_to_homeFragmentUI"
             app:destination="@id/homeFragmentUI" />
@@ -63,7 +64,8 @@
         tools:layout="@layout/fragment_signin" >
         <action
             android:id="@+id/action_signinFragmentUI_to_loginFragmentUI"
-            app:destination="@id/loginFragmentUI" />
+            app:destination="@id/loginFragmentUI"
+            app:popUpTo="@+id/titleFragment" />
         <action
             android:id="@+id/action_signinFragmentUI_to_homeFragmentUI"
             app:destination="@id/homeFragmentUI" />

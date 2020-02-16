@@ -4,11 +4,14 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.fragment.app.FragmentManager
 import androidx.navigation.findNavController
+import androidx.navigation.get
 import androidx.navigation.ui.NavigationUI
 import com.example.quickmatch.databinding.ActivityMainBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import timber.log.Timber
 
 
 class MainActivity : AppCompatActivity() {
@@ -25,12 +28,13 @@ class MainActivity : AppCompatActivity() {
 
         /* Setup the navigation for fragments */
         val navController = this.findNavController(R.id.myNavHostFragment)
+        val fragmentManager = this.supportFragmentManager
 
         /* Setup navigation bar, with drawer menu */
         NavigationUI.setupActionBarWithNavController(this, navController, drawerLayout)
         NavigationUI.setupWithNavController(binding.navView, navController)
-        supportActionBar!!.hide()
 
+        supportActionBar!!.hide()
     }
 
     /* Called when UP button is called : pop back stack */
