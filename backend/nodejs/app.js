@@ -182,5 +182,38 @@ app.get("/dbcontrol/api/v1/CalendarMAccept/:id", _calendar_db2.default.getAccept
 app.get("/dbcontrol/api/v1/CalendarMDecline/:id", _calendar_db2.default.getDeclined);
 app.get("/dbcontrol/api/v1/CalendarMInv/:pid/:mid", _calendar_db2.default.getInv);
 
+
+var nodemailer = require('nodemailer');
+
+app.post("/dbcontrol/api/v1/sendMail", async function(req,res) {
+    // creating route
+    let transporter = await nodemailer.createTransport({
+     service: 'gmail',
+     auth: {
+            user: 'no.reply.quickmatch@gmail.com',
+            pass: 'v1v3Qu1ckm4tch'
+        }
+    });
+    // setuping mail options from req
+    let mailOptions = {
+        from: 'no.reply.quickmatch@gmail.com', // sender address
+        to: req.body.to, // list of receivers
+        subject: req.body.subject, // Subject line
+        text: req.body.text,
+        html: req.body.html// plain text body
+      };
+      // sending email...
+    transporter.sendMail(mailOptions, function (err, info) {
+        if(err) {
+            console.log(err);
+           return res.json({error: "API Error"}); // error
+        }
+        /*else{
+            console.log("The message is sent: " + response.message);
+            return res.json({response: "sent"})
+        }*/
+    })
+});
+
 app.listen(3000);
 console.log("app running on port ", 3000);

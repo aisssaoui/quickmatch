@@ -273,7 +273,7 @@ var sha512 = require('js-sha512');
             }
         },
   },
-  created: function() {
+  created: async function() {
       alert("Pour des raisons de sécurité, nous vous recommandons la connexion via un compte Google.");
   }
 };
