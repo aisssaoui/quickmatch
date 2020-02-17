@@ -112,11 +112,13 @@ export default {
               mdp: this.mdp,
               phone_number: this.phone_number,
               mail_adress: this.mailAddress,
-              avatar: this.avatar
+              avatar: this.avatar,
+              isValid: true
           });
           if (apiRep.data.name != "error") {
               store.dispatch("hasAccount");
               store.dispatch("setID");
+              store.dispatch("setIsValid");
               router.push("/");
           } else {
               this.creationError(apiRep.data);

@@ -123,6 +123,7 @@ export default {
           } else {
             store.dispatch("hasAccount");
             store.dispatch("setID");
+            store.dispatch("setIsValid");
             router.push("/"); // redirection vers la page d'accueil
           }
         })
@@ -149,7 +150,12 @@ export default {
                 store.dispatch("setEmail",this.email);
                 store.dispatch("hasAccount");
                 store.dispatch("setID");
-                router.push("/");
+                store.dispatch("setIsValid");
+                if(store.getters.isValid === false) {
+                    router.push("/verifyAccount");
+                }else{
+                    router.push("/"); // redirection vers la page d'accueil
+                }
             }else{
                 alert("Email ou mot de passe invalide !");
             }

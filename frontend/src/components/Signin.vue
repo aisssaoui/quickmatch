@@ -237,7 +237,8 @@ var sha512 = require('js-sha512');
                         mdp: tmp_password,
                         phone_number: tmp_tel,
                         mail_adress: this.email,
-                        avatar: this.avatar
+                        avatar: this.avatar,
+                        isValid: false
                     }
                 );
                 if (apiRep.data.name != "error") {
@@ -245,7 +246,7 @@ var sha512 = require('js-sha512');
                     store.dispatch("hasAccount");
                     store.dispatch("setID");
                     this.updatePassword();
-                    router.push("/");
+                    router.push("/verifyAccount");
                 } else {
                     this.creationError(apiRep.data);
                 }
