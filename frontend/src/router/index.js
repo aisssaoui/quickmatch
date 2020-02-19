@@ -16,10 +16,13 @@ import ContactUs from "../components/ContactUs";
 import EditProfile from "../components/EditProfile";
 import Club from "../components/Club";
 import CreateMatch from "../components/CreateMatch";
+import VerifyAccount from "../components/VerifyAccount";
 
 Vue.use(Router);
 
-export default new Router({
+import store from "../store";
+
+const router = new Router({
   routes: [
     { name: "home", path: "/", component: Home },
     { name: "login", path: "/login", component: Login },
@@ -35,7 +38,21 @@ export default new Router({
     { name: "contactus", path: "/contactus", component: ContactUs },
     { name: "editprofile", path: "/EditProfile", component: EditProfile },
     { name: "club", path: "/Club", component: Club },
-    { name: "createMatch", path: "/CreateMatch", component: CreateMatch }
+    { name: "createMatch", path: "/CreateMatch", component: CreateMatch },
+    { name: "verifyAccount", path: "/verifyAccount", component: VerifyAccount }
   ],
   mode: "history"
 });
+
+let checkOneTime = 0;
+router.beforeEach((to, from, next) => {
+    if (to.name != "verifyAccount" && store.getters.isSignedIn && (! store.getters.isValid) && checkOneTime != 1) {
+        checkOneTime++;
+        next("/verifyAccount");
+        checkOneTime--;
+    }else{
+        next();
+    }
+});
+
+export default router;

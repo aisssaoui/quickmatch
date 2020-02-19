@@ -111,13 +111,16 @@ export default {
               first_name: this.firstName,
               mdp: this.mdp,
               phone_number: this.phone_number,
-              mail_adress: this.mailAddress,
-              avatar: this.avatar
+              mail_address: this.mailAddress,
+              avatar: this.avatar,
+              is_valid: true
           });
           if (apiRep.data.name != "error") {
               store.dispatch("hasAccount");
               store.dispatch("setID");
-              router.push("/");
+              store.dispatch("setIsValidHandmade").then(response => {
+                  router.push("/");
+              });
           } else {
               this.creationError(apiRep.data);
           }
