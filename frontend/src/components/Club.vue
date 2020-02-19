@@ -176,6 +176,34 @@
                   </v-list-item-content>
                 </v-list-item>
 
+                <v-list-item two-line>
+                  <v-list-item-content>
+                    <v-list-item-title class="font-weight-bold">Nombre de but(s)</v-list-item-title>
+                    <v-list-item-subtitle class="headline">{{ row.scored_goals }}</v-list-item-subtitle>
+                  </v-list-item-content>
+                </v-list-item>
+
+                <v-list-item two-line>
+                  <v-list-item-content>
+                    <v-list-item-title class="font-weight-bold">Nombre de but(s) encaissé(s)</v-list-item-title>
+                    <v-list-item-subtitle class="headline">{{ row.conceded_goals }}</v-list-item-subtitle>
+                  </v-list-item-content>
+                </v-list-item>
+
+                <v-list-item two-line>
+                  <v-list-item-content>
+                    <v-list-item-title class="font-weight-bold">Nombre de match joué(s)</v-list-item-title>
+                    <v-list-item-subtitle class="headline">{{ row.matches_played }}</v-list-item-subtitle>
+                  </v-list-item-content>
+                </v-list-item>
+
+                <v-list-item two-line>
+                  <v-list-item-content>
+                    <v-list-item-title class="font-weight-bold">Nombre de victoire(s)</v-list-item-title>
+                    <v-list-item-subtitle class="headline">{{ row.victories }}</v-list-item-subtitle>
+                  </v-list-item-content>
+                </v-list-item>
+
                 <div v-if="! row.is_admin">
                   <v-btn class="btn" rounded color="#666" v-on:click="promote_to_admin(row.id, id_club_switch, row.pseudo)">nommer admin</v-btn>
                   <br><br>
@@ -197,6 +225,13 @@
                 </v-list-item-content>
               </v-list-item>
 
+              <div>
+                <hr>
+
+                <p>pseudo du joueur : </p><input v-model="private_player">
+
+                <v-btn class="btn" rounded color="#666" v-on:click="add_to_club_private_player(id_club_switch, private_player)">ajouter</v-btn>
+              </div>
 
               <div v-if="playersNotInClub.length != 0">
                 <div v-for="row in playersNotInClub" :key="row.id">
@@ -220,6 +255,34 @@
                     <v-list-item-content>
                       <v-list-item-title class="font-weight-bold">Pseudo du joueur</v-list-item-title>
                       <v-list-item-subtitle class="headline">{{ row.pseudo }}</v-list-item-subtitle>
+                    </v-list-item-content>
+                  </v-list-item>
+
+                  <v-list-item two-line>
+                    <v-list-item-content>
+                      <v-list-item-title class="font-weight-bold">Nombre de but(s)</v-list-item-title>
+                      <v-list-item-subtitle class="headline">{{ row.scored_goals }}</v-list-item-subtitle>
+                    </v-list-item-content>
+                  </v-list-item>
+
+                  <v-list-item two-line>
+                    <v-list-item-content>
+                      <v-list-item-title class="font-weight-bold">Nombre de but(s) encaissé(s)</v-list-item-title>
+                      <v-list-item-subtitle class="headline">{{ row.conceded_goals }}</v-list-item-subtitle>
+                    </v-list-item-content>
+                  </v-list-item>
+
+                  <v-list-item two-line>
+                    <v-list-item-content>
+                      <v-list-item-title class="font-weight-bold">Nombre de match joué(s)</v-list-item-title>
+                      <v-list-item-subtitle class="headline">{{ row.matches_played }}</v-list-item-subtitle>
+                    </v-list-item-content>
+                  </v-list-item>
+
+                  <v-list-item two-line>
+                    <v-list-item-content>
+                      <v-list-item-title class="font-weight-bold">Nombre de victoire(s)</v-list-item-title>
+                      <v-list-item-subtitle class="headline">{{ row.victories }}</v-list-item-subtitle>
                     </v-list-item-content>
                   </v-list-item>
 
@@ -476,6 +539,7 @@ export default {
         })
         .catch(e => {
           alert("Echec, veuillez réessayer, si le problème persiste, réessayer plus tard");
+          this.$router.go();
         });
     },
     async delete_from_club(pid, cid, pseudo){
@@ -501,6 +565,27 @@ export default {
         .then(response => {
           alert("Vous avez ajouter " + pseudo + " au club " + this.name_club_switch);
           this.manage_club(this.name_club_switch, this.id_club_switch);
+        })
+        .catch(e => {
+          alert("Echec, veuillez réessayer, si le problème persiste, réessayer plus tard");
+          this.$router.go();
+        });
+    },
+    async add_to_club_private_player(cid, pseudo){
+      rep = await axios
+              .post("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/Players/p" + pseudo)
+              .catch(e => {
+                alert("Echec, veuillez réessayer, si le problème persiste, réessayer plus tard");
+                this.$router.go();
+              });
+      if (rep.data.rows.message == "player not found"){
+        alert("Personne ne porte le pseudo : " + pseudo);
+        return;
+      }
+      await axios
+        .post("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/InvitationClub/" + rep.data.rows.id + "&" + cid)
+        .then(response => {
+          alert("Une invitation a été envoyé à " + pseudo);
         })
         .catch(e => {
           alert("Echec, veuillez réessayer, si le problème persiste, réessayer plus tard");

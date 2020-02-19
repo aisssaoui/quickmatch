@@ -28,9 +28,14 @@ const player_belong_club = {
    */
   async getPlayerClubsByClubID(req, res) {
     const text =
-      `SELECT P.id, P.surname, P.first_name, P.pseudo, PBC.is_admin FROM
+      `SELECT * FROM
        player_belong_club PBC INNER JOIN player P ON P.id = PBC.player
-       WHERE PBC.club = $1`;
+       WHERE PBC.club = $1
+       ORDER BY
+          PBC.is_admin DESC,
+          PBC.inscription_date ASC,
+          P.surname ASC,
+          P.first_name ASC`;
     try {
       const { rows, rowCount } = await db.query(text, [req.params.id]);
       return res.status(200).send({ rows, rowCount });
@@ -47,8 +52,13 @@ const player_belong_club = {
   */
   async NgetPlayerClubsByClubID(req, res) {
     const text =
-    `SELECT P.id, P.surname, P.first_name, P.pseudo FROM player P
-     WHERE P.id NOT IN (SELECT PBC.player FROM player_belong_club PBC WHERE PBC.club = $1)`;
+    `SELECT * FROM player P WHERE
+     P.id NOT IN (SELECT PBC.player FROM player_belong_club PBC WHERE PBC.club = $1)
+     AND
+     P.private_club = FALSE
+     ORDER BY
+        P.surname ASC,
+        P.first_name ASC`;
     try {
       const { rows, rowCount } = await db.query(text, [req.params.id]);
       return res.status(200).send({ rows, rowCount });
@@ -65,7 +75,13 @@ const player_belong_club = {
    */
   async getPlayerClubsByPlayerID(req, res) {
     const text =
-      "SELECT * FROM player_belong_club PBC INNER JOIN club C on PBC.club = C.id WHERE PBC.player = $1";
+      `SELECT * FROM
+          player_belong_club PBC
+          INNER JOIN
+          club C
+          on PBC.club = C.id
+       WHERE PBC.player = $1
+       ORDER BY C.club_name`;
     try {
       const { rows, rowCount } = await db.query(text, [req.params.id]);
       return res.status(200).send({ rows, rowCount });
@@ -85,7 +101,8 @@ const player_belong_club = {
       `SELECT * FROM club C WHERE
        C.id NOT IN
          (SELECT PBC.club FROM player_belong_club PBC WHERE PBC.player = $1)
-       AND C.private_club = FALSE`;
+       AND C.private_club = FALSE
+       ORDER BY C.club_name`;
     try {
       const { rows, rowCount } = await db.query(text, [req.params.id]);
       return res.status(200).send({ rows, rowCount });
@@ -106,6 +123,36 @@ const player_belong_club = {
     try {
       const { rows } = await db.query(text, values);
       return res.status(201).send(rows[0]);
+    } catch (error) {
+      return res.status(400).send(error);
+    }
+  },
+
+  /**
+   * Add a player to a club given his pseudo
+   * @param {object} req
+   * @param {object} res
+   * @returns {object} player_belong_club object
+   */
+  async addPlayerToClubByPseudo(req, res) {
+    const text = "SELECT id FROM player WHERE pseudo = '$1'";
+    const values = [req.body.player_pseudo];
+
+    try {
+      const { rows_id } = await db.query(text, values);
+      if (rows_id.length == 0){
+        return res.status(201).send(rows_id);
+      }
+      player = rows_id.id;
+    } catch (error) {
+      return res.status(400).send(error);
+    }
+    //
+    text2 = "INSERT INTO player_belong_club (player, club, is_admin) VALUES($1, $2, $3) RETURNING *";
+    values2 = [player, req.body.club, req.body.is_admin];
+    try {
+      const { rows } = await db.query(text2, values2);
+      return res.status(201).send(rows);
     } catch (error) {
       return res.status(400).send(error);
     }

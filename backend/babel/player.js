@@ -83,6 +83,25 @@ const Player = {
   },
 
   /**
+   * Get A Player by his pseudo
+   * @param {object} req
+   * @param {object} res
+   * @returns {object} player object
+   */
+  async getByPseudo(req, res) {
+    const text = "SELECT * FROM player WHERE pseudo = '$1'";
+    try {
+      const { rows } = await db.query(text, [req.params.p]);
+      if (!rows[0]) {
+        return res.status(200).send({ message: "player not found" });
+      }
+      return res.status(200).send(rows[0]);
+    } catch (error) {
+      return res.status(200).send(error);
+    }
+  },
+
+  /**
    * Get A Player by his mail address
    * @param {object} req
    * @param {object} res
@@ -156,7 +175,7 @@ const Player = {
    * Delete A Player
    * @param {object} req
    * @param {object} res
-   * @returns {void} return statuc code 204
+   * @returns {void} return status code 204
    */
   async delete(req, res) {
     const deleteQuery = "DELETE FROM player WHERE id=$1 RETURNING *";

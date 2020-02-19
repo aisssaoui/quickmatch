@@ -77,7 +77,7 @@
         </v-form>
         <v-row class="pa-0" align="center" justify="center">
           <v-col class="pt-0" cols="10">
-            <v-btn rounded outlined block v-on:click="login">Se connecter</v-btn>
+            <v-btn rounded outlined block v-on:click="login">S'inscrire</v-btn>
           </v-col>
         </v-row>
         <v-divider></v-divider>

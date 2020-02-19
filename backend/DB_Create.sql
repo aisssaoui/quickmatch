@@ -9,6 +9,7 @@ surname VARCHAR(20) NOT NULL,
 first_name VARCHAR(20) NOT NULL,
 pseudo VARCHAR(20) NOT NULL,
 mdp VARCHAR(20) NOT NULL,
+private_profil BOOLEAN NOT NULL DEFAULT TRUE,
 mail_address VARCHAR(50),
 phone_number VARCHAR(10),						/*A voir pour le type selon utilisation*/
 scored_goals SMALLINT DEFAULT 0 NOT NULL CHECK (scored_goals >= 0),
@@ -47,6 +48,14 @@ FOREIGN KEY (player) REFERENCES Player(id),
 event_type VARCHAR(20)  						/*type discutable si liste finie d'event*/
 );
 
+CREATE TABLE IF NOT EXISTS Invitation_Club (
+id SMALLSERIAL PRIMARY KEY,
+player SMALLINT CHECK (player >= 0),
+club SMALLINT CHECK (club >= 0),
+FOREIGN KEY (club)   REFERENCES Club(id),
+FOREIGN KEY (player) REFERENCES Player(id)
+);
+
 CREATE TABLE IF NOT EXISTS Meet (				/*Nom a revoir peut etre*/
 id SMALLSERIAL PRIMARY KEY,
 location TEXT,
@@ -59,6 +68,7 @@ deletion_date TIMESTAMP
 CREATE TABLE IF NOT EXISTS Player_Belong_Club (
 player SMALLINT CHECK (player >= 0),
 club SMALLINT CHECK (club >= 0),
+inscription_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 is_admin BOOLEAN,
 FOREIGN KEY (player) REFERENCES Player(id),
 FOREIGN KEY (club)   REFERENCES Club(id),
