@@ -180,6 +180,7 @@ export default new Vuex.Store({
     }
   },
   async sendAgain(state) {
+    state.isValid = false;
       if (state.id == 0) {
           let getId = await axios.get(
             "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/players/ma" +
