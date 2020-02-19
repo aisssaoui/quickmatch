@@ -47,33 +47,33 @@ import router from "../router";
         validateAccount: async function(id) {
             let apiRep = null;
             apiRep = await axios.put(
-                "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/players/isValid" + id,
+                "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/players/id" + id,
                 {
-                    isValid: true
+                    is_valid: true
                 }
             );
             if (apiRep.data.name != "error") {
                 // validation ok
-                store.dispatch("setIsValid");
-                router.push("/");
+                store.dispatch("setIsValidHandmade");
             }else{
-                console.error("updatePassword failed");
+                console.error("update is_valid failed");
             }
         },
-        verify: function() {
+        verify: async function() {
             let id = store.getters.id;
-            let apiRep = null;
-            if (id === this.code) {
-                this.validateAccount(id);
+            if (id == this.code) {
+                let rep = await this.validateAccount(id);
+                router.push("/");
             }else{
                 alert("Vous avez entré le mauvais code !");
             }
         },
-        sendAgain: async function() {
+        sendAgain: function() {
             store.dispatch("sendAgain");
         }
   },
-  created: function() {
+  created: async function() {
+      store.dispatch("sendAgain");
   }
 };
 </script>

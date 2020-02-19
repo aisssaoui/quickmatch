@@ -46,9 +46,8 @@ const router = new Router({
 
 let checkOneTime = 0;
 router.beforeEach((to, from, next) => {
-    if (to.name != VerifyAccount && store.getters.isSignedIn && (! store.getters.isValid) && checkOneTime != 1) {
+    if (to.name != "verifyAccount" && store.getters.isSignedIn && (! store.getters.isValid) && checkOneTime != 1) {
         checkOneTime++;
-        console.log("go verif");
         next("/verifyAccount");
         checkOneTime--;
     }else{

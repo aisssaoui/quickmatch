@@ -123,8 +123,10 @@ export default {
           } else {
             store.dispatch("hasAccount");
             store.dispatch("setID");
-            store.dispatch("setIsValid");
-            router.push("/"); // redirection vers la page d'accueil
+            store.dispatch("setIsValidHandmade").then(response => {
+                router.push("/");
+            });
+
           }
         })
         .catch(e => {
@@ -139,28 +141,34 @@ export default {
         var hashedPassword = sha512(this.password + id);
         return hashedPassword === apiPassword;
     },
-    login() {
+    async login() {
       axios
         .get(
           "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/players/ma" +
             this.email
         )
-        .then(response => {
+        .then(async (response) => {
             if (this.passwordCheck(response.data.mdp,response.data.id)) {
                 store.dispatch("setEmail",this.email);
                 store.dispatch("hasAccount");
                 store.dispatch("setID");
                 store.dispatch("setIsValid");
-                if(store.getters.isValid === false) {
-                    router.push("/verifyAccount");
+                var player = await axios.get(
+                  "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/players/ma" +
+                    this.email,
+                  { ResponseType: "json" }
+                );
+                if(player.data.is_valid == false) {
+                    this.$router.push("/verifyAccount");
                 }else{
-                    router.push("/"); // redirection vers la page d'accueil
+                    this.$router.push("/"); // redirection vers la page d'accueil
                 }
             }else{
                 alert("Email ou mot de passe invalide !");
             }
         })
         .catch(e => {
+            console.log(e);
             alert("Email ou mot de passe invalide !");
         });
     }
