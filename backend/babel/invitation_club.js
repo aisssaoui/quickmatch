@@ -27,8 +27,8 @@ const invitation_club = {
    * @param {object} res
    * @returns {object} inviations array
    */
-  async getAll(req, res) {
-    const text = `SELECT * FROM
+  async getPlayerInvitations(req, res) {
+    const text = `SELECT I.id, I.player, I.club, C.club_name FROM
                     Invitation_Club I
                     JOIN
                     Club C
@@ -52,8 +52,8 @@ const invitation_club = {
    * @returns {void} return status code 204
    */
   async delete(req, res) {
-    const deleteQuery = "DELETE FROM Invitation_Club WHERE player = $1 AND club = $2 RETURNING *";
-    const values = [req.params.pid, req.params.cid];
+    const deleteQuery = "DELETE FROM Invitation_Club WHERE id = $1 RETURNING *";
+    const values = [req.params.ci_id];
 
     try {
       const { rows } = await db.query(deleteQuery, values);

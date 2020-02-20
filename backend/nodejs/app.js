@@ -20,10 +20,10 @@ var _player2 = _interopRequireDefault(_player);
 var _club = require("./src/controllers/club");
 var _club2 = _interopRequireDefault(_club);
 
-var _invitation = require("./src/controllers/invitation_club");
+var _invitation = require("./src/controllers/invitation");
 var _invitation2 = _interopRequireDefault(_invitation);
 
-var _invitation = require("./src/controllers/invitation");
+var _invitation_club = require("./src/controllers/invitation_club");
 var _invitation_club2 = _interopRequireDefault(_invitation_club);
 
 // var _invitation_for_meet = require("./src/controllers/invitation_for_meet");
@@ -96,7 +96,7 @@ app.get("/dbcontrol/api/v1/InvitationsRows", _invitation2.default.getAllRows);
 // Table Invitation_Club
 app.post("/dbcontrol/api/v1/InvitationClub/:pid&:cid", _invitation_club2.default.create);
 app.get("/dbcontrol/api/v1/InvitationClub/:pid", _invitation_club2.default.getPlayerInvitations);
-app.delete("/dbcontrol/api/v1/InvitationClub/:pid&:cid", _invitation_club2.default.delete);
+app.delete("/dbcontrol/api/v1/InvitationClub/:ci_id", _invitation_club2.default.delete);
 
 // Table invitation_for_meet
 // app.post("/dbcontrol/api/v1/InvitationForMeet", _invitation_for_meet2.default.create);
@@ -144,7 +144,6 @@ app.delete("/dbcontrol/api/v1/PlayerClubs/:cid&:pid", _player_belong_club2.defau
 app.get("/dbcontrol/api/v1/PlayerClubs", _player_belong_club2.default.getAll);
 app.get("/dbcontrol/api/v1/playerClubsCountAdmin/:cid", _player_belong_club2.default.getCountAdmin);
 app.put("/dbcontrol/api/v1/PlayerClubsPromoteToAdmin/:pid&:cid", _player_belong_club2.default.promoteToAdmin);
-app.get("/dbcontrol/api/v1/PlayerClubsRows", _player_belong_club2.default.getAllRows);
 
 app.get("/dbcontrol/api/v1/CalendarBPlayer/:id", _calendar_db2.default.getByPlayer);
 app.get("/dbcontrol/api/v1/CalendarBMeet/:id", _calendar_db2.default.getByMeet);

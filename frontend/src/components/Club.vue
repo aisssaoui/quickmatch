@@ -573,12 +573,12 @@ export default {
     },
     async add_to_club_private_player(cid, pseudo){
       rep = await axios
-              .post("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/Players/p" + pseudo)
+              .get("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/Players/p" + pseudo)
               .catch(e => {
                 alert("Echec, veuillez réessayer, si le problème persiste, réessayer plus tard");
                 this.$router.go();
               });
-      if (rep.data.rows.message == "player not found"){
+      if (rep.data.message == "player not found"){
         alert("Personne ne porte le pseudo : " + pseudo);
         return;
       }

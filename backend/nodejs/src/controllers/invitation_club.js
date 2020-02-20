@@ -71,7 +71,7 @@ var invitation_club = {
    * @param {object} res
    * @returns {object} inviations array
    */
-  getAll: function () {
+  getPlayerInvitations: function () {
     var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(req, res) {
       var text, values, _ref4, rows, rowCount;
 
@@ -79,7 +79,7 @@ var invitation_club = {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
-              text = "SELECT * FROM\n                    Invitation_Club I\n                    JOIN\n                    Club C\n                    ON\n                    I.club = C.id\n                  WHERE I.player = $1";
+              text = "SELECT I.id, I.player, I.club, C.club_name FROM\n                    Invitation_Club I\n                    JOIN\n                    Club C\n                    ON\n                    I.club = C.id\n                  WHERE I.player = $1";
               values = [req.params.pid];
               _context2.prev = 2;
               _context2.next = 5;
@@ -104,11 +104,11 @@ var invitation_club = {
       }, _callee2, this, [[2, 11]]);
     }));
 
-    function getAll(_x3, _x4) {
+    function getPlayerInvitations(_x3, _x4) {
       return _ref3.apply(this, arguments);
     }
 
-    return getAll;
+    return getPlayerInvitations;
   }(),
 
 
@@ -126,8 +126,8 @@ var invitation_club = {
         while (1) {
           switch (_context3.prev = _context3.next) {
             case 0:
-              deleteQuery = "DELETE FROM Invitation_Club WHERE player = $1 AND club = $2 RETURNING *";
-              values = [req.params.pid, req.params.cid];
+              deleteQuery = "DELETE FROM Invitation_Club WHERE id = $1 RETURNING *";
+              values = [req.params.ci_id];
               _context3.prev = 2;
               _context3.next = 5;
               return _db2.default.query(deleteQuery, values);
@@ -167,4 +167,4 @@ var invitation_club = {
   }()
 };
 
-exports.default = Player;
+exports.default = invitation_club;
