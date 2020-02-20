@@ -67,4 +67,4 @@ const invitation_club = {
   }
 };
 
-export default Player;
+export default invitation_club;
