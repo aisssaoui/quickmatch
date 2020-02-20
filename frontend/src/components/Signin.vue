@@ -178,6 +178,7 @@ var sha512 = require('js-sha512');
           router.push("/disconnected");
         },
         creationError: function(err) {
+            console.log(err);
           if (err.detail.includes("pseudo")) {
               alert("Pseudo déjà existant ! Veuillez en saisir un nouveau.");
               return;
@@ -236,16 +237,17 @@ var sha512 = require('js-sha512');
                         first_name: this.first_name,
                         mdp: tmp_password,
                         phone_number: tmp_tel,
-                        mail_adress: this.email,
-                        avatar: this.avatar
+                        mail_address: this.email,
+                        is_valid: false
                     }
                 );
                 if (apiRep.data.name != "error") {
                     store.dispatch("setEmail",this.email);
                     store.dispatch("hasAccount");
-                    store.dispatch("setID");
                     this.updatePassword();
-                    router.push("/");
+                    store.dispatch("setID").then(response => {
+                        router.push("/verifyAccount");
+                    });
                 } else {
                     this.creationError(apiRep.data);
                 }
@@ -273,7 +275,7 @@ var sha512 = require('js-sha512');
             }
         },
   },
-  created: function() {
+  created: async function() {
       alert("Pour des raisons de sécurité, nous vous recommandons la connexion via un compte Google.");
   }
 };

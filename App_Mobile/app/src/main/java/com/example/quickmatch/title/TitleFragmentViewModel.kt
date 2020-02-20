@@ -11,9 +11,10 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.*
 import retrofit2.Call
 import retrofit2.Response
+import timber.log.Timber
 import javax.security.auth.callback.Callback
 
-enum class ConnectionStatus { DONE, ERROR, LOADING }
+enum class ConnectionStatus { DONE, ERROR, LOADING, RESET }
 
 class TitleFragmentViewModel : ViewModel() {
 
@@ -40,13 +41,15 @@ class TitleFragmentViewModel : ViewModel() {
 
         coroutineScope.launch {
             var resultDeferred = DatabaseApi.retrofitService.testConnection() // work on a background thread
-            Log.i("TitleFragmentViewModel", "request sent")
+
+            Timber.i("request sent")
+
             try {
 
                 _status.value = ConnectionStatus.LOADING
-                Log.i("TitleFragmentViewModel", "changed to loading")
+                Timber.i("changed to loading")
                 var result = resultDeferred.await() // waiting result without blocking main thread
-                Log.i("TitleFragmentViewModel", result.message)
+                Timber.i(result.message)
                 _status.value = ConnectionStatus.DONE
 
             } catch (t: Throwable) {
@@ -54,6 +57,9 @@ class TitleFragmentViewModel : ViewModel() {
                 _status.value = ConnectionStatus.ERROR
 
             }
+
+            Timber.i(_status.value.toString())
+
         }
     }
 
@@ -70,7 +76,7 @@ class TitleFragmentViewModel : ViewModel() {
 
             } catch (t: Throwable) {
 
-                Log.i("TitleFragmentViewModel", t.message)
+                Timber.i(t.message)
 
             }
 
@@ -84,6 +90,6 @@ class TitleFragmentViewModel : ViewModel() {
     }
 
     fun resetConnectionStatus() {
-        _status.value = null
+        _status.value = ConnectionStatus.RESET
     }
 }

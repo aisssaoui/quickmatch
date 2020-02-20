@@ -188,7 +188,7 @@ export default {
       return store.getters.isSignedIn;
     },
     id() {
-      store.dispatch("id");
+      store.dispatch("setID");
       return store.getters.id;
     }
   }

@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.quickmatch.R
 import com.example.quickmatch.databinding.FragmentTitleBinding
 import com.google.android.material.snackbar.Snackbar
+import timber.log.Timber
 
 class TitleFragmentUI : Fragment() {
 
@@ -27,11 +28,6 @@ class TitleFragmentUI : Fragment() {
         binding.buttonTitleLogin.visibility = View.INVISIBLE
 
         // Snackbars for connexion test result display to the user
-        val snackbarError: Snackbar = Snackbar
-                .make(activity!!.findViewById(android.R.id.content), "La connexion au serveur a échoué", Snackbar.LENGTH_INDEFINITE)
-                .setAction("Réessayer") {
-                    viewModel.tryToConnect()
-                }
 
         val snackbarLoading: Snackbar = Snackbar
                 .make(activity!!.findViewById(android.R.id.content), "Connexion au serveur en cours", Snackbar.LENGTH_SHORT)
@@ -60,9 +56,17 @@ class TitleFragmentUI : Fragment() {
 
         // Show connexion status
         viewModel.status.observe(this, Observer {
+            Timber.i("observer%s", it.toString())
             when(it) {
                 ConnectionStatus.LOADING -> snackbarLoading.show()
-                ConnectionStatus.ERROR -> snackbarError.show()
+                ConnectionStatus.ERROR -> {
+                    Snackbar
+                            .make(activity!!.findViewById(android.R.id.content), "La connexion au serveur a échoué", Snackbar.LENGTH_INDEFINITE)
+                            .setAction("Réessayer") {
+                                viewModel.resetConnectionStatus()
+                                viewModel.tryToConnect()
+                            }.show()
+                }
                 ConnectionStatus.DONE -> {
                     snackbarDone.show()
                     binding.buttonTitleSignin.visibility = View.VISIBLE

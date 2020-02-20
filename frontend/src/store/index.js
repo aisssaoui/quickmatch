@@ -2,6 +2,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 import axios from "axios";
 
+
 Vue.use(Vuex);
 
 /* Cookies administration */
@@ -46,6 +47,7 @@ export default new Vuex.Store({
     nickname: "",
     imageUrl: "",
     isSignedIn: false,
+    isValid: false,
     connectionDate: Object,
     expirationDate: Object,
     expirationTimer: 0,
@@ -78,10 +80,12 @@ export default new Vuex.Store({
         state.cookieCheck = true;
         var cookieExpiration = getCookie("quickmatchExpiration");
         var cookieId = getCookie("quickmatchId");
-        if (cookieId != null && cookieExpiration != null) {
+        var cookieValid = getCookie("quickmatchValid");
+        if (cookieId != null && cookieExpiration != null && cookieValid != null) {
           state.expirationDate = new Date(cookieExpiration);
           state.id = cookieId;
           state.hasAccount = true;
+          state.isValid = cookieValid;
         }
       }
       if (state.hasAccount == true) {
@@ -102,48 +106,108 @@ export default new Vuex.Store({
       var end = new Date();
       end.setTime(end.getTime() - 1);
       /* cookie deletion */
-      setCookie(
-        "quickmatchExpiration",
-        state.expirationDate,
-        end,
-        "/",
-        "quickmatch.fr",
-        false
-      );
+      setCookie("quickmatchExpiration", state.expirationDate, end, "/", "quickmatch.fr", false);
       setCookie("quickmatchId", state.id, end, "/", "quickmatch.fr", false);
+      setCookie("quickmatchValid", state.isValid, end, "/", "quickmatch.fr", false);
     },
     hasAccount(state) {
       state.hasAccount = true;
-      setCookie(
-        "quickmatchExpiration",
-        state.expirationDate,
-        state.expirationDate,
-        "/",
-        "quickmatch.fr",
-        false
-      );
+      var cookieExp = getCookie("quickmatchExpiration");
+      if (cookieExp == null) {
+        setCookie(
+          "quickmatchExpiration",
+          state.expirationDate,
+          state.expirationDate,
+          "/",
+          "quickmatch.fr",
+          false
+        );
+      }
     },
     async setID(state) {
-      const player = await axios.get(
-        "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/players/ma" +
-          state.email,
-        { ResponseType: "json" }
-      );
-      state.id = player.data.id;
-      setCookie(
-        "quickmatchId",
-        state.id,
-        state.expirationDate,
-        "/",
-        "quickmatch.fr",
-        false
-      );
+      var cookieId = getCookie("quickmatchId");
+      if (cookieId == null) {
+        const player = await axios.get(
+          "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/players/ma" +
+            state.email,
+          { ResponseType: "json" }
+        );
+        state.id = player.data.id;
+        setCookie(
+          "quickmatchId",
+          state.id,
+          state.expirationDate,
+          "/",
+          "quickmatch.fr",
+          false
+        );
+      } else {
+          state.id = cookieId;
+      }
   },
   setEmail(state, mail) {
       state.email = mail;
       state.connectionDate = new Date();
       state.expirationDate = new Date();
       state.expirationDate.setSeconds(state.connectionDate.getSeconds() + 3600);
+  },
+  async setIsValid(state) {
+    var cookieValid = getCookie("quickmatchValid");
+    if (cookieValid == null) {
+      const player = await axios.get(
+        "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/players/ma" +
+        state.email,
+        { ResponseType: "json" }
+      );
+      state.isValid = player.data.is_valid;
+      setCookie("quickmatchValid", state.isValid, state.expirationDate, "/","quickmatch.fr", false);
+    }else{
+      state.isValid = cookieValid;
+    }
+  },
+  async setIsValidHandmade(state) {
+      state.isValid = true;
+      var cookieValid = getCookie("quickmatchValid");
+      if (cookieValid == null) {
+        setCookie(
+          "quickmatchValid",
+          state.isValid,
+          state.expirationDate,
+          "/",
+          "quickmatch.fr",
+          false
+        );
+    }
+  },
+  async sendAgain(state) {
+    state.isValid = false;
+      if (state.id == 0) {
+          let getId = await axios.get(
+            "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/players/ma" +
+              state.email,
+            { ResponseType: "json" }
+          );
+          state.id = getId.data.id;
+      }
+      var cookieCodeVerif = getCookie("quickmatchCodeVerif");
+      if (cookieCodeVerif != null) {
+          alert("Merci de patienter quelques instants avant un nouvel envoi.");
+      }else{
+          var now = new Date();
+          var end = new Date();
+          end.setSeconds(now.getSeconds() + 120);
+          setCookie("quickmatchCodeVerif", state.isValid, end, "/", "quickmatch.fr", false);
+          let apiRep = await axios.post(
+              "https://dbcontrol.quickmatch.fr//dbcontrol/api/v1/sendMail",
+              {
+                  to: state.email, // list of receivers
+                  subject: 'Votre code de vérification Quickmatch', // Subject line
+                  text: "[HTML NOT SUPPORTED] Bonjour, votre code est le suivant:" + state.id + ". A bientôt sur Quickmatch.fr !",
+                  html: '<p>Bonjour,<br><br> Votre code est le suivant : ' + state.id + '.<br><br> Merci de nous faire confiance, <br> À bientôt sur Quickmatch.fr ! <br><br></p><font size="-5"><i> Ce mail a été envoyé automatiquement, merci de ne pas y répondre.</i></front>'// plain text body
+              }
+          );
+          alert("Le code vient d'être envoyé à l'adresse " + state.email +" !");
+      }
   }
   },
   actions: {
@@ -164,6 +228,15 @@ export default new Vuex.Store({
     },
     setEmail(commit, mail) {
         this.commit("setEmail",mail);
+    },
+    setIsValid(commit) {
+        this.commit("setIsValid");
+    },
+    setIsValidHandmade(commit) {
+        this.commit("setIsValidHandmade");
+    },
+    sendAgain(commit) {
+        this.commit("sendAgain");
     }
   },
   getters: {
@@ -181,6 +254,9 @@ export default new Vuex.Store({
     },
     isSignedIn: function(state) {
       return state.isSignedIn;
+    },
+    isValid: function(state) {
+      return state.isValid;
     },
     connectionDate: function(state) {
       return state.connectionDate;
