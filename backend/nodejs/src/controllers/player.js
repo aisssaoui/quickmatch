@@ -510,7 +510,7 @@ var Player = {
                 case 0:
                   findOneQuery = "SELECT * FROM player WHERE id = $1";
                   updateOneQuery =
-                    "UPDATE player\n      SET pseudo = $1, surname = $2, first_name = $3, mail_address = $4, phone_number = $5, bio=$6, avatar=$7, mdp=$8\n      WHERE id = $9 RETURNING *";
+                    "UPDATE player\n      SET pseudo = $1, surname = $2, phone_number = $3, bio=$4, avatar=$5, mdp=$6, is_valid=$7\n      WHERE id = $8 RETURNING *";
                   _context7.prev = 2;
                   _context7.next = 5;
                   return _db2.default.query(findOneQuery, [req.params.id]);
@@ -532,13 +532,12 @@ var Player = {
                 case 9:
                   values = [
                     req.body.pseudo || rows[0].pseudo,
-                    req.body.surname || rows[0].surname,
-                    req.body.first_name || rows[0].first_name,
                     req.body.mail_address || rows[0].mail_address,
                     req.body.phone_number || rows[0].phone_number,
                     req.body.bio || rows[0].bio,
                     req.body.avatar || rows[0].avatar,
                     req.body.mdp || rows[0].mdp,
+                    req.body.is_valid === null ? rows[0].is_valid : req.body.is_valid,
                     req.params.id
                   ];
                   _context7.next = 12;
