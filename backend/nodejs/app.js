@@ -41,6 +41,9 @@ var _player_belong_club2 = _interopRequireDefault(_player_belong_club);
 var _calendar_db = require("./src/controllers/calendar_db");
 var _calendar_db2 = _interopRequireDefault(_calendar_db);
 
+var _validAccount = require("./src/controllers/validAccount");
+var _validAccount2 = _interopRequireDefault(_validAccount);
+
 function _interopRequireDefault(obj) {
   return obj && obj.__esModule ? obj : { default: obj };
 }
@@ -76,7 +79,7 @@ app.get(
 app.get("/dbcontrol/api/v1/Players/stat:id", _player2.default.getPlayerStat);
 app.get("/dbcontrol/api/v1/Players/id:id", _player2.default.getByID);
 app.put("/dbcontrol/api/v1/Players/id:id", _player2.default.update);
-app.delete("/dbcontrol/api/v1/Players/:mail_address", _player2.default.delete);
+app.delete("/dbcontrol/api/v1/Players/:id", _player2.default.delete);
 app.get("/dbcontrol/api/v1/PlayersRows", _player2.default.getAllRows);
 
 //Table club
@@ -181,6 +184,10 @@ app.get("/dbcontrol/api/v1/CalendarBMeet/:id", _calendar_db2.default.getByMeet);
 app.get("/dbcontrol/api/v1/CalendarMAccept/:id", _calendar_db2.default.getAccepted);
 app.get("/dbcontrol/api/v1/CalendarMDecline/:id", _calendar_db2.default.getDeclined);
 app.get("/dbcontrol/api/v1/CalendarMInv/:pid/:mid", _calendar_db2.default.getInv);
+
+
+// Envoi de mail 
+app.post("/dbcontrol/api/v1/SendMail", _validAccount2.default.sendMail)
 
 app.listen(3000);
 console.log("app running on port ", 3000);
