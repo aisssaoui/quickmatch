@@ -73,10 +73,10 @@ export default {
       avatar: "",
       pseudoRules: [
         v => !!v || "Pseudo requis",
-        v => v.length >= 2 || "Pseudo trop court",
+        v => v.length >= 2 || "verifyAccountPseudo trop court",
         v =>
           /^[a-zA-Z0-9 _\-éèçîïœžâêôàûùâãäåæçëìíîïðñòóôõúûüýö]+$/.test(v) ||
-          'Pseudo invalide (lettres, nombres, espace, "_" et "-" seulement)'
+          'Pseudo invalide (lettres, chiffres, espace, "_" et "-" seulement)'
       ],
       surnameRules: [
         v => !!v || "Nom requis",
@@ -93,6 +93,30 @@ export default {
     };
   },
   methods: {
+      checkPseudo: function() {
+          return /^[a-zA-Z0-9 _-éèçîïœžâêôàûùâãäåæçëìíîïðñòóôõúûüýö]+$/.test(this.pseudo);
+      },
+      checkSurname: function() {
+          return /^[a-zA-Z -éèçîïœžâêôàûùâãäåæçëìíîïðñòóôõúûüýö]+$/.test(this.surname);
+      },
+      checkFirstname: function() {
+          return /^[a-zA-Z -éèçîïœžâêôàûùâãäåæçëìíîïðñòóôõúûüýö]+$/.test(this.firstName);
+      },
+      checkSyntaxes: function() {
+        if (! this.checkPseudo()) {
+          alert("Le pseudo entré est invalide (lettres, chiffres, espace, '_' et '-' seulement).");
+          return false;
+        }
+        if (! this.checkSurname()) {
+          alert("Le nom entré est invalide (lettres, espaces et '-' seulement).");
+          return false;
+        }
+        if (! this.checkFirstname()) {
+          alert("Le prénom entré est invalide (lettres, espaces et '-' seulement).");
+          return false;
+        }
+        return true;
+      },
       creationError: function(err) {
         if (err.detail.includes("pseudo")) {
             alert("Pseudo déjà existant ! Veuillez en saisir un nouveau.");
@@ -101,7 +125,41 @@ export default {
             alert("La création du compte a échoué, veuillez réessayer ultérieurement.")
         }
     },
+    checkEntries: function() {
+        if(this.surname.length < 2 || this.surname.length > 20) {
+            alert("Le nom doit faire entre 2 et 20 caractères.");
+            return false;
+        }
+        if(this.firstName.length < 2 || this.firstName.length > 20) {
+            alert("Le prénom doit faire entre 2 et 20 caractères.");
+            return false;
+        }
+        if(this.pseudo.length < 2 || this.pseudo.length > 20) {
+            alert("Le pseudo doit faire entre 2 et 20 caractères.");
+            return false;
+        }
+        if (! this.checkSyntaxes()) {
+          return false;
+        }
+    },
+    validateAccount: async function(id) {
+        let apiRep = null;
+        apiRep = await axios.put(
+            "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/players/id" + id,
+            {
+                is_valid: true
+            }
+        );
+        if (apiRep.data.name != "error") {
+            // validation ok
+        }else{
+            console.error("update is_valid failed");
+        }
+    },
     createAccount: async function() {
+        if (this.checkEntries() == false) {
+            return;
+        }
         let apiRep = null;
         apiRep = await axios.post(
             "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/players/",
@@ -116,9 +174,10 @@ export default {
               is_valid: true
           });
           if (apiRep.data.name != "error") {
+              this.validateAccount(apiRep.data.id);
               store.dispatch("hasAccount");
               store.dispatch("setID");
-              store.dispatch("setIsValidHandmade").then(response => {
+              store.dispatch("setIsValidGoogle").then(response => {
                   router.push("/");
               });
           } else {
@@ -127,10 +186,16 @@ export default {
     }
   },
   created: function() {
-    this.surname = store.getters.surname;
-    this.firstName = store.getters.givenName;
-    this.mailAddress = store.getters.email;
-    this.avatar = store.getters.imageUrl;
+    store.dispatch("isSignedIn");
+    if (! store.getters.email == "none") {
+      alert("Une erreur est survenue, vous allez être redirigé(e) vers la page d'accueil. Si le problème persiste, merci de contacter le support. \n\n ERR: CREATION_ACCOUNT_EMAIL_NONE");
+      router.push("/");
+    }else{
+      this.surname = store.getters.surname;
+      this.firstName = store.getters.givenName;
+      this.mailAddress = store.getters.email;
+      this.avatar = store.getters.imageUrl;
+    }
   }
 };
 </script>

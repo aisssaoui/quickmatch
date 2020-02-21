@@ -54,7 +54,7 @@ import router from "../router";
             );
             if (apiRep.data.name != "error") {
                 // validation ok
-                store.dispatch("setIsValidHandmade");
+                store.dispatch("setIsValid",true);
             }else{
                 console.error("update is_valid failed");
             }

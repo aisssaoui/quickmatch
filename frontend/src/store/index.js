@@ -2,6 +2,8 @@ import Vue from "vue";
 import Vuex from "vuex";
 import axios from "axios";
 
+import router from "../router";
+import store from ".";
 
 Vue.use(Vuex);
 
@@ -35,6 +37,11 @@ function getCookie(name) {
   return null;
 }
 
+function forcedDisconnection() {
+  store.dispatch("logout");
+  router.push("/");
+}
+
 /* ********************* */
 
 export default new Vuex.Store({
@@ -66,7 +73,7 @@ export default new Vuex.Store({
       state.surname = state.profile.getFamilyName();
       state.email = state.profile.getEmail();
       state.imageUrl = state.profile.getImageUrl();
-      state.isSignedIn = state.googleUser.isSignedIn();
+      state.isSignedIn = true;
       state.expirationTimer = state.googleUser.getAuthResponse().expires_in;
       /*** Setting expiration timer ***/
       state.connectionDate = new Date();
@@ -151,22 +158,15 @@ export default new Vuex.Store({
       state.expirationDate = new Date();
       state.expirationDate.setSeconds(state.connectionDate.getSeconds() + 3600);
   },
-  async setIsValid(state) {
+  async setIsValid(state,bool) {
+    state.isValid = bool;
     var cookieValid = getCookie("quickmatchValid");
     if (cookieValid == null) {
-      const player = await axios.get(
-        "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/players/ma" +
-        state.email,
-        { ResponseType: "json" }
-      );
-      state.isValid = player.data.is_valid;
       setCookie("quickmatchValid", state.isValid, state.expirationDate, "/","quickmatch.fr", false);
-    }else{
-      state.isValid = cookieValid;
     }
   },
-  async setIsValidHandmade(state) {
-      state.isValid = true;
+  async setIsValidGoogle(state) {
+    state.isValid = true;
       var cookieValid = getCookie("quickmatchValid");
       if (cookieValid == null) {
         setCookie(
@@ -181,6 +181,11 @@ export default new Vuex.Store({
   },
   async sendAgain(state) {
     state.isValid = false;
+    if (state.email == "none") {
+      alert("Une erreur est survenue, vous allez être déconnecté(e) et redirigé(e) vers la page d'accueil. Si le problème persiste, merci de contacter le support. \n\n ERR: VERIFY_ACCOUNT_MAIL_NONE");
+      forcedDisconnection();
+      return 1;
+    }
       if (state.id == 0) {
           let getId = await axios.get(
             "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/players/ma" +
@@ -229,11 +234,11 @@ export default new Vuex.Store({
     setEmail(commit, mail) {
         this.commit("setEmail",mail);
     },
-    setIsValid(commit) {
-        this.commit("setIsValid");
+    setIsValid(commit,bool) {
+        this.commit("setIsValid",bool);
     },
-    setIsValidHandmade(commit) {
-        this.commit("setIsValidHandmade");
+    setIsValidGoogle(commit) {
+        this.commit("setIsValidGoogle");
     },
     sendAgain(commit) {
         this.commit("sendAgain");
