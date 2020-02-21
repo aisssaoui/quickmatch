@@ -228,9 +228,15 @@
               <div>
                 <hr>
 
-                <p>pseudo du joueur : </p><input v-model="private_player">
+                <v-list-item two-line>
+                  <v-list-item-content>
+                    <v-list-item-title class="font-weight-bold">Entrez le pseudo d'un joueur</v-list-item-title>
+                    <v-text-field v-model="private_player" :rules="pseudoRules" :counter="20"></v-text-field>
+                  </v-list-item-content>
+                </v-list-item>
 
                 <v-btn class="btn" rounded color="#666" v-on:click="add_to_club_private_player(id_club_switch, private_player)">ajouter</v-btn>
+                <br><br>
               </div>
 
               <div v-if="playersNotInClub.length != 0">
@@ -384,6 +390,13 @@ export default {
       switch_menu: false,
       id_club_switch: -1,
       name_club_switch: "",
+      pseudoRules: [
+        v => !!v || "Pseudo requis",
+        v => v.length >= 2 || "Pseudo trop court",
+        v =>
+          /^[a-zA-Z0-9 _\-éèçîïœžâêôàûùâãäåæçëìíîïðñòóôõúûüýö]+$/.test(v) ||
+          'Pseudo invalide (lettres, nombres, espace, "_" et "-" seulement)'
+      ]
     };
   },
   async created() {
@@ -572,7 +585,7 @@ export default {
         });
     },
     async add_to_club_private_player(cid, pseudo){
-      rep = await axios
+      let rep = await axios
               .get("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/Players/p" + pseudo)
               .catch(e => {
                 alert("Echec, veuillez réessayer, si le problème persiste, réessayer plus tard");
@@ -583,7 +596,7 @@ export default {
         return;
       }
       await axios
-        .post("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/InvitationClub/" + rep.data.rows.id + "&" + cid)
+        .post("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/InvitationClub/" + rep.data.id + "&" + cid)
         .then(response => {
           alert("Une invitation a été envoyé à " + pseudo);
         })

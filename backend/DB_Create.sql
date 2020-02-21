@@ -9,7 +9,7 @@ surname VARCHAR(20) NOT NULL,
 first_name VARCHAR(20) NOT NULL,
 pseudo VARCHAR(20) NOT NULL,
 mdp VARCHAR(20) NOT NULL,
-private_profil BOOLEAN NOT NULL DEFAULT TRUE,
+private_profil BOOLEAN NOT NULL DEFAULT FALSE,
 mail_address VARCHAR(50),
 phone_number VARCHAR(10),						/*A voir pour le type selon utilisation*/
 scored_goals SMALLINT DEFAULT 0 NOT NULL CHECK (scored_goals >= 0),

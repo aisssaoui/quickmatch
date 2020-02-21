@@ -45,7 +45,7 @@ const player_belong_club = {
   },
 
   /**
-  * Get all the player who do not belong to the $1 club
+  * Get all the player who do not belong to the $1 club and have a public profil
   * @param {object} req
   * @param {object} res
   * @returns {object} player_belong_club & player object
@@ -55,7 +55,7 @@ const player_belong_club = {
     `SELECT * FROM player P WHERE
      P.id NOT IN (SELECT PBC.player FROM player_belong_club PBC WHERE PBC.club = $1)
      AND
-     P.private_club = FALSE
+     P.private_profil = FALSE
      ORDER BY
         P.surname ASC,
         P.first_name ASC`;

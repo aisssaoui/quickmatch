@@ -112,7 +112,7 @@ var player_belong_club = {
 
 
   /**
-  * Get all the player who do not belong to the $1 club
+  * Get all the player who do not belong to the $1 club and have a public profil
   * @param {object} req
   * @param {object} res
   * @returns {object} player_belong_club & player object
@@ -125,7 +125,7 @@ var player_belong_club = {
         while (1) {
           switch (_context3.prev = _context3.next) {
             case 0:
-              text = "SELECT * FROM player P WHERE\n     P.id NOT IN (SELECT PBC.player FROM player_belong_club PBC WHERE PBC.club = $1)\n     AND\n     P.private_club = FALSE\n     ORDER BY\n        P.surname ASC,\n        P.first_name ASC";
+              text = "SELECT * FROM player P WHERE\n     P.id NOT IN (SELECT PBC.player FROM player_belong_club PBC WHERE PBC.club = $1)\n     AND\n     P.private_profil = FALSE\n     ORDER BY\n        P.surname ASC,\n        P.first_name ASC";
               _context3.prev = 1;
               _context3.next = 4;
               return _db2.default.query(text, [req.params.id]);
