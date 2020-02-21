@@ -28,8 +28,9 @@ android {
     androidExtensions {
         experimental = true
     }
-    dataBinding {
-        enabled = true
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 
@@ -66,7 +67,7 @@ dependencies {
 
     // RetroFit
     implementation "com.squareup.retrofit2:retrofit:$version_retrofit"
-    implementation "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:$version_retrofit_coroutines_adapter"
+    //implementation "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:$version_retrofit_coroutines_adapter"
     implementation "com.squareup.retrofit2:converter-moshi:$version_retrofit"
 
     // Coroutines

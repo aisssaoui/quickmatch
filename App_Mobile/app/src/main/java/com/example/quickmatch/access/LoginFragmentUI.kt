@@ -60,7 +60,7 @@ class LoginFragmentUI : Fragment() {
                 LoginStatus.SUCCESS -> findNavController().navigate(LoginFragmentUIDirections.actionLoginFragmentUIToHomeFragmentUI())
                 LoginStatus.WRONG_PWD -> binding.textLoginStatus.text = "Mot de passe invalide - Réessayez"
                 LoginStatus.GOOGLE -> binding.textLoginStatus.text = "Connectez vous avec Google"
-                LoginStatus.NETWORK_ERROR -> binding.textLoginStatus.text = "Erreur réseau..."
+                LoginStatus.NETWORK_ERROR -> binding.textLoginStatus.text = "Erreur d'inscription (Bad request)"
                 LoginStatus.UNKNOWN -> binding.textLoginStatus.text = "Utilisateur inconnu - Inscrivez vous ou réessayez"
             }
         })

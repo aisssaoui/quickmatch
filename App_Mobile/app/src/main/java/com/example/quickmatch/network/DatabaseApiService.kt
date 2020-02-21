@@ -1,14 +1,12 @@
 package com.example.quickmatch.network
 
-import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import kotlinx.coroutines.Deferred
-import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
-import retrofit2.create
 import retrofit2.http.*
+
 /* HTTP requests*/
 /* TODO: changer les requêtes en HTTPS (afin de fit avec la version web */
 
@@ -20,10 +18,9 @@ private val moshi = Moshi.Builder()
         .add(KotlinJsonAdapterFactory())
         .build()
 
-/* Retrofit builder with converter for response and bes url */
+/* Retrofit builder with converter for response and base url */
 private val retrofit = Retrofit.Builder()
         .addConverterFactory(MoshiConverterFactory.create(moshi))
-        .addCallAdapterFactory(CoroutineCallAdapterFactory())
         .baseUrl(BASE_URL)
         .build()
 
@@ -32,122 +29,123 @@ private val retrofit = Retrofit.Builder()
 /* API to communicate with the backend */
 interface DatabaseApiService {
     @GET("dbcontrol")
-    fun testConnection() : Deferred<TestObject>
+    suspend fun testConnection() : TestObject
 
     /* PLAYERS */
     /* GET REQUESTS */
     @GET("dbcontrol/api/v1/PlayersRows")
-    fun getAllPlayers() : Deferred<List<PlayerObject>>
+    suspend fun getAllPlayers() : List<PlayerObject>
     @GET("dbcontrol/api/v1/Players/ma{mail_address}")
-    fun getPlayerByMail(@Path("mail_address") mailAddress : String) : Deferred<PlayerObject>
+    suspend fun getPlayerByMail(@Path("mail_address") mailAddress : String) : PlayerObject
     @GET("dbcontrol/api/v1/Players/p{pseudo}")
-    fun getPlayerByPseudo(@Path("pseudo") pseudo : String) : Deferred<PlayerObject>
+    suspend fun getPlayerByPseudo(@Path("pseudo") pseudo : String) : PlayerObject
     @GET("dbcontrol/api/v1/Players/id{id}")
-    fun getPlayerById(@Path("id") id : Int) : Deferred<PlayerObject>
+    suspend fun getPlayerById(@Path("id") id : Int) : PlayerObject
     @GET("dbcontrol/api/v1/Players/stat{id}")
-    fun getPlayerMeetSheetsById(@Path("id") id : Int) : Deferred<List<MeetsSheetObject>>
+    suspend fun getPlayerMeetSheetsById(@Path("id") id : Int) : List<MeetsSheetObject>
+    //TODO add getByPhoneNumber method when route is available
 
     /* POST REQUESTS */
     @POST("dbcontrol/api/v1/Players")
-    fun addPlayer(@Body player: PlayerObject) : Deferred<PlayerObject>
+    suspend fun addPlayer(@Body player: PlayerObject) : PlayerObject
 
     /* PUT REQUESTS */
     @PUT("dbcontrol/api/v1/Players/id{id}")
     /* TODO: mettre tous les paramètres d'un player pour l'update 1) soit on met tout à la main 2) metre un objet player */
-    fun updatePlayerById(@Path("id") id : Int, player: PlayerObject)
+    suspend fun updatePlayerById(@Path("id") id : Int, @Body player: PlayerObject)
 
     /* DELETE REQUESTS */
-    @DELETE("dbcontrol/api/v1/Players/{mail_adress}")
-    fun deletePlayerByMail(@Path("mail_adress") mailAdress : String)
+    @DELETE("dbcontrol/api/v1/Players/{mail_address}")
+    suspend fun deletePlayerByMail(@Path("mail_address") mailAddress : String)
 
     /* CLUBS */
     /* GET REQUESTS */
     @GET("dbcontrol/api/v1/ClubsRows")
-    fun getAllClubs() : Deferred<List<ClubObject>>
+    suspend fun getAllClubs() : List<ClubObject>
     @GET("dbcontrol/api/v1/Clubs/{id}")
-    fun getClubById(@Path("id") id : Int) : Deferred<ClubObject>
+    suspend fun getClubById(@Path("id") id : Int) : ClubObject
 
     /* DELETE REQUESTS */
     @DELETE("dbcontrol/api/v1/Clubs/{id}")
-    fun deleteClubById(@Path("id") id : Int)
+    suspend fun deleteClubById(@Path("id") id : Int)
 
     /* POST REQUESTS */
     @POST("dbcontrol/api/v1/Clubs")
-    fun addClub(clubObject: ClubObject)
+    suspend fun addClub(clubObject: ClubObject)
 
     /* INVITATIONS */
     /* GET REQUESTS */
     @GET("dbcontrol/api/v1/InvitationsRows")
-    fun getAllInvitations() : Deferred<List<InvitationObject>>
+    suspend fun getAllInvitations() : List<InvitationObject>
     @GET("dbcontrol/api/v1/Invitations/{id}")
-    fun getInvitationById(@Path("id") id : Int) : Deferred<InvitationObject>
+    suspend fun getInvitationById(@Path("id") id : Int) : InvitationObject
 
     /* POST REQUESTS */
     @POST("dbcontrol/api/v1/Invitations")
-    fun addInvitation(invitationObject: InvitationObject)
+    suspend fun addInvitation(invitationObject: InvitationObject)
 
     /* DELETE REQUESTS */
     @DELETE("dbcontrol/api/v1/Invitations/{id}")
-    fun deleteInvitationById(@Path("id") id : Int)
+    suspend fun deleteInvitationById(@Path("id") id : Int)
 
     /* SLOTS */
     /* GET REQUESTS */
     @GET("dbcontrol/api/v1/SlotsRows")
-    fun getAllSlots() : Deferred<List<SlotObject>>
+    suspend fun getAllSlots() : List<SlotObject>
     @GET("dbcontrol/api/v1/Slots/{id}")
-    fun getSlotById(@Path("id") id : Int) : Deferred<SlotObject>
+    suspend fun getSlotById(@Path("id") id : Int) : SlotObject
 
     /* POST REQUESTS */
     @POST("dbcontrol/api/v1/Slots")
-    fun addSlot(slotObject : SlotObject)
+    suspend fun addSlot(slotObject : SlotObject)
 
     /* DELETE REQUESTS */
     @DELETE("dbcontrol/api/v1/Slots/{id}")
-    fun deleteSlotById(@Path("id") id : Int)
+    suspend fun deleteSlotById(@Path("id") id : Int)
 
     /* TODO: faire pour les tables : meetsheet, meet, player belong club*/
 
     /* MEET */
     /* GET REQUESTS */
     @GET("dbcontrol/api/v1/MeetsRows")
-    fun getAllMeets() : Deferred<List<MeetObject>>
+    suspend fun getAllMeets() : List<MeetObject>
     @GET("dbcontrol/api/v1/Meets/{id}")
-    fun getMeetById(@Path("id") id : Int) : Deferred<MeetObject>
+    suspend fun getMeetById(@Path("id") id : Int) : MeetObject
 
     /* POST REQUESTS */
     @POST("dbcontrol/api/v1/Meets")
-    fun addMeet(meetObject : MeetObject)
+    suspend fun addMeet(meetObject : MeetObject)
 
     /* DELETE REQUESTS */
     @DELETE("dbcontrol/api/v1/Meets/{id}")
-    fun deleteMeetById(@Path("id") id : Int)
+    suspend fun deleteMeetById(@Path("id") id : Int)
 
     /* MEETSHEETS */
     /* GET REQUESTS */
     /* TODO: verifier les types pour les lists de meetsheets */
     @GET("dbcontrol/api/v1/MeetsSheetRows")
-    fun getAllMeetsSheets() : Deferred<List<List<MeetsSheetObject>>>
+    suspend fun getAllMeetsSheets() : List<List<MeetsSheetObject>>
     /* TODO: verifier le back pour cette route (ne marche pas atm) */
     @GET("dbcontrol/api/v1/MeetsSheet/{mail}")
-    fun getMeetsSheetByMail(@Path("id") mail : String) : Deferred<List<MeetsSheetObject>>
+    suspend fun getMeetsSheetByMail(@Path("id") mail : String) : List<MeetsSheetObject>
 
     /* POST REQUESTS */
     @POST("dbcontrol/api/v1/MeetsSheet")
-    fun addMeetsSheet(meetsSheetObject: MeetsSheetObject)
+    suspend fun addMeetsSheet(meetsSheetObject: MeetsSheetObject)
 
     /* DELETE REQUESTS */
     @DELETE("dbcontrol/api/v1/MeetsSheet/{mail}")
-    fun deleteMeetsSheetByMail(@Path("mail") mail : String)
+    suspend fun deleteMeetsSheetByMail(@Path("mail") mail : String)
 
     /* PLAYERBELONGCLUB */
     /* GET REQUESTS */
     @GET("dbcontrol/api/v1/PlayerClubsRows")
-    fun getPlayerClubs() : Deferred<List<PlayerClubsObject>>
+    suspend fun getPlayerClubs() : List<PlayerClubsObject>
     /* TODO : rajouter les rows pour chacune des fonctions suivantes (demander à faiz) */
     @GET("dbcontrol/api/v1/PlayerClubs/paid{id}")
-    fun getClubsByIdAdmin(@Path("id") id : Int) : Deferred<List<PlayerClubsObject>>
+    suspend fun getClubsByIdAdmin(@Path("id") id : Int) : List<PlayerClubsObject>
     @GET("dbcontrol/api/v1/PlayerClubs/pid{id}")
-    fun getClubsByIdPlayer(@Path("id") id : Int) : Deferred<List<PlayerClubsObject>>
+    suspend fun getClubsByIdPlayer(@Path("id") id : Int) : List<PlayerClubsObject>
 
 
 }
