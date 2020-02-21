@@ -510,7 +510,7 @@ var Player = {
                 case 0:
                   findOneQuery = "SELECT * FROM player WHERE id = $1";
                   updateOneQuery =
-                    "UPDATE player\n      SET pseudo = $1, surname = $2, phone_number = $3, bio=$4, avatar=$5, mdp=$6, is_valid=$7\n      WHERE id = $8 RETURNING *";
+                    "UPDATE player\n      SET pseudo = $1, mail_address=$2, phone_number = $3, bio=$4, avatar=$5, mdp=$6, is_valid=$7\n      WHERE id = $8 RETURNING *";
                   _context7.prev = 2;
                   _context7.next = 5;
                   return _db2.default.query(findOneQuery, [req.params.id]);
