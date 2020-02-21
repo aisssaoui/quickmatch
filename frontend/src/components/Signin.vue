@@ -132,7 +132,7 @@ var sha512 = require('js-sha512');
       pseudoRules: [
         v => !!v || 'Pseudo requis',
         v => v.length >= 2 || 'Pseudo trop court',
-        v => /^[a-zA-Z0-9 _\-éèçîïœžâêôàûùâãäåæçëìíîïðñòóôõúûüýö]+$/.test(v) || 'Pseudo invalide (lettres, nombres, espace, "_" et "-" seulement)'
+        v => /^[a-zA-Z0-9 _\-éèçîïœžâêôàûùâãäåæçëìíîïðñòóôõúûüýö]+$/.test(v) || 'Pseudo invalide (lettres, chiffres, espace, "_" et "-" seulement)'
       ],
       passwordRules: [
         v => !!v || 'Mot de passe requis',
@@ -217,7 +217,7 @@ var sha512 = require('js-sha512');
           return false;
         }
         if (! this.checkPseudo()) {
-          alert("Le pseudo entré est invalide (lettres, nombres, espace, '_' et '-' seulement).");
+          alert("Le pseudo entré est invalide (lettres, chiffres, espace, '_' et '-' seulement).");
           return false;
         }
         if (! this.checkSurname()) {

@@ -76,7 +76,7 @@ export default {
         v => v.length >= 2 || "verifyAccountPseudo trop court",
         v =>
           /^[a-zA-Z0-9 _\-éèçîïœžâêôàûùâãäåæçëìíîïðñòóôõúûüýö]+$/.test(v) ||
-          'Pseudo invalide (lettres, nombres, espace, "_" et "-" seulement)'
+          'Pseudo invalide (lettres, chiffres, espace, "_" et "-" seulement)'
       ],
       surnameRules: [
         v => !!v || "Nom requis",
@@ -93,12 +93,53 @@ export default {
     };
   },
   methods: {
+      checkPseudo: function() {
+          return /^[a-zA-Z0-9 _-éèçîïœžâêôàûùâãäåæçëìíîïðñòóôõúûüýö]+$/.test(this.pseudo);
+      },
+      checkSurname: function() {
+          return /^[a-zA-Z -éèçîïœžâêôàûùâãäåæçëìíîïðñòóôõúûüýö]+$/.test(this.surname);
+      },
+      checkFirstname: function() {
+          return /^[a-zA-Z -éèçîïœžâêôàûùâãäåæçëìíîïðñòóôõúûüýö]+$/.test(this.firstName);
+      },
+      checkSyntaxes: function() {
+        if (! this.checkPseudo()) {
+          alert("Le pseudo entré est invalide (lettres, chiffres, espace, '_' et '-' seulement).");
+          return false;
+        }
+        if (! this.checkSurname()) {
+          alert("Le nom entré est invalide (lettres, espaces et '-' seulement).");
+          return false;
+        }
+        if (! this.checkFirstname()) {
+          alert("Le prénom entré est invalide (lettres, espaces et '-' seulement).");
+          return false;
+        }
+        return true;
+      },
       creationError: function(err) {
         if (err.detail.includes("pseudo")) {
             alert("Pseudo déjà existant ! Veuillez en saisir un nouveau.");
             return;
         }else{
             alert("La création du compte a échoué, veuillez réessayer ultérieurement.")
+        }
+    },
+    checkEntries: function() {
+        if(this.surname.length < 2 || this.surname.length > 20) {
+            alert("Le nom doit faire entre 2 et 20 caractères.");
+            return false;
+        }
+        if(this.firstName.length < 2 || this.firstName.length > 20) {
+            alert("Le prénom doit faire entre 2 et 20 caractères.");
+            return false;
+        }
+        if(this.pseudo.length < 2 || this.pseudo.length > 20) {
+            alert("Le pseudo doit faire entre 2 et 20 caractères.");
+            return false;
+        }
+        if (! this.checkSyntaxes()) {
+          return false;
         }
     },
     validateAccount: async function(id) {
@@ -116,6 +157,9 @@ export default {
         }
     },
     createAccount: async function() {
+        if (this.checkEntries() == false) {
+            return;
+        }
         let apiRep = null;
         apiRep = await axios.post(
             "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/players/",
