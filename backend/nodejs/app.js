@@ -187,7 +187,7 @@ app.get("/dbcontrol/api/v1/CalendarMInv/:pid/:mid", _calendar_db2.default.getInv
 
 
 // Envoi de mail 
-app.post("/dbcontrol/api/v1/SendMail", _validAccount2.default.SendMail)
+app.post("/dbcontrol/api/v1/SendMail", _validAccount2.default.sendMail)
 
 app.listen(3000);
 console.log("app running on port ", 3000);
