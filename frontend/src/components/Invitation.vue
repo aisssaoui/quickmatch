@@ -42,28 +42,12 @@
 
           <v-list-item two-line>
             <v-list-item-content>
-              <v-list-item-title class="font-weight-bold">Invitation pour un match</v-list-item-title>
+              <v-list-item-title class="font-weight-bold">Invitation pour le club '{{ row.club_name }}'</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
 
-          <v-list-item two-line>
-            <v-list-item-content>
-              <v-list-item-title class="font-weight-bold">Localisation</v-list-item-title>
-              <v-list-item-subtitle class="headline">{{row.location}}</v-list-item-subtitle>
-            </v-list-item-content>
-          </v-list-item>
-
-          <v-list-item two-line>
-            <v-list-item-content>
-              <v-list-item-title class="font-weight-bold">Date</v-list-item-title>
-              <v-list-item-subtitle
-                class="headline"
-              >Le {{DayInFrench(row.repeat_day)}} de {{row.start_hour}} à {{row.end_hour}}</v-list-item-subtitle>
-            </v-list-item-content>
-          </v-list-item>
-
-          <v-btn class="btn" rounded color="red" v-on:click="declineInv(row.meet)">Refuser</v-btn>
-          <v-btn class="btn" rounded color="green" v-on:click="acceptInv(row.meet)">Accepter</v-btn>
+          <v-btn class="btn" rounded color="red" v-on:click="declineClubInv(row.id, rox.club_name)">Refuser</v-btn>
+          <v-btn class="btn" rounded color="green" v-on:click="acceptClubInv(row.id, row.club, row.player, rox.club_name)">Accepter</v-btn>
           <br />
           <br />
       </div>
@@ -155,6 +139,12 @@ export default {
       this.$router.go();
     },
     acceptClubInv: async function(ci_id, cid, pid, club_name) {
+      await axios
+        .delete("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/InvitationClub/" + ci_id)
+        .catch(e => {
+          alert("Echec, veuillez réessayer, si le problème persiste, réessayer plus tard");
+          this.$router.go();
+        });
       await axios
         .post("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/PlayerClubs",
           {

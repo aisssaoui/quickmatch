@@ -568,6 +568,7 @@ export default {
         });
     },
     async add_to_club(pid, cid, pseudo){
+      /*
       await axios
         .post("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/PlayerClubs/",
           {
@@ -583,6 +584,17 @@ export default {
           alert("Echec, veuillez réessayer, si le problème persiste, réessayer plus tard");
           this.$router.go();
         });
+        */
+        await axios
+          .post("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/InvitationClub/" + pid + "&" + cid)
+          .then(response => {
+            alert("Une invitation a été envoyé à " + pseudo);
+            this.manage_club(this.name_club_switch, this.id_club_switch);
+          })
+          .catch(e => {
+            alert("Echec, veuillez réessayer, si le problème persiste, réessayer plus tard");
+            this.$router.go();
+          });
     },
     async add_to_club_private_player(cid, pseudo){
       let rep = await axios
@@ -599,6 +611,7 @@ export default {
         .post("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/InvitationClub/" + rep.data.id + "&" + cid)
         .then(response => {
           alert("Une invitation a été envoyé à " + pseudo);
+          this.manage_club(this.name_club_switch, this.id_club_switch);
         })
         .catch(e => {
           alert("Echec, veuillez réessayer, si le problème persiste, réessayer plus tard");
