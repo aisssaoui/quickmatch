@@ -10,6 +10,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 enum class LoginStatus { UNKNOWN, GOOGLE, WRONG_PWD, NETWORK_ERROR, SUCCESS }
 
@@ -31,24 +32,24 @@ class LoginFragmentViewModel : ViewModel() {
 
         coroutineScope.launch {
 
-            var resultDeferred = DatabaseApi.retrofitService.getPlayerByMail(mailAddress)
-
             try {
 
-                var result = resultDeferred.await()
+                var result = DatabaseApi.retrofitService.getPlayerByMail(mailAddress)
 
-                Log.i("LoginFragmentViewModel", result.toString())
+                Timber.i(result.toString())
 
                 checkPassword(result, password)
 
             } catch (t: Throwable) {
 
-                Log.i("LoginFragmentViewModel", t.message)
+                Timber.i(t.message)
                 _loginStatus.value = LoginStatus.NETWORK_ERROR
 
             }
         }
     }
+
+    //TODO unhash password before check
 
     private fun checkPassword(player : PlayerObject, password: String) = when (player.password) {
                                                                                 "stocked by Google" -> _loginStatus.value = LoginStatus.GOOGLE

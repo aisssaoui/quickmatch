@@ -22,7 +22,6 @@ import timber.log.Timber
  * A simple [Fragment] subclass.
  */
 
-//TODO add * for mandatory fields in layout
 class SigninFragmentUI : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -33,10 +32,12 @@ class SigninFragmentUI : Fragment() {
 
         binding.viewModel = viewModel
 
+        /* Navigation to login fragment */
         binding.buttonSigninLogin.setOnClickListener {
             findNavController().navigate(SigninFragmentUIDirections.actionSigninFragmentUIToLoginFragmentUI())
         }
 
+        /* Launch signin request */
         binding.buttonSigninSignin.setOnClickListener {
             viewModel.tryToSignIn(binding.inputSigninName.text.toString(),
                     binding.inputSigninFirstname.text.toString(),
@@ -47,16 +48,21 @@ class SigninFragmentUI : Fragment() {
                     binding.inputSigninPhone.text.toString())
         }
 
+        /* Observer for the signin status in the viewModel */
         viewModel.signinStatus.observe(this, Observer {
             when (it) {
                 SigninStatus.PASSWORD_NOT_MATCHING -> binding.textSigninStatus.text = "Incohérence de mot de passe"
-                SigninStatus.NETWORK_ERROR -> binding.textSigninStatus.text = "Erreur réseau..."
-                SigninStatus.MISSING_FIELD -> binding.textSigninStatus.text = "Champ obligatoire manquant"
-                SigninStatus.WRONG_PASSWORD_SIZE -> binding.textSigninStatus.text = "Format de mot de passe incorrect"
+                SigninStatus.NETWORK_ERROR -> binding.textSigninStatus.text = "Erreur d'inscription (Bad request)"
+                SigninStatus.MISSING_FIELD_NAME -> binding.textSigninStatus.text = "Champ obligatoire manquant : Nom"
+                SigninStatus.MISSING_FIELD_FIRST_NAME -> binding.textSigninStatus.text = "Champ obligatoire manquant : Prénom"
+                SigninStatus.WRONG_PASSWORD_SIZE -> binding.textSigninStatus.text = "Format de mot de passe incorrect (8 caractères minimum)"
                 SigninStatus.DONE -> findNavController().navigate(SigninFragmentUIDirections.actionSigninFragmentUIToHomeFragmentUI())
             }
         })
 
+        //TODO add informations texts in layout for fields' format + binding adapters
+
+        /* Observer for the mail check status in the  viewModel */
         viewModel.mailStatus.observe(this, Observer {
             if (it == SigninMailStatus.ACCOUNT_EXISTS)
                 binding.inputSigninMail.setTextColor(Color.RED)
@@ -64,6 +70,7 @@ class SigninFragmentUI : Fragment() {
                 binding.inputSigninMail.setTextColor(Color.WHITE)
         })
 
+        /* Observer for the pseudo check status in the viewModel */
         viewModel.pseudoStatus.observe(this, Observer {
             if (it == SigninPseudoStatus.PSEUDO_EXISTS)
                 binding.inputSigninPseudo.setTextColor(Color.RED)

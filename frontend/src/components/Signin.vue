@@ -66,8 +66,8 @@
           </v-col>
           <v-col class="py-0" cols="6" md="12">
             <v-text-field
-              v-model="tel"
-              :rules="telRules"
+              v-model="phone"
+              :rules="phoneRules"
               :counter="10"
               label="Numéro de téléphone (optionnel)"
               outlined
@@ -112,12 +112,12 @@ var sha512 = require('js-sha512');
       clientId:
         "864617003210-1dr6nsvputhjv59l5b3633sslri4vdjd.apps.googleusercontent.com",
       valid: false,
-      surname: "",
-      first_name: "",
-      pseudo: "",
-      password: "",
-      email: "",
-      tel: "",
+      surname: "test",
+      first_name: "test",
+      pseudo: "test123",
+      password: "12345678",
+      email: "r_maxime@live.fr",
+      phone: "",
       avatar: "",
       surnameRules: [
         v => !!v || 'Nom requis',
@@ -132,7 +132,7 @@ var sha512 = require('js-sha512');
       pseudoRules: [
         v => !!v || 'Pseudo requis',
         v => v.length >= 2 || 'Pseudo trop court',
-        v => /^[a-zA-Z0-9 _\-éèçîïœžâêôàûùâãäåæçëìíîïðñòóôõúûüýö]+$/.test(v) || 'Pseudo invalide (lettres, nombres, espace, "_" et "-" seulement)'
+        v => /^[a-zA-Z0-9 _\-éèçîïœžâêôàûùâãäåæçëìíîïðñòóôõúûüýö]+$/.test(v) || 'Pseudo invalide (lettres, chiffres, espace, "_" et "-" seulement)'
       ],
       passwordRules: [
         v => !!v || 'Mot de passe requis',
@@ -142,7 +142,7 @@ var sha512 = require('js-sha512');
         v => !!v || 'E-mail requis',
         v => /^[a-zA-Z0-9._-]+@[a-z0-9._-]{2,}\.[a-z]{2,4}$/.test(v) || 'E-mail invalide'
       ],
-      telRules: [
+      phoneRules: [
         v => v.length == 0 || /^(0[1-8])(([0-9]{2})){4}$/.test(v) || 'Numéro de téléphone invalide (exemple: 0600000000) ou laisser vide'
       ],
     }),
@@ -178,7 +178,6 @@ var sha512 = require('js-sha512');
           router.push("/disconnected");
         },
         creationError: function(err) {
-            console.log(err);
           if (err.detail.includes("pseudo")) {
               alert("Pseudo déjà existant ! Veuillez en saisir un nouveau.");
               return;
@@ -196,6 +195,44 @@ var sha512 = require('js-sha512');
       hash: function() {
           var newPassword = sha512(this.password);
           return newPassword;
+      },
+      checkEmail: function() {
+          return /^[a-zA-Z0-9._-]+@[a-z0-9._-]{2,}\.[a-z]{2,4}$/.test(this.email);
+      },
+      checkPseudo: function() {
+          return /^[a-zA-Z0-9 _-éèçîïœžâêôàûùâãäåæçëìíîïðñòóôõúûüýö]+$/.test(this.pseudo);
+      },
+      checkSurname: function() {
+          return /^[a-zA-Z -éèçîïœžâêôàûùâãäåæçëìíîïðñòóôõúûüýö]+$/.test(this.surname);
+      },
+      checkFirstname: function() {
+          return /^[a-zA-Z -éèçîïœžâêôàûùâãäåæçëìíîïðñòóôõúûüýö]+$/.test(this.first_name);
+      },
+      checkPhone: function() {
+          return (/^(0[1-8])(([0-9]{2})){4}$/.test(this.phone) || this.phone === "");
+      },
+      checkSyntaxes: function() {
+        if (! this.checkEmail()) {
+          alert("L'adresse mail entrée est invalide, merci de respecter la syntaxe.");
+          return false;
+        }
+        if (! this.checkPseudo()) {
+          alert("Le pseudo entré est invalide (lettres, chiffres, espace, '_' et '-' seulement).");
+          return false;
+        }
+        if (! this.checkSurname()) {
+          alert("Le nom entré est invalide (lettres, espaces et '-' seulement).");
+          return false;
+        }
+        if (! this.checkFirstname()) {
+          alert("Le prénom entré est invalide (lettres, espaces et '-' seulement).");
+          return false;
+        }
+        if (! this.checkPhone()) {
+          alert("Numéro de téléphone invalide (exemple: 0600000000) ou laisser vide");
+          return false;
+        }
+        return true;
       },
       checkEntries: function() {
           if(this.surname.length < 2 || this.surname.length > 20) {
@@ -218,16 +255,19 @@ var sha512 = require('js-sha512');
               alert("L'adresse mail doit faire entre 6 et 50 caractères.");
               return false;
           }
+          if (! this.checkSyntaxes()) {
+            return false;
+          }
       },
         login: async function() {
             let apiRep = null;
             let tmp_password = this.hash();
-            var tmp_tel = this.tel;
+            var tmp_phone = this.phone;
             if (this.checkEntries() == false) {
                 return;
             }else{
-            if (this.tel === "") {
-                tmp_tel = null;
+            if (this.phone === "") {
+                tmp_phone = null;
             }
                 apiRep = await axios.post(
                     "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/players/",
@@ -236,7 +276,7 @@ var sha512 = require('js-sha512');
                         surname: this.surname,
                         first_name: this.first_name,
                         mdp: tmp_password,
-                        phone_number: tmp_tel,
+                        phone_number: tmp_phone,
                         mail_address: this.email,
                         is_valid: false
                     }
@@ -251,7 +291,7 @@ var sha512 = require('js-sha512');
                 } else {
                     this.creationError(apiRep.data);
                 }
-                this.tel = "";
+                this.phone = "";
             }
         },
         updatePassword : async function() {

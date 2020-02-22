@@ -40,20 +40,17 @@ class TitleFragmentViewModel : ViewModel() {
     fun tryToConnect() {
 
         coroutineScope.launch {
-            var resultDeferred = DatabaseApi.retrofitService.testConnection() // work on a background thread
-
-            Timber.i("request sent")
 
             try {
 
                 _status.value = ConnectionStatus.LOADING
-                Timber.i("changed to loading")
-                var result = resultDeferred.await() // waiting result without blocking main thread
+                var result = DatabaseApi.retrofitService.testConnection() // work on a background thread
                 Timber.i(result.message)
                 _status.value = ConnectionStatus.DONE
 
             } catch (t: Throwable) {
 
+                Timber.i(t.message)
                 _status.value = ConnectionStatus.ERROR
 
             }
@@ -61,27 +58,6 @@ class TitleFragmentViewModel : ViewModel() {
             Timber.i(_status.value.toString())
 
         }
-    }
-
-    fun getPlayersList() {
-
-        coroutineScope.launch {
-
-            val listResultDeferred = DatabaseApi.retrofitService.getAllPlayers()
-
-            try {
-
-                val result = listResultDeferred.await()
-                _listPlayers.value = result
-
-            } catch (t: Throwable) {
-
-                Timber.i(t.message)
-
-            }
-
-        }
-
     }
 
     override fun onCleared() {

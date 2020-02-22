@@ -123,10 +123,9 @@ export default {
           } else {
             store.dispatch("hasAccount");
             store.dispatch("setID");
-            store.dispatch("setIsValidHandmade").then(response => {
+            store.dispatch("setIsValidGoogle").then(response => {
                 router.push("/");
             });
-
           }
         })
         .catch(e => {
@@ -152,12 +151,12 @@ export default {
                 store.dispatch("setEmail",this.email);
                 store.dispatch("hasAccount");
                 store.dispatch("setID");
-                store.dispatch("setIsValid");
                 var player = await axios.get(
                   "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/players/ma" +
                     this.email,
                   { ResponseType: "json" }
                 );
+                store.dispatch("setIsValid",player.data.is_valid);
                 if(player.data.is_valid == false) {
                     this.$router.push("/verifyAccount");
                 }else{

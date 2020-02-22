@@ -368,27 +368,69 @@ var Player = {
    * @param {object} res
    * @returns {object} updated Player
    */
-  update: function () {
-    var _ref14 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee8(req, res) {
-      var findOneQuery, updateOneQuery, _ref15, rows, values, response;
+  update: (function() {
+    var _ref13 = _asyncToGenerator(
+      /*#__PURE__*/ regeneratorRuntime.mark(function _callee7(req, res) {
+        var findOneQuery, updateOneQuery, _ref14, rows, values, response;
 
-      return regeneratorRuntime.wrap(function _callee8$(_context8) {
-        while (1) {
-          switch (_context8.prev = _context8.next) {
-            case 0:
-              findOneQuery = "SELECT * FROM player WHERE id = $1";
-              updateOneQuery = "UPDATE player\n      SET pseudo = $1, surname = $2, first_name = $3, mail_address = $4, phone_number = $5, bio=$6, avatar=$7, mdp=$8\n      WHERE id = $9 RETURNING *";
-              _context8.prev = 2;
-              _context8.next = 5;
-              return _db2.default.query(findOneQuery, [req.params.id]);
+        return regeneratorRuntime.wrap(
+          function _callee7$(_context7) {
+            while (1) {
+              switch ((_context7.prev = _context7.next)) {
+                case 0:
+                  findOneQuery = "SELECT * FROM player WHERE id = $1";
+                  updateOneQuery =
+                    "UPDATE player\n      SET pseudo = $1, mail_address=$2, phone_number = $3, bio=$4, avatar=$5, mdp=$6, is_valid=$7\n      WHERE id = $8 RETURNING *";
+                  _context7.prev = 2;
+                  _context7.next = 5;
+                  return _db2.default.query(findOneQuery, [req.params.id]);
 
-            case 5:
-              _ref15 = _context8.sent;
-              rows = _ref15.rows;
+                case 5:
+                  _ref14 = _context7.sent;
+                  rows = _ref14.rows;
 
-              if (rows[0]) {
-                _context8.next = 9;
-                break;
+                  if (rows[0]) {
+                    _context7.next = 9;
+                    break;
+                  }
+
+                  return _context7.abrupt(
+                    "return",
+                    res.status(200).send({ message: "player not found" })
+                  );
+
+                case 9:
+                  values = [
+                    req.body.pseudo || rows[0].pseudo,
+                    req.body.mail_address || rows[0].mail_address,
+                    req.body.phone_number || rows[0].phone_number,
+                    req.body.bio || rows[0].bio,
+                    req.body.avatar || rows[0].avatar,
+                    req.body.mdp || rows[0].mdp,
+                    req.body.is_valid === null ? rows[0].is_valid : req.body.is_valid,
+                    req.params.id
+                  ];
+                  _context7.next = 12;
+                  return _db2.default.query(updateOneQuery, values);
+
+                case 12:
+                  response = _context7.sent;
+                  return _context7.abrupt(
+                    "return",
+                    res.status(200).send(response.rows[0])
+                  );
+
+                case 16:
+                  _context7.prev = 16;
+                  _context7.t0 = _context7["catch"](2);
+                  return _context7.abrupt(
+                    "return",
+                    res.status(200).send(_context7.t0)
+                  );
+
+                case 19:
+                case "end":
+                  return _context7.stop();
               }
 
               return _context8.abrupt("return", res.status(200).send({ message: "player not found" }));
