@@ -17,7 +17,7 @@
         tools:context=".access.SigninFragmentUI">
 
         <TextView
-            android:id="@+id/text_signin_tilte"
+            android:id="@+id/text_signin_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
@@ -44,8 +44,8 @@
             android:textAlignment="center"
             android:textColor="@android:color/background_light"
             android:textColorHint="@android:color/background_light"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintBottom_toTopOf="@+id/input_signin_firstname"
+            app:layout_constraintEnd_toStartOf="@+id/status_image_name"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/text_signin_status" />
 
@@ -62,8 +62,8 @@
             android:textAlignment="center"
             android:textColor="@android:color/background_light"
             android:textColorHint="@android:color/background_light"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintBottom_toTopOf="@+id/input_signin_pseudo"
+            app:layout_constraintEnd_toStartOf="@+id/status_image_first_name"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/input_signin_name" />
 
@@ -80,8 +80,8 @@
             android:textAlignment="center"
             android:textColor="@android:color/background_light"
             android:textColorHint="@android:color/white"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintBottom_toTopOf="@+id/input_signin_mail"
+            app:layout_constraintEnd_toStartOf="@+id/status_image_pseudo"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/input_signin_firstname" />
 
@@ -98,8 +98,8 @@
             android:textAlignment="center"
             android:textColor="@android:color/background_light"
             android:textColorHint="@android:color/white"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintBottom_toTopOf="@+id/input_signin_confirm_pwd"
+            app:layout_constraintEnd_toStartOf="@+id/status_image_password"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/input_signin_mail" />
 
@@ -116,8 +116,8 @@
             android:textAlignment="center"
             android:textColor="@android:color/background_light"
             android:textColorHint="@android:color/white"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintBottom_toTopOf="@+id/input_signin_phone"
+            app:layout_constraintEnd_toStartOf="@+id/status_image_password2"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/input_signin_pwd" />
 
@@ -134,8 +134,8 @@
             android:textAlignment="center"
             android:textColor="@android:color/background_light"
             android:textColorHint="@android:color/white"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintBottom_toTopOf="@+id/text_mandatory_fields"
+            app:layout_constraintEnd_toStartOf="@+id/imageView7"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/input_signin_confirm_pwd" />
 
@@ -152,8 +152,8 @@
             android:textAlignment="center"
             android:textColor="@android:color/background_light"
             android:textColorHint="@android:color/white"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintBottom_toTopOf="@+id/input_signin_pwd"
+            app:layout_constraintEnd_toStartOf="@+id/status_image_mail"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/input_signin_pseudo" />
 
@@ -215,7 +215,7 @@
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/text_signin_tilte"
+            app:layout_constraintTop_toBottomOf="@+id/text_signin_title"
             tools:text="@string/text_signin_status" />
 
         <TextView
@@ -228,6 +228,82 @@
             android:textColor="@android:color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/input_signin_phone" />
+
+        <ImageView
+            android:id="@+id/status_image_mail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintBottom_toBottomOf="@+id/input_signin_mail"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/input_signin_mail"
+            app:signinMailStatus="@{viewModel.mailStatus}"
+            app:srcCompat="@drawable/ic_sync_orange_24dp"
+            app:inputBasicFormat="@{viewModel.mailFormat}"/>
+
+        <ImageView
+            android:id="@+id/status_image_pseudo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintBottom_toBottomOf="@+id/input_signin_pseudo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/input_signin_pseudo"
+            app:srcCompat="@drawable/ic_sync_orange_24dp"
+            app:signinPseudoStatus="@{viewModel.pseudoStatus}"
+            app:inputBasicFormat="@{viewModel.pseudoFormat}"/>
+
+        <ImageView
+            android:id="@+id/status_image_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintBottom_toBottomOf="@+id/input_signin_name"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/input_signin_name"
+            app:srcCompat="@drawable/ic_sync_orange_24dp"
+            app:inputBasicFormat="@{viewModel.nameFormat}"/>
+
+        <ImageView
+            android:id="@+id/status_image_first_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintBottom_toBottomOf="@+id/input_signin_firstname"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/input_signin_firstname"
+            app:srcCompat="@drawable/ic_sync_orange_24dp"
+            app:inputBasicFormat="@{viewModel.firstNameFormat}"/>
+
+        <ImageView
+            android:id="@+id/status_image_password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintBottom_toBottomOf="@+id/input_signin_pwd"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/input_signin_pwd"
+            app:srcCompat="@drawable/ic_sync_orange_24dp" />
+
+        <ImageView
+            android:id="@+id/status_image_password2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintBottom_toBottomOf="@+id/input_signin_confirm_pwd"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/input_signin_confirm_pwd"
+            app:srcCompat="@drawable/ic_sync_orange_24dp" />
+
+        <ImageView
+            android:id="@+id/imageView7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintBottom_toBottomOf="@+id/input_signin_phone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/input_signin_phone"
+            app:srcCompat="@drawable/ic_sync_orange_24dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

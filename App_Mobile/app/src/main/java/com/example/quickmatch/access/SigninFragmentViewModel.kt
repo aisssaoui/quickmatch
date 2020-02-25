@@ -10,14 +10,35 @@ import kotlinx.coroutines.*
 import timber.log.Timber
 import java.security.MessageDigest
 
-enum class SigninMailStatus { ACCOUNT_EXISTS, MAIL_VALID, WRONG_FORMAT }
-enum class SigninPseudoStatus { PSEUDO_EXISTS, PSEUDO_VALID, WRONG_FORMAT }
+/* sizes to respect to sotre in database */
+val MAIL_SIZE = 50
+val BASIC_SIZE = 20
+
+/* enum classes for status check on requests */
+enum class SigninMailStatus { ACCOUNT_EXISTS, MAIL_VALID, WRONG_FORMAT, LOADING }
+enum class SigninPseudoStatus { PSEUDO_EXISTS, PSEUDO_VALID, WRONG_FORMAT, LOADING }
 enum class SigninPhoneNumberStatus { PHONE_NUMBER_EXISTS, PHONE_NUMBER_VALID, WRONG_FORMAT }
 enum class SigninStatus { PASSWORD_NOT_MATCHING, NETWORK_ERROR, MISSING_FIELD_NAME, MISSING_FIELD_FIRST_NAME, WRONG_PASSWORD_SIZE, DONE }
 
 class SigninFragmentViewModel : ViewModel() {
 
     /* Live datas of the viewModel */
+
+    private val _pseudoFormat = MutableLiveData<Boolean>()
+    val pseudoFormat : LiveData<Boolean>
+    get() = _pseudoFormat
+
+    private val _mailFormat = MutableLiveData<Boolean>()
+    val mailFormat : LiveData<Boolean>
+        get() = _mailFormat
+
+    private val _nameFormat = MutableLiveData<Boolean>()
+    val nameFormat : LiveData<Boolean>
+        get() = _nameFormat
+
+    private val _firstNameFormat = MutableLiveData<Boolean>()
+    val firstNameFormat : LiveData<Boolean>
+        get() = _firstNameFormat
 
     // Result of the signin query
     private val _signinStatus = MutableLiveData<SigninStatus>()
@@ -49,16 +70,35 @@ class SigninFragmentViewModel : ViewModel() {
 
     /* Methods */
 
+    /* Check format for pseudo */
+    fun checkFormatPseudo(pseudo: String) {
+        val l = pseudo.length
+        _pseudoFormat.value = l in 1..BASIC_SIZE
+    }
+
+    /* Check format for pseudo */
+    fun checkFormatMail(mailAddress: String) {
+        val l = mailAddress.length
+        val mailPattern = Regex("[a-zA-Z0-9._-]+@[a-z0-9-]+\\.[a-z]+")
+        _mailFormat.value = l in 1..MAIL_SIZE && mailAddress.matches(mailPattern)
+    }
+
+    /* Check format for name */
+    fun checkFormatName(name: String) {
+        val l = name.length
+        _nameFormat.value = l in 1..BASIC_SIZE
+    }
+
+    /* Check format for 1st name */
+    fun checkFormatFirstName(firstName: String) {
+        val l = firstName.length
+        _firstNameFormat.value = l in 1..BASIC_SIZE
+    }
+
     /* request to check if the mail typed already exists */
     private fun checkMailAddress(mailAddress: String) {
 
-        // Check mail format
-        val mailPattern = Regex("[a-zA-Z0-9._-]+@[a-z]+\\.[a-z]+")
-
-        if (!mailAddress.matches(mailPattern)) {
-            _mailStatus.value = SigninMailStatus.WRONG_FORMAT
-            return
-        }
+        _mailStatus.value = SigninMailStatus.LOADING
 
         coroutineScope.launch {
 
@@ -78,6 +118,8 @@ class SigninFragmentViewModel : ViewModel() {
 
     /* request to check if the pseudo typed already exists */
     private fun checkPseudo(pseudo: String) {
+
+        _pseudoStatus.value = SigninPseudoStatus.LOADING
 
         // Check pseudo format
         if ((pseudo.length < 2) or (pseudo.length > 20)) {
@@ -132,10 +174,8 @@ class SigninFragmentViewModel : ViewModel() {
     fun tryToSignIn(name : String, firstName : String, pseudo : String, mailAddress : String,
                     password : String, passwordCheck: String, phoneNumber : String?) {
 
-        //TODO put the following calls in edits onChange methods
-
-        //checkMailAddress(mailAddress)
-        //checkPseudo(pseudo)
+        checkMailAddress(mailAddress)
+        checkPseudo(pseudo)
         //checkPhoneNumber(phoneNumber)
 
         //TODO fix limits for each field according to database varchar size

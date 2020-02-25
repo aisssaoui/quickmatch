@@ -31,6 +31,7 @@ class SigninFragmentUI : Fragment() {
         val viewModel = ViewModelProviders.of(this).get(SigninFragmentViewModel::class.java)
 
         binding.viewModel = viewModel
+        binding.lifecycleOwner = this
 
         /* Navigation to login fragment */
         binding.buttonSigninLogin.setOnClickListener {
@@ -39,6 +40,7 @@ class SigninFragmentUI : Fragment() {
 
         /* Launch signin request */
         binding.buttonSigninSignin.setOnClickListener {
+            Timber.i("Button clicked")
             viewModel.tryToSignIn(binding.inputSigninName.text.toString(),
                     binding.inputSigninFirstname.text.toString(),
                     binding.inputSigninPseudo.text.toString(),
@@ -60,23 +62,32 @@ class SigninFragmentUI : Fragment() {
             }
         })
 
-        //TODO add informations texts in layout for fields' format + binding adapters
+        /* Focus observers to check fields format */
 
-        /* Observer for the mail check status in the  viewModel */
-        viewModel.mailStatus.observe(this, Observer {
-            if (it == SigninMailStatus.ACCOUNT_EXISTS)
-                binding.inputSigninMail.setTextColor(Color.RED)
-            else
-                binding.inputSigninMail.setTextColor(Color.WHITE)
-        })
+        binding.inputSigninPseudo.setOnFocusChangeListener { v, hasFocus ->
+            if (!hasFocus) {
+                viewModel.checkFormatPseudo(binding.inputSigninPseudo.text.toString())
+            }
+        }
 
-        /* Observer for the pseudo check status in the viewModel */
-        viewModel.pseudoStatus.observe(this, Observer {
-            if (it == SigninPseudoStatus.PSEUDO_EXISTS)
-                binding.inputSigninPseudo.setTextColor(Color.RED)
-            else
-                binding.inputSigninPseudo.setTextColor(Color.WHITE)
-        })
+        binding.inputSigninName.setOnFocusChangeListener { v, hasFocus ->
+            if (!hasFocus) {
+                viewModel.checkFormatName(binding.inputSigninName.text.toString())
+            }
+        }
+
+        binding.inputSigninFirstname.setOnFocusChangeListener { v, hasFocus ->
+            if (!hasFocus) {
+                viewModel.checkFormatFirstName(binding.inputSigninFirstname.text.toString())
+            }
+        }
+
+        binding.inputSigninMail.setOnFocusChangeListener { v, hasFocus ->
+            if (!hasFocus) {
+                viewModel.checkFormatMail(binding.inputSigninMail.text.toString())
+            }
+        }
+
 
         return binding.root
     }
