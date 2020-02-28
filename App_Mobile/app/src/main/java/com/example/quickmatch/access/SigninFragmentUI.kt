@@ -88,6 +88,26 @@ class SigninFragmentUI : Fragment() {
             }
         }
 
+        binding.inputSigninPwd.setOnFocusChangeListener { v, hasFocus ->
+            if (!hasFocus) {
+                viewModel.checkFormatPassword(binding.inputSigninPwd.text.toString())
+            }
+        }
+
+        binding.inputSigninConfirmPwd.setOnFocusChangeListener { v, hasFocus ->
+            if (!hasFocus) {
+                viewModel.checkFormatPasswordCheck(binding.inputSigninPwd.text.toString(), binding.inputSigninConfirmPwd.text.toString())
+            }
+        }
+
+        binding.inputSigninPhone.setOnFocusChangeListener { v, hasFocus ->
+            if (!hasFocus && binding.inputSigninPhone.text.toString() != "") {
+                viewModel.checkPhoneNumberFormat(binding.inputSigninPhone.text.toString())
+            }
+        }
+
+
+
 
         return binding.root
     }

@@ -10,15 +10,16 @@ import kotlinx.coroutines.*
 import timber.log.Timber
 import java.security.MessageDigest
 
-/* sizes to respect to sotre in database */
-val MAIL_SIZE = 50
-val BASIC_SIZE = 20
+/* sizes to respect to store in database */
+const val MAIL_SIZE = 50
+const val BASIC_SIZE = 20
+const val MIN_PASSWORD_SIZE = 8
 
 /* enum classes for status check on requests */
-enum class SigninMailStatus { ACCOUNT_EXISTS, MAIL_VALID, WRONG_FORMAT, LOADING }
+enum class SigninMailStatus { ACCOUNT_EXISTS, MAIL_VALID, LOADING }
 enum class SigninPseudoStatus { PSEUDO_EXISTS, PSEUDO_VALID, WRONG_FORMAT, LOADING }
-enum class SigninPhoneNumberStatus { PHONE_NUMBER_EXISTS, PHONE_NUMBER_VALID, WRONG_FORMAT }
-enum class SigninStatus { PASSWORD_NOT_MATCHING, NETWORK_ERROR, MISSING_FIELD_NAME, MISSING_FIELD_FIRST_NAME, WRONG_PASSWORD_SIZE, DONE }
+enum class SigninPhoneNumberStatus { WRONG_FORMAT, PHONE_NUMBER_EXISTS, PHONE_NUMBER_VALID }
+enum class SigninStatus { NETWORK_ERROR, DONE }
 
 class SigninFragmentViewModel : ViewModel() {
 
@@ -32,6 +33,14 @@ class SigninFragmentViewModel : ViewModel() {
     val mailFormat : LiveData<Boolean>
         get() = _mailFormat
 
+    private val _passwordFormat = MutableLiveData<Boolean>()
+    val passwordFormat : LiveData<Boolean>
+        get() = _passwordFormat
+
+    private val _passwordCheckFormat = MutableLiveData<Boolean>()
+    val passwordCheckFormat : LiveData<Boolean>
+        get() = _passwordCheckFormat
+
     private val _nameFormat = MutableLiveData<Boolean>()
     val nameFormat : LiveData<Boolean>
         get() = _nameFormat
@@ -39,6 +48,10 @@ class SigninFragmentViewModel : ViewModel() {
     private val _firstNameFormat = MutableLiveData<Boolean>()
     val firstNameFormat : LiveData<Boolean>
         get() = _firstNameFormat
+
+    private val _phoneNumberFormat = MutableLiveData<Boolean>()
+    val phoneNumberFormat : LiveData<Boolean>
+        get() = _phoneNumberFormat
 
     // Result of the signin query
     private val _signinStatus = MutableLiveData<SigninStatus>()
@@ -81,6 +94,24 @@ class SigninFragmentViewModel : ViewModel() {
         val l = mailAddress.length
         val mailPattern = Regex("[a-zA-Z0-9._-]+@[a-z0-9-]+\\.[a-z]+")
         _mailFormat.value = l in 1..MAIL_SIZE && mailAddress.matches(mailPattern)
+    }
+
+    /* Check format for password */
+    fun checkFormatPassword(password: String) {
+        val passwordPattern = Regex("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{$MIN_PASSWORD_SIZE,$BASIC_SIZE}$")
+        _passwordFormat.value = password.matches(passwordPattern)
+    }
+
+    /* Check passwords equality */
+    fun checkFormatPasswordCheck(password: String, passwordCheck: String) {
+        val passwordPattern = Regex("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{$MIN_PASSWORD_SIZE,$BASIC_SIZE}$")
+        _passwordCheckFormat.value = password == passwordCheck && passwordCheck.matches(passwordPattern)
+    }
+
+    /* Check phone number format (french) */
+    fun checkPhoneNumberFormat(phoneNumber: String) {
+        val phoneNumberPattern = Regex("^(?:(?:\\+|00)33|0)\\s*[1-9](?:[\\s.-]*\\d{2}){4}\$")
+        _phoneNumberFormat.value = phoneNumber.matches(phoneNumberPattern)
     }
 
     /* Check format for name */
@@ -170,86 +201,78 @@ class SigninFragmentViewModel : ViewModel() {
         }
     }*/
 
+    /* Parse phone number to keek the difits only */
+    private fun parsePhoneNumber(phoneNumber: String) : String? {
+        if(phoneNumber != "") {
+            var parsedPhoneNumber = phoneNumber.replace("+33", "0")
+            Timber.i(phoneNumber)
+            return parsedPhoneNumber.filterNot { it in ".- " }
+        }
+        return null
+    }
+
+
     /* function checking the validity of unique informations and then posting the new player to the remote server */
     fun tryToSignIn(name : String, firstName : String, pseudo : String, mailAddress : String,
-                    password : String, passwordCheck: String, phoneNumber : String?) {
+                    password : String, passwordCheck: String, phoneNumber : String) {
 
+        /* Check unicity for unique fields */
         checkMailAddress(mailAddress)
         checkPseudo(pseudo)
         //checkPhoneNumber(phoneNumber)
 
-        //TODO fix limits for each field according to database varchar size
-        //TODO fix an accepted password size
-        if (password == "")
-            _signinStatus.value = SigninStatus.WRONG_PASSWORD_SIZE
+        /* Parse phone number */
+        val finalPhoneNumber = parsePhoneNumber(phoneNumber)
+        Timber.i(finalPhoneNumber)
 
-        else if (name == "")
-            _signinStatus.value = SigninStatus.MISSING_FIELD_NAME
+        /* hash password */
+        val hashedPassword = Utils.sha512(password)
+        //Timber.i(hashedPassword)
 
-        else if (firstName == "")
-            _signinStatus.value = SigninStatus.MISSING_FIELD_FIRST_NAME
+        /* Player that will be posted to the database */
+        var newPlayerObject = PlayerObject(null, name, firstName, pseudo, hashedPassword, mailAddress, finalPhoneNumber,
+                0, 0, 0, 0,
+                null, null )
 
-        else if (password != passwordCheck)
-            _signinStatus.value = SigninStatus.PASSWORD_NOT_MATCHING
+        //Timber.i(newPlayerObject.toString())
 
-        else {
+        coroutineScope.launch {
 
-            /* Give a value for phone number to actually have something in the player object */
-            var finalPhoneNumber: String? = null
-            if (phoneNumber == "") finalPhoneNumber else finalPhoneNumber = phoneNumber
+            var firstResult : PlayerObject? = null
 
+            try {
 
-            /* hash password */
-            val hashedPassword = Utils.sha512(password)
-            Timber.i(hashedPassword)
+                firstResult = DatabaseApi.retrofitService.addPlayer(newPlayerObject)
 
-            /* Player that will be posted to the database */
-            var newPlayerObject = PlayerObject(null, name, firstName, pseudo, hashedPassword, mailAddress, finalPhoneNumber,
-                    0, 0, 0, 0,
-                    null, null )
+                Timber.i(firstResult.toString())
 
-            Timber.i(newPlayerObject.toString())
+            } catch (t: Throwable) {
 
-            coroutineScope.launch {
+                Timber.i(t.message + " post1")
+                _signinStatus.value = SigninStatus.NETWORK_ERROR
+            }
 
-                var firstResult : PlayerObject? = null
+            if (firstResult == null) return@launch
 
-                try {
+            try { /* update salted password */
 
-                    firstResult = DatabaseApi.retrofitService.addPlayer(newPlayerObject)
+                var finalPlayerObject = firstResult!!
+                finalPlayerObject.password = Utils.sha512(password + firstResult.id.toString())
 
-                    Timber.i(firstResult.toString())
+                Timber.i(finalPlayerObject.password)
 
-                } catch (t: Throwable) {
+                var result = DatabaseApi.retrofitService.updatePlayerById(finalPlayerObject.id!!, finalPlayerObject)
 
-                    Timber.i(t.message + " post1")
-                    _signinStatus.value = SigninStatus.NETWORK_ERROR
-                }
+                _signinStatus.value = SigninStatus.DONE
+                Timber.i(result.toString())
 
-                if (firstResult == null) return@launch
+            } catch (t: Throwable) {
 
-                try { /* update salted password */
+                Timber.i(t.message + " post2")
+                _signinStatus.value = SigninStatus.NETWORK_ERROR
 
-                    var finalPlayerObject = firstResult!!
-                    finalPlayerObject.password = Utils.sha512(password + firstResult.id.toString())
-
-                    Timber.i(finalPlayerObject.password)
-
-                    var result = DatabaseApi.retrofitService.updatePlayerById(finalPlayerObject.id!!, finalPlayerObject)
-
-                    _signinStatus.value = SigninStatus.DONE
-                    Timber.i(result.toString())
-
-                } catch (t: Throwable) {
-
-                    Timber.i(t.message + " post2")
-                    _signinStatus.value = SigninStatus.NETWORK_ERROR
-
-                }
             }
         }
-
-
     }
 
 }

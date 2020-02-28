@@ -283,7 +283,8 @@
             app:layout_constraintBottom_toBottomOf="@+id/input_signin_pwd"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/input_signin_pwd"
-            app:srcCompat="@drawable/ic_sync_orange_24dp" />
+            app:srcCompat="@drawable/ic_sync_orange_24dp"
+            app:inputBasicFormat="@{viewModel.passwordFormat}"/>
 
         <ImageView
             android:id="@+id/status_image_password2"
@@ -293,7 +294,8 @@
             app:layout_constraintBottom_toBottomOf="@+id/input_signin_confirm_pwd"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/input_signin_confirm_pwd"
-            app:srcCompat="@drawable/ic_sync_orange_24dp" />
+            app:srcCompat="@drawable/ic_sync_orange_24dp"
+            app:inputBasicFormat="@{viewModel.passwordCheckFormat}"/>
 
         <ImageView
             android:id="@+id/imageView7"
@@ -303,7 +305,8 @@
             app:layout_constraintBottom_toBottomOf="@+id/input_signin_phone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/input_signin_phone"
-            app:srcCompat="@drawable/ic_sync_orange_24dp" />
+            app:srcCompat="@drawable/ic_sync_orange_24dp"
+            app:inputBasicFormat="@{viewModel.phoneNumberFormat}"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

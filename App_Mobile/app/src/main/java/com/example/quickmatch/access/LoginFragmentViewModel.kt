@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.quickmatch.network.DatabaseApi
 import com.example.quickmatch.network.PlayerObject
+import com.example.quickmatch.utils.Utils.sha512
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -38,7 +39,7 @@ class LoginFragmentViewModel : ViewModel() {
 
                 Timber.i(result.toString())
 
-                checkPassword(result, password)
+                checkPassword(result, sha512(password + result.id.toString()))
 
             } catch (t: Throwable) {
 
