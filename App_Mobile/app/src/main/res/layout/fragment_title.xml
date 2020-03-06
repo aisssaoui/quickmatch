@@ -7,14 +7,14 @@
     <data>
         <variable
             name="viewModel"
-            type="com.example.quickmatch.title.TitleFragmentViewModel" />
+            type="com.example.quickmatch.access.title.TitleFragmentViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@android:color/holo_green_light"
-        tools:context=".title.TitleFragmentUI">
+        tools:context=".access.title.TitleFragmentUI">
 
         <ImageView
             android:id="@+id/title_logo"

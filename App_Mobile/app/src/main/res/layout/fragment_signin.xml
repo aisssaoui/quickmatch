@@ -7,14 +7,14 @@
     <data>
         <variable
             name="viewModel"
-            type="com.example.quickmatch.access.SigninFragmentViewModel" />
+            type="com.example.quickmatch.access.signin.SigninFragmentViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@android:color/holo_green_light"
-        tools:context=".access.SigninFragmentUI">
+        tools:context=".access.signin.SigninFragmentUI">
 
         <TextView
             android:id="@+id/text_signin_title"

@@ -51,7 +51,6 @@ interface DatabaseApiService {
 
     /* PUT REQUESTS */
     @PUT("dbcontrol/api/v1/Players/id{id}")
-    /* TODO: mettre tous les paramètres d'un player pour l'update 1) soit on met tout à la main 2) metre un objet player */
     suspend fun updatePlayerById(@Path("id") id : Int, @Body player: PlayerObject)
 
     /* DELETE REQUESTS */

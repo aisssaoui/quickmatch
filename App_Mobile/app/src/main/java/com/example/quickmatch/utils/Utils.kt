@@ -1,5 +1,8 @@
 package com.example.quickmatch.utils
 
+import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
+import timber.log.Timber
 import java.security.MessageDigest
 
 /**
@@ -8,7 +11,7 @@ import java.security.MessageDigest
  * @license MIT
  */
 
-object Utils {
+object HashUtils {
 
     fun sha512(input: String) = hashString("SHA-512", input)
 
@@ -32,4 +35,40 @@ object Utils {
     }
 
 }
+
+object FormatUtils {
+
+    /* sizes to respect to store in database */
+    const val MAIL_SIZE = 50
+    const val BASIC_SIZE = 20
+    const val MIN_PASSWORD_SIZE = 8
+    const val BIO_SIZE = 80
+    const val AVATAR_SIZE = 60
+
+    /* Regexs */
+    val mailPattern = Regex("[a-zA-Z0-9._-]+@[a-z0-9-]+\\.[a-z]+")
+    val passwordPattern = Regex("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{$MIN_PASSWORD_SIZE,$BASIC_SIZE}$")
+    val phoneNumberPattern = Regex("^(?:(?:\\+|00)33|0)\\s*[1-9](?:[\\s.-]*\\d{2}){4}\$")
+
+    /* Parse phone number to keek the difits only */
+    fun parsePhoneNumber(phoneNumber: String) : String? {
+        if(phoneNumber != "") {
+            var parsedPhoneNumber = phoneNumber.replace("+33", "0")
+            Timber.i(phoneNumber)
+            return parsedPhoneNumber.filterNot { it in ".- " }
+        }
+        return null
+    }
+
+    /* parse a date string from database */
+    fun parseDateToJJMMAAAA(date: String) : String {
+        val splitDate = date.split("-", "T")
+        val day = splitDate[2]
+        val month = splitDate[1]
+        val year = splitDate[0]
+        return "$day / $month / $year"
+    }
+}
+
+
 
