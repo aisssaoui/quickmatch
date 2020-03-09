@@ -387,7 +387,7 @@ export default {
           /^[a-zA-Z1-9_ \-éèçîïœžâêôàûùâãäåæçëìíîïðñòóôõúûüýö]+$/.test(v) ||
           "Nom de club invalide"
       ],
-      switch_menu: false,
+      switch_menu: false, //
       id_club_switch: -1,
       name_club_switch: "",
       pseudoRules: [
@@ -568,23 +568,6 @@ export default {
         });
     },
     async add_to_club(pid, cid, pseudo){
-      /*
-      await axios
-        .post("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/PlayerClubs/",
-          {
-            club: cid,
-            player: pid,
-            is_admin: false
-          })
-        .then(response => {
-          alert("Vous avez ajouter " + pseudo + " au club " + this.name_club_switch);
-          this.manage_club(this.name_club_switch, this.id_club_switch);
-        })
-        .catch(e => {
-          alert("Echec, veuillez réessayer, si le problème persiste, réessayer plus tard");
-          this.$router.go();
-        });
-        */
         await axios
           .post("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/InvitationClub/" + pid + "&" + cid)
           .then(response => {
