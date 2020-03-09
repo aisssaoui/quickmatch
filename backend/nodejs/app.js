@@ -73,6 +73,7 @@ app.post("/dbcontrol/api/v1/Players", _player2.default.create);
 app.get("/dbcontrol/api/v1/Players", _player2.default.getAll);
 app.get("/dbcontrol/api/v1/Players/ma:mail_address", _player2.default.getByMail);
 app.get("/dbcontrol/api/v1/Players/p:p", _player2.default.getByPseudo);
+app.get("/dbcontrol/api/v1/Players/n:phone_number", _player2.default.getByPhone);
 app.get("/dbcontrol/api/v1/Players/stat:id", _player2.default.getPlayerStat);
 app.get("/dbcontrol/api/v1/Players/id:id", _player2.default.getByID);
 app.put("/dbcontrol/api/v1/Players/id:id", _player2.default.update);
@@ -120,7 +121,10 @@ app.get("/dbcontrol/api/v1/SlotsRows", _slot2.default.getAllRows);
 // Table meet_sheet
 app.post("/dbcontrol/api/v1/MeetsSheet", _meet_sheet2.default.create);
 app.get("/dbcontrol/api/v1/MeetsSheet", _meet_sheet2.default.getAll);
-app.get("/dbcontrol/api/v1/MeetsSheet/:player_mail_address",_meet_sheet2.default.getOne);
+app.get(
+  "/dbcontrol/api/v1/MeetsSheet/:player_mail_address",
+  _meet_sheet2.default.getOne
+);
 //app.put("/dbcontrol/api/v1/MeetsSheet/:player_mail_adress", _meet_sheet2.default.update);
 
 /* TODO : meetsheet getone avec l'@ mail ne marche pas */
@@ -148,15 +152,26 @@ app.get("/dbcontrol/api/v1/PlayerClubs", _player_belong_club2.default.getAll);
 app.get("/dbcontrol/api/v1/playerClubsCountAdmin/:cid", _player_belong_club2.default.getCountAdmin);
 app.put("/dbcontrol/api/v1/PlayerClubsPromoteToAdmin/:pid&:cid", _player_belong_club2.default.promoteToAdmin);
 
-app.get("/dbcontrol/api/v1/CalendarBPlayer/:id", _calendar_db2.default.getByPlayer);
+app.get(
+  "/dbcontrol/api/v1/CalendarBPlayer/:id",
+  _calendar_db2.default.getByPlayer
+);
 app.get("/dbcontrol/api/v1/CalendarBMeet/:id", _calendar_db2.default.getByMeet);
-app.get("/dbcontrol/api/v1/CalendarMAccept/:id", _calendar_db2.default.getAccepted);
-app.get("/dbcontrol/api/v1/CalendarMDecline/:id", _calendar_db2.default.getDeclined);
-app.get("/dbcontrol/api/v1/CalendarMInv/:pid/:mid", _calendar_db2.default.getInv);
+app.get(
+  "/dbcontrol/api/v1/CalendarMAccept/:id",
+  _calendar_db2.default.getAccepted
+);
+app.get(
+  "/dbcontrol/api/v1/CalendarMDecline/:id",
+  _calendar_db2.default.getDeclined
+);
+app.get(
+  "/dbcontrol/api/v1/CalendarMInv/:pid/:mid",
+  _calendar_db2.default.getInv
+);
 
-
-// Envoi de mail 
-app.post("/dbcontrol/api/v1/SendMail", _validAccount2.default.sendMail)
+// Envoi de mail
+app.post("/dbcontrol/api/v1/SendMail", _validAccount2.default.sendMail);
 
 app.listen(3000);
 console.log("app running on port ", 3000);

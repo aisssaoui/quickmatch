@@ -25,37 +25,59 @@ var Player = {
    * @param {object} res
    * @returns {object} Player object
    */
-  create: function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(req, res) {
-      var text, values, _ref2, rows;
+  create: (function() {
+    var _ref = _asyncToGenerator(
+      /*#__PURE__*/ regeneratorRuntime.mark(function _callee(req, res) {
+        var text, values, _ref2, rows;
 
-      return regeneratorRuntime.wrap(function _callee$(_context) {
-        while (1) {
-          switch (_context.prev = _context.next) {
-            case 0:
-              text = "INSERT INTO Player (surname, first_name, mail_address, phone_number, pseudo, mdp, avatar)\n\t    VALUES($1, $2, $3, $4, $5, $6, $7)\n      RETURNING *";
-              values = [req.body.surname, req.body.first_name, req.body.mail_adress, req.body.phone_number, req.body.pseudo, req.body.mdp, req.body.avatar];
-              _context.prev = 2;
-              _context.next = 5;
-              return _db2.default.query(text, values);
+        return regeneratorRuntime.wrap(
+          function _callee$(_context) {
+            while (1) {
+              switch ((_context.prev = _context.next)) {
+                case 0:
+                  text =
+                    "INSERT INTO Player (surname, first_name, mail_address, phone_number, pseudo, mdp, avatar)\n\t    VALUES($1, $2, $3, $4, $5, $6, $7)\n      RETURNING *";
+                  values = [
+                    req.body.surname,
+                    req.body.first_name,
+                    req.body.mail_adress,
+                    req.body.phone_number,
+                    req.body.pseudo,
+                    req.body.mdp,
+                    req.body.avatar
+                  ];
+                  _context.prev = 2;
+                  _context.next = 5;
+                  return _db2.default.query(text, values);
 
-            case 5:
-              _ref2 = _context.sent;
-              rows = _ref2.rows;
-              return _context.abrupt("return", res.status(201).send(rows[0]));
+                case 5:
+                  _ref2 = _context.sent;
+                  rows = _ref2.rows;
+                  return _context.abrupt(
+                    "return",
+                    res.status(201).send(rows[0])
+                  );
 
-            case 10:
-              _context.prev = 10;
-              _context.t0 = _context["catch"](2);
-              return _context.abrupt("return", res.status(200).send(_context.t0));
+                case 10:
+                  _context.prev = 10;
+                  _context.t0 = _context["catch"](2);
+                  return _context.abrupt(
+                    "return",
+                    res.status(200).send(_context.t0)
+                  );
 
-            case 13:
-            case "end":
-              return _context.stop();
-          }
-        }
-      }, _callee, this, [[2, 10]]);
-    }));
+                case 13:
+                case "end":
+                  return _context.stop();
+              }
+            }
+          },
+          _callee,
+          this,
+          [[2, 10]]
+        );
+      })
+    );
 
     function create(_x, _x2) {
       return _ref.apply(this, arguments);
@@ -151,8 +173,32 @@ var Player = {
     }
 
     return getAllRows;
-  }(),
+  })(),
 
+  /**
+   * Get A Player by his id
+   * @param {object} req
+   * @param {object} res
+   * @returns {object} player object
+   */
+  getByID: (function() {
+    var _ref6 = _asyncToGenerator(
+      /*#__PURE__*/ regeneratorRuntime.mark(function _callee4(req, res) {
+        var text, _ref7, rows;
+
+        return regeneratorRuntime.wrap(
+          function _callee4$(_context4) {
+            while (1) {
+              switch ((_context4.prev = _context4.next)) {
+                case 0:
+                  text = "SELECT * FROM player WHERE id = $1";
+                  _context4.prev = 1;
+                  _context4.next = 4;
+                  return _db2.default.query(text, [req.params.id]);
+
+                case 4:
+                  _ref7 = _context4.sent;
+                  rows = _ref7.rows;
 
   /**
    * Get A Player by his id
@@ -205,8 +251,7 @@ var Player = {
     }
 
     return getByID;
-  }(),
-
+  })(),
 
   /**
    * Get A Player by his pseudo
@@ -214,45 +259,61 @@ var Player = {
    * @param {object} res
    * @returns {object} player object
    */
-  getByPseudo: function () {
-    var _ref8 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5(req, res) {
-      var text, _ref9, rows;
+  getByPseudo: (function() {
+    var _ref8 = _asyncToGenerator(
+      /*#__PURE__*/ regeneratorRuntime.mark(function _callee5(req, res) {
+        var text, _ref9, rows;
 
-      return regeneratorRuntime.wrap(function _callee5$(_context5) {
-        while (1) {
-          switch (_context5.prev = _context5.next) {
-            case 0:
-              text = "SELECT * FROM player WHERE pseudo = '$1'";
-              _context5.prev = 1;
-              _context5.next = 4;
-              return _db2.default.query(text, [req.params.p]);
+        return regeneratorRuntime.wrap(
+          function _callee5$(_context5) {
+            while (1) {
+              switch ((_context5.prev = _context5.next)) {
+                case 0:
+                  text = "SELECT * FROM player WHERE pseudo = $1";
+                  _context5.prev = 1;
+                  _context5.next = 4;
+                  return _db2.default.query(text, [req.params.pseudo]);
 
-            case 4:
-              _ref9 = _context5.sent;
-              rows = _ref9.rows;
+                case 4:
+                  _ref9 = _context5.sent;
+                  rows = _ref9.rows;
 
-              if (rows[0]) {
-                _context5.next = 8;
-                break;
+                  if (rows[0]) {
+                    _context5.next = 8;
+                    break;
+                  }
+
+                  return _context5.abrupt(
+                    "return",
+                    res.status(202).send({ message: "player not found" })
+                  );
+
+                case 8:
+                  return _context5.abrupt(
+                    "return",
+                    res.status(200).send(rows[0])
+                  );
+
+                case 11:
+                  _context5.prev = 11;
+                  _context5.t0 = _context5["catch"](1);
+                  return _context5.abrupt(
+                    "return",
+                    res.status(202).send(_context5.t0)
+                  );
+
+                case 14:
+                case "end":
+                  return _context5.stop();
               }
-
-              return _context5.abrupt("return", res.status(200).send({ message: "player not found" }));
-
-            case 8:
-              return _context5.abrupt("return", res.status(200).send(rows[0]));
-
-            case 11:
-              _context5.prev = 11;
-              _context5.t0 = _context5["catch"](1);
-              return _context5.abrupt("return", res.status(200).send(_context5.t0));
-
-            case 14:
-            case "end":
-              return _context5.stop();
-          }
-        }
-      }, _callee5, this, [[1, 11]]);
-    }));
+            }
+          },
+          _callee5,
+          this,
+          [[1, 11]]
+        );
+      })
+    );
 
     function getByPseudo(_x9, _x10) {
       return _ref8.apply(this, arguments);
@@ -261,52 +322,67 @@ var Player = {
     return getByPseudo;
   }(),
 
-
   /**
    * Get A Player by his mail address
    * @param {object} req
    * @param {object} res
    * @returns {object} player object
    */
-  getByMail: function () {
-    var _ref10 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee6(req, res) {
-      var text, _ref11, rows;
+  getByMail: (function() {
+    var _ref10 = _asyncToGenerator(
+      /*#__PURE__*/ regeneratorRuntime.mark(function _callee6(req, res) {
+        var text, _ref11, rows;
 
-      return regeneratorRuntime.wrap(function _callee6$(_context6) {
-        while (1) {
-          switch (_context6.prev = _context6.next) {
-            case 0:
-              text = "SELECT * FROM player WHERE mail_address = $1";
-              _context6.prev = 1;
-              _context6.next = 4;
-              return _db2.default.query(text, [req.params.mail_address]);
+        return regeneratorRuntime.wrap(
+          function _callee6$(_context6) {
+            while (1) {
+              switch ((_context6.prev = _context6.next)) {
+                case 0:
+                  text = "SELECT * FROM player WHERE mail_address = $1";
+                  _context6.prev = 1;
+                  _context6.next = 4;
+                  return _db2.default.query(text, [req.params.mail_address]);
 
-            case 4:
-              _ref11 = _context6.sent;
-              rows = _ref11.rows;
+                case 4:
+                  _ref11 = _context6.sent;
+                  rows = _ref11.rows;
 
-              if (rows[0]) {
-                _context6.next = 8;
-                break;
+                  if (rows[0]) {
+                    _context6.next = 8;
+                    break;
+                  }
+
+                  return _context6.abrupt(
+                    "return",
+                    res.status(202).send({ message: "player not found" })
+                  );
+
+                case 8:
+                  return _context6.abrupt(
+                    "return",
+                    res.status(200).send(rows[0])
+                  );
+
+                case 11:
+                  _context6.prev = 11;
+                  _context6.t0 = _context6["catch"](1);
+                  return _context6.abrupt(
+                    "return",
+                    res.status(202).send(_context6.t0)
+                  );
+
+                case 14:
+                case "end":
+                  return _context6.stop();
               }
-
-              return _context6.abrupt("return", res.status(202).send({ message: "player not found" }));
-
-            case 8:
-              return _context6.abrupt("return", res.status(200).send(rows[0]));
-
-            case 11:
-              _context6.prev = 11;
-              _context6.t0 = _context6["catch"](1);
-              return _context6.abrupt("return", res.status(202).send(_context6.t0));
-
-            case 14:
-            case "end":
-              return _context6.stop();
-          }
-        }
-      }, _callee6, this, [[1, 11]]);
-    }));
+            }
+          },
+          _callee6,
+          this,
+          [[1, 11]]
+        );
+      })
+    );
 
     function getByMail(_x11, _x12) {
       return _ref10.apply(this, arguments);
@@ -315,6 +391,74 @@ var Player = {
     return getByMail;
   }(),
 
+  /**
+   * Get A Player by his phone_number
+   * @param {object} req
+   * @param {object} res
+   * @returns {object} player object
+   */
+  getByPhone: (function() {
+    var _ref12 = _asyncToGenerator(
+      /*#__PURE__*/ regeneratorRuntime.mark(function _callee7(req, res) {
+        var text, _ref13, rows;
+
+        return regeneratorRuntime.wrap(
+          function _callee7$(_context7) {
+            while (1) {
+              switch ((_context7.prev = _context7.next)) {
+                case 0:
+                  text = "SELECT * FROM player WHERE phone_number = $1";
+                  _context7.prev = 1;
+                  _context7.next = 4;
+                  return _db2.default.query(text, [req.params.phone_number]);
+
+                case 4:
+                  _ref13 = _context7.sent;
+                  rows = _ref13.rows;
+
+                  if (rows[0]) {
+                    _context7.next = 8;
+                    break;
+                  }
+
+                  return _context7.abrupt(
+                    "return",
+                    res.status(202).send({ message: "player not found" })
+                  );
+
+                case 8:
+                  return _context7.abrupt(
+                    "return",
+                    res.status(200).send(rows[0])
+                  );
+
+                case 11:
+                  _context7.prev = 11;
+                  _context7.t0 = _context7["catch"](1);
+                  return _context7.abrupt(
+                    "return",
+                    res.status(202).send(_context7.t0)
+                  );
+
+                case 14:
+                case "end":
+                  return _context7.stop();
+              }
+            }
+          },
+          _callee7,
+          this,
+          [[1, 11]]
+        );
+      })
+    );
+
+    function getByPhone(_x13, _x14) {
+      return _ref12.apply(this, arguments);
+    }
+
+    return getByPhone;
+  })(),
 
   /**
    * Get A Player stats per match
@@ -322,40 +466,54 @@ var Player = {
    * @param {object} res
    * @returns {object} player_stat object
    */
-  getPlayerStat: function () {
-    var _ref12 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee7(req, res) {
-      var text, _ref13, rows, rowCount;
+  getPlayerStat: (function() {
+    var _ref14 = _asyncToGenerator(
+      /*#__PURE__*/ regeneratorRuntime.mark(function _callee8(req, res) {
+        var text, _ref15, rows, rowCount;
 
-      return regeneratorRuntime.wrap(function _callee7$(_context7) {
-        while (1) {
-          switch (_context7.prev = _context7.next) {
-            case 0:
-              text = "SELECT MS.won, MS.scored_goals, MS.conceded_goals, M.precise_date, M.location FROM Meet_sheet MS JOIN Meet M ON MS.meet = M.id WHERE MS.player = $1";
-              _context7.prev = 1;
-              _context7.next = 4;
-              return _db2.default.query(text, [req.params.id]);
+        return regeneratorRuntime.wrap(
+          function _callee8$(_context8) {
+            while (1) {
+              switch ((_context8.prev = _context8.next)) {
+                case 0:
+                  text =
+                    "SELECT MS.won, MS.scored_goals, MS.conceded_goals, M.precise_date, M.location FROM Meet_sheet MS JOIN Meet M ON MS.meet = M.id WHERE MS.player = $1";
+                  _context8.prev = 1;
+                  _context8.next = 4;
+                  return _db2.default.query(text, [req.params.id]);
 
-            case 4:
-              _ref13 = _context7.sent;
-              rows = _ref13.rows;
-              rowCount = _ref13.rowCount;
-              return _context7.abrupt("return", res.status(200).send({ rows: rows, rowCount: rowCount }));
+                case 4:
+                  _ref15 = _context8.sent;
+                  rows = _ref15.rows;
+                  rowCount = _ref15.rowCount;
+                  return _context8.abrupt(
+                    "return",
+                    res.status(200).send({ rows: rows, rowCount: rowCount })
+                  );
 
-            case 10:
-              _context7.prev = 10;
-              _context7.t0 = _context7["catch"](1);
-              return _context7.abrupt("return", res.status(400).send(_context7.t0));
+                case 10:
+                  _context8.prev = 10;
+                  _context8.t0 = _context8["catch"](1);
+                  return _context8.abrupt(
+                    "return",
+                    res.status(400).send(_context8.t0)
+                  );
 
-            case 13:
-            case "end":
-              return _context7.stop();
-          }
-        }
-      }, _callee7, this, [[1, 10]]);
-    }));
+                case 13:
+                case "end":
+                  return _context8.stop();
+              }
+            }
+          },
+          _callee8,
+          this,
+          [[1, 10]]
+        );
+      })
+    );
 
-    function getPlayerStat(_x13, _x14) {
-      return _ref12.apply(this, arguments);
+    function getPlayerStat(_x15, _x16) {
+      return _ref14.apply(this, arguments);
     }
 
     return getPlayerStat;
@@ -369,32 +527,32 @@ var Player = {
    * @returns {object} updated Player
    */
   update: (function() {
-    var _ref13 = _asyncToGenerator(
-      /*#__PURE__*/ regeneratorRuntime.mark(function _callee7(req, res) {
-        var findOneQuery, updateOneQuery, _ref14, rows, values, response;
+    var _ref16 = _asyncToGenerator(
+      /*#__PURE__*/ regeneratorRuntime.mark(function _callee9(req, res) {
+        var findOneQuery, updateOneQuery, _ref17, rows, values, response;
 
         return regeneratorRuntime.wrap(
-          function _callee7$(_context7) {
+          function _callee9$(_context9) {
             while (1) {
-              switch ((_context7.prev = _context7.next)) {
+              switch ((_context9.prev = _context9.next)) {
                 case 0:
                   findOneQuery = "SELECT * FROM player WHERE id = $1";
                   updateOneQuery =
-                    "UPDATE player\n      SET pseudo = $1, mail_address=$2, phone_number = $3, bio=$4, avatar=$5, mdp=$6, is_valid=$7\n      WHERE id = $8 RETURNING *";
-                  _context7.prev = 2;
-                  _context7.next = 5;
+                    "UPDATE player\n      SET pseudo = $1, surname = $2, first_name = $3, mail_address = $4, phone_number = $5, bio=$6, avatar=$7, mdp=$8, is_valid=$9, private_profil=$10\n      WHERE id = $11 RETURNING *";
+                  _context9.prev = 2;
+                  _context9.next = 5;
                   return _db2.default.query(findOneQuery, [req.params.id]);
 
                 case 5:
-                  _ref14 = _context7.sent;
-                  rows = _ref14.rows;
+                  _ref17 = _context9.sent;
+                  rows = _ref17.rows;
 
                   if (rows[0]) {
-                    _context7.next = 9;
+                    _context9.next = 9;
                     break;
                   }
 
-                  return _context7.abrupt(
+                  return _context9.abrupt(
                     "return",
                     res.status(200).send({ message: "player not found" })
                   );
@@ -402,117 +560,122 @@ var Player = {
                 case 9:
                   values = [
                     req.body.pseudo || rows[0].pseudo,
+                    req.body.surname || rows[0].surname,
+                    req.body.first_name || rows[0].first_name,
                     req.body.mail_address || rows[0].mail_address,
                     req.body.phone_number || rows[0].phone_number,
                     req.body.bio || rows[0].bio,
                     req.body.avatar || rows[0].avatar,
                     req.body.mdp || rows[0].mdp,
-                    req.body.is_valid === null ? rows[0].is_valid : req.body.is_valid,
+                    req.body.is_valid === null
+                      ? rows[0].is_valid
+                      : req.body.is_valid,
+                    req.body.private_profil === null
+                      ? rows[0].private_profil
+                      : req.body.private_profil,
                     req.params.id
                   ];
-                  _context7.next = 12;
+                  _context9.next = 12;
                   return _db2.default.query(updateOneQuery, values);
 
                 case 12:
-                  response = _context7.sent;
-                  return _context7.abrupt(
+                  response = _context9.sent;
+                  return _context9.abrupt(
                     "return",
                     res.status(200).send(response.rows[0])
                   );
 
                 case 16:
-                  _context7.prev = 16;
-                  _context7.t0 = _context7["catch"](2);
-                  return _context7.abrupt(
+                  _context9.prev = 16;
+                  _context9.t0 = _context9["catch"](2);
+                  return _context9.abrupt(
                     "return",
-                    res.status(200).send(_context7.t0)
+                    res.status(200).send(_context9.t0)
                   );
 
                 case 19:
                 case "end":
-                  return _context7.stop();
+                  return _context9.stop();
               }
+            }
+          },
+          _callee9,
+          this,
+          [[2, 16]]
+        );
+      })
+    );
 
-              return _context8.abrupt("return", res.status(200).send({ message: "player not found" }));
-
-            case 9:
-              values = [req.body.pseudo || rows[0].pseudo, req.body.surname || rows[0].surname, req.body.first_name || rows[0].first_name, req.body.mail_address || rows[0].mail_address, req.body.phone_number || rows[0].phone_number, req.body.bio || rows[0].bio, req.body.avatar || rows[0].avatar, req.body.mdp || rows[0].mdp, req.params.id];
-              _context8.next = 12;
-              return _db2.default.query(updateOneQuery, values);
-
-            case 12:
-              response = _context8.sent;
-              return _context8.abrupt("return", res.status(200).send(response.rows[0]));
-
-            case 16:
-              _context8.prev = 16;
-              _context8.t0 = _context8["catch"](2);
-              return _context8.abrupt("return", res.status(200).send(_context8.t0));
-
-            case 19:
-            case "end":
-              return _context8.stop();
-          }
-        }
-      }, _callee8, this, [[2, 16]]);
-    }));
-
-    function update(_x15, _x16) {
-      return _ref14.apply(this, arguments);
+    function update(_x17, _x18) {
+      return _ref16.apply(this, arguments);
     }
 
-    return update;
-  }(),
-
+              return _context8.abrupt("return", res.status(200).send({ message: "player not found" }));
 
   /**
    * Delete A Player
    * @param {object} req
    * @param {object} res
-   * @returns {void} return status code 204
+   * @returns {void} return statuc code 204
    */
-  delete: function () {
-    var _ref16 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee9(req, res) {
-      var deleteQuery, _ref17, rows;
+  delete: (function() {
+    var _ref18 = _asyncToGenerator(
+      /*#__PURE__*/ regeneratorRuntime.mark(function _callee10(req, res) {
+        var deleteQuery, _ref19, rows;
 
-      return regeneratorRuntime.wrap(function _callee9$(_context9) {
-        while (1) {
-          switch (_context9.prev = _context9.next) {
-            case 0:
-              deleteQuery = "DELETE FROM player WHERE id=$1 RETURNING *";
-              _context9.prev = 1;
-              _context9.next = 4;
-              return _db2.default.query(deleteQuery, [req.params.id]);
+        return regeneratorRuntime.wrap(
+          function _callee10$(_context10) {
+            while (1) {
+              switch ((_context10.prev = _context10.next)) {
+                case 0:
+                  deleteQuery = "DELETE FROM player WHERE id=$1 RETURNING *";
+                  _context10.prev = 1;
+                  _context10.next = 4;
+                  return _db2.default.query(deleteQuery, [req.params.id]);
 
-            case 4:
-              _ref17 = _context9.sent;
-              rows = _ref17.rows;
+                case 4:
+                  _ref19 = _context10.sent;
+                  rows = _ref19.rows;
 
-              if (rows[0]) {
-                _context9.next = 8;
-                break;
+                  if (rows[0]) {
+                    _context10.next = 8;
+                    break;
+                  }
+
+                  return _context10.abrupt(
+                    "return",
+                    res.status(404).send({ message: "player not found" })
+                  );
+
+                case 8:
+                  return _context10.abrupt(
+                    "return",
+                    res.status(204).send({ message: "deleted" })
+                  );
+
+                case 11:
+                  _context10.prev = 11;
+                  _context10.t0 = _context10["catch"](1);
+                  return _context10.abrupt(
+                    "return",
+                    res.status(400).send(_context10.t0)
+                  );
+
+                case 14:
+                case "end":
+                  return _context10.stop();
               }
+            }
+          },
+          _callee10,
+          this,
+          [[1, 11]]
+        );
+      })
+    );
 
-              return _context9.abrupt("return", res.status(404).send({ message: "player not found" }));
-
-            case 8:
-              return _context9.abrupt("return", res.status(204).send({ message: "deleted" }));
-
-            case 11:
-              _context9.prev = 11;
-              _context9.t0 = _context9["catch"](1);
-              return _context9.abrupt("return", res.status(400).send(_context9.t0));
-
-            case 14:
-            case "end":
-              return _context9.stop();
-          }
-        }
-      }, _callee9, this, [[1, 11]]);
-    }));
-
-    function _delete(_x17, _x18) {
-      return _ref16.apply(this, arguments);
+    function _delete(_x19, _x20) {
+      return _ref18.apply(this, arguments);
     }
 
     return _delete;

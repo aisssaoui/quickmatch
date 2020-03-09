@@ -7,14 +7,14 @@
     <data>
         <variable
             name="viewModel"
-            type="com.example.quickmatch.access.LoginFragmentViewModel" />
+            type="com.example.quickmatch.access.login.LoginFragmentViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@android:color/holo_green_light"
-        tools:context=".access.LoginFragmentUI">
+        tools:context=".access.login.LoginFragmentUI">
 
         <TextView
             android:id="@+id/text_login_title"

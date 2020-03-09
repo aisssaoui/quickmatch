@@ -1,10 +1,13 @@
 package com.example.quickmatch.network
 
+import android.os.Parcelable
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import kotlinx.android.parcel.Parcelize
 
 /* Player created by parsing data (moshi) in the JSON response */
 @JsonClass(generateAdapter = true)
+@Parcelize /* To pass a PlayerObject between activities */
 data class PlayerObject(
         val id : Int?,
         val surname : String,
@@ -19,5 +22,5 @@ data class PlayerObject(
         val victories : Int,
         val avatar : String?,
         val bio : String?
-)
+) : Parcelable
 
