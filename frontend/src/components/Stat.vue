@@ -3,58 +3,53 @@
     <div v-if="isSignedIn">
       <!-- ///////////////////////////////////////////////////////////////// -->
         <div class="my_card">
-          <div class="titre">Statistiques globales</div>
+          <div class="title">Statistiques globales</div>
 
           <hr>
-
-          <div class="para1">Nom</div>
-          <div class="para1">Prénom</div>
-          <div class="para1">Nombre de but(s)</div>
-          <div class="para1">Nombre de but(s) encaissé(s)</div>
-          <div class="para1">Nombre de match joué(s)</div>
-          <div class="para1">Nombre de victoire(s)</div>
+          <div class="tab_head_glob">Nom</div>
+          <div class="tab_head_glob">Prénom</div>
+          <div class="tab_head_glob">Nombre de but(s)</div>
+          <div class="tab_head_glob">Nombre de but(s) encaissé(s)</div>
+          <div class="tab_head_glob">Nombre de match joué(s)</div>
+          <div class="tab_head_glob">Nombre de victoire(s)</div>
 
           <br>
-
-          <div class="para2">{{ playerToShow.surname }}</div>
-          <div class="para2">{{ playerToShow.first_name }}</div>
-          <div class="para2">{{ playerToShow.scored_goals }}</div>
-          <div class="para2">{{ playerToShow.conceded_goals }}</div>
-          <div class="para2">{{ playerToShow.matches_played }}</div>
-          <div class="para2">{{ playerToShow.victories }}</div>
+          <div class="tab_glob">{{ playerToShow.surname }}</div>
+          <div class="tab_glob">{{ playerToShow.first_name }}</div>
+          <div class="tab_glob">{{ playerToShow.scored_goals }}</div>
+          <div class="tab_glob">{{ playerToShow.conceded_goals }}</div>
+          <div class="tab_glob">{{ playerToShow.matches_played }}</div>
+          <div class="tab_glob">{{ playerToShow.victories }}</div>
 
         </div>
       <!-- ///////////////////////////////////////////////////////////////// -->
       <div class="my_card">
-        <div class="titre">Statistiques de vos derniers matchs</div>
-
-        <hr><br>
+        <div class="title">Statistiques de vos derniers matchs</div>
+        <br>
 
         <div v-if="playerStatToShow.length != 0">
-          <div class="para3">Date</div>
-          <div class="para3">Lieux</div>
-          <div class="para3">Nombre de but(s)</div>
-          <div class="para3">Nombre de but(s) encaissé(s)</div>
-          <div class="para3">Résultat du match</div>
+          <div class="tab_head_match">Date</div>
+          <div class="tab_head_match">Lieux</div>
+          <div class="tab_head_match">Nombre de but(s)</div>
+          <div class="tab_head_match">Nombre de but(s) encaissé(s)</div>
+          <div class="tab_head_match">Résultat du match</div>
 
           <div v-for="row in playerStatToShowPage" :key="row.id">
             <hr>
-
-            <div class="para4">{{ new Date(row.precise_date).toLocaleDateString('fr-FR') }} ({{ new Date(row.precise_date).toLocaleTimeString('fr-FR') }})</div>
-            <div class="para4">{{ row.location }}</div>
-            <div class="para4">{{ row.scored_goals }}</div>
-            <div class="para4">{{ row.conceded_goals }}</div>
-            <div v-if="row.won" class="para4">Victoire</div>
-            <div v-else class="para4">Défaite</div>
+            <div class="tab_match">{{ new Date(row.precise_date).toLocaleDateString('fr-FR') }} ({{ new Date(row.precise_date).toLocaleTimeString('fr-FR') }})</div>
+            <div class="tab_match">{{ row.location }}</div>
+            <div class="tab_match">{{ row.scored_goals }}</div>
+            <div class="tab_match">{{ row.conceded_goals }}</div>
+            <div v-if="row.won" class="tab_match">Victoire</div>
+            <div v-else class="tab_match">Défaite</div>
           </div>
 
           <br>
-
           <div class="pages">
             <div class="numeric_icon" v-on:click="page_left()"><v-icon color="black">mdi-chevron-left</v-icon></div>
             <!-- <div class="numeric_icon" v-if="this.playerStatPage > "><v-icon color="black">mdi-dots-horizontal</v-icon></div> -->
             <div style="display: inline-block;" v-for="index in this.playerStatPageMax" :key="index">
-              <div class="numeric_icon" v-on:click="page(index)">{{ index }}</div>
+              <div v-bind:id="index" class="numeric_icon" v-on:click="page(index)">{{ index }}</div>
             </div>
             <div class="numeric_icon" v-on:click="page_right()"><v-icon color="black">mdi-chevron-right</v-icon></div>
           </div>
@@ -62,7 +57,7 @@
 
         <div v-else>
           <hr>
-          <div class="para1">Vous n'avez pas encore joué de match</div>
+          <div class="tab_nothing">Vous n'avez pas encore joué de match</div>
         </div>
       </div>
       <!-- ///////////////////////////////////////////////////////////////// -->
@@ -93,33 +88,37 @@
     border-radius: 5px;
     box-shadow: 0px 4px 8px #AAA;
   }
-  .titre{
+  .title{
     text-align: center;
     color: white;
     font-size: 200%;
     margin: 5px;
   }
-  .para1, .para2, .para3, .para4{
+  .tab_head_glob, .tab_glob, .tab_head_match, .tab_match{
     display: inline-block;
-    width: 16%;
     overflow: hidden;
     text-overflow: ellipsis;
     margin-top: 5px;
     margin-left: 5px;
   }
-  .para1, .para2{
+  .tab_head_glob, .tab_glob{
     width: 16%;
   }
-  .para3, .para4{
+  .tab_head_match, .tab_match{
     width: 19%;
   }
-  .para1, .para3{
+  .tab_head_glob, .tab_head_match{
     font-weight: bold;
     color: white;
   }
-  .para2, .para4{
+  .tab_glob, .tab_match{
     color: #CCC;
     font-size: 120%;
+  }
+  .tab_nothing{
+    text-align: center;
+    font-weight: bold;
+    color: white;
   }
 </style>
 
@@ -136,6 +135,7 @@ export default {
   data() {
     return {
       playerToShow: {},
+      //////////////////////////////////////////////////////////////////////////
       playerStatToShow: {},
       playerStatNbPageMenu: 5, // si nombre plus grand que 4, utilisation des ..., ex les btn du bas : " < 1 ... 5 6 7 8 9 ... 18 > "
       playerStatPage: 1,
@@ -147,12 +147,7 @@ export default {
   },
   async created() {
     const player = await axios
-      .get(
-        "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/players/id" + this.id,
-        {
-          responseType: "json"
-        }
-      )
+      .get("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/players/id" + this.id, {responseType: "json"})
       .catch(e => {
         if (this.isSignedIn()){
           alert("Une erreur s'est produite, nous allons rafraichir la page, si le problème persiste, quittez la page");
@@ -161,12 +156,7 @@ export default {
       });
     this.playerToShow = player.data;
     const playerStat = await axios
-      .get(
-        "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/players/stat" + this.id,
-        {
-          responseType: "json"
-        }
-      )
+      .get("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/players/stat" + this.id, {responseType: "json"})
       .catch(e => {
         if (this.isSignedIn()){
           alert("Une erreur s'est produite, nous allons rafraichir la page, si le problème persiste, quittez la page");
@@ -179,6 +169,7 @@ export default {
     for (let i = 0; i < Math.min(this.playerStatNbRowPerPage, this.playerStatNbRow); i++){
       this.playerStatToShowPage.push(this.playerStatToShow[i]);
     }
+    document.getElementById("1").style.backgroundColor = "orange";
   },
   computed: {
     isSignedIn() {
@@ -202,15 +193,15 @@ export default {
       }
     },
     page(n){
+      document.getElementById(this.playerStatPage).style.backgroundColor = "white";
       this.playerStatPage = n;
+      document.getElementById(this.playerStatPage).style.backgroundColor = "orange";
       let len = this.playerStatToShowPage.length
       for (let i = 0; i < len; i++){
         this.playerStatToShowPage.pop();
-        console.log(this.playerStatToShowPage);
       }
       for (let i = (this.playerStatPage - 1) * this.playerStatNbRowPerPage; i < Math.min(this.playerStatNbRow, this.playerStatPage * this.playerStatNbRowPerPage); i++){
         this.playerStatToShowPage.push(this.playerStatToShow[i]);
-        console.log(this.playerStatToShowPage);
       }
     }
   },
