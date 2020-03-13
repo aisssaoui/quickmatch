@@ -7,6 +7,8 @@ import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.quickmatch.R
+import com.example.quickmatch.content.club.ClubCreationStatus
+import timber.log.Timber
 
 @BindingAdapter("imageUrl")
 fun bindImage(imgView: ImageView, imgUrl: String?) {
@@ -37,5 +39,28 @@ fun bindFormat(imgView: ImageView, status : Boolean?) {
             imgView.setImageResource(R.drawable.ic_remove_circle_outline_red_24dp)
         }
         null -> imgView.visibility = View.GONE
+    }
+}
+
+@BindingAdapter("clubCreationStatus")
+fun bindStatusMail(imgView: ImageView, status: ClubCreationStatus?) {
+    Timber.i("Get in adapter")
+    Timber.i(status.toString())
+    when(status) {
+        ClubCreationStatus.DONE -> {
+            imgView.visibility = View.VISIBLE
+            imgView.setImageResource(R.drawable.ic_check_circle_white_24dp)
+        }
+        ClubCreationStatus.LOADING -> {
+            imgView.visibility = View.VISIBLE
+            imgView.setImageResource(R.drawable.status_loading_animation)
+        }
+        null -> {
+            imgView.visibility = View.GONE
+        }
+        else -> {
+            imgView.visibility = View.VISIBLE
+            imgView.setImageResource(R.drawable.ic_remove_circle_outline_red_24dp)
+        }
     }
 }

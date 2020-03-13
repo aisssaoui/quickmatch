@@ -44,7 +44,7 @@ class ClubAdapter : RecyclerView.Adapter<ClubAdapter.ViewHolder>() {
         fun bind(item: ClubObject) {
             clubName.text = item.name
             clubPrivacy.text = if (item.private) "Privé" else "Public"
-            clubCreationDate.text = clubCreationDate.text.toString() + " " + FormatUtils.parseDateToJJMMAAAA(item.creationDate)
+            clubCreationDate.text = itemView.context.getString(R.string.created) + " " + FormatUtils.parseDateToJJMMAAAA(item.creationDate!!)
             joinClubIcon.setImageResource(R.drawable.ic_group_add_green_48dp)
         }
 

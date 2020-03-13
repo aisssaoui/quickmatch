@@ -44,6 +44,7 @@ object FormatUtils {
     const val MIN_PASSWORD_SIZE = 8
     const val BIO_SIZE = 80
     const val AVATAR_SIZE = 60
+    const val CLUB_NAME_SIZE = 40
 
     /* Regexs */
     val mailPattern = Regex("[a-zA-Z0-9._-]+@[a-z0-9-]+\\.[a-z]+")
