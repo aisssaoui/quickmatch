@@ -16,7 +16,7 @@ const Player = {
     const values = [
       req.body.surname,
       req.body.first_name,
-      req.body.mail_adress,
+      req.body.mail_address,
       req.body.phone_number,
       req.body.pseudo,
       req.body.mdp,
@@ -83,6 +83,25 @@ const Player = {
   },
 
   /**
+   * Get A Player by his pseudo
+   * @param {object} req
+   * @param {object} res
+   * @returns {object} player object
+   */
+  async getByPseudo(req, res) {
+    const text = "SELECT * FROM player WHERE pseudo = $1";
+    try {
+      const { rows } = await db.query(text, [req.params.pseudo]);
+      if (!rows[0]) {
+        return res.status(202).send({ message: "player not found" });
+      }
+      return res.status(200).send(rows[0]);
+    } catch (error) {
+      return res.status(202).send(error);
+    }
+  },
+
+  /**
    * Get A Player by his mail address
    * @param {object} req
    * @param {object} res
@@ -92,6 +111,25 @@ const Player = {
     const text = "SELECT * FROM player WHERE mail_address = $1";
     try {
       const { rows } = await db.query(text, [req.params.mail_address]);
+      if (!rows[0]) {
+        return res.status(202).send({ message: "player not found" });
+      }
+      return res.status(200).send(rows[0]);
+    } catch (error) {
+      return res.status(202).send(error);
+    }
+  },
+
+  /**
+   * Get A Player by his phone_number
+   * @param {object} req
+   * @param {object} res
+   * @returns {object} player object
+   */
+  async getByPhone(req, res) {
+    const text = "SELECT * FROM player WHERE phone_number = $1";
+    try {
+      const { rows } = await db.query(text, [req.params.phone_number]);
       if (!rows[0]) {
         return res.status(202).send({ message: "player not found" });
       }
@@ -127,8 +165,8 @@ const Player = {
   async update(req, res) {
     const findOneQuery = "SELECT * FROM player WHERE id = $1";
     const updateOneQuery = `UPDATE player
-      SET pseudo = $1, surname = $2, first_name = $3, mail_address = $4, phone_number = $5, bio=$6, avatar=$7, mdp=$8
-      WHERE id = $9 RETURNING *`;
+      SET pseudo = $1, surname = $2, first_name = $3, mail_address = $4, phone_number = $5, bio=$6, avatar=$7, mdp=$8, is_valid=$9, private_profil=$10
+      WHERE id = $11 RETURNING *`;
     try {
       const { rows } = await db.query(findOneQuery, [req.params.id]);
       if (!rows[0]) {
@@ -143,6 +181,10 @@ const Player = {
         req.body.bio || rows[0].bio,
         req.body.avatar || rows[0].avatar,
         req.body.mdp || rows[0].mdp,
+        req.body.is_valid === null ? rows[0].is_valid : req.body.is_valid,
+        req.body.private_profil === null
+          ? rows[0].private_profil
+          : req.body.private_profil,
         req.params.id
       ];
       const response = await db.query(updateOneQuery, values);

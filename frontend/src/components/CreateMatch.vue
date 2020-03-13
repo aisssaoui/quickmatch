@@ -6,10 +6,9 @@
     <br />
     <v-card class="mx-auto" max-width="1000" tile>
       <br />
-      <span
-        v-if="Err"
-        style="color : red; font-size: 25px;margin: 15px;"
-      >Merci de renseigner tous les champs</span>
+      <span v-if="Err" style="color : red; font-size: 25px;margin: 15px;"
+        >Merci de renseigner tous les champs</span
+      >
 
       <v-list-item two-line>
         <v-list-item-content>
@@ -91,13 +90,18 @@
       <v-list-item>
         <v-list-item-content>
           <v-list-item-subtitle class="headline">
-            <v-text-field label="Localisation" v-model="location"></v-text-field>
+            <v-text-field
+              label="Localisation"
+              v-model="location"
+            ></v-text-field>
           </v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
 
       <v-list-item style="width: 900px">
-        <v-subheader>Min et Max de joueurs requis par équipe pour le match</v-subheader>
+        <v-subheader
+          >Min et Max de joueurs requis par équipe pour le match</v-subheader
+        >
         <v-range-slider
           v-model="range"
           :max="max"
@@ -111,35 +115,71 @@
       </v-list-item>
 
       <v-list-item>
-        <v-list-item-title class="font-weight-bold">Jour de répétition:</v-list-item-title>
+        <v-list-item-title class="font-weight-bold"
+          >Jour de répétition:</v-list-item-title
+        >
       </v-list-item>
 
       <v-list-item>
         <v-list-item>
-          <v-checkbox v-model="selected" label="Lundi" value="Monday"></v-checkbox>
+          <v-checkbox
+            v-model="selected"
+            label="Lundi"
+            value="Monday"
+          ></v-checkbox>
         </v-list-item>
         <v-list-item>
-          <v-checkbox v-model="selected" label="Mardi" value="Tuesday"></v-checkbox>
+          <v-checkbox
+            v-model="selected"
+            label="Mardi"
+            value="Tuesday"
+          ></v-checkbox>
         </v-list-item>
         <v-list-item>
-          <v-checkbox v-model="selected" label="Mercredi" value="Wednesday"></v-checkbox>
+          <v-checkbox
+            v-model="selected"
+            label="Mercredi"
+            value="Wednesday"
+          ></v-checkbox>
         </v-list-item>
         <v-list-item>
-          <v-checkbox v-model="selected" label="Jeudi" value="Thursday"></v-checkbox>
+          <v-checkbox
+            v-model="selected"
+            label="Jeudi"
+            value="Thursday"
+          ></v-checkbox>
         </v-list-item>
         <v-list-item>
-          <v-checkbox v-model="selected" label="Vendredi" value="Friday"></v-checkbox>
+          <v-checkbox
+            v-model="selected"
+            label="Vendredi"
+            value="Friday"
+          ></v-checkbox>
         </v-list-item>
         <v-list-item>
-          <v-checkbox v-model="selected" label="Samedi" value="Saturday"></v-checkbox>
+          <v-checkbox
+            v-model="selected"
+            label="Samedi"
+            value="Saturday"
+          ></v-checkbox>
         </v-list-item>
         <v-list-item>
-          <v-checkbox v-model="selected" label="Dimanche" value="Sunday"></v-checkbox>
+          <v-checkbox
+            v-model="selected"
+            label="Dimanche"
+            value="Sunday"
+          ></v-checkbox>
         </v-list-item>
       </v-list-item>
 
       <v-card-actions>
-        <v-btn text class="title" color="deep-purple accent-4" v-on:click="CreateMatch">Créer !</v-btn>
+        <v-btn
+          text
+          class="title"
+          color="deep-purple accent-4"
+          v-on:click="CreateMatch"
+          >Créer !</v-btn
+        >
       </v-card-actions>
     </v-card>
   </div>
@@ -229,23 +269,25 @@ export default {
       }
 
       //Create Meet
-      let meetID = null;
-      let apiRep3 = null;
-      apiRep3 = await axios.post(
-        "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/Meets",
-        {
-          location: this.location,
-          precise_date: null,
-          minimal_team_size: this.range[0],
-          maximal_team_size: this.range[1],
-          deletion_date: null
+      let meetsID = [];
+      for (let i = 0; i < this.selected.length; i++) {
+        let apiRep3 = null;
+        apiRep3 = await axios.post(
+          "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/Meets",
+          {
+            location: this.location,
+            precise_date: null,
+            minimal_team_size: this.range[0],
+            maximal_team_size: this.range[1],
+            deletion_date: null
+          }
+        );
+        if (apiRep3.data.name != "error") {
+          meetsID.push(apiRep3.data.id);
+        } else {
+          this.Err = 1;
+          return;
         }
-      );
-      if (apiRep3.data.name != "error") {
-        meetID = apiRep3.data.id;
-      } else {
-        this.Err = 1;
-        return;
       }
 
       //Create Invitations
@@ -262,7 +304,7 @@ export default {
               slot_id: slotsId[i],
               player_id: playersInv[j],
               event_type: "Match",
-              meet_id: meetID,
+              meet_id: meetsID[i],
               status: s
             }
           );
