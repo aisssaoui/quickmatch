@@ -292,7 +292,8 @@ export default {
               " joueurs n'ont pas encore répondu au match";
           }
         }
-        this.events.push({
+        if (acceptedTable.contains(this.surname())){ /////// FIND THE F PSEUDO 
+          this.events.push({
           name:
             "Match à " +
             this.byPlayerTable.rows[i].location +
@@ -311,6 +312,29 @@ export default {
             this.byPlayerTable.rows[i].end_hour,
           color: color
         });
+        }
+        else{
+          this.events.push({
+          name:
+            "Invitation à " +
+            this.byPlayerTable.rows[i].location +
+            " ~~~ " +
+            playing +
+            "/" +
+            this.byPlayerTable.rows[i].minimal_team_size * 2,
+          details: dts,
+          start:
+            gameDate.format("YYYY-MM-DD") +
+            " " +
+            this.byPlayerTable.rows[i].start_hour,
+          end:
+            gameDate.format("YYYY-MM-DD") +
+            " " +
+            this.byPlayerTable.rows[i].end_hour,
+          color: color
+        });
+        }
+        
       }
     },
     viewDay({ date }) {
@@ -351,6 +375,9 @@ export default {
       return d > 3 && d < 21
         ? "th"
         : ["th", "st", "nd", "rd", "th", "th", "th", "th", "th", "th"][d % 10];
+    },
+    surname() {
+      return store.getters.surname();
     }
   },
   async created() {
