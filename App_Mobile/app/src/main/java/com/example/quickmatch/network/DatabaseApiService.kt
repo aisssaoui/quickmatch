@@ -2,7 +2,6 @@ package com.example.quickmatch.network
 
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import kotlinx.coroutines.Deferred
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.*
@@ -139,13 +138,16 @@ interface DatabaseApiService {
     /* PLAYERBELONGCLUB */
     /* GET REQUESTS */
     @GET("dbcontrol/api/v1/PlayerClubsRows")
-    suspend fun getPlayerClubs() : List<PlayerClubsObject>
+    suspend fun getPlayerClubs() : List<PlayerBelongClubObject>
     /* TODO : rajouter les rows pour chacune des fonctions suivantes (demander à faiz) */
     @GET("dbcontrol/api/v1/PlayerClubs/paid{id}")
-    suspend fun getClubsByIdAdmin(@Path("id") id : Int) : List<PlayerClubsObject>
+    suspend fun getClubsByIdAdmin(@Path("id") id : Int) : List<PlayerBelongClubObject>
     @GET("dbcontrol/api/v1/PlayerClubs/pid{id}")
-    suspend fun getClubsByIdPlayer(@Path("id") id : Int) : List<PlayerClubsObject>
+    suspend fun getClubsByIdPlayer(@Path("id") id : Int) : List<PlayerBelongClubObject>
 
+    /* POST REQUESTS */
+    @POST("dbcontrol/api/v1/PlayerClubs")
+    suspend fun addPlayerToClub(@Body playerClub: PlayerBelongClubObject)
 
 }
 
