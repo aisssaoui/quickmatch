@@ -29,6 +29,8 @@
             <div class="tab_head_v_clubs">Date de création</div>
             <div class="tab_head_v_clubs">Club privé</div>
             <div class="tab_head_v_clubs">Administrateur</div>
+            <div class="tab_head_v_clubs">Quitter le club</div>
+            <div class="tab_head_v_clubs">Gérer le club</div>
 
             <div v-for="row in clubsInToShowPage" :key="row.id">
               <hr>
@@ -82,6 +84,7 @@
           <div v-if="clubsNotInToShow.length != 0">
             <div class="tab_head_r_clubs">Nom du Club</div>
             <div class="tab_head_r_clubs">Date de création</div>
+            <div class="tab_head_r_clubs">Demander à rejoindre</div>
 
             <div v-for="row in clubsNotInToShowPage" :key="row.id">
               <hr>
@@ -127,6 +130,8 @@
           <div class="tab_head_g_clubs">Nombre de but(s) encaissé(s)</div>
           <div class="tab_head_g_clubs">Nombre de match joué(s)</div>
           <div class="tab_head_g_clubs">Nombre de victoire(s)</div>
+          <div class="tab_head_g_clubs">Nommer admin</div>
+          <div class="tab_head_g_clubs">Supprimer</div>
 
           <div v-for="row in playersInClubToShowPage" :key="row.id">
             <hr>
@@ -174,6 +179,7 @@
             <v-btn dark small rounded align="left" color="#666" v-on:click="manage_club_menu(name_club_switch, id_club_switch)">Retourner au menu de gestion du club "{{ name_club_switch }}"</v-btn>
           </div>
           <div class="title">Ajouter un joueur</div>
+          <br>
 
           <div v-if="playersNotInClubToShow.length != 0">
             <div class="tab_head_a_clubs">Nom</div>
@@ -183,6 +189,7 @@
             <div class="tab_head_a_clubs">Nombre de but(s) encaissé(s)</div>
             <div class="tab_head_a_clubs">Nombre de match joué(s)</div>
             <div class="tab_head_a_clubs">Nombre de victoire(s)</div>
+            <div class="tab_head_a_clubs">Ajouter</div>
 
             <div v-for="row in playersNotInClubToShowPage" :key="row.id">
               <hr>
@@ -246,7 +253,7 @@
   }
   .title{
     color: white;
-    font-size: 300%;
+    font-size: 200%;
     margin: 5px;
   }
   .tab_nothing{
@@ -402,7 +409,7 @@ export default {
         this.clubsInToShowPage.push(this.clubsInToShow[i]);
       }
       this.switch_menu = 'p';
-      document.getElementById(this.clubsInPage).style.backgroundColor = "orange";
+      setTimeout(() => { document.getElementById(this.clubsInPage).style.backgroundColor = "orange"; }, 1);
     },
     page_left_vc(){
       if (this.clubsInPage != 1){
@@ -529,7 +536,7 @@ export default {
         this.clubsNotInToShowPage.push(this.clubsNotInToShow[i]);
       }
       this.switch_menu = 'r';
-      document.getElementById(this.clubsNotInPage).style.backgroundColor = "orange";
+      setTimeout(() => { document.getElementById(this.clubsNotInPage).style.backgroundColor = "orange"; }, 1);
     },
     page_left_rc(){
       if (this.clubsNotInPage != 1){
@@ -605,7 +612,7 @@ export default {
         this.playersInClubToShowPage.push(this.playersInClubToShow[i]);
       }
       this.switch_menu = 'g';
-      document.getElementById(this.playersInClubPage).style.backgroundColor = "orange";
+      setTimeout(() => { document.getElementById(this.playersInClubPage).style.backgroundColor = "orange"; }, 1);
     },
     page_left_gc(){
       if (this.playersInClubPage != 1){
@@ -671,7 +678,7 @@ export default {
         this.playersNotInClubToShowPage.push(this.playersNotInClubToShow[i]);
       }
       this.switch_menu = 'a';
-      document.getElementById(this.playersNotInClubPage).style.backgroundColor = "orange";
+      setTimeout(() => { document.getElementById(this.playersNotInClubPage).style.backgroundColor = "orange"; }, 1);
     },
     page_left_ac(){
       if (this.playersNotInClubPage != 1){
