@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -23,8 +24,10 @@ import timber.log.Timber
 
 class SigninFragmentUI : Fragment() {
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
 
         val binding: FragmentSigninBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_signin, container, false)
         val viewModel = ViewModelProviders.of(this).get(SigninFragmentViewModel::class.java)
@@ -39,27 +42,47 @@ class SigninFragmentUI : Fragment() {
 
         /* Launch signin request */
         binding.buttonSigninSignin.setOnClickListener {
-            Timber.i("Button clicked")
-            viewModel.tryToSignIn(binding.inputSigninName.text.toString(),
+                viewModel.tryToSignIn(
+                    binding.inputSigninName.text.toString(),
                     binding.inputSigninFirstname.text.toString(),
                     binding.inputSigninPseudo.text.toString(),
                     binding.inputSigninMail.text.toString(),
                     binding.inputSigninPwd.text.toString(),
                     binding.inputSigninConfirmPwd.text.toString(),
-                    binding.inputSigninPhone.text.toString())
+                    binding.inputSigninPhone.text.toString()
+                )
         }
+
+        /* Lauch check requests */
+        binding.buttonSigninCheck.setOnClickListener {
+            viewModel.checkUnicity(binding.inputSigninMail.text.toString(),
+                binding.inputSigninPseudo.text.toString(),
+                binding.inputSigninPhone.text.toString())
+        }
+
+        /* Observer for signin authorization */
+        viewModel.authorizedToSignin.observe(this, Observer {
+            binding.buttonSigninSignin.isEnabled = it
+            binding.buttonSigninCheck.isEnabled = !it
+        })
+
 
         /* Observer for the signin status in the viewModel */
         viewModel.signinStatus.observe(this, Observer {
             when (it) {
-                SigninStatus.NETWORK_ERROR -> binding.textSigninStatus.text = "Erreur d'inscription (Bad request)"
+                SigninStatus.NETWORK_ERROR -> {
+                    binding.textSigninStatus.visibility = View.VISIBLE
+                    binding.textSigninStatus.text = "Erreur d'inscription"
+                }
                 SigninStatus.DONE -> {
                     val intentContent = Intent(this.activity, ContentActivity::class.java)
                     startActivity(intentContent)
                     this.activity!!.finish()
                 }
+                else -> binding.textSigninStatus.visibility = View.GONE
             }
         })
+
 
         /* Focus observers to check fields format */
 
@@ -95,7 +118,10 @@ class SigninFragmentUI : Fragment() {
 
         binding.inputSigninConfirmPwd.setOnFocusChangeListener { v, hasFocus ->
             if (!hasFocus) {
-                viewModel.checkFormatPasswordCheck(binding.inputSigninPwd.text.toString(), binding.inputSigninConfirmPwd.text.toString())
+                viewModel.checkFormatPasswordCheck(
+                    binding.inputSigninPwd.text.toString(),
+                    binding.inputSigninConfirmPwd.text.toString()
+                )
             }
         }
 
@@ -105,7 +131,18 @@ class SigninFragmentUI : Fragment() {
             }
         }
 
+        /* Observer of unicity checks to update unicity map */
+        viewModel.mailStatus.observe(this, Observer {
+            viewModel.checkUnicityState()
+        })
 
+        viewModel.pseudoStatus.observe(this, Observer {
+            viewModel.checkUnicityState()
+        })
+
+        viewModel.phoneNumberStatus.observe(this, Observer {
+            viewModel.checkUnicityState()
+        })
 
 
         return binding.root

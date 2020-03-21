@@ -30,6 +30,10 @@ class ClubFragmentUI : BaseFragment() {
             findNavController().navigate(ClubFragmentUIDirections.actionClubFragmentUIToClubListFragmentUI())
         }
 
+        binding.addButton.setOnClickListener {
+            findNavController().navigate(ClubFragmentUIDirections.actionClubFragmentUIToClubCreationFragmentUI())
+        }
+
         return binding.root
     }
 

@@ -1,29 +1,19 @@
 package com.example.quickmatch.content.club
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.quickmatch.R
+import com.example.quickmatch.databinding.ListClubsItemBinding
 import com.example.quickmatch.network.ClubObject
-import com.example.quickmatch.utils.FormatUtils
 
-class ClubAdapter : RecyclerView.Adapter<ClubAdapter.ViewHolder>() {
-    var data = listOf<ClubObject>() // datas list displayed by the recycler view
-    set(value) { // setter to make recycler view know when datas to display change
-        field = value
-        notifyDataSetChanged()
-    }
-
-    /* give knowledge of datas size */
-    override fun getItemCount() = data.size
+class ClubAdapter(val clickListener: ClubClickListener) : ListAdapter<ClubObject, ClubAdapter.ViewHolder>(ClubDiffCallback()) {
 
     /* how data should be binded with the viewholder */
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = data[position]
-        holder.bind(item)
+        val item = getItem(position)
+        holder.bind(item, clickListener)
     }
 
     /* how to create a new viewholder */
@@ -32,31 +22,41 @@ class ClubAdapter : RecyclerView.Adapter<ClubAdapter.ViewHolder>() {
     }
 
     /* custom view holder based on the custom item layout */
-    class ViewHolder private constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
-        /* view in the layout */
-        private val clubName: TextView = itemView.findViewById(R.id.club_name)
-        private val clubPrivacy: TextView = itemView.findViewById(R.id.club_privacy)
-        private val clubCreationDate: TextView = itemView.findViewById(R.id.club_creation_date)
-        private val joinClubIcon: ImageView = itemView.findViewById(R.id.join_icon)
+    class ViewHolder private constructor(val binding: ListClubsItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
         /* bind view values to the datas */
-        fun bind(item: ClubObject) {
-            clubName.text = item.name
-            clubPrivacy.text = if (item.private) "Privé" else "Public"
-            clubCreationDate.text = clubCreationDate.text.toString() + " " + FormatUtils.parseDateToJJMMAAAA(item.creationDate)
-            joinClubIcon.setImageResource(R.drawable.ic_group_add_green_48dp)
+        fun bind(item: ClubObject, clickListener: ClubClickListener) {
+            binding.club = item
+            binding.clickListener = clickListener
+            binding.executePendingBindings()
         }
 
         /* inflate layout here to encapsulate, onCreateViewHolder has nothing to know about inflation */
         companion object {
             fun from(parent: ViewGroup): ViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
-                val view = layoutInflater.inflate(R.layout.list_clubs_item, parent, false)
-                return ViewHolder((view))
+                val binding = ListClubsItemBinding.inflate(layoutInflater, parent, false)
+                return ViewHolder(binding)
             }
         }
     }
+}
 
+/* class used to improve data refresh in the recycler view */
+class ClubDiffCallback : DiffUtil.ItemCallback<ClubObject>() {
 
+    /* check if items are the same item */
+    override fun areItemsTheSame(oldItem: ClubObject, newItem: ClubObject): Boolean {
+        return oldItem.id == newItem.id
+    }
+
+    /* check equality between items */
+    override fun areContentsTheSame(oldItem: ClubObject, newItem: ClubObject): Boolean {
+        return oldItem == newItem
+    }
+}
+
+/* Click listener for recycler view items */
+class ClubClickListener(val clickListener : (clubId: Int?) -> Unit) {
+    fun onClick(club: ClubObject) = clickListener(club.id)
 }

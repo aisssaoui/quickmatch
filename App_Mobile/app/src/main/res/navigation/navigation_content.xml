@@ -40,6 +40,9 @@
         <action
             android:id="@+id/action_clubFragmentUI_to_clubListFragmentUI"
             app:destination="@id/clubListFragmentUI" />
+        <action
+            android:id="@+id/action_clubFragmentUI_to_clubCreationFragmentUI"
+            app:destination="@id/clubCreationFragmentUI" />
     </fragment>
     <fragment
         android:id="@+id/settingFragmentUI"
@@ -59,4 +62,13 @@
         android:id="@+id/clubListFragmentUI"
         android:name="com.example.quickmatch.content.club.ClubListFragmentUI"
         android:label="ClubListFragmentUI" />
+    <fragment
+        android:id="@+id/clubCreationFragmentUI"
+        android:name="com.example.quickmatch.content.club.ClubCreationFragmentUI"
+        android:label="ClubCreationFragmentUI" >
+        <action
+            android:id="@+id/action_clubCreationFragmentUI_to_clubFragmentUI"
+            app:destination="@id/clubFragmentUI"
+            app:popUpTo="@+id/clubFragmentUI" />
+    </fragment>
 </navigation>

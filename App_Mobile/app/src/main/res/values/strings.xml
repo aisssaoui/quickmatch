@@ -52,4 +52,9 @@
     <string name="sms">SMS</string>
     <string name="text_privacy">Privé</string>
     <string name="created">Créé le :</string>
+    <string name="create_club">Créer un club</string>
+    <string name="club_name">Nom du club</string>
+    <string name="private_club">Club privé</string>
+    <string name="create_the_club">Créer le club</string>
+    <string name="text_check">Vérifier les informations</string>
 </resources>

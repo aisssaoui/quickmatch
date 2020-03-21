@@ -2,7 +2,6 @@ package com.example.quickmatch.network
 
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import kotlinx.coroutines.Deferred
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.*
@@ -24,7 +23,6 @@ private val retrofit = Retrofit.Builder()
         .baseUrl(BASE_URL)
         .build()
 
-/* TODO: trouver comment faire pour POST ie. passer un club par exemple dans les params d'une requete */
 
 /* API to communicate with the backend */
 interface DatabaseApiService {
@@ -37,13 +35,14 @@ interface DatabaseApiService {
     suspend fun getAllPlayers() : List<PlayerObject>
     @GET("dbcontrol/api/v1/Players/ma{mail_address}")
     suspend fun getPlayerByMail(@Path("mail_address") mailAddress : String) : PlayerObject
-    @GET("dbcontrol/api/v1/Players/p{pseudo}")
-    suspend fun getPlayerByPseudo(@Path("pseudo") pseudo : String) : PlayerObject
+    @GET("dbcontrol/api/v1/Players/p{p}")
+    suspend fun getPlayerByPseudo(@Path("p") pseudo : String) : PlayerObject
+    @GET("dbcontrol/api/v1/Players/n{phone_number}")
+    suspend fun getPlayerByPhoneNumber(@Path("phone_number") phoneNumber : String) : PlayerObject
     @GET("dbcontrol/api/v1/Players/id{id}")
     suspend fun getPlayerById(@Path("id") id : Int) : PlayerObject
     @GET("dbcontrol/api/v1/Players/stat{id}")
     suspend fun getPlayerMeetSheetsById(@Path("id") id : Int) : List<MeetsSheetObject>
-    //TODO add getByPhoneNumber method when route is available
 
     /* POST REQUESTS */
     @POST("dbcontrol/api/v1/Players")
@@ -70,7 +69,7 @@ interface DatabaseApiService {
 
     /* POST REQUESTS */
     @POST("dbcontrol/api/v1/Clubs")
-    suspend fun addClub(clubObject: ClubObject)
+    suspend fun addClub(@Body clubObject: ClubObject)
 
     /* INVITATIONS */
     /* GET REQUESTS */
@@ -139,13 +138,16 @@ interface DatabaseApiService {
     /* PLAYERBELONGCLUB */
     /* GET REQUESTS */
     @GET("dbcontrol/api/v1/PlayerClubsRows")
-    suspend fun getPlayerClubs() : List<PlayerClubsObject>
+    suspend fun getPlayerClubs() : List<PlayerBelongClubObject>
     /* TODO : rajouter les rows pour chacune des fonctions suivantes (demander à faiz) */
     @GET("dbcontrol/api/v1/PlayerClubs/paid{id}")
-    suspend fun getClubsByIdAdmin(@Path("id") id : Int) : List<PlayerClubsObject>
+    suspend fun getClubsByIdAdmin(@Path("id") id : Int) : List<PlayerBelongClubObject>
     @GET("dbcontrol/api/v1/PlayerClubs/pid{id}")
-    suspend fun getClubsByIdPlayer(@Path("id") id : Int) : List<PlayerClubsObject>
+    suspend fun getClubsByIdPlayer(@Path("id") id : Int) : List<PlayerBelongClubObject>
 
+    /* POST REQUESTS */
+    @POST("dbcontrol/api/v1/PlayerClubs")
+    suspend fun addPlayerToClub(@Body playerClub: PlayerBelongClubObject)
 
 }
 

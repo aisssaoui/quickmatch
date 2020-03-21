@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.quickmatch.network.ClubObject
 import com.example.quickmatch.network.DatabaseApi
+import com.example.quickmatch.network.PlayerBelongClubObject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -18,6 +19,10 @@ class ClubListFragmentViewModel : ViewModel() {
     private val _getAllStatus = MutableLiveData<RequestStatus>()
     val getAllStatus : LiveData<RequestStatus>
         get() = _getAllStatus
+
+    private val _joinStatus = MutableLiveData<RequestStatus>()
+    val joinStatus : LiveData<RequestStatus>
+        get() = _joinStatus
 
    val clubs = MutableLiveData<List<ClubObject>>()
 
@@ -40,7 +45,7 @@ class ClubListFragmentViewModel : ViewModel() {
 
             try {
 
-                clubs.value = DatabaseApi.retrofitService.getAllClubs()
+                clubs.value = DatabaseApi.retrofitService.getAllClubs().filter { club -> !club.private } // display only public clubs here
                 _getAllStatus.value = RequestStatus.DONE
 
             } catch (t: Throwable) {
@@ -50,6 +55,29 @@ class ClubListFragmentViewModel : ViewModel() {
 
             }
         }
+    }
+
+    fun onJoinClubClicked(playerId: Int?, clubId: Int?) {
+
+        _joinStatus.value = RequestStatus.LOADING
+
+        val newPlayerClub = PlayerBelongClubObject(playerId!!, clubId!!, false)
+        Timber.i(newPlayerClub.toString())
+
+        coroutineScope.launch {
+
+            try {
+
+                val result = DatabaseApi.retrofitService.addPlayerToClub(newPlayerClub)
+                _joinStatus.value = RequestStatus.DONE
+
+            } catch (t: Throwable) {
+
+                Timber.i(t.message + " / onJoinClubClicked()")
+                _joinStatus.value = RequestStatus.ERROR
+            }
+        }
+
     }
 
 }
