@@ -5,10 +5,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.quickmatch.databinding.ListClubsItemBinding
-import com.example.quickmatch.network.ClubAndPlayerBelongClubObject
+import com.example.quickmatch.content.player
+import com.example.quickmatch.databinding.ListClubPlayerItemBinding
+import com.example.quickmatch.network.PlayerAndPlayerBelongClubObject
 
-class ClubAdapter(val clickListener: ClubClickListener) : ListAdapter<ClubAndPlayerBelongClubObject, ClubAdapter.ViewHolder>(ClubDiffCallback()) {
+class PlayerAdapter(val clickListener: PlayerClickListener) : ListAdapter<PlayerAndPlayerBelongClubObject, PlayerAdapter.ViewHolder>(PlayerDiffCallback()) {
 
     /* how data should be binded with the viewholder */
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -22,12 +23,13 @@ class ClubAdapter(val clickListener: ClubClickListener) : ListAdapter<ClubAndPla
     }
 
     /* custom view holder based on the custom item layout */
-    class ViewHolder private constructor(val binding: ListClubsItemBinding) : RecyclerView.ViewHolder(binding.root) {
+    class ViewHolder private constructor(val binding: ListClubPlayerItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
         /* bind view values to the datas */
-        fun bind(item: ClubAndPlayerBelongClubObject, clickListener: ClubClickListener) {
-            binding.clubAndPlayer = item
+        fun bind(item: PlayerAndPlayerBelongClubObject, clickListener: PlayerClickListener) {
+            binding.player = item
             binding.clickListener = clickListener
+            binding.loggedPlayer = player
             binding.executePendingBindings()
         }
 
@@ -35,7 +37,7 @@ class ClubAdapter(val clickListener: ClubClickListener) : ListAdapter<ClubAndPla
         companion object {
             fun from(parent: ViewGroup): ViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
-                val binding = ListClubsItemBinding.inflate(layoutInflater, parent, false)
+                val binding = ListClubPlayerItemBinding.inflate(layoutInflater, parent, false)
                 return ViewHolder(binding)
             }
         }
@@ -43,20 +45,20 @@ class ClubAdapter(val clickListener: ClubClickListener) : ListAdapter<ClubAndPla
 }
 
 /* class used to improve data refresh in the recycler view */
-class ClubDiffCallback : DiffUtil.ItemCallback<ClubAndPlayerBelongClubObject>() {
+class PlayerDiffCallback : DiffUtil.ItemCallback<PlayerAndPlayerBelongClubObject>() {
 
     /* check if items are the same item */
-    override fun areItemsTheSame(oldItem: ClubAndPlayerBelongClubObject, newItem: ClubAndPlayerBelongClubObject): Boolean {
+    override fun areItemsTheSame(oldItem: PlayerAndPlayerBelongClubObject, newItem: PlayerAndPlayerBelongClubObject): Boolean {
         return oldItem.id == newItem.id
     }
 
     /* check equality between items */
-    override fun areContentsTheSame(oldItem: ClubAndPlayerBelongClubObject, newItem: ClubAndPlayerBelongClubObject): Boolean {
+    override fun areContentsTheSame(oldItem: PlayerAndPlayerBelongClubObject, newItem: PlayerAndPlayerBelongClubObject): Boolean {
         return oldItem == newItem
     }
 }
 
 /* Click listener for recycler view items */
-class ClubClickListener(val clickListener : (clubId: Int?) -> Unit) {
-    fun onClick(club: ClubAndPlayerBelongClubObject) = clickListener(club.id)
+class PlayerClickListener(val clickListener : (clubId: Int?) -> Unit) {
+    fun onClick(club: PlayerAndPlayerBelongClubObject) = clickListener(club.id)
 }

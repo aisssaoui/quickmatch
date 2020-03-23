@@ -57,4 +57,11 @@
     <string name="private_club">Club privé</string>
     <string name="create_the_club">Créer le club</string>
     <string name="text_check">Vérifier les informations</string>
+    <string name="search_hint">Rechercher</string>
+    <string name="empty_clubs_join">Vous ne pouvez rejoindre aucun nouveau club...</string>
+    <string name="joined">Membre depuis le :</string>
+    <string name="no_club">Vous n\'êtes membre d\'aucun club...</string>
+    <string name="text_members">Membres :</string>
+    <string name="text_leave">Quitter le club</string>
+    <string name="text_name_firstname_pseudo">Nom Prénom (Pseudo)</string>
 </resources>

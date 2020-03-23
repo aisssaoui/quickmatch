@@ -3,9 +3,11 @@ package com.example.quickmatch.content.club
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.quickmatch.content.player
 import com.example.quickmatch.network.ClubObject
 import com.example.quickmatch.network.DatabaseApi
 import com.example.quickmatch.network.PlayerBelongClubObject
+import com.example.quickmatch.network.PlayerObject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -14,7 +16,7 @@ import timber.log.Timber
 
 enum class RequestStatus { DONE, ERROR, LOADING }
 
-class ClubListFragmentViewModel : ViewModel() {
+class ClubJoinFragmentViewModel : ViewModel() {
 
     private val _getAllStatus = MutableLiveData<RequestStatus>()
     val getAllStatus : LiveData<RequestStatus>
@@ -32,12 +34,11 @@ class ClubListFragmentViewModel : ViewModel() {
     // Uses main thread coz retrofit works itself on background threads
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
-
     init {
-        getClubs()
+        getPublicNewClubs()
     }
 
-    private fun getClubs() {
+    private fun getPublicNewClubs() {
 
         _getAllStatus.value = RequestStatus.LOADING
 
@@ -45,7 +46,7 @@ class ClubListFragmentViewModel : ViewModel() {
 
             try {
 
-                clubs.value = DatabaseApi.retrofitService.getAllClubs().filter { club -> !club.private } // display only public clubs here
+                clubs.value = DatabaseApi.retrofitService.getPlayerNotJoinedPublicClubs(player.id!!)
                 _getAllStatus.value = RequestStatus.DONE
 
             } catch (t: Throwable) {
@@ -57,11 +58,11 @@ class ClubListFragmentViewModel : ViewModel() {
         }
     }
 
-    fun onJoinClubClicked(playerId: Int?, clubId: Int?) {
+    fun onJoinClubClicked(clubId: Int?) {
 
         _joinStatus.value = RequestStatus.LOADING
 
-        val newPlayerClub = PlayerBelongClubObject(playerId!!, clubId!!, false)
+        val newPlayerClub = PlayerBelongClubObject(player.id!!, clubId!!, false)
         Timber.i(newPlayerClub.toString())
 
         coroutineScope.launch {
@@ -70,6 +71,7 @@ class ClubListFragmentViewModel : ViewModel() {
 
                 val result = DatabaseApi.retrofitService.addPlayerToClub(newPlayerClub)
                 _joinStatus.value = RequestStatus.DONE
+                getPublicNewClubs()
 
             } catch (t: Throwable) {
 
@@ -77,7 +79,6 @@ class ClubListFragmentViewModel : ViewModel() {
                 _joinStatus.value = RequestStatus.ERROR
             }
         }
-
     }
 
 }

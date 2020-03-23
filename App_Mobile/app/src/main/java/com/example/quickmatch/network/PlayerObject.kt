@@ -21,6 +21,8 @@ data class PlayerObject(
         @Json(name = "matches_played") val matchesPlayed : Int,
         val victories : Int,
         val avatar : String?,
-        val bio : String?
+        val bio : String?,
+        @Json(name = "is_valid") val isValid : Boolean?,
+        @Json(name = "private_profil") val isPrivate : Boolean?
 ) : Parcelable
 
