@@ -2,6 +2,7 @@ package com.example.quickmatch.content.club
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.appcompat.widget.PopupMenu
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -59,6 +60,8 @@ class PlayerDiffCallback : DiffUtil.ItemCallback<PlayerAndPlayerBelongClubObject
 }
 
 /* Click listener for recycler view items */
-class PlayerClickListener(val clickListener : (clubId: Int?) -> Unit) {
-    fun onClick(club: PlayerAndPlayerBelongClubObject) = clickListener(club.id)
+class PlayerClickListener(val clickListener : (playerId: Int?) -> Unit) {
+    fun onClick(clickedPlayer: PlayerAndPlayerBelongClubObject) {
+        if(!clickedPlayer.isPrivate!!) clickListener(clickedPlayer.id)
+    }
 }

@@ -13,10 +13,14 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-class ClubIntefaceFragmentViewModel(private val clubId : Int) : ViewModel() {
+//TODO allow click on private player to exclude or promote him
+//TODO change options array according to logged player's privilege
+
+class ClubInterfaceFragmentViewModel(private val clubId : Int) : ViewModel() {
 
     val club = MutableLiveData<ClubObject>()
     val players = MutableLiveData<List<PlayerAndPlayerBelongClubObject>>()
+    val playerAndClubInfos = MutableLiveData<PlayerAndPlayerBelongClubObject>()
 
     private val _getClubDetailsStatus = MutableLiveData<RequestStatus>()
     val getClubDetailsStatus : LiveData<RequestStatus>
@@ -30,6 +34,14 @@ class ClubIntefaceFragmentViewModel(private val clubId : Int) : ViewModel() {
     val leaveClubStatus : LiveData<RequestStatus>
         get() = _leaveClubStatus
 
+    private val _excludePlayerStatus = MutableLiveData<RequestStatus>()
+    val excludePlayerStatus : LiveData<RequestStatus>
+        get() = _excludePlayerStatus
+
+    private val _promotePlayerStatus = MutableLiveData<RequestStatus>()
+    val promotePlayerStatus : LiveData<RequestStatus>
+        get() = _promotePlayerStatus
+
     // Create coroutine job and scope
     private var viewModelJob = Job()
 
@@ -39,6 +51,23 @@ class ClubIntefaceFragmentViewModel(private val clubId : Int) : ViewModel() {
     init {
         getClubDetails()
         getClubPlayers()
+        getPlayerInClubInfos()
+    }
+
+    fun getPlayerInClubInfos() {
+
+        coroutineScope.launch {
+
+            try {
+
+                //playerAndClubInfos = DatabaseApi.retrofitService.get
+
+            } catch (t: Throwable) {
+
+                Timber.i(t.message + " / getPlayerInClbInfos()")
+
+            }
+        }
     }
 
     private fun getClubDetails() {
@@ -97,6 +126,48 @@ class ClubIntefaceFragmentViewModel(private val clubId : Int) : ViewModel() {
 
                 Timber.i(t.message + "/ leaveClub()")
                 _leaveClubStatus.value = RequestStatus.ERROR
+
+            }
+        }
+    }
+
+    fun excludePlayer(id: Int) {
+
+        _excludePlayerStatus.value = RequestStatus.LOADING
+
+        coroutineScope.launch {
+
+            try {
+
+                DatabaseApi.retrofitService.removePlayerFromClub(clubId, id)
+                _excludePlayerStatus.value = RequestStatus.DONE
+                getClubPlayers()
+
+            } catch (t: Throwable) {
+
+                Timber.i(t.message + "/ excludePlayer()")
+                _excludePlayerStatus.value = RequestStatus.ERROR
+
+            }
+        }
+    }
+
+    fun promotePlayer(playerId: Int) {
+
+        _promotePlayerStatus.value = RequestStatus.LOADING
+
+        coroutineScope.launch {
+
+            try {
+
+                DatabaseApi.retrofitService.promotePlayerToAdminOfClub(playerId, clubId)
+                _promotePlayerStatus.value = RequestStatus.DONE
+                getClubPlayers()
+
+            } catch (t: Throwable) {
+
+                Timber.i(t.message + " / promotePlayer()")
+                _promotePlayerStatus.value = RequestStatus.ERROR
 
             }
         }

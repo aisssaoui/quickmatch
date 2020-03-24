@@ -1,6 +1,7 @@
 package com.example.quickmatch.content
 
 import android.graphics.Typeface
+import android.media.Image
 import android.provider.Settings.Global.getString
 import android.view.View
 import android.widget.Button
@@ -142,7 +143,7 @@ fun ImageView.setClubMembershipIcon(clubAndPlayer: ClubAndPlayerBelongClubObject
 
     clubAndPlayer?.let {
         if (it.admin) setImageResource(R.drawable.ic_star_yellow_48dp)
-        else setImageResource(R.drawable.ic_card_membership_black_48dp)
+        else setImageResource(R.drawable.ic_person_outline_brown_48dp)
     }
 }
 
@@ -167,5 +168,21 @@ fun TextView.setMembersCount(count: Int?) {
 
     count?.let {
         text = if (it > 1) "$count membres" else "$count membre"
+    }
+}
+
+@BindingAdapter("playerProfilPrivacyFormatted")
+fun ImageView.setProfilPrivacyIcon(private: Boolean?) {
+    private?.let {
+        val src: Int = if(it) R.drawable.ic_lock_outline_red_24dp else R.drawable.ic_lock_open_green_24dp
+        setImageResource(src)
+    }
+}
+
+@BindingAdapter("playerIsAdminFormatted")
+fun ImageView.setProfilMembership(isAdmin: Boolean?) {
+    isAdmin?.let {
+        val src: Int = if(isAdmin) R.drawable.ic_star_black_24dp else R.drawable.ic_person_outline_black_24dp
+        setImageResource(src)
     }
 }

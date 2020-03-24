@@ -64,4 +64,5 @@
     <string name="text_members">Membres :</string>
     <string name="text_leave">Quitter le club</string>
     <string name="text_name_firstname_pseudo">Nom Prénom (Pseudo)</string>
+    <string name="three_dot_text"><![CDATA[&#8942;]]></string>
 </resources>

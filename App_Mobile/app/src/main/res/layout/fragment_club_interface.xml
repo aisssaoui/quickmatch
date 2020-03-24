@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.example.quickmatch.content.club.ClubIntefaceFragmentViewModel" />
+            type="com.example.quickmatch.content.club.ClubInterfaceFragmentViewModel" />
 
     </data>
 

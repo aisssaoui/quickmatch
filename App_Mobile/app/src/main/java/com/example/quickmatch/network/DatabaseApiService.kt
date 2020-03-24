@@ -153,6 +153,10 @@ interface DatabaseApiService {
     @DELETE("dbcontrol/api/v1/PlayerClubs/{cid}&{pid}")
     suspend fun removePlayerFromClub(@Path("cid") idClub: Int, @Path("pid") idPlayer: Int)
 
+    /* PUT REQUESTS */
+    @PUT("dbcontrol/api/v1/PlayerClubsPromoteToAdmin/{pid}&{cid}")
+    suspend fun promotePlayerToAdminOfClub(@Path("pid") playerId: Int, @Path("cid") clubId: Int)
+
 }
 
 object DatabaseApi {
