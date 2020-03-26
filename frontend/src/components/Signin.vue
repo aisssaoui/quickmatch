@@ -112,11 +112,11 @@ var sha512 = require('js-sha512');
       clientId:
         "864617003210-1dr6nsvputhjv59l5b3633sslri4vdjd.apps.googleusercontent.com",
       valid: false,
-      surname: "test",
-      first_name: "test",
-      pseudo: "test123",
-      password: "12345678",
-      email: "r_maxime@live.fr",
+      surname: "",
+      first_name: "",
+      pseudo: "",
+      password: "",
+      email: "",
       phone: "",
       avatar: "",
       surnameRules: [
