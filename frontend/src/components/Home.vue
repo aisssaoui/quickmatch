@@ -57,9 +57,6 @@
             style="padding: 12px 0px 0px 100px;"
           >Quick Match organise votre vie sportive.</p>
         </div>
-        <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-2">
-          <v-btn class="ma-2" outlined color="#20003c">Decouvrez</v-btn>
-        </div>
       </v-jumbotron>
     </v-flex>
 
@@ -137,19 +134,6 @@
     </v-container>
 
     <hr style="width:50%; margin: auto;" color="#20003c" size="1px"/>
-
-    <v-container id="connect">
-      <div class="row text-center">
-        <div class="col-12">
-          <p class="headline font-weight-medium">NOUS CONTACTER</p>
-        </div>
-        <v-container fluid fill-height class="col-12 social">
-              <a v-for="item in socials" :key="item" :to="item.route">
-                <v-icon> {{item.icon}} </v-icon>
-              </a>
-        </v-container>
-      </div>
-    </v-container>
   </div>
 </template>
 

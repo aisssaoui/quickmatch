@@ -244,7 +244,7 @@
 
       <!-- /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
     </div>
-    <WorkInProgress v-else></WorkInProgress>
+    <NotConnected v-else></NotConnected>
   </div>
 </template>
 
@@ -297,10 +297,10 @@
 import store from "../store";
 import axios from "axios";
 import router from "../router";
-import WorkInProgress from "./WorkInProgress";
+import NotConnected from "./NotConnected";
 export default {
   components: {
-    WorkInProgress
+    NotConnected
   },
   data() {
     return {
@@ -334,7 +334,7 @@ export default {
       )
       .catch(e => {
         if (this.isSignedIn()){
-          alert("Une erreur s'est produite, nous allons rafraichir la page, si le problème persiste, quittez la page");
+          alert("Une erreur s'est produite, nous allons rafraichir la page, si le problème persiste, quittez la page. \n\n ERR: CANNOT_GET_PLAYER_CLUBS");
           this.$router.go();
         }
       });
@@ -349,7 +349,7 @@ export default {
       )
       .catch(e => {
         if (this.isSignedIn()){
-          alert("Une erreur s'est produite, nous allons rafraichir la page, si le problème persiste, quittez la page");
+          alert("Une erreur s'est produite, nous allons rafraichir la page, si le problème persiste, quittez la page. \n\n ERR: CANNOT_GET_OTHER_CLUBS");
           this.$router.go();
         }
       });
@@ -378,11 +378,11 @@ export default {
         )
         .catch(e => {
           if (this.name_already_exist(this.club_name)){
-            alert("un club porte déjà le même nom, choisissez-en un autre");
+            alert("un club porte déjà le même nom, choisissez-en un autre. \n\n ERR: CLUB_NAME_ALREADY_EXIST");
             this.$router.go();
           }
           else{
-            alert("Echec, veuillez réessayer, si le problème persiste, réessayer plus tard");
+            alert("Echec, veuillez réessayer, si le problème persiste, réessayer plus tard. \n\n ERR: CANNOT_CREATE_CLUB");
           }
         });
       let cid = apiRep.data.id;
@@ -401,7 +401,7 @@ export default {
           this.$router.go();
         })
         .catch(e => {
-          alert("Echec, veuillez réessayer, si le problème persiste, réessayer plus tard");
+          alert("Echec, veuillez réessayer, si le problème persiste, réessayer plus tard. \n\n ERR: CANNOT_INSERT_ADMIN_IN_CLUB");
         });
     },
     async join_club(cid, club_name) {
@@ -418,7 +418,7 @@ export default {
         alert("Vous avez rejoins le club " + club_name);
       })
       .catch(e => {
-        alert("Echec, veuillez réessayer, si le problème persiste, réessayer plus tard");
+        alert("Echec, veuillez réessayer, si le problème persiste, réessayer plus tard. \n\n ERR: CANNOT_INSERT_PLAYER_IN_CLUB");
       });
       this.$router.go();
     },
@@ -430,7 +430,7 @@ export default {
           }
         )
         .catch(e => {
-          alert("Echec, veuillez réessayer, si le problème persiste, réessayer plus tard");
+          alert("Echec, veuillez réessayer, si le problème persiste, réessayer plus tard. \n\n ERR: CANNOT_GET_NUMBER_ADMIN_CLUB");
           this.$router.go();
         });
       let nb = count_admin.data.rows[0]["nb"];
@@ -454,7 +454,7 @@ export default {
             alert("Vous avez quitté le club " + club_name);
           })
           .catch(e => {
-            alert("Echec, veuillez réessayer, si le problème persiste, réessayer plus tard");
+            alert("Echec, veuillez réessayer, si le problème persiste, réessayer plus tard. \n\n ERR: CANNOT_DELETE_PLAYER_IN_CLUB");
             this.$router.go();
           });
         if (nb == 1 && is_admin){
@@ -462,6 +462,10 @@ export default {
             .delete("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/Clubs/" + cid)
             .then(response => {
               alert("Le club " + club_name + " a été détruit");
+            })
+            .catch(e => {
+              alert("Echec, veuillez réessayer, si le problème persiste, réessayer plus tard. \n\n ERR: CANNOT_DELETE_CLUB");
+              this.$router.go();
             });
         }
       }
@@ -475,7 +479,7 @@ export default {
           this.manage_club(this.name_club_switch, this.id_club_switch);
         })
         .catch(e => {
-          alert("Echec, veuillez réessayer, si le problème persiste, réessayer plus tard");
+          alert("Echec, veuillez réessayer, si le problème persiste, réessayer plus tard.\n\n ERR: CANNOT_PROMOTE_PLAYER_ADMIN");
         });
     },
     async delete_from_club(pid, cid, pseudo){
@@ -486,7 +490,7 @@ export default {
           this.manage_club(this.name_club_switch, this.id_club_switch);
         })
         .catch(e => {
-          alert("Echec, veuillez réessayer, si le problème persiste, réessayer plus tard");
+          alert("Echec, veuillez réessayer, si le problème persiste, réessayer plus tard. \n\n CANNOT_KICK_PLAYER_FROM_CLUB");
           this.$router.go();
         });
     },
@@ -503,7 +507,7 @@ export default {
           this.manage_club(this.name_club_switch, this.id_club_switch);
         })
         .catch(e => {
-          alert("Echec, veuillez réessayer, si le problème persiste, réessayer plus tard");
+          alert("Echec, veuillez réessayer, si le problème persiste, réessayer plus tard. \n\n CANNOT_INSERT_PLAYER_IN_CLUB_BY_USER");
           this.$router.go();
         });
     },
@@ -513,14 +517,14 @@ export default {
       let players_in = await axios
         .get("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/PlayerClubs/cid" + cid, {responseType: "json"})
         .catch(e => {
-          alert("Une erreur s'est produite, nous allons rafraichir la page, si le problème persiste, quittez la page");
+          alert("Une erreur s'est produite, nous allons rafraichir la page, si le problème persiste, quittez la page. \n\n CANNOT_GET_PLAYER_LIST_IN_CLUB");
           this.$router.go();
         });
       this.playersInClub = players_in.data.rows;
       let players_not_in = await axios
         .get("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/PlayerClubs/ncid" + cid, {responseType: "json"})
         .catch(e => {
-          alert("Une erreur s'est produite, nous allons rafraichir la page, si le problème persiste, quittez la page");
+          alert("Une erreur s'est produite, nous allons rafraichir la page, si le problème persiste, quittez la page. \n\n CANNOT_GET_PLAYER_LIST_NOT_IN_CLUB");
           this.$router.go();
         });
       this.playersNotInClub = players_not_in.data.rows;
@@ -530,14 +534,14 @@ export default {
       let clubs_in = await axios
         .get("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/PlayerClubs/pid" + this.id, {responseType: "json"})
         .catch(e => {
-          alert("Une erreur s'est produite, nous allons rafraichir la page, si le problème persiste, quittez la page");
+          alert("Une erreur s'est produite, nous allons rafraichir la page, si le problème persiste, quittez la page. \n\n CANNOT_GET_PLAYER_CLUBS");
           this.$router.go();
         });
       this.clubsInToShow = clubs_in.data.rows;
       let clubs_not_in = await axios
         .get("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/PlayerClubs/npid" + this.id, {responseType: "json"})
         .catch(e => {
-          alert("Une erreur s'est produite, nous allons rafraichir la page, si le problème persiste, quittez la page");
+          alert("Une erreur s'est produite, nous allons rafraichir la page, si le problème persiste, quittez la page. \n\n CANNOT_GET_OTHER_CLUBS");
           this.$router.go();
         });
       this.clubsNotInToShow = clubs_not_in.data.rows;

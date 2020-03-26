@@ -91,18 +91,18 @@
         </v-list-item>
       </v-card>
     </div>
-    <WorkInProgress v-else></WorkInProgress>
+    <NotConnected v-else></NotConnected>
   </div>
 </template>
 
 <script>
 import axios from "axios";
-import WorkInProgress from "./WorkInProgress";
+import NotConnected from "./NotConnected";
 import store from "../store";
 
 export default {
   components: {
-    WorkInProgress
+    NotConnected
   },
   data() {
     return {
@@ -124,6 +124,8 @@ export default {
         this.$router.go();
       } else {
         // gestion d'erreur
+        alert("Une erreur est survenue, vous allez être redirigé(e) vers la page d'accueil. Si le problème persiste, merci de contacter le support. \n\n ERR: CANNOT_UPDATE_USER_PROFILE_PICTURE");
+        router.push("/");
       }
     }
   },

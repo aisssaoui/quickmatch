@@ -122,7 +122,8 @@ export default {
             alert("Pseudo déjà existant ! Veuillez en saisir un nouveau.");
             return;
         }else{
-            alert("La création du compte a échoué, veuillez réessayer ultérieurement.")
+          alert("Une erreur est survenue, vous allez être redirigé(e) vers la page d'accueil. Si le problème persiste, merci de contacter le support. \n\n ERR: CREATION_GOOGLE_ACCOUNT_ERROR");
+          router.push("/");
         }
     },
     checkEntries: function() {
@@ -153,7 +154,7 @@ export default {
         if (apiRep.data.name != "error") {
             // validation ok
         }else{
-            console.error("update is_valid failed");
+          alert("Si vous voyez ce message, merci de contacter le support urgemment.  \n\n ERR: CANNOT_UPDATE_VALID_FIELD");
         }
     },
     createAccount: async function() {
@@ -181,7 +182,7 @@ export default {
                   router.push("/");
               });
           } else {
-              this.creationError(apiRep.data);
+            this.creationError(apiRep.data);
           }
     }
   },

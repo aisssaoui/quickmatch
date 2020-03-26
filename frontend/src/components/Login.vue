@@ -129,7 +129,9 @@ export default {
           }
         })
         .catch(e => {
-          console.log(e);
+          alert("Une erreur est survenue, vous allez être redirigé(e) vers la page d'accueil. Si le problème persiste, merci de contacter le support. \n\n ERR: CANNOT_CHECK_USER_MAIL");
+          router.push("/");
+          //console.log(e);
         });
     },
     logout() {
@@ -167,8 +169,9 @@ export default {
             }
         })
         .catch(e => {
-            console.log(e);
-            alert("Email ou mot de passe invalide !");
+            //console.log(e);
+            alert("Une erreur est survenue, vous allez être redirigé(e) vers la page d'accueil. Si le problème persiste, merci de contacter le support. \n\n ERR: CANNOT_CHECK_USER_MAIL");
+            router.push("/");
         });
     }
   },

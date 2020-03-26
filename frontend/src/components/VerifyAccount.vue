@@ -56,7 +56,7 @@ import router from "../router";
                 // validation ok
                 store.dispatch("setIsValid",true);
             }else{
-                console.error("update is_valid failed");
+              alert("Si vous voyez ce message, merci de contacter le support urgemment.  \n\n ERR: CANNOT_UPDATE_VALID_FIELD");
             }
         },
         verify: async function() {
@@ -65,7 +65,7 @@ import router from "../router";
                 let rep = await this.validateAccount(id);
                 router.push("/");
             }else{
-                alert("Vous avez entré le mauvais code !");
+                alert("Vous avez entré le mauvais code ! \n\n ERR: WRONG_CODE");
             }
         },
         sendAgain: function() {

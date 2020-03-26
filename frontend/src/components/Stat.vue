@@ -105,7 +105,7 @@
       </div>
       <!-- ///////////////////////////////////////////////////////////////// -->
     </div>
-    <WorkInProgress v-else></WorkInProgress>
+    <NotConnected v-else></NotConnected>
   </div>
 </template>
 
@@ -132,11 +132,11 @@
 import store from "../store";
 import axios from "axios";
 import router from "../router";
-import WorkInProgress from "./WorkInProgress";
+import NotConnected from "./NotConnected";
 
 export default {
   components: {
-    WorkInProgress
+    NotConnected
   },
   data() {
     return {
@@ -154,7 +154,7 @@ export default {
       )
       .catch(e => {
         if (this.isSignedIn()){
-          alert("Une erreur s'est produite, nous allons rafraichir la page, si le problème persiste, quittez la page");
+          alert("Une erreur s'est produite, nous allons rafraichir la page, si le problème persiste, quittez la page. \n\n ERR: CANNOT_GET_PLAYER_INFOS");
           this.$router.go();
         }
       });
@@ -168,7 +168,7 @@ export default {
       )
       .catch(e => {
         if (this.isSignedIn()){
-          alert("Une erreur s'est produite, nous allons rafraichir la page, si le problème persiste, quittez la page");
+          alert("Une erreur s'est produite, nous allons rafraichir la page, si le problème persiste, quittez la page. \n\n ERR: CANNOT_GET_PLAYER_STAT");
           this.$router.go();
         }
       });

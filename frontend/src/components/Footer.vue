@@ -1,7 +1,7 @@
 <template>
   <v-footer color="#20003c" padless>
     <v-row justify="center">
-      
+
       <v-btn v-for="link in links" :key="link.text" :to="link.route" color="white" text rounded class="my-2">
         {{ link.text }}
       </v-btn>
@@ -20,7 +20,6 @@
       links: [
         { text:'Accueil', route: '/' },
         { text:'A propos de nous', route: '/aboutus' },
-        { text:'Equipe', route: '/team' },
         { text:'Nous contacter', route: '/contactus' }
       ],
     }),

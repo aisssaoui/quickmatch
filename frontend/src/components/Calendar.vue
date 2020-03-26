@@ -83,17 +83,17 @@
       </v-col>
     </v-row>
   </div>
-  <WorkInProgress v-else></WorkInProgress>
+  <NotConnected v-else></NotConnected>
 </template>
 
 <script>
 import axios from "axios";
 import moment from "moment";
-import WorkInProgress from "./WorkInProgress";
+import NotConnected from "./NotConnected";
 import store from "../store";
 export default {
   components: {
-    WorkInProgress
+    NotConnected
   },
   data: () => ({
     today: Date(),
