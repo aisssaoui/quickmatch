@@ -338,7 +338,7 @@
 
       <!-- /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
     </div>
-    <WorkInProgress v-else></WorkInProgress>
+    <Not-connected v-else></Not-connected>
   </div>
 </template>
 
@@ -432,7 +432,7 @@
 import store from "../store";
 import axios from "axios";
 import router from "../router";
-import WorkInProgress from "./WorkInProgress";
+import NotConnected from "./NotConnected";
 export default {
   components: {
     WorkInProgress
