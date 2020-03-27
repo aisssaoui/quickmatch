@@ -140,6 +140,7 @@ export default {
     },
     passwordCheck(apiPassword,id) {
         var hashedPassword = sha512(this.password + id);
+        console.log(hashedPassword + " zzz " + apiPassword);
         return hashedPassword === apiPassword;
     },
     async login() {
