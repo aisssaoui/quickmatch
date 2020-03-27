@@ -84,6 +84,11 @@ class SigninFragmentViewModel : ViewModel() {
     // Uses main thread coz retrofit works itself on background threads
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
+    /* Player object received from database */
+    private var _player : PlayerObject? = null
+    val player : PlayerObject?
+        get() = _player
+
     init {
         _authorizedToSignin.value = false
     }
@@ -221,19 +226,18 @@ class SigninFragmentViewModel : ViewModel() {
         /* Player that will be posted to the database */
         var newPlayerObject = PlayerObject(null, name, firstName, pseudo, hashedPassword, mailAddress, finalPhoneNumber,
                 0, 0, 0, 0,
-                null, null )
+                null, null, null, null)
 
         Timber.i(newPlayerObject.toString())
 
         coroutineScope.launch {
 
             _signinStatus.value = SigninStatus.LOADING
-            var firstResult : PlayerObject? = null
 
             try {
 
-                firstResult = DatabaseApi.retrofitService.addPlayer(newPlayerObject)
-                Timber.i(firstResult.toString())
+                _player = DatabaseApi.retrofitService.addPlayer(newPlayerObject)
+                Timber.i(_player.toString())
 
             } catch (t: Throwable) {
 
@@ -241,19 +245,17 @@ class SigninFragmentViewModel : ViewModel() {
                 _signinStatus.value = SigninStatus.NETWORK_ERROR
             }
 
-            if (firstResult == null) return@launch
+            if (_player == null) return@launch
+
+            _player!!.password = HashUtils.sha512(password + _player!!.id.toString())
+            Timber.i(_player.toString())
 
             try { /* update salted password */
 
-                var finalPlayerObject = firstResult!!
-                finalPlayerObject.password = HashUtils.sha512(password + firstResult.id.toString())
-
-                Timber.i(finalPlayerObject.password)
-
-                var result = DatabaseApi.retrofitService.updatePlayerById(finalPlayerObject.id!!, finalPlayerObject)
+                _player = DatabaseApi.retrofitService.updatePlayerById(_player!!.id!!, _player!!)
 
                 _signinStatus.value = SigninStatus.DONE
-                Timber.i(result.toString())
+                Timber.i(_player.toString())
 
             } catch (t: Throwable) {
 

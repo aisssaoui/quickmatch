@@ -25,59 +25,37 @@ var Player = {
    * @param {object} res
    * @returns {object} Player object
    */
-  create: (function() {
-    var _ref = _asyncToGenerator(
-      /*#__PURE__*/ regeneratorRuntime.mark(function _callee(req, res) {
-        var text, values, _ref2, rows;
+  create: function () {
+    var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(req, res) {
+      var text, values, _ref2, rows;
 
-        return regeneratorRuntime.wrap(
-          function _callee$(_context) {
-            while (1) {
-              switch ((_context.prev = _context.next)) {
-                case 0:
-                  text =
-                    "INSERT INTO Player (surname, first_name, mail_address, phone_number, pseudo, mdp, avatar)\n\t    VALUES($1, $2, $3, $4, $5, $6, $7)\n      RETURNING *";
-                  values = [
-                    req.body.surname,
-                    req.body.first_name,
-                    req.body.mail_address,
-                    req.body.phone_number,
-                    req.body.pseudo,
-                    req.body.mdp,
-                    req.body.avatar
-                  ];
-                  _context.prev = 2;
-                  _context.next = 5;
-                  return _db2.default.query(text, values);
+      return regeneratorRuntime.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              text = "INSERT INTO Player (surname, first_name, mail_address, phone_number, pseudo, mdp, avatar)\n\t    VALUES($1, $2, $3, $4, $5, $6, $7)\n      RETURNING *";
+              values = [req.body.surname, req.body.first_name, req.body.mail_address, req.body.phone_number, req.body.pseudo, req.body.mdp, req.body.avatar];
+              _context.prev = 2;
+              _context.next = 5;
+              return _db2.default.query(text, values);
 
-                case 5:
-                  _ref2 = _context.sent;
-                  rows = _ref2.rows;
-                  return _context.abrupt(
-                    "return",
-                    res.status(201).send(rows[0])
-                  );
+            case 5:
+              _ref2 = _context.sent;
+              rows = _ref2.rows;
+              return _context.abrupt("return", res.status(201).send(rows[0]));
 
-                case 10:
-                  _context.prev = 10;
-                  _context.t0 = _context["catch"](2);
-                  return _context.abrupt(
-                    "return",
-                    res.status(200).send(_context.t0)
-                  );
+            case 10:
+              _context.prev = 10;
+              _context.t0 = _context["catch"](2);
+              return _context.abrupt("return", res.status(200).send(_context.t0));
 
-                case 13:
-                case "end":
-                  return _context.stop();
-              }
-            }
-          },
-          _callee,
-          this,
-          [[2, 10]]
-        );
-      })
-    );
+            case 13:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee, this, [[2, 10]]);
+    }));
 
     function create(_x, _x2) {
       return _ref.apply(this, arguments);
@@ -530,7 +508,7 @@ var Player = {
               return _context10.abrupt("return", res.status(404).send({ message: "player not found" }));
 
             case 8:
-              return _context10.abrupt("return", res.status(204).send({ message: "deleted" }));
+              return _context10.abrupt("return", res.status(200).send({ message: "deleted" }));
 
             case 11:
               _context10.prev = 11;

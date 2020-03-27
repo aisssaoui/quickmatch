@@ -50,7 +50,7 @@ interface DatabaseApiService {
 
     /* PUT REQUESTS */
     @PUT("dbcontrol/api/v1/Players/id{id}")
-    suspend fun updatePlayerById(@Path("id") id : Int, @Body player: PlayerObject)
+    suspend fun updatePlayerById(@Path("id") id : Int, @Body player: PlayerObject) : PlayerObject
 
     /* DELETE REQUESTS */
     @DELETE("dbcontrol/api/v1/Players/{mail_address}")
@@ -125,7 +125,7 @@ interface DatabaseApiService {
     suspend fun getAllMeetsSheets() : List<List<MeetsSheetObject>>
     /* TODO: verifier le back pour cette route (ne marche pas atm) */
     @GET("dbcontrol/api/v1/MeetsSheet/{mail}")
-    suspend fun getMeetsSheetByMail(@Path("id") mail : String) : List<MeetsSheetObject>
+    suspend fun getMeetsSheetByMail(@Path("mail") mail : String) : List<MeetsSheetObject>
 
     /* POST REQUESTS */
     @POST("dbcontrol/api/v1/MeetsSheet")
@@ -137,17 +137,25 @@ interface DatabaseApiService {
 
     /* PLAYERBELONGCLUB */
     /* GET REQUESTS */
-    @GET("dbcontrol/api/v1/PlayerClubsRows")
-    suspend fun getPlayerClubs() : List<PlayerBelongClubObject>
-    /* TODO : rajouter les rows pour chacune des fonctions suivantes (demander à faiz) */
-    @GET("dbcontrol/api/v1/PlayerClubs/paid{id}")
-    suspend fun getClubsByIdAdmin(@Path("id") id : Int) : List<PlayerBelongClubObject>
-    @GET("dbcontrol/api/v1/PlayerClubs/pid{id}")
-    suspend fun getClubsByIdPlayer(@Path("id") id : Int) : List<PlayerBelongClubObject>
+    //TODO without rows
+    @GET("dbcontrol/api/v1/PlayerClubsRows/cid{id}")
+    suspend fun getClubPlayers(@Path("id") idClub : Int) : List<PlayerAndPlayerBelongClubObject>
+    @GET("dbcontrol/api/v1/PlayerClubsRows/pid{id}")
+    suspend fun getPlayerClubs(@Path("id") idPlayer : Int) : List<ClubAndPlayerBelongClubObject>
+    @GET("dbcontrol/api/v1/PlayerClubsRows/npid{id}")
+    suspend fun getPlayerNotJoinedPublicClubs(@Path("id") idPlayer: Int) : List<ClubObject>
 
     /* POST REQUESTS */
     @POST("dbcontrol/api/v1/PlayerClubs")
     suspend fun addPlayerToClub(@Body playerClub: PlayerBelongClubObject)
+
+    /* DELETE REQUESTS */
+    @DELETE("dbcontrol/api/v1/PlayerClubs/{cid}&{pid}")
+    suspend fun removePlayerFromClub(@Path("cid") idClub: Int, @Path("pid") idPlayer: Int)
+
+    /* PUT REQUESTS */
+    @PUT("dbcontrol/api/v1/PlayerClubsPromoteToAdmin/{pid}&{cid}")
+    suspend fun promotePlayerToAdminOfClub(@Path("pid") playerId: Int, @Path("cid") clubId: Int)
 
 }
 

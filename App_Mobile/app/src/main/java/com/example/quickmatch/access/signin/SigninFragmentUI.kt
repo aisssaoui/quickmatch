@@ -1,11 +1,15 @@
 package com.example.quickmatch.access.signin
 
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -16,6 +20,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.quickmatch.R
 import com.example.quickmatch.content.ContentActivity
 import com.example.quickmatch.databinding.FragmentSigninBinding
+import com.example.quickmatch.splash.SplashAccessToContent
 import timber.log.Timber
 
 /**
@@ -24,10 +29,7 @@ import timber.log.Timber
 
 class SigninFragmentUI : Fragment() {
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         val binding: FragmentSigninBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_signin, container, false)
         val viewModel = ViewModelProviders.of(this).get(SigninFragmentViewModel::class.java)
@@ -75,9 +77,16 @@ class SigninFragmentUI : Fragment() {
                     binding.textSigninStatus.text = "Erreur d'inscription"
                 }
                 SigninStatus.DONE -> {
-                    val intentContent = Intent(this.activity, ContentActivity::class.java)
-                    startActivity(intentContent)
+                    val intentContent = Intent(this.activity, SplashAccessToContent::class.java)
+                    intentContent.putExtra("player", viewModel.player)
+
+                    /* disable keyboard when navigating to the app */
+                    val inputMethodManager = activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    inputMethodManager.hideSoftInputFromWindow(activity!!.currentFocus!!.applicationWindowToken, 0)
+
                     this.activity!!.finish()
+                    startActivity(intentContent)
+
                 }
                 else -> binding.textSigninStatus.visibility = View.GONE
             }
@@ -131,7 +140,7 @@ class SigninFragmentUI : Fragment() {
             }
         }
 
-        /* Observer of unicity checks to update unicity map */
+        /* Observer of unicity checks, change the state each time there is a change */
         viewModel.mailStatus.observe(this, Observer {
             viewModel.checkUnicityState()
         })
@@ -144,6 +153,25 @@ class SigninFragmentUI : Fragment() {
             viewModel.checkUnicityState()
         })
 
+        /* change observers for unique fields, in order to disable sign in without a re-check */
+
+        /* Text watcher object which is the same for all fields */
+        val watcher = object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                binding.buttonSigninCheck.isEnabled = true
+                binding.buttonSigninSignin.isEnabled = false
+            }
+        }
+
+        binding.inputSigninMail.addTextChangedListener(watcher)
+        binding.inputSigninPhone.addTextChangedListener(watcher)
+        binding.inputSigninPseudo.addTextChangedListener(watcher)
 
         return binding.root
     }

@@ -110,6 +110,49 @@ var player_belong_club = {
     return getPlayerClubsByClubID;
   }(),
 
+  /**
+   * Get all the player who belong to the $1 club
+   * @param {object} req
+   * @param {object} res
+   * @returns {object} player_belong_club & player object (without rows)
+   */
+  getPlayerClubsByClubIDRows: function () {
+    var _ref25 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee14(req, res) {
+      var text, a;
+
+      return regeneratorRuntime.wrap(function _callee14$(_context14) {
+        while (1) {
+          switch (_context14.prev = _context14.next) {
+            case 0:
+              text = "SELECT * FROM\n       player_belong_club PBC INNER JOIN player P ON P.id = PBC.player\n       WHERE PBC.club = $1\n       ORDER BY\n          PBC.is_admin DESC,\n          PBC.inscription_date ASC,\n          P.surname ASC,\n          P.first_name ASC";
+              _context14.prev = 1;
+              _context14.next = 4;
+              return _db2.default.query(text, [req.params.id]);
+
+            case 4:
+              a = _context14.sent;
+              return _context14.abrupt("return", res.status(200).send(a.rows));
+
+            case 8:
+              _context14.prev = 8;
+              _context14.t0 = _context14["catch"](1);
+              return _context14.abrupt("return", res.status(400).send(_context14.t0));
+
+            case 11:
+            case "end":
+              return _context14.stop();
+          }
+        }
+      }, _callee14, this, [[1, 8]]);
+    }));
+
+    function getPlayerClubsByClubIDRows(_x27, _x28) {
+      return _ref25.apply(this, arguments);
+    }
+
+    return getPlayerClubsByClubIDRows;
+  }(),
+
 
   /**
   * Get all the player who do not belong to the $1 club and have a public profil
@@ -202,6 +245,49 @@ var player_belong_club = {
     return getPlayerClubsByPlayerID;
   }(),
 
+  /**
+   * Get all the club where the $1 player is
+   * @param {object} req
+   * @param {object} res
+   * @returns {object} player_belong_club & club object (without rows)
+   */
+  getPlayerClubsByPlayerIDRows: function () {
+    var _ref24 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee12(req, res) {
+      var text, a;
+
+      return regeneratorRuntime.wrap(function _callee12$(_context12) {
+        while (1) {
+          switch (_context12.prev = _context12.next) {
+            case 0:
+              text = "SELECT * FROM\n          player_belong_club PBC\n          INNER JOIN\n          club C\n          on PBC.club = C.id\n       WHERE PBC.player = $1\n       ORDER BY C.club_name";
+              _context12.prev = 1;
+              _context12.next = 4;
+              return _db2.default.query(text, [req.params.id]);
+
+            case 4:
+              a = _context12.sent;
+              return _context12.abrupt("return", res.status(200).send(a.rows));
+
+            case 8:
+              _context12.prev = 8;
+              _context12.t0 = _context12["catch"](1);
+              return _context12.abrupt("return", res.status(400).send(_context12.t0));
+
+            case 11:
+            case "end":
+              return _context12.stop();
+          }
+        }
+      }, _callee12, this, [[1, 8]]);
+    }));
+
+    function getPlayerClubsByPlayerIDRows(_x23, _x24) {
+      return _ref24.apply(this, arguments);
+    }
+
+    return getPlayerClubsByPlayerIDRows;
+  }(),
+
 
   /**
    * Get all the club where the $1 player is not and which are public club
@@ -248,6 +334,48 @@ var player_belong_club = {
     return NgetPlayerClubsByPlayerID;
   }(),
 
+    /**
+   * Get all the club where the $1 player is not and which are public club
+   * @param {object} req
+   * @param {object} res
+   * @returns {object} player_belong_club & club object (without rows)
+   */
+  NgetPlayerClubsByPlayerIDRows: function () {
+    var _ref25 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee13(req, res) {
+      var text, a;
+
+      return regeneratorRuntime.wrap(function _callee13$(_context13) {
+        while (1) {
+          switch (_context13.prev = _context13.next) {
+            case 0:
+              text = "SELECT * FROM club C WHERE\n       C.id NOT IN\n         (SELECT PBC.club FROM player_belong_club PBC WHERE PBC.player = $1)\n       AND C.private_club = FALSE\n       ORDER BY C.club_name";
+              _context13.prev = 1;
+              _context13.next = 4;
+              return _db2.default.query(text, [req.params.id]);
+
+            case 4:
+              a = _context13.sent;
+              return _context13.abrupt("return", res.status(200).send(a.rows));
+
+            case 8:
+              _context13.prev = 10;
+              _context13.t0 = _context13["catch"](1);
+              return _context5.abrupt("return", res.status(400).send(_context13.t0));
+
+            case 11:
+            case "end":
+              return _context13.stop();
+          }
+        }
+      }, _callee13, this, [[1, 8]]);
+    }));
+
+    function NgetPlayerClubsByPlayerIDRows(_x25, _x26) {
+      return _ref25.apply(this, arguments);
+    }
+
+    return NgetPlayerClubsByPlayerIDRows;
+  }(),
 
   /**
    * Add a player to a club
@@ -402,7 +530,7 @@ var player_belong_club = {
               return _context8.abrupt("return", res.status(404).send({ message: "belonging of the player to the club not found" }));
 
             case 9:
-              return _context8.abrupt("return", res.status(204).send({ message: "deleted" }));
+              return _context8.abrupt("return", res.status(200).send({ message: "deleted" }));
 
             case 12:
               _context8.prev = 12;

@@ -162,6 +162,8 @@ export default {
       if (apiRep.data.name != "error") {
         this.$router.push({ path: `/profile` });
       } else {
+        alert("Une erreur est survenue, vous allez être redirigé(e) vers la page d'accueil. Si le problème persiste, merci de contacter le support. \n\n ERR: CANNOT_UPDATE_PROFILE");
+        router.push("/");
         this.ShowError(apiRep.data);
       }
     },

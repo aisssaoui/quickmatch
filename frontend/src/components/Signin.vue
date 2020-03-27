@@ -112,11 +112,11 @@ var sha512 = require('js-sha512');
       clientId:
         "864617003210-1dr6nsvputhjv59l5b3633sslri4vdjd.apps.googleusercontent.com",
       valid: false,
-      surname: "test",
-      first_name: "test",
-      pseudo: "test123",
-      password: "12345678",
-      email: "r_maxime@live.fr",
+      surname: "",
+      first_name: "",
+      pseudo: "",
+      password: "",
+      email: "",
       phone: "",
       avatar: "",
       surnameRules: [
@@ -170,7 +170,9 @@ var sha512 = require('js-sha512');
                 }
             })
             .catch(e => {
-                console.log(e);
+              alert("Une erreur est survenue, vous allez être redirigé(e) vers la page d'accueil. Si le problème persiste, merci de contacter le support. \n\n ERR: CANNOT_CHECK_USER_MAIL");
+              router.push("/");
+                //console.log(e);
             });
         },
         logout() {
@@ -190,7 +192,7 @@ var sha512 = require('js-sha512');
               alert("Numéro de téléphone déjà existant ! Veuillez en saisir un nouveau.");
               return;
           }
-          alert("La création du compte a échoué, veuillez réessayer ultérieurement.")
+          alert("La création du compte a échoué, veuillez réessayer ultérieurement. \n\n ERR: CANNOT_CREATE_ACCOUNT_WITHOUT_GOOGLE")
       },
       hash: function() {
           var newPassword = sha512(this.password);
@@ -311,7 +313,8 @@ var sha512 = require('js-sha512');
             if (apiRep.data.name != "error") {
                 // update ok
             }else{
-                console.error("updatePassword failed");
+              alert("Si vous voyez ce message, merci de contacter urgemment le support. \n\n ERR: CANNOT_UPDATE_PASSWORD");
+              router.push("/");
             }
         },
   },

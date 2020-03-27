@@ -75,7 +75,25 @@
                 <span v-html="selectedEvent.details"></span>
               </v-card-text>
               <v-card-actions>
-                <v-btn text color="secondary" @click="selectedOpen = false">Cancel</v-btn>
+                <v-btn text color="primary" @click="selectedOpen = false">OK</v-btn>
+                <v-btn
+                  v-if="selectedEvent.inv"
+                  text
+                  color="success"
+                  @click="AcceptInvit(selectedEvent.meetid)"
+                >Accepter</v-btn>
+                <v-btn
+                  v-if="selectedEvent.inv"
+                  text
+                  color="error"
+                  @click="DeclineInvit(selectedEvent.meetid)"
+                >Refuser</v-btn>
+                <v-btn
+                  v-else
+                  text
+                  color="secondary"
+                  @click="ModifyInvit(selectedEvent.meetid)"
+                >Modifier</v-btn>
               </v-card-actions>
             </v-card>
           </v-menu>
@@ -83,17 +101,17 @@
       </v-col>
     </v-row>
   </div>
-  <WorkInProgress v-else></WorkInProgress>
+  <NotConnected v-else></NotConnected>
 </template>
 
 <script>
 import axios from "axios";
 import moment from "moment";
-import WorkInProgress from "./WorkInProgress";
+import NotConnected from "./NotConnected";
 import store from "../store";
 export default {
   components: {
-    WorkInProgress
+    NotConnected
   },
   data: () => ({
     today: Date(),
@@ -119,6 +137,7 @@ export default {
     playersTable: {},
     byPlayerTable: {},
     byMeetTable: {},
+    pseudo: null,
     start: null,
     end: null,
     selectedEvent: {},
@@ -185,6 +204,12 @@ export default {
     this.$refs.calendar.checkChange();
   },
   methods: {
+    checkPseudoInZabi: function(Json9elwa) {
+      for (let i = 0; i < Json9elwa.rowCount; i++) {
+        if (this.pseudo == Json9elwa.rows[i].pseudo) return true;
+      }
+      return false;
+    },
     setSlotsTable: function(response) {
       this.slotsTable = response.data;
     },
@@ -292,26 +317,136 @@ export default {
               " joueurs n'ont pas encore répondu au match";
           }
         }
-        this.events.push({
-          name:
-            "Match à " +
-            this.byPlayerTable.rows[i].location +
-            " ~~~ " +
-            playing +
-            "/" +
-            this.byPlayerTable.rows[i].minimal_team_size * 2,
-          details: dts,
-          start:
-            gameDate.format("YYYY-MM-DD") +
-            " " +
-            this.byPlayerTable.rows[i].start_hour,
-          end:
-            gameDate.format("YYYY-MM-DD") +
-            " " +
-            this.byPlayerTable.rows[i].end_hour,
-          color: color
-        });
+        if (this.checkPseudoInZabi(acceptedTable[i])) {
+          this.events.push({
+            name:
+              "Match à " +
+              this.byPlayerTable.rows[i].location +
+              " ~~~ " +
+              playing +
+              "/" +
+              this.byPlayerTable.rows[i].minimal_team_size * 2,
+            details: dts,
+            start:
+              gameDate.format("YYYY-MM-DD") +
+              " " +
+              this.byPlayerTable.rows[i].start_hour,
+            end:
+              gameDate.format("YYYY-MM-DD") +
+              " " +
+              this.byPlayerTable.rows[i].end_hour,
+            color: color,
+            meetid: this.byPlayerTable.rows[i].meet,
+            inv: false
+          });
+        } else if (this.checkPseudoInZabi(declinedTable[i])) {
+          this.events.push({
+            name:
+              "Match à " +
+              this.byPlayerTable.rows[i].location +
+              " ~~~ " +
+              playing +
+              "/" +
+              this.byPlayerTable.rows[i].minimal_team_size * 2,
+            details: dts,
+            start:
+              gameDate.format("YYYY-MM-DD") +
+              " " +
+              this.byPlayerTable.rows[i].start_hour,
+            end:
+              gameDate.format("YYYY-MM-DD") +
+              " " +
+              this.byPlayerTable.rows[i].end_hour,
+            color: "grey",
+            meetid: this.byPlayerTable.rows[i].meet,
+            inv: false
+          });
+        } else {
+          this.events.push({
+            name:
+              "Invitation à " +
+              this.byPlayerTable.rows[i].location +
+              " ~~~ " +
+              playing +
+              "/" +
+              this.byPlayerTable.rows[i].minimal_team_size * 2,
+            details: dts,
+            start:
+              gameDate.format("YYYY-MM-DD") +
+              " " +
+              this.byPlayerTable.rows[i].start_hour,
+            end:
+              gameDate.format("YYYY-MM-DD") +
+              " " +
+              this.byPlayerTable.rows[i].end_hour,
+            color: color,
+            meetid: this.byPlayerTable.rows[i].meet,
+            inv: true
+          });
+        }
       }
+    },
+    async ModifyInvit(meetid) {
+      const inv_id = await axios.get(
+        "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/CalendarMInv/" +
+          this.id +
+          "/" +
+          meetid,
+        {
+          responseType: "json"
+        }
+      );
+      let invid = inv_id.data.rows[0].id;
+      await axios.put(
+        "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/invitations/" + invid,
+        {
+          status: null
+        }
+      );
+      alert(
+        "Vous serez rediriger vers vos invitations pour modifier votre choix !"
+      );
+      this.$router.push("/invitation");
+    },
+    async AcceptInvit(meetid) {
+      const inv_id = await axios.get(
+        "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/CalendarMInv/" +
+          this.id +
+          "/" +
+          meetid,
+        {
+          responseType: "json"
+        }
+      );
+      let invid = inv_id.data.rows[0].id;
+      await axios.put(
+        "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/invitations/" + invid,
+        {
+          status: true
+        }
+      );
+      alert("Invitation acceptée !");
+      this.$router.go();
+    },
+    async DeclineInvit(meetid) {
+      const inv_id = await axios.get(
+        "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/CalendarMInv/" +
+          this.id +
+          "/" +
+          meetid,
+        {
+          responseType: "json"
+        }
+      );
+      let invid = inv_id.data.rows[0].id;
+      await axios.put(
+        "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/invitations/" + invid,
+        {
+          status: false
+        }
+      );
+      alert("Invitation refusée !");
+      this.$router.go();
     },
     viewDay({ date }) {
       this.focus = date;
@@ -379,6 +514,13 @@ export default {
         responseType: "json"
       }
     );
+    const pseudodata = await axios.get(
+      "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/Players/id" + this.id,
+      {
+        responseType: "json"
+      }
+    );
+    this.pseudo = pseudodata.data.pseudo;
     // this.setSlotsTable(slot_Table);
     // this.setInvitationsTable(invitation_Table);
     // this.setPlayersTable(player_Table);

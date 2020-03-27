@@ -1,7 +1,11 @@
 package com.example.quickmatch.content
 
+import android.graphics.Typeface
+import android.media.Image
 import android.provider.Settings.Global.getString
 import android.view.View
+import android.widget.Button
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.net.toUri
@@ -10,7 +14,10 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.quickmatch.R
 import com.example.quickmatch.content.club.ClubCreationStatus
+import com.example.quickmatch.network.ClubAndPlayerBelongClubObject
 import com.example.quickmatch.network.ClubObject
+import com.example.quickmatch.network.PlayerAndPlayerBelongClubObject
+import com.example.quickmatch.network.PlayerObject
 import com.example.quickmatch.utils.FormatUtils
 import timber.log.Timber
 
@@ -71,7 +78,7 @@ fun bindStatusMail(imgView: ImageView, status: ClubCreationStatus?) {
     }
 }
 
-/* Adapter for club fields in the recycler view */
+/* Adapter for club fields in the search new club recycler view */
 
 @BindingAdapter("clubCreationFormatted")
 fun TextView.setClubCreationDate(club: ClubObject?) {
@@ -98,9 +105,84 @@ fun TextView.setClubPrivacy(club: ClubObject?) {
 }
 
 @BindingAdapter("clubJoinIcon")
-fun ImageView.setClubJoinIcon(club: ClubObject?) {
+fun ImageButton.setClubJoinIcon(club: ClubObject?) {
 
     club?.let {
-        setImageResource(R.drawable.ic_group_add_green_48dp)
+        setImageResource(R.drawable.join_button_background)
+    }
+}
+
+/* Player clubs recyclerView binding adapter */
+
+@BindingAdapter("clubAndPlayerInscriptionFormatted")
+fun TextView.setClubInscriptionDate(clubAndPlayer: ClubAndPlayerBelongClubObject?) {
+
+    clubAndPlayer?.let {
+        text = "Membre depuis le : " + FormatUtils.parseDateToJJMMAAAA(it.inscriptionDate!!)
+    }
+}
+
+@BindingAdapter("clubAndPlayerName")
+fun TextView.setClubAndPlayerName(clubAndPlayer: ClubAndPlayerBelongClubObject?) {
+
+    clubAndPlayer?.let {
+        text = it.name
+    }
+}
+
+@BindingAdapter("clubAndPlayerPrivacyFormatted")
+fun TextView.setClubPrivacy(clubAndPlayer: ClubAndPlayerBelongClubObject?) {
+
+    clubAndPlayer?.let {
+        text = if(it.private) "Privé" else "Public"
+    }
+}
+
+@BindingAdapter("clubAndPlayerMembership")
+fun ImageView.setClubMembershipIcon(clubAndPlayer: ClubAndPlayerBelongClubObject?) {
+
+    clubAndPlayer?.let {
+        if (it.admin) setImageResource(R.drawable.ic_star_yellow_48dp)
+        else setImageResource(R.drawable.ic_person_outline_brown_48dp)
+    }
+}
+
+@BindingAdapter("playerNameAndPseudoFormatted")
+fun TextView.setPlayerNameAndPseudo(player: PlayerAndPlayerBelongClubObject?) {
+
+    player?.let {
+        text = "${player.surname} ${player.firstName} (${player.pseudo})"
+    }
+}
+
+@BindingAdapter("playerLoggedTypeface")
+fun TextView.setLoggedPlayerTypeface(isLogged: Boolean?) {
+    isLogged?.let {
+        typeface = if (it) Typeface.DEFAULT_BOLD else Typeface.DEFAULT
+    }
+
+}
+
+@BindingAdapter("clubNumberOfMembers")
+fun TextView.setMembersCount(count: Int?) {
+
+    count?.let {
+        text = if (it > 1) "$count membres" else "$count membre"
+    }
+}
+
+@BindingAdapter("playerProfilPrivacyFormatted")
+fun ImageView.setProfilPrivacyIcon(private: Boolean?) {
+    private?.let {
+        val src: Int = if(it) R.drawable.ic_lock_outline_red_24dp else R.drawable.ic_lock_open_green_24dp
+        setImageResource(src)
+    }
+}
+
+@BindingAdapter("playerIsAdminFormatted")
+fun ImageView.setProfilMembership(isAdmin: Boolean?) {
+    isAdmin?.let {
+        val src: Int = if(isAdmin) R.drawable.ic_star_black_24dp else R.drawable.ic_person_outline_black_24dp
+        setImageResource(src)
     }
 }
