@@ -333,10 +333,7 @@ var Invitation = {
                   );
 
                 case 9:
-                  values = [
-                    req.body.status === null ? rows[0].status: req.body.status,
-                    req.params.id
-                  ];
+                  values = [req.body.status, req.params.id];
                   _context4.next = 12;
                   return _db2.default.query(updateOneQuery, values);
 

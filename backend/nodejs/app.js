@@ -23,6 +23,9 @@ var _club2 = _interopRequireDefault(_club);
 var _invitation = require("./src/controllers/invitation");
 var _invitation2 = _interopRequireDefault(_invitation);
 
+var _invitation_club = require("./src/controllers/invitation_club");
+var _invitation_club2 = _interopRequireDefault(_invitation_club);
+
 // var _invitation_for_meet = require("./src/controllers/invitation_for_meet");
 // var _invitation_for_meet2 = _interopRequireDefault(_invitation_for_meet);
 
@@ -99,6 +102,20 @@ app.put("/dbcontrol/api/v1/Invitations/:id", _invitation2.default.update);
 app.delete("/dbcontrol/api/v1/Invitations/:id", _invitation2.default.delete);
 app.get("/dbcontrol/api/v1/InvitationsRows", _invitation2.default.getAllRows);
 
+// Table Invitation_Club
+app.post(
+  "/dbcontrol/api/v1/InvitationClub/:pid&:cid",
+  _invitation_club2.default.create
+);
+app.get(
+  "/dbcontrol/api/v1/InvitationClub/:pid",
+  _invitation_club2.default.getPlayerInvitations
+);
+app.delete(
+  "/dbcontrol/api/v1/InvitationClub/:ci_id",
+  _invitation_club2.default.delete
+);
+
 // Table invitation_for_meet
 // app.post("/dbcontrol/api/v1/InvitationForMeet", _invitation_for_meet2.default.create);
 // app.get("/dbcontrol/api/v1/InvitationForMeet", _invitation_for_meet2.default.getAll);
@@ -150,12 +167,24 @@ app.get(
   _player_belong_club2.default.getPlayerClubsByPlayerID
 );
 app.get(
+  "/dbcontrol/api/v1/PlayerClubsRows/pid:id",
+  _player_belong_club2.default.getPlayerClubsByPlayerIDRows
+);
+app.get(
   "/dbcontrol/api/v1/PlayerClubs/npid:id",
   _player_belong_club2.default.NgetPlayerClubsByPlayerID
 );
 app.get(
+  "/dbcontrol/api/v1/PlayerClubsRows/npid:id",
+  _player_belong_club2.default.NgetPlayerClubsByPlayerIDRows
+);
+app.get(
   "/dbcontrol/api/v1/PlayerClubs/cid:id",
   _player_belong_club2.default.getPlayerClubsByClubID
+);
+app.get(
+  "/dbcontrol/api/v1/PlayerClubsRows/cid:id",
+  _player_belong_club2.default.getPlayerClubsByClubIDRows
 );
 app.get(
   "/dbcontrol/api/v1/PlayerClubs/ncid:id",
@@ -178,11 +207,8 @@ app.put(
   "/dbcontrol/api/v1/PlayerClubsPromoteToAdmin/:pid&:cid",
   _player_belong_club2.default.promoteToAdmin
 );
-app.get(
-  "/dbcontrol/api/v1/PlayerClubsRows",
-  _player_belong_club2.default.getAllRows
-);
 
+// Calendar related routes
 app.get(
   "/dbcontrol/api/v1/CalendarBPlayer/:id",
   _calendar_db2.default.getByPlayer
