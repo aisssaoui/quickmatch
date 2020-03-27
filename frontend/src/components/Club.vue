@@ -435,7 +435,7 @@ import router from "../router";
 import NotConnected from "./NotConnected";
 export default {
   components: {
-    WorkInProgress
+    NotConnected
   },
   data() {
     return {
