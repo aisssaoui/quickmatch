@@ -44,7 +44,10 @@
                 <v-btn dark small rounded color="#666" v-on:click="leave_club(row.id, row.club_name, row.is_admin)">Quitter le club</v-btn>
               </div>
               <div class="tab_btn tab_v_clubs" v-if="row.is_admin" >
-                <v-btn dark small rounded color="#666" v-on:click="manage_club_menu(row.club_name, row.id)">Gérer le club</v-btn>
+                <v-btn dark small rounded color="#666" v-on:click="manage_club_menu(row.club_name, row.id, row.is_admin)">Gérer le club</v-btn>
+              </div>
+              <div class="tab_btn tab_v_clubs" v-else >
+                <v-btn dark small rounded color="#666" v-on:click="manage_club_menu(row.club_name, row.id, row.is_admin)">Voir le club</v-btn>
               </div>
             </div>
             <br>
@@ -142,10 +145,10 @@
             <div class="tab_row tab_g_clubs">{{ row.conceded_goals }}</div>
             <div class="tab_row tab_g_clubs">{{ row.matches_played }}</div>
             <div class="tab_row tab_g_clubs">{{ row.victories }}</div>
-            <div class="tab_btn tab_g_clubs" v-if="! row.is_admin">
+            <div class="tab_btn tab_g_clubs" v-if="! row.is_admin && admin_club_switch">
               <v-btn dark small rounded color="#666" v-on:click="promote_to_admin(row.id, id_club_switch, row.pseudo)">Nommer admin</v-btn>
             </div>
-            <div class="tab_btn tab_g_clubs" v-if="! row.is_admin" >
+            <div class="tab_btn tab_g_clubs" v-if="! row.is_admin && admin_club_switch" >
               <v-btn dark small rounded color="#666" v-on:click="delete_from_club(row.id, id_club_switch, row.pseudo)">Supprimer</v-btn>
             </div>
           </div>
@@ -161,7 +164,7 @@
           </div>
 
           <br>
-          <div style="text-align: right; margin-right: 5px;">
+          <div v-if="admin_club_switch" style="text-align: right; margin-right: 5px;">
             <v-btn dark rounded align="left" color="#666" v-on:click="add_club_menu()">Ajouter un joueur</v-btn>
           </div>
           <br>
@@ -355,6 +358,7 @@ export default {
       */
       id_club_switch: -1,
       name_club_switch: "",
+      admin_club_switch: false,
       pseudoRules: [
         v => !!v || "Pseudo requis",
         v => v.length >= 2 || "Pseudo trop court",
@@ -436,7 +440,7 @@ export default {
       }
     },
     //
-    async create_club() {
+    async create_club(){
       let apiRep = null;
       apiRep = await axios
         .post("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/Clubs", {
@@ -446,11 +450,10 @@ export default {
         .catch(e => {
           if (this.name_already_exist(this.club_name)) {
             alert("un club porte déjà le même nom, choisissez-en un autre");
+          }
+          else{
+            alert("Echec, veuillez réessayer, si le problème persiste, réessayer plus tard");
             this.$router.go();
-          } else {
-            alert(
-              "Echec, veuillez réessayer, si le problème persiste, réessayer plus tard"
-            );
           }
         });
       let cid = apiRep.data.id;
@@ -466,59 +469,49 @@ export default {
           this.$router.go();
         })
         .catch(e => {
-          alert(
-            "Echec, veuillez réessayer, si le problème persiste, réessayer plus tard"
-          );
+          alert("Echec, veuillez réessayer, si le problème persiste, réessayer plus tard");
         });
+    },
+    name_already_exist(club_name){
+      for (var row_in in this.clubsInToShow){
+        if (this.clubsInToShow[row_in]["club_name"] == club_name){
+          return true;
+        }
+      }
+      for (var row_not_in in this.clubsNotInToShow){
+        if (this.clubsNotInToShow[row_not_in]["club_name"] == club_name){
+          return true;
+        }
+      }
+      return false;
     },
     async leave_club(cid, club_name, is_admin) {
       let count_admin = await axios
-        .get(
-          "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/PlayerClubsCountAdmin/" +
-            cid,
-          {
-            responseType: "json"
-          }
-        )
+        .get("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/PlayerClubsCountAdmin/" + cid, {responseType: "json"})
         .catch(e => {
-          alert(
-            "Echec, veuillez réessayer, si le problème persiste, réessayer plus tard"
-          );
+          alert("Echec, veuillez réessayer, si le problème persiste, réessayer plus tard");
           this.$router.go();
         });
       let nb = count_admin.data.rows[0]["nb"];
       let destroy_club = true;
       if (nb == 1 && is_admin) {
-        if (
-          !confirm(
-            "vous êtes le dernier admin de ce club, le quitter le détruira, souhaitez vous continuer ?"
-          )
-        ) {
+        if (!confirm("vous êtes le dernier admin de ce club, le quitter le détruira, souhaitez vous continuer ?")){
           destroy_club = false;
         }
       }
       if (destroy_club) {
         await axios
-          .delete(
-            "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/PlayerClubs/" +
-              cid +
-              "&" +
-              this.id
-          )
+          .delete("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/PlayerClubs/" + cid + "&" + this.id)
           .then(response => {
             alert("Vous avez quitté le club " + club_name);
           })
           .catch(e => {
-            alert(
-              "Echec, veuillez réessayer, si le problème persiste, réessayer plus tard"
-            );
+            alert("Echec, veuillez réessayer, si le problème persiste, réessayer plus tard");
             this.$router.go();
           });
         if (nb == 1 && is_admin) {
           await axios
-            .delete(
-              "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/Clubs/" + cid
-            )
+            .delete("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/Clubs/" + cid)
             .then(response => {
               alert("Le club " + club_name + " a été détruit");
             });
@@ -570,11 +563,9 @@ export default {
       }
     },
     //
-    async join_club(cid, club_name) {
+    async join_club(cid, club_name){
       let apiRep1 = null;
-      apiRep1 = await axios.post(
-        "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/PlayerClubs",
-        {
+      apiRep1 = await axios.post("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/PlayerClubs",{
           club: cid,
           player: this.id,
           is_admin: false
@@ -589,23 +580,11 @@ export default {
         this.$router.go();
       });
     },
-    name_already_exist(club_name){
-      for (var row_in in this.clubsInToShow){
-        if (this.clubsInToShow[row_in]["club_name"] == club_name){
-          return true;
-        }
-      }
-      for (var row_not_in in this.clubsNotInToShow){
-        if (this.clubsNotInToShow[row_not_in]["club_name"] == club_name){
-          return true;
-        }
-      }
-      return false;
-    },
     ////////////////////////////////////////////////////////////////////////////
-    async manage_club_menu(club_name, cid){
+    async manage_club_menu(club_name, cid, is_admin){
       this.name_club_switch = club_name;
       this.id_club_switch = cid;
+      this.admin_club_switch = is_admin;
       let playersIn = await axios
         .get("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/PlayerClubs/cid" + cid, {responseType: "json"})
         .catch(e => {
@@ -637,7 +616,7 @@ export default {
     },
     page_gc(n){
       document.getElementById(this.playersInClubPage).style.backgroundColor = "white";
-      this.clubsNotInPage = n;
+      this.playersInClubPage = n;
       document.getElementById(this.playersInClubPage).style.backgroundColor = "orange";
       let len = this.playersInClubToShowPage.length
       for (let i = 0; i < len; i++){
@@ -677,9 +656,7 @@ export default {
       let playersNotIn = await axios
         .get("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/PlayerClubs/ncid" + this.id_club_switch, {responseType: "json"})
         .catch(e => {
-          alert(
-            "Une erreur s'est produite, nous allons rafraichir la page, si le problème persiste, quittez la page"
-          );
+          alert("Une erreur s'est produite, nous allons rafraichir la page, si le problème persiste, quittez la page");
           this.$router.go();
         });
       this.playersNotInClubToShow = playersNotIn.data.rows;
