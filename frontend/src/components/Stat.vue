@@ -6,20 +6,20 @@
           <div class="title">Statistiques globales</div>
 
           <hr>
-          <div class="tab_head_glob">Nom</div>
-          <div class="tab_head_glob">Prénom</div>
-          <div class="tab_head_glob">Nombre de but(s)</div>
-          <div class="tab_head_glob">Nombre de but(s) encaissé(s)</div>
-          <div class="tab_head_glob">Nombre de match joué(s)</div>
-          <div class="tab_head_glob">Nombre de victoire(s)</div>
+          <div class="tab_head tab_glob">Nom</div>
+          <div class="tab_head tab_glob">Prénom</div>
+          <div class="tab_head tab_glob">Nombre de but(s)</div>
+          <div class="tab_head tab_glob">Nombre de but(s) encaissé(s)</div>
+          <div class="tab_head tab_glob">Nombre de match joué(s)</div>
+          <div class="tab_head tab_glob">Nombre de victoire(s)</div>
 
           <br>
-          <div class="tab_glob">{{ playerToShow.surname }}</div>
-          <div class="tab_glob">{{ playerToShow.first_name }}</div>
-          <div class="tab_glob">{{ playerToShow.scored_goals }}</div>
-          <div class="tab_glob">{{ playerToShow.conceded_goals }}</div>
-          <div class="tab_glob">{{ playerToShow.matches_played }}</div>
-          <div class="tab_glob">{{ playerToShow.victories }}</div>
+          <div class="tab_row tab_glob">{{ playerToShow.surname }}</div>
+          <div class="tab_row tab_glob">{{ playerToShow.first_name }}</div>
+          <div class="tab_row tab_glob">{{ playerToShow.scored_goals }}</div>
+          <div class="tab_row tab_glob">{{ playerToShow.conceded_goals }}</div>
+          <div class="tab_row tab_glob">{{ playerToShow.matches_played }}</div>
+          <div class="tab_row tab_glob">{{ playerToShow.victories }}</div>
 
         </div>
       <!-- ///////////////////////////////////////////////////////////////// -->
@@ -28,20 +28,20 @@
         <br>
 
         <div v-if="playerStatToShow.length != 0">
-          <div class="tab_head_match">Date</div>
-          <div class="tab_head_match">Lieux</div>
-          <div class="tab_head_match">Nombre de but(s)</div>
-          <div class="tab_head_match">Nombre de but(s) encaissé(s)</div>
-          <div class="tab_head_match">Résultat du match</div>
+          <div class="tab_head tab_match">Date</div>
+          <div class="tab_head tab_match">Lieux</div>
+          <div class="tab_head tab_match">Nombre de but(s)</div>
+          <div class="tab_head tab_match">Nombre de but(s) encaissé(s)</div>
+          <div class="tab_head tab_match">Résultat du match</div>
 
           <div v-for="row in playerStatToShowPage" :key="row.id">
             <hr>
-            <div class="tab_match">{{ new Date(row.precise_date).toLocaleDateString('fr-FR') }} ({{ new Date(row.precise_date).toLocaleTimeString('fr-FR') }})</div>
-            <div class="tab_match">{{ row.location }}</div>
-            <div class="tab_match">{{ row.scored_goals }}</div>
-            <div class="tab_match">{{ row.conceded_goals }}</div>
-            <div v-if="row.won" class="tab_match">Victoire</div>
-            <div v-else class="tab_match">Défaite</div>
+            <div class="tab_row tab_match">{{ new Date(row.precise_date).toLocaleDateString('fr-FR') }} ({{ new Date(row.precise_date).toLocaleTimeString('fr-FR') }})</div>
+            <div class="tab_row tab_match">{{ row.location }}</div>
+            <div class="tab_row tab_match">{{ row.scored_goals }}</div>
+            <div class="tab_row tab_match">{{ row.conceded_goals }}</div>
+            <div v-if="row.won" class="tab_row tab_match">Victoire</div>
+            <div v-else class="tab_row tab_match">Défaite</div>
           </div>
 
           <br>
@@ -94,31 +94,31 @@
     font-size: 200%;
     margin: 5px;
   }
-  .tab_head_glob, .tab_glob, .tab_head_match, .tab_match{
+  .tab_nothing{
+    text-align: center;
+    font-weight: bold;
+    color: white;
+  }
+  .tab_head, .tab_row{
     display: inline-block;
     overflow: hidden;
     text-overflow: ellipsis;
     margin-top: 5px;
     margin-left: 5px;
   }
-  .tab_head_glob, .tab_glob{
-    width: 16%;
-  }
-  .tab_head_match, .tab_match{
-    width: 19%;
-  }
-  .tab_head_glob, .tab_head_match{
+  .tab_head{
     font-weight: bold;
     color: white;
   }
-  .tab_glob, .tab_match{
+  .tab_row tab_glob{
     color: #CCC;
     font-size: 120%;
   }
-  .tab_nothing{
-    text-align: center;
-    font-weight: bold;
-    color: white;
+  .tab_glob, .tab_glob{
+    width: 16%;
+  }
+  .tab_match, .tab_match{
+    width: 19%;
   }
 </style>
 

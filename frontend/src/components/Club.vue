@@ -25,25 +25,25 @@
           <br>
 
           <div v-if="clubsInToShow.length != 0">
-            <div class="tab_head_v_clubs">Nom du Club</div>
-            <div class="tab_head_v_clubs">Date de création</div>
-            <div class="tab_head_v_clubs">Club privé</div>
-            <div class="tab_head_v_clubs">Administrateur</div>
-            <div class="tab_head_v_clubs">Quitter le club</div>
-            <div class="tab_head_v_clubs">Gérer le club</div>
+            <div class="tab_head tab_v_clubs">Nom du Club</div>
+            <div class="tab_head tab_v_clubs">Date de création</div>
+            <div class="tab_head tab_v_clubs">Club privé</div>
+            <div class="tab_head tab_v_clubs">Administrateur</div>
+            <div class="tab_head tab_v_clubs">Quitter le club</div>
+            <div class="tab_head tab_v_clubs">Gérer le club</div>
 
             <div v-for="row in clubsInToShowPage" :key="row.id">
               <hr>
-              <div class="tab_v_clubs">{{ row.club_name }}</div>
-              <div class="tab_v_clubs">{{ new Date(row.creation_date).toLocaleDateString('fr-FR') }}</div>
-              <div v-if="row.private_club" class="tab_v_clubs">oui</div>
-              <div v-else class="tab_v_clubs">non</div>
-              <div v-if="row.is_admin" class="tab_v_clubs">oui</div>
-              <div v-else class="tab_v_clubs">non</div>
-              <div class="btn_v_clubs">
+              <div class="tab_row tab_v_clubs">{{ row.club_name }}</div>
+              <div class="tab_row tab_v_clubs">{{ new Date(row.creation_date).toLocaleDateString('fr-FR') }}</div>
+              <div v-if="row.private_club" class="tab_row tab_v_clubs">oui</div>
+              <div v-else class="tab_row tab_v_clubs">non</div>
+              <div v-if="row.is_admin" class="tab_row tab_v_clubs">oui</div>
+              <div v-else class="tab_row tab_v_clubs">non</div>
+              <div class="tab_btn tab_v_clubs">
                 <v-btn dark small rounded color="#666" v-on:click="leave_club(row.id, row.club_name, row.is_admin)">Quitter le club</v-btn>
               </div>
-              <div class="btn_v_clubs" v-if="row.is_admin" >
+              <div class="tab_btn tab_v_clubs" v-if="row.is_admin" >
                 <v-btn dark small rounded color="#666" v-on:click="manage_club_menu(row.club_name, row.id)">Gérer le club</v-btn>
               </div>
             </div>
@@ -82,15 +82,15 @@
           <div class="title">Rejoindre un club</div>
 
           <div v-if="clubsNotInToShow.length != 0">
-            <div class="tab_head_r_clubs">Nom du Club</div>
-            <div class="tab_head_r_clubs">Date de création</div>
-            <div class="tab_head_r_clubs">Demander à rejoindre</div>
+            <div class="tab_head tab_r_clubs">Nom du Club</div>
+            <div class="tab_head tab_r_clubs">Date de création</div>
+            <div class="tab_head tab_r_clubs">Demander à rejoindre</div>
 
             <div v-for="row in clubsNotInToShowPage" :key="row.id">
               <hr>
-              <div class="tab_r_clubs">{{ row.club_name }}</div>
-              <div class="tab_r_clubs">{{ new Date(row.creation_date).toLocaleDateString('fr-FR') }}</div>
-              <div class="btn_r_clubs">
+              <div class="tab_row tab_r_clubs">{{ row.club_name }}</div>
+              <div class="tab_row tab_r_clubs">{{ new Date(row.creation_date).toLocaleDateString('fr-FR') }}</div>
+              <div class="tab_btn tab_r_clubs">
                 <v-btn dark small rounded color="#666" v-on:click="join_club(row.id, row.club_name)">Demander à rejoindre</v-btn>
               </div>
             </div>
@@ -123,29 +123,29 @@
           <div class="title">Joueurs du club {{ name_club_switch }}</div>
           <br>
 
-          <div class="tab_head_g_clubs">Nom</div>
-          <div class="tab_head_g_clubs">Prénom</div>
-          <div class="tab_head_g_clubs">Pseudo</div>
-          <div class="tab_head_g_clubs">Nombre de but(s)</div>
-          <div class="tab_head_g_clubs">Nombre de but(s) encaissé(s)</div>
-          <div class="tab_head_g_clubs">Nombre de match joué(s)</div>
-          <div class="tab_head_g_clubs">Nombre de victoire(s)</div>
-          <div class="tab_head_g_clubs">Nommer admin</div>
-          <div class="tab_head_g_clubs">Supprimer</div>
+          <div class="tab_head tab_g_clubs">Nom</div>
+          <div class="tab_head tab_g_clubs">Prénom</div>
+          <div class="tab_head tab_g_clubs">Pseudo</div>
+          <div class="tab_head tab_g_clubs">Nombre de but(s)</div>
+          <div class="tab_head tab_g_clubs">Nombre de but(s) encaissé(s)</div>
+          <div class="tab_head tab_g_clubs">Nombre de match joué(s)</div>
+          <div class="tab_head tab_g_clubs">Nombre de victoire(s)</div>
+          <div class="tab_head tab_g_clubs">Nommer admin</div>
+          <div class="tab_head tab_g_clubs">Supprimer</div>
 
           <div v-for="row in playersInClubToShowPage" :key="row.id">
             <hr>
-            <div class="tab_g_clubs">{{ row.surname }}</div>
-            <div class="tab_g_clubs">{{ row.first_name }}</div>
-            <div class="tab_g_clubs">{{ row.pseudo }}</div>
-            <div class="tab_g_clubs">{{ row.scored_goals }}</div>
-            <div class="tab_g_clubs">{{ row.conceded_goals }}</div>
-            <div class="tab_g_clubs">{{ row.matches_played }}</div>
-            <div class="tab_g_clubs">{{ row.victories }}</div>
-            <div class="btn_g_clubs" v-if="! row.is_admin">
+            <div class="tab_row tab_g_clubs">{{ row.surname }}</div>
+            <div class="tab_row tab_g_clubs">{{ row.first_name }}</div>
+            <div class="tab_row tab_g_clubs">{{ row.pseudo }}</div>
+            <div class="tab_row tab_g_clubs">{{ row.scored_goals }}</div>
+            <div class="tab_row tab_g_clubs">{{ row.conceded_goals }}</div>
+            <div class="tab_row tab_g_clubs">{{ row.matches_played }}</div>
+            <div class="tab_row tab_g_clubs">{{ row.victories }}</div>
+            <div class="tab_btn tab_g_clubs" v-if="! row.is_admin">
               <v-btn dark small rounded color="#666" v-on:click="promote_to_admin(row.id, id_club_switch, row.pseudo)">Nommer admin</v-btn>
             </div>
-            <div class="btn_g_clubs" v-if="! row.is_admin" >
+            <div class="tab_btn tab_g_clubs" v-if="! row.is_admin" >
               <v-btn dark small rounded color="#666" v-on:click="delete_from_club(row.id, id_club_switch, row.pseudo)">Supprimer</v-btn>
             </div>
           </div>
@@ -182,25 +182,25 @@
           <br>
 
           <div v-if="playersNotInClubToShow.length != 0">
-            <div class="tab_head_a_clubs">Nom</div>
-            <div class="tab_head_a_clubs">Prénom</div>
-            <div class="tab_head_a_clubs">Pseudo</div>
-            <div class="tab_head_a_clubs">Nombre de but(s)</div>
-            <div class="tab_head_a_clubs">Nombre de but(s) encaissé(s)</div>
-            <div class="tab_head_a_clubs">Nombre de match joué(s)</div>
-            <div class="tab_head_a_clubs">Nombre de victoire(s)</div>
-            <div class="tab_head_a_clubs">Ajouter</div>
+            <div class="tab_head tab_a_clubs">Nom</div>
+            <div class="tab_head tab_a_clubs">Prénom</div>
+            <div class="tab_head tab_a_clubs">Pseudo</div>
+            <div class="tab_head tab_a_clubs">Nombre de but(s)</div>
+            <div class="tab_head tab_a_clubs">Nombre de but(s) encaissé(s)</div>
+            <div class="tab_head tab_a_clubs">Nombre de match joué(s)</div>
+            <div class="tab_head tab_a_clubs">Nombre de victoire(s)</div>
+            <div class="tab_head tab_a_clubs">Ajouter</div>
 
             <div v-for="row in playersNotInClubToShowPage" :key="row.id">
               <hr>
-              <div class="tab_a_clubs">{{ row.surname }}</div>
-              <div class="tab_a_clubs">{{ row.first_name }}</div>
-              <div class="tab_a_clubs">{{ row.pseudo }}</div>
-              <div class="tab_a_clubs">{{ row.scored_goals }}</div>
-              <div class="tab_a_clubs">{{ row.conceded_goals }}</div>
-              <div class="tab_a_clubs">{{ row.matches_played }}</div>
-              <div class="tab_a_clubs">{{ row.victories }}</div>
-              <div class="btn_a_clubs">
+              <div class="tab_row tab_a_clubs">{{ row.surname }}</div>
+              <div class="tab_row tab_a_clubs">{{ row.first_name }}</div>
+              <div class="tab_row tab_a_clubs">{{ row.pseudo }}</div>
+              <div class="tab_row tab_a_clubs">{{ row.scored_goals }}</div>
+              <div class="tab_row tab_a_clubs">{{ row.conceded_goals }}</div>
+              <div class="tab_row tab_a_clubs">{{ row.matches_played }}</div>
+              <div class="tab_row tab_a_clubs">{{ row.victories }}</div>
+              <div class="tab_btn tab_a_clubs">
                 <v-btn dark small rounded color="#666" v-on:click="add_to_club(row.id, id_club_switch, row.pseudo)">Ajouter</v-btn>
               </div>
             </div>
@@ -261,31 +261,31 @@
     font-weight: bold;
     color: white;
   }
-  .tab_head_v_clubs, .tab_v_clubs, .btn_v_clubs, .tab_head_r_clubs, .tab_r_clubs, .btn_r_clubs, .tab_head_g_clubs, .tab_g_clubs, .btn_g_clubs, .tab_head_a_clubs, .tab_a_clubs, .btn_a_clubs{
+  .tab_head, .tab_row, .tab_btn{
     display: inline-block;
     overflow: hidden;
     text-overflow: ellipsis;
     margin-top: 5px;
     margin-left: 5px;
   }
-  .tab_head_v_clubs, .tab_head_r_clubs, .tab_head_g_clubs, .tab_head_a_clubs{
+  .tab_head{
     font-weight: bold;
     color: white;
   }
-  .tab_v_clubs, .tab_r_clubs, .tab_g_clubs, .tab_a_clubs{
+  .tab_row{
     color: #CCC;
     font-size: 120%;
   }
-  .tab_head_v_clubs, .tab_v_clubs, .btn_v_clubs{
+  .tab_v_clubs{
     width: 16%;
   }
-  .tab_head_r_clubs, .tab_r_clubs, .btn_r_clubs{
+  .tab_r_clubs{
     width: 32%;
   }
-  .tab_head_g_clubs, .tab_g_clubs, .btn_g_clubs{
+  .tab_g_clubs{
     width: 10.6%;
   }
-  .tab_head_a_clubs, .tab_a_clubs, .btn_a_clubs{
+  .tab_a_clubs{
     width: 12.2%;
   }
 </style>
@@ -717,60 +717,17 @@ export default {
     },
     //
     async add_to_club(pid, cid, pseudo){
-        await axios
-          .post("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/InvitationClub/" + pid + "&" + cid)
-          .then(response => {
-            alert("Une invitation a été envoyé à " + pseudo);
-            this.add_club_menu();
-          })
-          .catch(e => {
-            alert("Echec, veuillez réessayer, si le problème persiste, réessayer plus tard");
-            this.$router.go();
-          });
-    },
-    page_ac(n) {
-      document.getElementById(this.playersNotInClubPage).style.backgroundColor =
-        "white";
-      this.playersNotInClubPage = n;
-      document.getElementById(this.playersNotInClubPage).style.backgroundColor =
-        "orange";
-      let len = this.playersNotInClubToShowPage.length;
-      for (let i = 0; i < len; i++) {
-        this.playersNotInClubToShowPage.pop();
-      }
-      for (
-        let i =
-          (this.playersNotInClubPage - 1) * this.playersNotInClubNbRowPerPage;
-        i <
-        Math.min(
-          this.playersNotInClubNbRow,
-          this.playersNotInClubPage * this.playersNotInClubNbRowPerPage
-        );
-        i++
-      ) {
-        this.playersNotInClubToShowPage.push(this.playersNotInClubToShow[i]);
-      }
-    },
-    //
-    async add_to_club(pid, cid, pseudo) {
       await axios
-        .post(
-          "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/InvitationClub/" +
-            pid +
-            "&" +
-            cid
-        )
+        .post("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/InvitationClub/" + pid + "&" + cid)
         .then(response => {
           alert("Une invitation a été envoyé à " + pseudo);
           this.add_club_menu();
         })
         .catch(e => {
-          alert(
-            "Echec, veuillez réessayer, si le problème persiste, réessayer plus tard"
-          );
+          alert("Echec, veuillez réessayer, si le problème persiste, réessayer plus tard");
           this.$router.go();
         });
-    }
+    },
   }
 };
 </script>
