@@ -53,7 +53,8 @@ id SMALLSERIAL PRIMARY KEY,
 player SMALLINT CHECK (player >= 0),
 club SMALLINT CHECK (club >= 0),
 FOREIGN KEY (club)   REFERENCES Club(id),
-FOREIGN KEY (player) REFERENCES Player(id)
+FOREIGN KEY (player) REFERENCES Player(id),
+UNIQUE(player, club)
 );
 
 CREATE TABLE IF NOT EXISTS Meet (				/*Nom a revoir peut etre*/

@@ -27,34 +27,49 @@ var invitation_club = {
    */
   create: function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(req, res) {
-      var text, values, _ref2, rows;
+      var text1, text2, values, _ref2, rows, rowcount;
 
       return regeneratorRuntime.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              text = "INSERT INTO Invitation_Club (player, club) VALUES($1, $2) RETURNING *";
+              text1 = "SELECT * FROM Invitation_Club WHERE player = $1 AND club = $2)";
+              text2 = "INSERT INTO Invitation_Club (player, club) VALUES($1, $2) RETURNING *";
               values = [req.params.pid, req.params.cid];
-              _context.prev = 2;
-              _context.next = 5;
-              return _db2.default.query(text, values);
+              _context.prev = 3;
+              _context.next = 6;
+              return _db2.default.query(text1, values);
 
-            case 5:
+            case 6:
               _ref2 = _context.sent;
               rows = _ref2.rows;
-              return _context.abrupt("return", res.status(201).send(rows[0]));
+              rowcount = _ref2.rowcount;
 
-            case 10:
-              _context.prev = 10;
-              _context.t0 = _context["catch"](2);
-              return _context.abrupt("return", res.status(200).send(_context.t0));
+              if (!(rowcount != 0)) {
+                _context.next = 11;
+                break;
+              }
+
+              return _context.abrupt("return", res.status(204).send({ message: "deleted" }));
+
+            case 11:
+              _context.next = 13;
+              return _db2.default.query(text2, values);
 
             case 13:
+              return _context.abrupt("return", res.status(200).send({ message: "ok" }));
+
+            case 16:
+              _context.prev = 16;
+              _context.t0 = _context["catch"](3);
+              return _context.abrupt("return", res.status(200).send(_context.t0));
+
+            case 19:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, this, [[2, 10]]);
+      }, _callee, this, [[3, 16]]);
     }));
 
     function create(_x, _x2) {
@@ -83,7 +98,7 @@ var invitation_club = {
               values = [req.params.pid];
               _context2.prev = 2;
               _context2.next = 5;
-              return _db2.default.query(text);
+              return _db2.default.query(text, values);
 
             case 5:
               _ref4 = _context2.sent;

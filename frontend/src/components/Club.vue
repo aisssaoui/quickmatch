@@ -44,10 +44,10 @@
                 <v-btn dark small rounded color="#666" v-on:click="leave_club(row.id, row.club_name, row.is_admin)">Quitter le club</v-btn>
               </div>
               <div class="tab_btn tab_v_clubs" v-if="row.is_admin" >
-                <v-btn dark small rounded color="#666" v-on:click="manage_club_menu(row.club_name, row.id, row.is_admin)">Gérer le club</v-btn>
+                <v-btn dark small rounded color="#666" v-on:click="manage_club_menu(row.club_name, row.id, row.is_admin).then(response => {page_gc(1);})">Gérer le club</v-btn>
               </div>
               <div class="tab_btn tab_v_clubs" v-else >
-                <v-btn dark small rounded color="#666" v-on:click="manage_club_menu(row.club_name, row.id, row.is_admin)">Voir le club</v-btn>
+                <v-btn dark small rounded color="#666" v-on:click="manage_club_menu(row.club_name, row.id, row.is_admin).then(response => {page_gc(1);})">Voir le club</v-btn>
               </div>
             </div>
             <br>
@@ -69,7 +69,7 @@
 
           <br>
           <div style="text-align: right; margin-right: 5px;">
-            <v-btn dark rounded align="left" color="#666" v-on:click="join_club_menu()">Rejoindre un club</v-btn>
+            <v-btn dark rounded align="left" color="#666" v-on:click="join_club_menu().then(response => {page_rc(1);})">Rejoindre un club</v-btn>
           </div>
           <br>
         </div>
@@ -80,7 +80,7 @@
       <div v-if="switch_menu == 'r'">
         <div class="my_card">
           <div style="margin-left: 5px; padding-top: 5px;">
-            <v-btn dark small rounded align="left" color="#666" v-on:click="main_menu()">Retourner au menu principale</v-btn>
+            <v-btn dark small rounded align="left" color="#666" v-on:click="main_menu().then(response => {page_vc(1);})">Retourner au menu principale</v-btn>
           </div>
           <div class="title">Rejoindre un club</div>
 
@@ -121,7 +121,7 @@
       <div v-if="switch_menu == 'g'">
         <div class="my_card">
           <div style="margin-left: 5px; padding-top: 5px;">
-            <v-btn dark small rounded align="left" color="#666" v-on:click="main_menu()">Retourner au menu principale</v-btn>
+            <v-btn dark small rounded align="left" color="#666" v-on:click="main_menu().then(response => {page_vc(1);})">Retourner au menu principale</v-btn>
           </div>
           <div class="title">Joueurs du club {{ name_club_switch }}</div>
           <br>
@@ -165,7 +165,7 @@
 
           <br>
           <div v-if="admin_club_switch" style="text-align: right; margin-right: 5px;">
-            <v-btn dark rounded align="left" color="#666" v-on:click="add_club_menu()">Ajouter un joueur</v-btn>
+            <v-btn dark rounded align="left" color="#666" v-on:click="add_club_menu().then(response => {page_ac(1);})">Ajouter un joueur</v-btn>
           </div>
           <br>
         </div>
@@ -176,10 +176,10 @@
       <div v-if="switch_menu == 'a'">
         <div class="my_card">
           <div style="margin-left: 5px; padding-top: 5px;">
-            <v-btn dark small rounded align="left" color="#666" v-on:click="main_menu()">Retourner au menu principale</v-btn>
+            <v-btn dark small rounded align="left" color="#666" v-on:click="main_menu().then(response => {page_vc(1);})">Retourner au menu principale</v-btn>
           </div>
           <div style="margin-left: 5px; margin-top: 5px;">
-            <v-btn dark small rounded align="left" color="#666" v-on:click="manage_club_menu(name_club_switch, id_club_switch)">Retourner au menu de gestion du club "{{ name_club_switch }}"</v-btn>
+            <v-btn dark small rounded align="left" color="#666" v-on:click="manage_club_menu(name_club_switch, id_club_switch, admin_club_switch).then(response => {page_gc(1);})">Retourner au menu de gestion du club "{{ name_club_switch }}"</v-btn>
           </div>
           <div class="title">Ajouter un joueur</div>
           <br>
@@ -407,15 +407,9 @@ export default {
           this.$router.go();
         });
       this.clubsInToShow = clubsIn.data.rows;
-      this.clubsInPage = 1;
       this.clubsInNbRow = clubsIn.data.rowCount;
       this.clubsInPageMax = Math.floor((clubsIn.data.rowCount -1) / this.clubsInNbRowPerPage) + 1;
-      this.clubsInToShowPage = [];
-      for (let i = 0; i < Math.min(this.clubsInNbRowPerPage, this.clubsInNbRow); i++){
-        this.clubsInToShowPage.push(this.clubsInToShow[i]);
-      }
       this.switch_menu = 'p';
-      setTimeout(() => { document.getElementById(this.clubsInPage).style.backgroundColor = "orange"; }, 1);
     },
     page_left_vc(){
       if (this.clubsInPage != 1){
@@ -466,10 +460,13 @@ export default {
         })
         .then(response => {
           alert("Club " + this.club_name + " créé !");
-          this.$router.go();
+          this.main_menu().then(response => {
+            this.page_vc(n_page);
+          });
         })
         .catch(e => {
           alert("Echec, veuillez réessayer, si le problème persiste, réessayer plus tard");
+          this.$router.go();
         });
     },
     name_already_exist(club_name){
@@ -516,12 +513,19 @@ export default {
               alert("Le club " + club_name + " a été détruit");
             });
         }
+        let n_page = this.clubsInPage;
+        document.getElementById(this.clubsInPage).style.backgroundColor = "white";
+        if (this.clubsInToShowPage.length == 1 && n_page != 1){
+          n_page--;
+        }
+        this.main_menu().then(response => {
+          this.page_vc(n_page);
+        });
       }
-      this.$router.go();
     },
     ////////////////////////////////////////////////////////////////////////////
     async join_club_menu(){
-      var clubsNotIn = await axios
+      let clubsNotIn = await axios
         .get("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/PlayerClubs/npid" + this.id, {responseType: "json"})
         .catch(e => {
           if (this.isSignedIn()){
@@ -530,15 +534,9 @@ export default {
           }
         });
       this.clubsNotInToShow = clubsNotIn.data.rows;
-      this.clubsNotInPage = 1;
       this.clubsNotInNbRow = clubsNotIn.data.rowCount;
       this.clubsNotInPageMax = Math.floor((clubsNotIn.data.rowCount -1) / this.clubsNotInNbRowPerPage) + 1;
-      this.clubsNotInToShowPage = [];
-      for (let i = 0; i < Math.min(this.clubsNotInNbRowPerPage, this.clubsNotInNbRow); i++){
-        this.clubsNotInToShowPage.push(this.clubsNotInToShow[i]);
-      }
       this.switch_menu = 'r';
-      setTimeout(() => { document.getElementById(this.clubsNotInPage).style.backgroundColor = "orange"; }, 1);
     },
     page_left_rc(){
       if (this.clubsNotInPage != 1){
@@ -573,7 +571,14 @@ export default {
       )
       .then(response => {
         alert("Vous avez rejoins le club " + club_name);
-        this.join_club_menu();
+        let n_page = this.clubsNotInPage;
+        document.getElementById(this.clubsNotInPage).style.backgroundColor = "white";
+        if (this.clubsNotInToShowPage.length == 1 && n_page != 1){
+          n_page--;
+        }
+        this.join_club_menu().then(response => {
+          this.page_rc(n_page);
+        });
       })
       .catch(e => {
         alert("Echec, veuillez réessayer, si le problème persiste, réessayer plus tard");
@@ -594,15 +599,9 @@ export default {
           this.$router.go();
         });
       this.playersInClubToShow = playersIn.data.rows;
-      this.playersInClubPage = 1;
       this.playersInClubNbRow = playersIn.data.rowCount;
       this.playersInClubPageMax = Math.floor((playersIn.data.rowCount -1) / this.playersInClubNbRowPerPage) + 1;
-      this.playersInClubToShowPage = [];
-      for (let i = 0; i < Math.min(this.playersInClubNbRowPerPage, this.playersInClubNbRow); i++){
-        this.playersInClubToShowPage.push(this.playersInClubToShow[i]);
-      }
       this.switch_menu = 'g';
-      setTimeout(() => { document.getElementById(this.playersInClubPage).style.backgroundColor = "orange"; }, 1);
     },
     page_left_gc(){
       if (this.playersInClubPage != 1){
@@ -632,7 +631,11 @@ export default {
       .put("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/PlayerClubsPromoteToAdmin/" + pid + "&" + cid)
       .then(response => {
         alert("Vous avez promu admin " + pseudo);
-        this.manage_club_menu(this.name_club_switch, this.id_club_switch);
+        let n_page = this.playersInClubPage;
+        document.getElementById(this.playersInClubPage).style.backgroundColor = "white";
+        this.manage_club_menu(this.name_club_switch, this.id_club_switch, this.admin_club_switch).then(response => {
+          this.page_gc(n_page);
+        });
       })
       .catch(e => {
         alert("Echec, veuillez réessayer, si le problème persiste, réessayer plus tard");
@@ -644,7 +647,14 @@ export default {
       .delete("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/PlayerClubs/" + cid + "&" + pid)
       .then(response => {
         alert("Vous avez renvoyer " + pseudo + " du club " + this.name_club_switch);
-        this.manage_club_menu(this.name_club_switch, this.id_club_switch);
+        let n_page = this.playersInClubPage;
+        document.getElementById(this.playersInClubPage).style.backgroundColor = "white";
+        if (this.playersInClubToShowPage.length == 1 && n_page != 1){
+          n_page--;
+        }
+        this.manage_club_menu(this.name_club_switch, this.id_club_switch, this.admin_club_switch).then(response => {
+          this.page_gc(n_page);
+        });
       })
       .catch(e => {
         alert("Echec, veuillez réessayer, si le problème persiste, réessayer plus tard");
@@ -660,15 +670,9 @@ export default {
           this.$router.go();
         });
       this.playersNotInClubToShow = playersNotIn.data.rows;
-      this.playersNotInClubPage = 1;
       this.playersNotInClubNbRow = playersNotIn.data.rowCount;
       this.playersNotInClubPageMax = Math.floor((playersNotIn.data.rowCount -1) / this.playersNotInClubNbRowPerPage) + 1;
-      this.playersNotInClubToShowPage = [];
-      for (let i = 0; i < Math.min(this.playersNotInClubNbRowPerPage, this.playersNotInClubNbRow); i++){
-        this.playersNotInClubToShowPage.push(this.playersNotInClubToShow[i]);
-      }
       this.switch_menu = 'a';
-      setTimeout(() => { document.getElementById(this.playersNotInClubPage).style.backgroundColor = "orange"; }, 1);
     },
     page_left_ac(){
       if (this.playersNotInClubPage != 1){
@@ -697,8 +701,24 @@ export default {
       await axios
         .post("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/InvitationClub/" + pid + "&" + cid)
         .then(response => {
-          alert("Une invitation a été envoyé à " + pseudo);
-          this.add_club_menu();
+          if (response.data.message == "ok"){
+            console.log(response);
+            alert("Une invitation a été envoyé à " + pseudo);
+            let n_page = this.playersNotInClubPage;
+            document.getElementById(this.playersNotInClubPage).style.backgroundColor = "white";
+            this.add_club_menu().then(response => {
+              this.page_ac(n_page);
+            });
+          }
+          else{
+            console.log(response);
+            alert("Une invitation avait déjà été envoyé à " + pseudo);
+            let n_page = this.playersNotInClubPage;
+            document.getElementById(this.playersNotInClubPage).style.backgroundColor = "white";
+            this.add_club_menu().then(response => {
+              this.page_ac(n_page);
+            });
+          }
         })
         .catch(e => {
           alert("Echec, veuillez réessayer, si le problème persiste, réessayer plus tard");

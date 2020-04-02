@@ -10,12 +10,17 @@ const invitation_club = {
    * @returns {object} Invitation_Club object
    */
   async create(req, res) {
-    const text = "INSERT INTO Invitation_Club (player, club) VALUES($1, $2) RETURNING *";
+    const text1 = "SELECT * FROM Invitation_Club WHERE player = $1 AND club = $2)";
+    const text2 = "INSERT INTO Invitation_Club (player, club) VALUES ($1, $2) RETURNING *";
     const values = [req.params.pid, req.params.cid];
 
     try {
-      const { rows } = await db.query(text, values);
-      return res.status(201).send(rows[0]);
+      const {rows, rowcount} = await db.query(text1, values);
+      if (rowcount != 0){
+        return res.status(200).send({ message: "already exist" });
+      }
+      await db.query(text2, values);
+      return res.status(200).send({ message: "invitation send" });
     } catch (error) {
       return res.status(200).send(error);
     }
@@ -38,7 +43,7 @@ const invitation_club = {
     const values = [req.params.pid];
 
     try {
-      const { rows, rowCount } = await db.query(text);
+      const { rows, rowCount } = await db.query(text, values);
       return res.status(200).send({ rows, rowCount });
     } catch (error) {
       return res.status(200).send(error);

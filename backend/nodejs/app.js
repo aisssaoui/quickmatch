@@ -108,7 +108,7 @@ app.delete("/dbcontrol/api/v1/InvitationClub/:ci_id", _invitation_club2.default.
 // app.get("/dbcontrol/api/v1/InvitationForMeet/:id", _invitation_for_meet2.default.getOne);
 // app.put("/dbcontrol/api/v1/InvitationForMeet/:id", _invitation_for_meet2.default.update);
 // app.delete("/dbcontrol/api/v1/InvitationForMeet/:id", _invitation_for_meet2.default.delete);
-//app.get("/dbcontrol/api/v1/Playersrows", _player2.default.getAllRows);
+// app.get("/dbcontrol/api/v1/Playersrows", _player2.default.getAllRows);
 
 // Table slot
 app.post("/dbcontrol/api/v1/Slots", _slot2.default.create);
@@ -140,8 +140,11 @@ app.get("/dbcontrol/api/v1/MeetsRows", _meet2.default.getAllRows);
 // Table player_belong_club
 app.get("/dbcontrol/api/v1/PlayerClubs/paid:id", _player_belong_club2.default.getPlayerAdminClubs);
 app.get("/dbcontrol/api/v1/PlayerClubs/pid:id",_player_belong_club2.default.getPlayerClubsByPlayerID);
+app.get("/dbcontrol/api/v1/PlayerClubsRows/pid:id", _player_belong_club2.default.getPlayerClubsByPlayerIDRows);
 app.get("/dbcontrol/api/v1/PlayerClubs/npid:id", _player_belong_club2.default.NgetPlayerClubsByPlayerID);
+app.get("/dbcontrol/api/v1/PlayerClubsRows/npid:id", _player_belong_club2.default.NgetPlayerClubsByPlayerIDRows);
 app.get("/dbcontrol/api/v1/PlayerClubs/cid:id", _player_belong_club2.default.getPlayerClubsByClubID);
+app.get("/dbcontrol/api/v1/PlayerClubsRows/cid:id", _player_belong_club2.default.getPlayerClubsByClubIDRows);
 app.get("/dbcontrol/api/v1/PlayerClubs/ncid:id", _player_belong_club2.default.NgetPlayerClubsByClubID);
 app.post("/dbcontrol/api/v1/PlayerClubs", _player_belong_club2.default.addPlayerToClub);
 app.delete("/dbcontrol/api/v1/PlayerClubs/:cid&:pid", _player_belong_club2.default.deletePlayerFromClub);
@@ -149,6 +152,13 @@ app.get("/dbcontrol/api/v1/PlayerClubs", _player_belong_club2.default.getAll);
 app.get("/dbcontrol/api/v1/playerClubsCountAdmin/:cid", _player_belong_club2.default.getCountAdmin);
 app.put("/dbcontrol/api/v1/PlayerClubsPromoteToAdmin/:pid&:cid", _player_belong_club2.default.promoteToAdmin);
 
+app.get("/dbcontrol/api/v1/CalendarBPlayer/:id", _calendar_db2.default.getByPlayer);
+app.get("/dbcontrol/api/v1/CalendarBMeet/:id", _calendar_db2.default.getByMeet);
+app.get("/dbcontrol/api/v1/CalendarMAccept/:id", _calendar_db2.default.getAccepted);
+app.get("/dbcontrol/api/v1/CalendarMDecline/:id", _calendar_db2.default.getDeclined);
+app.get("/dbcontrol/api/v1/CalendarMInv/:pid/:mid", _calendar_db2.default.getInv);
+
+// Calendar related routes
 app.get("/dbcontrol/api/v1/CalendarBPlayer/:id", _calendar_db2.default.getByPlayer);
 app.get("/dbcontrol/api/v1/CalendarBMeet/:id", _calendar_db2.default.getByMeet);
 app.get("/dbcontrol/api/v1/CalendarMAccept/:id", _calendar_db2.default.getAccepted);
