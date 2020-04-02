@@ -460,6 +460,7 @@ export default {
         })
         .then(response => {
           alert("Club " + this.club_name + " créé !");
+          let n_page = this.clubsInPage;
           this.main_menu().then(response => {
             this.page_vc(n_page);
           });
@@ -489,7 +490,10 @@ export default {
           alert("Echec, veuillez réessayer, si le problème persiste, réessayer plus tard");
           this.$router.go();
         });
-      let nb = count_admin.data.rows[0]["nb"];
+      let nb = 0;
+      if (count_admin.data.rowCount != 0){
+        nb = count_admin.data.rows[0]["nb"];
+      }
       let destroy_club = true;
       if (nb == 1 && is_admin) {
         if (!confirm("vous êtes le dernier admin de ce club, le quitter le détruira, souhaitez vous continuer ?")){
@@ -562,6 +566,12 @@ export default {
     },
     //
     async join_club(cid, club_name){
+      await axios.delete("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/InvitationClub/" + this.id + "&" + cid)
+      .catch(e => {
+        console.log(e);
+        alert("Echec, veuillez réessayer, si le problème persiste, réessayer plus tard");
+        this.$router.go();
+      });
       let apiRep1 = null;
       apiRep1 = await axios.post("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/PlayerClubs",{
           club: cid,
@@ -701,8 +711,7 @@ export default {
       await axios
         .post("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/InvitationClub/" + pid + "&" + cid)
         .then(response => {
-          if (response.data.message == "ok"){
-            console.log(response);
+          if (response.data.message == "invitation send"){
             alert("Une invitation a été envoyé à " + pseudo);
             let n_page = this.playersNotInClubPage;
             document.getElementById(this.playersNotInClubPage).style.backgroundColor = "white";
@@ -711,7 +720,6 @@ export default {
             });
           }
           else{
-            console.log(response);
             alert("Une invitation avait déjà été envoyé à " + pseudo);
             let n_page = this.playersNotInClubPage;
             document.getElementById(this.playersNotInClubPage).style.backgroundColor = "white";

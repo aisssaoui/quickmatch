@@ -46,8 +46,8 @@
             </v-list-item-content>
           </v-list-item>
 
-          <v-btn class="btn" rounded color="red" v-on:click="declineClubInv(row.id, rox.club_name)">Refuser</v-btn>
-          <v-btn class="btn" rounded color="green" v-on:click="acceptClubInv(row.id, row.club, row.player, rox.club_name)">Accepter</v-btn>
+          <v-btn class="btn" rounded color="red" v-on:click="declineClubInv(row.player, row.club, row.club_name)">Refuser</v-btn>
+          <v-btn class="btn" rounded color="green" v-on:click="acceptClubInv(row.player, row.club, row.club_name)">Accepter</v-btn>
           <br />
           <br />
       </div>
@@ -138,9 +138,9 @@ export default {
       alert("Match refusé !");
       this.$router.go();
     },
-    acceptClubInv: async function(ci_id, cid, pid, club_name) {
+    acceptClubInv: async function(pid, cid, club_name) {
       await axios
-        .delete("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/InvitationClub/" + ci_id)
+        .delete("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/InvitationClub/" + pid + "&" + cid)
         .catch(e => {
           alert("Echec, veuillez réessayer, si le problème persiste, réessayer plus tard");
           this.$router.go();
@@ -161,9 +161,9 @@ export default {
           this.$router.go();
         });
     },
-    declineClubInv: async function(ci_id, club_name) {
+    declineClubInv: async function(pid, cid, club_name) {
       await axios
-        .delete("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/InvitationClub/" + ci_id)
+        .delete("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/InvitationClub/" + pid + "&" + cid)
         .then(response => {
           alert("Invitation du club '" + club_name + "' refusé !");
           this.$router.go();

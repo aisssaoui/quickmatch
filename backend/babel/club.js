@@ -109,14 +109,11 @@ const Club = {
    * @returns {void} return statuc code 204
    */
   async delete(req, res) {
-    const deleteQuery1 = "DELETE FROM club WHERE id=$1 RETURNING *";
-    const deleteQuery2 = "DELETE FROM player_belong_club WHERE club=$1 RETURNING *";
-    const deleteQuery3 = "DELETE FROM invitation_club WHERE club=$1 RETURNING *";
+    const deleteQuery1 = "DELETE FROM player_belong_club WHERE club=$1 RETURNING *";
+    const deleteQuery2 = "DELETE FROM invitation_club WHERE club=$1 RETURNING *";
+      const deleteQuery3 = "DELETE FROM club WHERE id=$1 RETURNING *";
     try {
-      const { rows } = await db.query(deleteQuery1, [req.params.id]);
-      if (!rows[0]) {
-        return res.status(404).send({ message: "club not found" });
-      }
+      await db.query(deleteQuery1, [req.params.id]);
       await db.query(deleteQuery2, [req.params.id])
       await db.query(deleteQuery3, [req.params.id])
       return res.status(204).send({ message: "deleted" });

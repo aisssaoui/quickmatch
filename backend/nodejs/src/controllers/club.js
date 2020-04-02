@@ -277,52 +277,40 @@ var Club = {
    */
   delete: function () {
     var _ref10 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee6(req, res) {
-      var deleteQuery1, deleteQuery2, deleteQuery3, _ref11, rows;
-
+      var deleteQuery1, deleteQuery2, deleteQuery3;
       return regeneratorRuntime.wrap(function _callee6$(_context6) {
         while (1) {
           switch (_context6.prev = _context6.next) {
             case 0:
-              deleteQuery1 = "DELETE FROM club WHERE id=$1 RETURNING *";
-              deleteQuery2 = "DELETE FROM player_belong_club WHERE club=$1 RETURNING *";
-              deleteQuery3 = "DELETE FROM invitation_club WHERE club=$1 RETURNING *";
+              deleteQuery1 = "DELETE FROM player_belong_club WHERE club=$1 RETURNING *";
+              deleteQuery2 = "DELETE FROM invitation_club WHERE club=$1 RETURNING *";
+              deleteQuery3 = "DELETE FROM club WHERE id=$1 RETURNING *";
               _context6.prev = 3;
               _context6.next = 6;
               return _db2.default.query(deleteQuery1, [req.params.id]);
 
             case 6:
-              _ref11 = _context6.sent;
-              rows = _ref11.rows;
-
-              if (rows[0]) {
-                _context6.next = 10;
-                break;
-              }
-
-              return _context6.abrupt("return", res.status(404).send({ message: "club not found" }));
-
-            case 10:
-              _context6.next = 12;
+              _context6.next = 8;
               return _db2.default.query(deleteQuery2, [req.params.id]);
 
-            case 12:
-              _context6.next = 14;
+            case 8:
+              _context6.next = 10;
               return _db2.default.query(deleteQuery3, [req.params.id]);
 
-            case 14:
+            case 10:
               return _context6.abrupt("return", res.status(204).send({ message: "deleted" }));
 
-            case 17:
-              _context6.prev = 17;
+            case 13:
+              _context6.prev = 13;
               _context6.t0 = _context6["catch"](3);
               return _context6.abrupt("return", res.status(400).send(_context6.t0));
 
-            case 20:
+            case 16:
             case "end":
               return _context6.stop();
           }
         }
-      }, _callee6, this, [[3, 17]]);
+      }, _callee6, this, [[3, 13]]);
     }));
 
     function _delete(_x11, _x12) {

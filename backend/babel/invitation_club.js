@@ -10,13 +10,13 @@ const invitation_club = {
    * @returns {object} Invitation_Club object
    */
   async create(req, res) {
-    const text1 = "SELECT * FROM Invitation_Club WHERE player = $1 AND club = $2)";
+    const text1 = "SELECT * FROM Invitation_Club WHERE player = $1 AND club = $2";
     const text2 = "INSERT INTO Invitation_Club (player, club) VALUES ($1, $2) RETURNING *";
     const values = [req.params.pid, req.params.cid];
 
     try {
-      const {rows, rowcount} = await db.query(text1, values);
-      if (rowcount != 0){
+      const {rows, rowCount} = await db.query(text1, values);
+      if (rowCount != 0){
         return res.status(200).send({ message: "already exist" });
       }
       await db.query(text2, values);
@@ -51,20 +51,17 @@ const invitation_club = {
   },
 
   /**
-   * Delete a player inviation into a club
+   * Delete a player invitation into a club
    * @param {object} req
    * @param {object} res
    * @returns {void} return status code 204
    */
   async delete(req, res) {
-    const deleteQuery = "DELETE FROM Invitation_Club WHERE id = $1 RETURNING *";
-    const values = [req.params.ci_id];
+    const deleteQuery = "DELETE FROM Invitation_Club WHERE player = $1 AND club = $2 RETURNING *";
+    const values = [req.params.pid, req.params.cid];
 
     try {
-      const { rows } = await db.query(deleteQuery, values);
-      if (!rows[0]) {
-        return res.status(404).send({ message: "player not found" });
-      }
+      await db.query(deleteQuery, values);
       return res.status(204).send({ message: "deleted" });
     } catch (error) {
       return res.status(400).send(error);

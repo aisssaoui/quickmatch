@@ -27,14 +27,14 @@ var invitation_club = {
    */
   create: function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(req, res) {
-      var text1, text2, values, _ref2, rows, rowcount;
+      var text1, text2, values, _ref2, rows, rowCount;
 
       return regeneratorRuntime.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              text1 = "SELECT * FROM Invitation_Club WHERE player = $1 AND club = $2)";
-              text2 = "INSERT INTO Invitation_Club (player, club) VALUES($1, $2) RETURNING *";
+              text1 = "SELECT * FROM Invitation_Club WHERE player = $1 AND club = $2";
+              text2 = "INSERT INTO Invitation_Club (player, club) VALUES ($1, $2) RETURNING *";
               values = [req.params.pid, req.params.cid];
               _context.prev = 3;
               _context.next = 6;
@@ -43,21 +43,21 @@ var invitation_club = {
             case 6:
               _ref2 = _context.sent;
               rows = _ref2.rows;
-              rowcount = _ref2.rowcount;
+              rowCount = _ref2.rowCount;
 
-              if (!(rowcount != 0)) {
+              if (!(rowCount != 0)) {
                 _context.next = 11;
                 break;
               }
 
-              return _context.abrupt("return", res.status(204).send({ message: "deleted" }));
+              return _context.abrupt("return", res.status(200).send({ message: "already exist" }));
 
             case 11:
               _context.next = 13;
               return _db2.default.query(text2, values);
 
             case 13:
-              return _context.abrupt("return", res.status(200).send({ message: "ok" }));
+              return _context.abrupt("return", res.status(200).send({ message: "invitation send" }));
 
             case 16:
               _context.prev = 16;
@@ -128,50 +128,38 @@ var invitation_club = {
 
 
   /**
-   * Delete a player inviation into a club
+   * Delete a player invitation into a club
    * @param {object} req
    * @param {object} res
    * @returns {void} return status code 204
    */
   delete: function () {
     var _ref5 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(req, res) {
-      var deleteQuery, values, _ref6, rows;
-
+      var deleteQuery, values;
       return regeneratorRuntime.wrap(function _callee3$(_context3) {
         while (1) {
           switch (_context3.prev = _context3.next) {
             case 0:
-              deleteQuery = "DELETE FROM Invitation_Club WHERE id = $1 RETURNING *";
-              values = [req.params.ci_id];
+              deleteQuery = "DELETE FROM Invitation_Club WHERE player = $1 AND club = $2 RETURNING *";
+              values = [req.params.pid, req.params.cid];
               _context3.prev = 2;
               _context3.next = 5;
               return _db2.default.query(deleteQuery, values);
 
             case 5:
-              _ref6 = _context3.sent;
-              rows = _ref6.rows;
-
-              if (rows[0]) {
-                _context3.next = 9;
-                break;
-              }
-
-              return _context3.abrupt("return", res.status(404).send({ message: "player not found" }));
-
-            case 9:
               return _context3.abrupt("return", res.status(204).send({ message: "deleted" }));
 
-            case 12:
-              _context3.prev = 12;
+            case 8:
+              _context3.prev = 8;
               _context3.t0 = _context3["catch"](2);
               return _context3.abrupt("return", res.status(400).send(_context3.t0));
 
-            case 15:
+            case 11:
             case "end":
               return _context3.stop();
           }
         }
-      }, _callee3, this, [[2, 12]]);
+      }, _callee3, this, [[2, 8]]);
     }));
 
     function _delete(_x5, _x6) {

@@ -100,7 +100,7 @@ app.get("/dbcontrol/api/v1/InvitationsRows", _invitation2.default.getAllRows);
 // Table Invitation_Club
 app.post("/dbcontrol/api/v1/InvitationClub/:pid&:cid", _invitation_club2.default.create);
 app.get("/dbcontrol/api/v1/InvitationClub/:pid", _invitation_club2.default.getPlayerInvitations);
-app.delete("/dbcontrol/api/v1/InvitationClub/:ci_id", _invitation_club2.default.delete);
+app.delete("/dbcontrol/api/v1/InvitationClub/:pid&:cid", _invitation_club2.default.delete);
 
 // Table invitation_for_meet
 // app.post("/dbcontrol/api/v1/InvitationForMeet", _invitation_for_meet2.default.create);
@@ -152,14 +152,9 @@ app.get("/dbcontrol/api/v1/PlayerClubs", _player_belong_club2.default.getAll);
 app.get("/dbcontrol/api/v1/playerClubsCountAdmin/:cid", _player_belong_club2.default.getCountAdmin);
 app.put("/dbcontrol/api/v1/PlayerClubsPromoteToAdmin/:pid&:cid", _player_belong_club2.default.promoteToAdmin);
 
-app.get("/dbcontrol/api/v1/CalendarBPlayer/:id", _calendar_db2.default.getByPlayer);
-app.get("/dbcontrol/api/v1/CalendarBMeet/:id", _calendar_db2.default.getByMeet);
-app.get("/dbcontrol/api/v1/CalendarMAccept/:id", _calendar_db2.default.getAccepted);
-app.get("/dbcontrol/api/v1/CalendarMDecline/:id", _calendar_db2.default.getDeclined);
-app.get("/dbcontrol/api/v1/CalendarMInv/:pid/:mid", _calendar_db2.default.getInv);
-
 // Calendar related routes
 app.get("/dbcontrol/api/v1/CalendarBPlayer/:id", _calendar_db2.default.getByPlayer);
+app.get("/dbcontrol/api/v1/CalendarBPlayerRows/:id", _calendar_db2.default.getByPlayerRows);
 app.get("/dbcontrol/api/v1/CalendarBMeet/:id", _calendar_db2.default.getByMeet);
 app.get("/dbcontrol/api/v1/CalendarMAccept/:id", _calendar_db2.default.getAccepted);
 app.get("/dbcontrol/api/v1/CalendarMDecline/:id", _calendar_db2.default.getDeclined);
