@@ -1,5 +1,7 @@
 package com.example.quickmatch.content
 
+import android.annotation.SuppressLint
+import android.graphics.Color
 import android.graphics.Typeface
 import android.media.Image
 import android.provider.Settings.Global.getString
@@ -8,18 +10,18 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.cardview.widget.CardView
+import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.quickmatch.R
 import com.example.quickmatch.content.club.ClubCreationStatus
-import com.example.quickmatch.network.ClubAndPlayerBelongClubObject
-import com.example.quickmatch.network.ClubObject
-import com.example.quickmatch.network.PlayerAndPlayerBelongClubObject
-import com.example.quickmatch.network.PlayerObject
+import com.example.quickmatch.network.*
 import com.example.quickmatch.utils.FormatUtils
 import timber.log.Timber
+import kotlin.math.absoluteValue
 
 /* Binding adapters for live datas */
 
@@ -184,5 +186,21 @@ fun ImageView.setProfilMembership(isAdmin: Boolean?) {
     isAdmin?.let {
         val src: Int = if(isAdmin) R.drawable.ic_star_black_24dp else R.drawable.ic_person_outline_black_24dp
         setImageResource(src)
+    }
+}
+
+@BindingAdapter("matchInfosFormatted")
+fun TextView.setMatchInfos(match: PlayerMeetObject?) {
+    match?.let {
+        text = "Match à ${match.location}"
+    }
+}
+
+
+@BindingAdapter("matchWonFormatted")
+fun CardView.setMatchResultColor(match: PlayerMeetObject?) {
+    match?.let {
+        val color = if(it.won == true) R.color.green_match else R.color.red_match
+        setCardBackgroundColor(ContextCompat.getColor(context, color))
     }
 }

@@ -26,7 +26,12 @@
         android:id="@+id/matchFragmentUI"
         android:name="com.example.quickmatch.content.match.MatchFragmentUI"
         android:label="fragment_matchs"
-        tools:layout="@layout/fragment_matchs" />
+        tools:layout="@layout/fragment_matchs" >
+        <action
+            android:id="@+id/action_matchFragmentUI_to_matchCreationFragmentUI"
+            app:destination="@id/matchCreationFragmentUI"
+            app:popUpTo="@+id/matchFragmentUI" />
+    </fragment>
     <fragment
         android:id="@+id/statFragmentUI"
         android:name="com.example.quickmatch.content.stat.StatFragmentUI"
@@ -87,4 +92,8 @@
             android:name="clubId"
             app:argType="integer" />
     </fragment>
+    <fragment
+        android:id="@+id/matchCreationFragmentUI"
+        android:name="com.example.quickmatch.content.match.MatchCreationFragmentUI"
+        android:label="MatchCreationFragmentUI" />
 </navigation>
