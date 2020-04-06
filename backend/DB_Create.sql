@@ -43,8 +43,11 @@ CREATE TABLE IF NOT EXISTS Invitation (
 id SMALLSERIAL PRIMARY KEY,
 slot SMALLINT CHECK (slot >= 0),
 player SMALLINT CHECK (player >= 0),
+meet SMALLINT CHECK (player >= 0),
+status BOOLEAN,
 FOREIGN KEY (slot)   REFERENCES Slot(id),
 FOREIGN KEY (player) REFERENCES Player(id),
+FOREIGN KEY (meet) REFERENCES Meet(id),
 event_type VARCHAR(20)  						/*type discutable si liste finie d'event*/
 );
 

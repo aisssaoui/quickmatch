@@ -63,7 +63,7 @@
           </div>
 
           <div v-else>
-            <hr>
+            <hr><br>
             <div class="tab_nothing">Vous n'êtes dans aucun club</div>
           </div>
 
@@ -110,7 +110,7 @@
           </div>
 
           <div v-else>
-            <hr>
+            <hr><br>
             <div class="tab_nothing">Aucun club disponible</div>
           </div>
         </div>
@@ -141,10 +141,10 @@
             <div class="tab_row tab_g_clubs">{{ row.surname }}</div>
             <div class="tab_row tab_g_clubs">{{ row.first_name }}</div>
             <div class="tab_row tab_g_clubs">{{ row.pseudo }}</div>
-            <div class="tab_row tab_g_clubs">{{ row.scored_goals }}</div>
-            <div class="tab_row tab_g_clubs">{{ row.conceded_goals }}</div>
-            <div class="tab_row tab_g_clubs">{{ row.matches_played }}</div>
-            <div class="tab_row tab_g_clubs">{{ row.victories }}</div>
+            <div class="tab_row tab_g_clubs">{{ row.scored_goals_club }}</div>
+            <div class="tab_row tab_g_clubs">{{ row.conceded_goals_club }}</div>
+            <div class="tab_row tab_g_clubs">{{ row.matches_played_club }}</div>
+            <div class="tab_row tab_g_clubs">{{ row.victories_club }}</div>
             <div class="tab_btn tab_g_clubs" v-if="! row.is_admin && admin_club_switch">
               <v-btn dark small rounded color="#666" v-on:click="promote_to_admin(row.id, id_club_switch, row.pseudo)">Nommer admin</v-btn>
             </div>
@@ -220,7 +220,7 @@
           </div>
 
           <div v-else>
-            <hr>
+            <hr><br>
             <div class="tab_nothing">Aucun joueur disponible</div>
           </div>
         </div>
@@ -347,7 +347,6 @@ export default {
       valid: false,
       club_name: null,
       private_club: false,
-      /*
       club_nameRules: [
         v => !!v || "Nom de club requis",
         v => v.length >= 2 || "Nom de club trop court",
@@ -355,7 +354,6 @@ export default {
           /^[a-zA-Z1-9_ \-éèçîïœžâêôàûùâãäåæçëìíîïðñòóôõúûüýö]+$/.test(v) ||
           "Nom de club invalide"
       ],
-      */
       id_club_switch: -1,
       name_club_switch: "",
       admin_club_switch: false,

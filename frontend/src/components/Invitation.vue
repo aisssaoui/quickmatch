@@ -65,7 +65,6 @@
 import WorkInProgress from "./WorkInProgress";
 import axios from "axios";
 import store from "../store";
-
 export default {
   components: {
     WorkInProgress
@@ -85,7 +84,6 @@ export default {
       }
     );
     this.InvitationsToShow = player.data;
-
     const invitationsClub = await axios
       .get("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/InvitationClub/" + this.id);
     this.InvitationsClubToShow = invitationsClub.data.rows;

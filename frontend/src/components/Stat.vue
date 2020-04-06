@@ -56,7 +56,7 @@
         </div>
 
         <div v-else>
-          <hr>
+          <hr><br>
           <div class="tab_nothing">Vous n'avez pas encore joué de match</div>
         </div>
       </div>
