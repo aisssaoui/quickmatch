@@ -38,6 +38,10 @@ object HashUtils {
 
 object FormatUtils {
 
+    /* team sizes */
+    const val MINIMUM_TEAM_SIZE = 5
+    const val MAXIMUM_TEAM_SIZE = 11
+
     /* sizes to respect to store in database */
     const val MAIL_SIZE = 50
     const val BASIC_SIZE = 20
@@ -62,12 +66,15 @@ object FormatUtils {
     }
 
     /* parse a date string from database */
-    fun parseDateToJJMMAAAA(date: String) : String {
-        val splitDate = date.split("-", "T")
-        val day = splitDate[2]
-        val month = splitDate[1]
-        val year = splitDate[0]
-        return "$day / $month / $year"
+    fun parseDateToJJMMAAAA(date: String?) : String {
+        date?.let {
+            val splitDate = date.split("-", "T")
+            val day = splitDate[2]
+            val month = splitDate[1]
+            val year = splitDate[0]
+            return "$day / $month / $year"
+        }
+        return ""
     }
 }
 

@@ -109,6 +109,8 @@ interface DatabaseApiService {
     suspend fun getAllMeets() : List<MeetObject>
     @GET("dbcontrol/api/v1/Meets/{id}")
     suspend fun getMeetById(@Path("id") id : Int) : MeetObject
+    @GET("dbcontrol/api/v1/CalendarBPlayerRows/{id}")
+    suspend fun getPlayerMatches(@Path("id") id : Int) : List<PlayerMeetObject>
 
     /* POST REQUESTS */
     @POST("dbcontrol/api/v1/Meets")
