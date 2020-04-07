@@ -1,7 +1,7 @@
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+  value: true,
 });
 
 var _moment = require("moment");
@@ -17,9 +17,9 @@ function _interopRequireDefault(obj) {
 }
 
 function _asyncToGenerator(fn) {
-  return function() {
+  return function () {
     var gen = fn.apply(this, arguments);
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
       function step(key, arg) {
         try {
           var info = gen[key](arg);
@@ -32,10 +32,10 @@ function _asyncToGenerator(fn) {
           resolve(value);
         } else {
           return Promise.resolve(value).then(
-            function(value) {
+            function (value) {
               step("next", value);
             },
-            function(err) {
+            function (err) {
               step("throw", err);
             }
           );
@@ -54,7 +54,7 @@ var Meet = {
    * @param {object} res
    * @returns {object} meet object
    */
-  create: (function() {
+  create: (function () {
     var _ref = _asyncToGenerator(
       /*#__PURE__*/ regeneratorRuntime.mark(function _callee(req, res) {
         var text, values, _ref2, rows;
@@ -65,13 +65,14 @@ var Meet = {
               switch ((_context.prev = _context.next)) {
                 case 0:
                   text =
-                    "INSERT INTO meet (location, precise_date, minimal_team_size, maximal_team_size, deletion_date)\n\t    VALUES($1, $2, $3, $4, $5)\n        returning *";
+                    "INSERT INTO meet (location, precise_date, minimal_team_size, maximal_team_size, deletion_date, played)\n\t    VALUES($1, $2, $3, $4, $5, $6)\n        returning *";
                   values = [
                     req.body.location,
                     req.body.precise_date,
                     req.body.minimal_team_size,
                     req.body.maximal_team_size,
-                    req.body.deletion_date
+                    req.body.deletion_date,
+                    req.body.played,
                   ];
                   _context.prev = 2;
                   _context.next = 5;
@@ -119,7 +120,7 @@ var Meet = {
    * @param {object} res
    * @returns {object} meets array
    */
-  getAll: (function() {
+  getAll: (function () {
     var _ref3 = _asyncToGenerator(
       /*#__PURE__*/ regeneratorRuntime.mark(function _callee2(req, res) {
         var findAllQuery, _ref4, rows, rowCount;
@@ -177,7 +178,7 @@ var Meet = {
    * @param {object} res
    * @returns {object} meets array
    */
-  getAllRows: (function() {
+  getAllRows: (function () {
     var _ref5 = _asyncToGenerator(
       /*#__PURE__*/ regeneratorRuntime.mark(function _callee3(req, res) {
         var findAllQuery, a;
@@ -232,7 +233,7 @@ var Meet = {
    * @param {object} res
    * @returns {object} meet object
    */
-  getOne: (function() {
+  getOne: (function () {
     var _ref5 = _asyncToGenerator(
       /*#__PURE__*/ regeneratorRuntime.mark(function _callee3(req, res) {
         var text, _ref6, rows;
@@ -301,8 +302,83 @@ var Meet = {
    * @param {object} res
    * @returns {object} updated meet
    */
-  update: (function() {
-    // TO DO
+  update: (function () {
+    var _ref16 = _asyncToGenerator(
+      /*#__PURE__*/ regeneratorRuntime.mark(function _callee9(req, res) {
+        var findOneQuery, updateOneQuery, _ref17, rows, values, response;
+
+        return regeneratorRuntime.wrap(
+          function _callee9$(_context9) {
+            while (1) {
+              switch ((_context9.prev = _context9.next)) {
+                case 0:
+                  findOneQuery = "SELECT * FROM meet WHERE id = $1";
+                  updateOneQuery =
+                    "UPDATE meet\n      SET location = $1, precise_date = $2, minimal_team_size = $3, maximal_team_size = $4, deletion_date = $5, played=$6\n      WHERE id = $7 RETURNING *";
+                  _context9.prev = 2;
+                  _context9.next = 5;
+                  return _db2.default.query(findOneQuery, [req.params.id]);
+
+                case 5:
+                  _ref17 = _context9.sent;
+                  rows = _ref17.rows;
+
+                  if (rows[0]) {
+                    _context9.next = 9;
+                    break;
+                  }
+
+                  return _context9.abrupt(
+                    "return",
+                    res.status(200).send({ message: "meet not found" })
+                  );
+
+                case 9:
+                  values = [
+                    req.body.location || rows[0].location,
+                    req.body.precise_date || rows[0].precise_date,
+                    req.body.minimal_team_size || rows[0].minimal_team_size,
+                    req.body.maximal_team_size || rows[0].maximal_team_size,
+                    req.body.deletion_date || rows[0].deletion_date,
+                    req.body.played === null ? rows[0].played : req.body.played,
+                    req.params.id,
+                  ];
+                  _context9.next = 12;
+                  return _db2.default.query(updateOneQuery, values);
+
+                case 12:
+                  response = _context9.sent;
+                  return _context9.abrupt(
+                    "return",
+                    res.status(200).send(response.rows[0])
+                  );
+
+                case 16:
+                  _context9.prev = 16;
+                  _context9.t0 = _context9["catch"](2);
+                  return _context9.abrupt(
+                    "return",
+                    res.status(200).send(_context9.t0)
+                  );
+
+                case 19:
+                case "end":
+                  return _context9.stop();
+              }
+            }
+          },
+          _callee9,
+          this,
+          [[2, 16]]
+        );
+      })
+    );
+
+    function update(_x17, _x18) {
+      return _ref16.apply(this, arguments);
+    }
+
+    return update;
   })(),
 
   /**
@@ -311,7 +387,7 @@ var Meet = {
    * @param {object} res
    * @returns {void} return statuc code 204
    */
-  delete: (function() {
+  delete: (function () {
     var _ref9 = _asyncToGenerator(
       /*#__PURE__*/ regeneratorRuntime.mark(function _callee5(req, res) {
         var deleteQuery, _ref10, rows;
@@ -372,7 +448,7 @@ var Meet = {
     }
 
     return _delete;
-  })()
+  })(),
 };
 
 exports.default = Meet;

@@ -1,7 +1,7 @@
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+  value: true,
 });
 
 var _moment = require("moment");
@@ -17,9 +17,9 @@ function _interopRequireDefault(obj) {
 }
 
 function _asyncToGenerator(fn) {
-  return function() {
+  return function () {
     var gen = fn.apply(this, arguments);
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
       function step(key, arg) {
         try {
           var info = gen[key](arg);
@@ -32,10 +32,10 @@ function _asyncToGenerator(fn) {
           resolve(value);
         } else {
           return Promise.resolve(value).then(
-            function(value) {
+            function (value) {
               step("next", value);
             },
-            function(err) {
+            function (err) {
               step("throw", err);
             }
           );
@@ -54,7 +54,7 @@ var Slot = {
    * @param {object} res
    * @returns {object} slot object
    */
-  create: (function() {
+  create: (function () {
     var _ref = _asyncToGenerator(
       /*#__PURE__*/ regeneratorRuntime.mark(function _callee(req, res) {
         var text, values, _ref2, rows;
@@ -69,7 +69,7 @@ var Slot = {
                   values = [
                     req.body.start_hour,
                     req.body.end_hour,
-                    req.body.repeat_day
+                    req.body.repeat_day,
                   ];
                   _context.prev = 2;
                   _context.next = 5;
@@ -112,12 +112,81 @@ var Slot = {
   })(),
 
   /**
+   * Get A slot by start/end_hour and repeat day
+   * @param {object} req
+   * @param {object} res
+   * @returns {object} slot object
+   */
+  getByHoursAndRepeatDay: (function () {
+    var _ref = _asyncToGenerator(
+      /*#__PURE__*/ regeneratorRuntime.mark(function _callee(req, res) {
+        var text, values, _ref2, rows;
+
+        return regeneratorRuntime.wrap(
+          function _callee$(_context) {
+            while (1) {
+              switch ((_context.prev = _context.next)) {
+                case 0:
+                  text =
+                    "SELECT * FROM slot WHERE start_hour = $1 AND end_hour = $2 AND repeat_day = $3";
+                  values = [req.params.start, req.params.end, req.params.day];
+                  _context.prev = 1;
+                  _context.next = 4;
+                  return _db2.default.query(text, values);
+
+                case 4:
+                  _ref2 = _context.sent;
+                  rows = _ref2.rows;
+
+                  if (rows[0]) {
+                    _context.next = 8;
+                    break;
+                  }
+                  return _context.abrupt(
+                    "return",
+                    res.status(404).send({ message: "slot not found" })
+                  );
+
+                case 8:
+                  return _context.abrupt(
+                    "return",
+                    res.status(200).send(rows[0])
+                  );
+
+                case 11:
+                  _context.prev = 11;
+                  context.t0 = _context["catch"](1);
+                  return _context.abrupt(
+                    "return",
+                    res.status(400).send(_context.t0)
+                  );
+
+                case "end":
+                  return _context.stop();
+              }
+            }
+          },
+          _callee,
+          this,
+          [[1, 11]]
+        );
+      })
+    );
+
+    function getByHoursAndRepeatDay(_x, _x2) {
+      return _ref.apply(this, arguments);
+    }
+
+    return getByHoursAndRepeatDay;
+  })(),
+
+  /**
    * Get All slots
    * @param {object} req
    * @param {object} res
    * @returns {object} slots array
    */
-  getAll: (function() {
+  getAll: (function () {
     var _ref3 = _asyncToGenerator(
       /*#__PURE__*/ regeneratorRuntime.mark(function _callee2(req, res) {
         var findAllQuery, _ref4, rows, rowCount;
@@ -175,7 +244,7 @@ var Slot = {
    * @param {object} res
    * @returns {object} slots array
    */
-  getAllRows: (function() {
+  getAllRows: (function () {
     var _ref5 = _asyncToGenerator(
       /*#__PURE__*/ regeneratorRuntime.mark(function _callee3(req, res) {
         var findAllQuery, a;
@@ -230,7 +299,7 @@ var Slot = {
    * @param {object} res
    * @returns {object} slot object
    */
-  getOne: (function() {
+  getOne: (function () {
     var _ref5 = _asyncToGenerator(
       /*#__PURE__*/ regeneratorRuntime.mark(function _callee3(req, res) {
         var text, _ref6, rows;
@@ -299,8 +368,80 @@ var Slot = {
    * @param {object} res
    * @returns {object} updated slot
    */
-  update: (function() {
-    // TO DO
+  update: (function () {
+    var _ref7 = _asyncToGenerator(
+      /*#__PURE__*/ regeneratorRuntime.mark(function _callee4(req, res) {
+        var findOneQuery, updateOneQuery, _ref8, rows, values, response;
+
+        return regeneratorRuntime.wrap(
+          function _callee4$(_context4) {
+            while (1) {
+              switch ((_context4.prev = _context4.next)) {
+                case 0:
+                  findOneQuery = "SELECT * FROM slot WHERE id=$1";
+                  updateOneQuery =
+                    "UPDATE slot\n      SET start_hour=$1, end_hour=$2, repeat_day=$3 \n       WHERE id=$4 returning *";
+                  _context4.prev = 2;
+                  _context4.next = 5;
+                  return _db2.default.query(findOneQuery, [req.params.id]);
+
+                case 5:
+                  _ref8 = _context4.sent;
+                  rows = _ref8.rows;
+
+                  if (rows[0]) {
+                    _context4.next = 9;
+                    break;
+                  }
+
+                  return _context4.abrupt(
+                    "return",
+                    res.status(404).send({ message: "slot not found" })
+                  );
+
+                case 9:
+                  values = [
+                    req.body.start_hour || rows[0].start_hour,
+                    req.body.end_hour || rows[0].end_hour,
+                    req.body.repeat_day || rows[0].repeat_day,
+                    req.params.id,
+                  ];
+                  _context4.next = 12;
+                  return _db2.default.query(updateOneQuery, values);
+
+                case 12:
+                  response = _context4.sent;
+                  return _context4.abrupt(
+                    "return",
+                    res.status(200).send(response.rows[0])
+                  );
+
+                case 16:
+                  _context4.prev = 16;
+                  _context4.t0 = _context4["catch"](2);
+                  return _context4.abrupt(
+                    "return",
+                    res.status(400).send(_context4.t0)
+                  );
+
+                case 19:
+                case "end":
+                  return _context4.stop();
+              }
+            }
+          },
+          _callee4,
+          this,
+          [[2, 16]]
+        );
+      })
+    );
+
+    function update(_x7, _x8) {
+      return _ref7.apply(this, arguments);
+    }
+
+    return update;
   })(),
 
   /**
@@ -309,7 +450,7 @@ var Slot = {
    * @param {object} res
    * @returns {void} return statuc code 204
    */
-  delete: (function() {
+  delete: (function () {
     var _ref9 = _asyncToGenerator(
       /*#__PURE__*/ regeneratorRuntime.mark(function _callee5(req, res) {
         var deleteQuery, _ref10, rows;
@@ -370,7 +511,7 @@ var Slot = {
     }
 
     return _delete;
-  })()
+  })(),
 };
 
 exports.default = Slot;
