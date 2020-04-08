@@ -371,9 +371,7 @@ export default {
       .get("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/PlayerClubs/pid" + this.id, {responseType: "json"})
       .catch(e => {
         if (this.isSignedIn()) {
-          alert(
-            "Une erreur s'est produite, nous allons rafraichir la page, si le problème persiste, quittez la page"
-          );
+          alert("Une erreur s'est produite, nous allons rafraichir la page, si le problème persiste, quittez la page");
           this.$router.go();
         }
       });
@@ -566,7 +564,6 @@ export default {
     async join_club(cid, club_name){
       await axios.delete("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/InvitationClub/" + this.id + "&" + cid)
       .catch(e => {
-        console.log(e);
         alert("Echec, veuillez réessayer, si le problème persiste, réessayer plus tard");
         this.$router.go();
       });

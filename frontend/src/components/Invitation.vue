@@ -1,94 +1,221 @@
 <template>
-  <div>
-    <div v-if="isSignedIn">
-      <div v-if="InvitationsToShow.rowCount != 0">
-        <div v-for="row in InvitationsToShow.rows" :key="row.meet">
-          <div v-if="row.status === null">
-            <hr />
+  <div v-if="isSignedIn">
+    <!-- /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
 
-            <v-list-item two-line>
-              <v-list-item-content>
-                <v-list-item-title class="font-weight-bold">Invitation pour un match</v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
+    <div v-if="switch_inv == 'inv'">
+      <div class="my_card">
+        <div style="margin-left: 5px; padding-top: 5px;">
+          <v-btn dark small rounded align="left" color="#666" v-on:click="inv_c_menu().then(response => {page_inv_c(1);})">Invitations club</v-btn>
+        </div>
+        <div class="title">Invitation(s) pour un match</div>
 
-            <v-list-item two-line>
-              <v-list-item-content>
-                <v-list-item-title class="font-weight-bold">Localisation</v-list-item-title>
-                <v-list-item-subtitle class="headline">{{row.location}}</v-list-item-subtitle>
-              </v-list-item-content>
-            </v-list-item>
+        <div v-if="InvitationsToShow.length != 0">
+          <div class="tab_head tab_inv">Localisation</div>
+          <div class="tab_head tab_inv">Date</div>
+          <div class="tab_head tab_inv">Refuser</div>
+          <div class="tab_head tab_inv">Accepter</div>
 
-            <v-list-item two-line>
-              <v-list-item-content>
-                <v-list-item-title class="font-weight-bold">Date</v-list-item-title>
-                <v-list-item-subtitle
-                  class="headline"
-                >Le {{DayInFrench(row.repeat_day)}} de {{row.start_hour}} à {{row.end_hour}}</v-list-item-subtitle>
-              </v-list-item-content>
-            </v-list-item>
+          <div v-for="row in InvitationsToShowPage" :key="row.id">
+            <hr>
+            <div class="tab_row tab_inv">{{ row.location }}</div>
+            <div class="tab_row tab_inv">Le {{DayInFrench(row.repeat_day)}} de {{row.start_hour}} à {{row.end_hour}}</div>
+            <div class="tab_btn tab_inv">
+              <v-btn dark small rounded color="#666" v-on:click="declineInv(row.meet)">Refuser</v-btn>
+            </div>
+            <div class="tab_btn tab_inv">
+              <v-btn dark small rounded color="#666" v-on:click="acceptInv(row.meet)">Accepter</v-btn>
+            </div>
+          </div>
+          <br>
 
-            <v-btn class="btn" rounded color="red" v-on:click="declineInv(row.meet)">Refuser</v-btn>
-            <v-btn class="btn" rounded color="green" v-on:click="acceptInv(row.meet)">Accepter</v-btn>
-            <br />
-            <br />
+          <div class="pages">
+            <div class="numeric_icon" v-on:click="page_left_inv()"><v-icon color="black">mdi-chevron-left</v-icon></div>
+            <!-- <div class="numeric_icon" v-if="this.InvitationsPage > "><v-icon color="black">mdi-dots-horizontal</v-icon></div> -->
+            <div style="display: inline-block;" v-for="index in this.InvitationsPageMax" :key="index">
+              <div v-bind:id="index" class="numeric_icon" v-on:click="page_inv(index)">{{ index }}</div>
+            </div>
+            <div class="numeric_icon" v-on:click="page_right_inv()"><v-icon color="black">mdi-chevron-right</v-icon></div>
           </div>
         </div>
+
+        <div v-else>
+          <hr><br>
+          <div class="tab_nothing">Vous n'avez pas d'invitations pour un match</div>
+        </div>
       </div>
-
-
-      <div v-for="row in InvitationsClubToShow" :key="row.id">
-          <hr />
-
-          <v-list-item two-line>
-            <v-list-item-content>
-              <v-list-item-title class="font-weight-bold">Invitation pour le club '{{ row.club_name }}'</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-
-          <v-btn class="btn" rounded color="red" v-on:click="declineClubInv(row.player, row.club, row.club_name)">Refuser</v-btn>
-          <v-btn class="btn" rounded color="green" v-on:click="acceptClubInv(row.player, row.club, row.club_name)">Accepter</v-btn>
-          <br />
-          <br />
-      </div>
-
-
-      <br />
-      <br />
-      <p style="text-align: center">Vous n'avez pas d'autres invitations</p>
     </div>
-    <WorkInProgress v-else></WorkInProgress>
+
+    <!-- /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+
+    <div v-if="switch_inv == 'inv_c'">
+      <div class="my_card">
+        <div style="margin-left: 5px; padding-top: 5px;">
+          <v-btn dark small rounded align="left" color="#666" v-on:click="inv_menu().then(response => {page_inv(1);})">Invitations match</v-btn>
+        </div>
+        <div class="title">Invitation(s) dans un club</div>
+
+        <div v-if="InvitationsClubToShow.length != 0">
+          <div class="tab_head tab_inv_c">Nom du Club</div>
+          <div class="tab_head tab_inv_c">Refuser</div>
+          <div class="tab_head tab_inv_c">Accepter</div>
+
+          <div v-for="row in InvitationsClubToShowPage" :key="row.id">
+            <hr>
+            <div class="tab_row tab_inv_c">{{ row.club_name }}</div>
+            <div class="tab_btn tab_inv_c">
+              <v-btn dark small rounded color="#666" v-on:click="declineClubInv(row.player, row.club, row.club_name)">Refuser</v-btn>
+            </div>
+            <div class="tab_btn tab_inv_c">
+              <v-btn dark small rounded color="#666" v-on:click="acceptClubInv(row.player, row.club, row.club_name)">Accepter</v-btn>
+            </div>
+          </div>
+          <br>
+
+          <div class="pages">
+            <div class="numeric_icon" v-on:click="page_left_inv_c()"><v-icon color="black">mdi-chevron-left</v-icon></div>
+            <!-- <div class="numeric_icon" v-if="this.InvitationsClubPage > "><v-icon color="black">mdi-dots-horizontal</v-icon></div> -->
+            <div style="display: inline-block;" v-for="index in this.InvitationsClubPageMax" :key="index">
+              <div v-bind:id="index" class="numeric_icon" v-on:click="page_inv_c(index)">{{ index }}</div>
+            </div>
+            <div class="numeric_icon" v-on:click="page_right_inv_c()"><v-icon color="black">mdi-chevron-right</v-icon></div>
+          </div>
+        </div>
+
+        <div v-else>
+          <hr><br>
+          <div class="tab_nothing">Vous n'avez pas d'invitations dans un club</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
   </div>
+  <WorkInProgress v-else></WorkInProgress>
 </template>
+
+<style>
+  .pages{
+    text-align: center;
+  }
+  .numeric_icon{
+    margin: 2px;
+    display: inline-block;
+    background-color: white;
+    color: black;
+    border-radius: 5px;
+    width: 30px;
+    height: 30px;
+  }
+  .my_card{
+    margin-top: 1%;
+    margin-left: 2%;
+    margin-right: 2%;
+    margin-bottom: 1%;
+    background-color: black;
+    border-radius: 5px;
+    box-shadow: 0px 4px 8px #AAA;
+  }
+  .title{
+    color: white;
+    font-size: 200%;
+    margin: 5px;
+  }
+  .tab_nothing{
+    text-align: center;
+    font-weight: bold;
+    color: white;
+  }
+  .tab_head, .tab_row, .tab_btn{
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-top: 5px;
+    margin-left: 5px;
+  }
+  .tab_head{
+    font-weight: bold;
+    color: white;
+  }
+  .tab_row{
+    color: #CCC;
+    font-size: 120%;
+  }
+  .tab_inv{
+    width: 20%;
+  }
+  .tab_inv_c{
+    width: 15%;
+  }
+</style>
 
 <script>
 import WorkInProgress from "./WorkInProgress";
 import axios from "axios";
 import store from "../store";
+
 export default {
   components: {
     WorkInProgress
   },
   data() {
     return {
+      //////////////////////////////////////////////////////////////////////////
       InvitationsToShow: {},
-      InvitationsClubToShow: {}
+      InvitationsNbPageMenu: 5, // si nombre plus grand que 4, utilisation des ..., ex les btn du bas : " < 1 ... 5 6 7 8 9 ... 18 > "
+      InvitationsPage: 1,
+      InvitationsPageMax: 1,
+      InvitationsNbRowPerPage: 5,
+      InvitationsNbRow: 0,
+      InvitationsToShowPage: [],
+      //////////////////////////////////////////////////////////////////////////
+      InvitationsClubToShow: {},
+      InvitationsClubNbPageMenu: 5, // si nombre plus grand que 4, utilisation des ..., ex les btn du bas : " < 1 ... 5 6 7 8 9 ... 18 > "
+      InvitationsClubPage: 1,
+      InvitationsClubPageMax: 1,
+      InvitationsClubNbRowPerPage: 5,
+      InvitationsClubNbRow: 0,
+      InvitationsClubToShowPage: [],
+      //////////////////////////////////////////////////////////////////////////
+      switch_inv: 'inv' //inv pour invitation match | inc_c pour invitation club
     };
   },
   async created() {
-    const player = await axios.get(
-      "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/CalendarBPlayer/" +
-        this.id,
-      {
-        responseType: "json"
-      }
-    );
-    this.InvitationsToShow = player.data;
-    const invitationsClub = await axios
-      .get("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/InvitationClub/" + this.id);
-    this.InvitationsClubToShow = invitationsClub.data.rows;
+    const player = await axios.get("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/CalendarBPlayer/" + this.id, {responseType: "json"});
+    this.InvitationsToShow = player.data.rows;
+    this.InvitationsNbRow = player.data.rowCount;
+    this.InvitationsPageMax = Math.floor((this.InvitationsNbRow.length -1) / this.InvitationsNbRowPerPage) + 1;
+    for (let i = 0; i < Math.min(this.InvitationsNbRowPerPage, this.InvitationsNbRow); i++){
+      this.InvitationsToShowPage.push(this.InvitationsToShow[i]);
+    }
+    console.log(this.InvitationsToShow);
+    console.log(this.InvitationsToShowPage);
+    document.getElementById("1").style.backgroundColor = "orange";
   },
   methods: {
+    ////////////////////////////////////////////////////////////////////////////
+    page_left_inv(){
+      if (this.InvitationsPage != 1){
+        this.page(this.InvitationsPage - 1);
+      }
+    },
+    page_right_inv(){
+      if (this.InvitationsPage != this.InvitationsPageMax){
+        this.page(this.InvitationsPage + 1);
+      }
+    },
+    page_inv(n){
+      document.getElementById(this.InvitationsPage).style.backgroundColor = "white";
+      this.InvitationsPage = n;
+      document.getElementById(this.InvitationsPage).style.backgroundColor = "orange";
+      let len = this.InvitationsToShowPage.length
+      for (let i = 0; i < len; i++){
+        this.InvitationsToShowPage.pop();
+      }
+      for (let i = (this.InvitationsPage - 1) * this.InvitationsNbRowPerPage; i < Math.min(this.InvitationsNbRow, this.InvitationsPage * this.InvitationsNbRowPerPage); i++){
+        this.InvitationsToShowPage.push(this.InvitationsToShow[i]);
+      }
+    },
+    //
     DayInFrench: function(day) {
       if (day == "Monday") return "Lundi";
       if (day == "Tuesday") return "Mardi";
@@ -100,42 +227,74 @@ export default {
     },
     acceptInv: async function(mid) {
       let invID;
-      let apiRep = await axios.get(
-        "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/CalendarMInv/" +
-          this.id +
-          "/" +
-          mid,
-        { responseType: "json" }
-      );
+      let apiRep = await axios
+        .get("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/CalendarMInv/" + this.id + "/" + mid, { responseType: "json" });
       invID = apiRep.data.rows[0].id;
-      await axios.put(
-        "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/Invitations/" + invID,
-        {
-          status: true
-        }
-      );
-      alert("Match accepté !");
-      this.$router.go();
+      await axios
+        .put("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/Invitations/" + invID, {status: true})
+        .then(response => {
+          alert("Match accepté !");
+          let n_page = this.InvitationsPage;
+          if (this.InvitationsToShowPage.length == 1 && n_page != 1){
+            n_page--;
+          }
+          document.getElementById(this.InvitationsPage).style.backgroundColor = "white";
+          this.inv_menu().then(response => {
+            this.page_inv(n_page);
+          });
+        })
+        .catch(e => {
+          alert("Echec, veuillez réessayer, si le problème persiste, réessayer plus tard");
+          this.$router.go();
+        });
     },
     declineInv: async function(mid) {
       let invID;
-      let apiRep = await axios.get(
-        "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/CalendarMInv/" +
-          this.id +
-          "/" +
-          mid,
-        { responseType: "json" }
-      );
+      let apiRep = await axios
+        .get("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/CalendarMInv/" + this.id + "/" + mid, { responseType: "json" });
       invID = apiRep.data.rows[0].id;
-      await axios.put(
-        "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/Invitations/" + invID,
-        {
-          status: false
-        }
-      );
-      alert("Match refusé !");
-      this.$router.go();
+      await axios
+        .put("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/Invitations/" + invID, {status: false})
+        .then(response => {
+          alert("Match refusé !");
+          let n_page = this.InvitationsPage;
+          if (this.InvitationsToShowPage.length == 1 && n_page != 1){
+            n_page--;
+          }
+          document.getElementById(this.InvitationsPage).style.backgroundColor = "white";
+          this.inv_menu().then(response => {
+            this.page_inv(n_page);
+          });
+        })
+        .catch(e => {
+          alert("Echec, veuillez réessayer, si le problème persiste, réessayer plus tard");
+          this.$router.go();
+        });
     },
+    ////////////////////////////////////////////////////////////////////////////
+    page_left_inv_c(){
+      if (this.InvitationsClubPage != 1){
+        this.page(this.InvitationsClubPage - 1);
+      }
+    },
+    page_right_inv_c(){
+      if (this.InvitationsClubPage != this.InvitationsClubPageMax){
+        this.page(this.InvitationsClubPage + 1);
+      }
+    },
+    page_inv_c(n){
+      document.getElementById(this.InvitationsClubPage).style.backgroundColor = "white";
+      this.InvitationsClubPage = n;
+      document.getElementById(this.InvitationsClubPage).style.backgroundColor = "orange";
+      let len = this.InvitationsClubToShowPage.length
+      for (let i = 0; i < len; i++){
+        this.InvitationsClubToShowPage.pop();
+      }
+      for (let i = (this.InvitationsClubPage - 1) * this.InvitationsClubNbRowPerPage; i < Math.min(this.InvitationsClubNbRow, this.InvitationsClubPage * this.InvitationsClubNbRowPerPage); i++){
+        this.InvitationsClubToShowPage.push(this.InvitationsClubToShow[i]);
+      }
+    },
+    //
     acceptClubInv: async function(pid, cid, club_name) {
       await axios
         .delete("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/InvitationClub/" + pid + "&" + cid)
@@ -152,7 +311,14 @@ export default {
           })
         .then(response => {
           alert("Invitation du club '" + club_name + "' accepté !");
-          this.$router.go();
+          let n_page = this.InvitationsClubPage;
+          if (this.InvitationsClubToShowPage.length == 1 && n_page != 1){
+            n_page--;
+          }
+          document.getElementById(this.InvitationsClubPage).style.backgroundColor = "white";
+          this.inv_c_menu().then(response => {
+            this.page_inv_c(n_page);
+          });
         })
         .catch(e => {
           alert("Echec, veuillez réessayer, si le problème persiste, réessayer plus tard");
@@ -164,13 +330,39 @@ export default {
         .delete("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/InvitationClub/" + pid + "&" + cid)
         .then(response => {
           alert("Invitation du club '" + club_name + "' refusé !");
-          this.$router.go();
+          let n_page = this.InvitationsClubPage;
+          if (this.InvitationsClubToShowPage.length == 1 && n_page != 1){
+            n_page--;
+          }
+          document.getElementById(this.InvitationsClubPage).style.backgroundColor = "white";
+          this.inv_c_menu().then(response => {
+            this.page_inv_c(n_page);
+          });
         })
         .catch(e => {
           alert("Echec, veuillez réessayer, si le problème persiste, réessayer plus tard");
           this.$router.go();
         });
-    }
+    },
+    ////////////////////////////////////////////////////////////////////////////
+    async inv_menu(){
+      const player = await axios.get("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/CalendarBPlayer/" + this.id, {responseType: "json"});
+
+      this.InvitationsToShow = player.data.rows;
+      this.InvitationsNbRow = this.InvitationsToShow.length;
+      this.InvitationsPageMax = Math.floor((this.InvitationsNbRow.length -1) / this.InvitationsNbRowPerPage) + 1;
+
+      this.switch_inv = 'inv';
+    },
+    async inv_c_menu(){
+      const invitationsClub = await axios.get("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/InvitationClub/" + this.id, {responseType: "json"});
+
+      this.InvitationsClubToShow = invitationsClub.data.rows;
+      this.InvitationsNbRow = invitationsClub.data.rowCount;
+      this.InvitationsPageMax = Math.floor((invitationsClub.data.rowCount -1) / this.InvitationsNbRowPerPage) + 1;
+
+      this.switch_inv = 'inv_c';
+    },
   },
   computed: {
     isSignedIn() {
@@ -184,6 +376,3 @@ export default {
   }
 };
 </script>
-
-<style>
-</style>

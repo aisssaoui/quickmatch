@@ -21,7 +21,7 @@ var Calendar_db = {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              text = "select m.id as meet, i.player as player, status, start_hour, end_hour, repeat_day, location, minimal_team_size, maximal_team_size from invitation i left outer join slot s on i.slot = s.id left outer join meet m on i.meet = m.id where i.player=$1 ";
+              text = "select m.id as meet, i.player as player, status, start_hour, end_hour, repeat_day, location, minimal_team_size, maximal_team_size from invitation i left outer join slot s on i.slot = s.id left outer join meet m on i.meet = m.id where i.player=$1 and status = NULL";
               _context.prev = 1;
               _context.next = 4;
               return _db2.default.query(text, [req.params.id]);
