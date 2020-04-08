@@ -43,27 +43,10 @@
               
               <div class="btn_v_matchs">
                 <v-btn
-                v-if="row.state = 'Manque de joueurs'"
                   dark
                   small
                   rounded
-                  color="red"
-                  @click="showDialog(row.details)"
-                >{{row.players}}</v-btn>
-              <v-btn
-                v-else-if="row.state = 'Accepté'"
-                  dark
-                  small
-                  rounded
-                  color="green"
-                  @click="showDialog(row.details)"
-                >{{row.players}}</v-btn>
-              <v-btn
-                  v-else
-                  dark
-                  small
-                  rounded
-                  color="orange"
+                  :color="row.color"
                   @click="showDialog(row.details)"
                 >{{row.players}}</v-btn>
               </div>
