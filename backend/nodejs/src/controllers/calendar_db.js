@@ -96,7 +96,7 @@ var Calendar_db = {
     return getByPlayer;
   })(),
 
-  getNull: (function () {
+  getNotDecided: (function () {
     var _ref = _asyncToGenerator(
       /*#__PURE__*/ regeneratorRuntime.mark(function _callee(req, res) {
         var text, _ref2, rows, rowCount;
@@ -142,11 +142,11 @@ var Calendar_db = {
       })
     );
 
-    function getByPlayer(_x, _x2) {
+    function getNotDecided(_x, _x2) {
       return _ref.apply(this, arguments);
     }
 
-    return getByPlayer;
+    return getNotDecided;
   })(),
 
   /* Get all Meets of a player (without rows) */

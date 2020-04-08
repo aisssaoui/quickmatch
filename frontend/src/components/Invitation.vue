@@ -180,7 +180,7 @@ export default {
     };
   },
   async created() {
-    const player = await axios.get("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/CalendarBPlayer/" + this.id, {responseType: "json"});
+    const player = await axios.get("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/CalendarBPNotDecided/" + this.id, {responseType: "json"});
     this.InvitationsToShow = player.data.rows;
     this.InvitationsNbRow = player.data.rowCount;
     this.InvitationsPageMax = Math.floor((this.InvitationsNbRow.length -1) / this.InvitationsNbRowPerPage) + 1;
@@ -346,7 +346,7 @@ export default {
     },
     ////////////////////////////////////////////////////////////////////////////
     async inv_menu(){
-      const player = await axios.get("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/CalendarBPlayer/" + this.id, {responseType: "json"});
+      const player = await axios.get("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/CalendarBPNotDecided/" + this.id, {responseType: "json"});
 
       this.InvitationsToShow = player.data.rows;
       this.InvitationsNbRow = this.InvitationsToShow.length;
