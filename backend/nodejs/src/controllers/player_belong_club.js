@@ -63,6 +63,7 @@ var player_belong_club = {
 
     return getPlayerAdminClubs;
   }(),
+  
 
 
   /**
@@ -109,7 +110,7 @@ var player_belong_club = {
 
     return getPlayerClubsByClubID;
   }(),
-
+  
   /**
    * Get all the player who belong to the $1 club
    * @param {object} req
@@ -246,7 +247,7 @@ var player_belong_club = {
   }(),
 
   /**
-   * Get all the club where the $1 player is
+   * Get all the club where the $1 player is 
    * @param {object} req
    * @param {object} res
    * @returns {object} player_belong_club & club object (without rows)
