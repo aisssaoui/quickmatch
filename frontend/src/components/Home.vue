@@ -50,7 +50,7 @@
       </v-carousel-item>
     </v-carousel>
     <v-flex>
-      <v-jumbotron id="jumb" class="row grey lighten-3" style="padding: 10px 5px 10px 5px;">
+      <v-jumbotron id="jumb" class="row" style="padding: 10px 5px 10px 5px; background-color: #20003c">
         <div class="col-md-12 col-sm-12 col-md-9 col-lg-9 col-xl-10">
           <p
             class="title font-weight-regular"
