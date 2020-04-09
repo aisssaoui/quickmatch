@@ -84,7 +84,7 @@ app.get("/dbcontrol/api/v1/PlayersRows", _player2.default.getAllRows);
 app.post("/dbcontrol/api/v1/Clubs", _club2.default.create);
 app.get("/dbcontrol/api/v1/Clubs", _club2.default.getAll);
 app.get("/dbcontrol/api/v1/Clubs/:id", _club2.default.getOne);
-//app.put("/dbcontrol/api/v1/Clubs/:id", _club2.default.update);
+app.put("/dbcontrol/api/v1/Clubs/:cid&:name&:private", _club2.default.update);
 app.delete("/dbcontrol/api/v1/Clubs/:id", _club2.default.delete);
 app.get("/dbcontrol/api/v1/ClubsRows", _club2.default.getAllRows);
 

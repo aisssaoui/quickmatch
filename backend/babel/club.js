@@ -62,7 +62,16 @@ const Club = {
    * @returns {object} club object
    */
   async getOne(req, res) {
-    const text = "SELECT * FROM club WHERE id = $1";
+    const text = `SELECT * FROM
+                    (
+                      SELECT C.id, C.club_name, C.creation_date, C.private_club, C.nb_match_played, COUNT(PBC.player) as nb_player FROM
+                        club C
+                        JOIN
+                        player_belong_club PBC
+                        ON C.id = PBC.club
+                      GROUP BY C.id, C.club_name, C.creation_date, C.private_club, C.nb_match_played
+                    )
+                  WHERE C.id = $1`;
     try {
       const { rows } = await db.query(text, [req.params.id]);
       if (!rows[0]) {
@@ -81,19 +90,14 @@ const Club = {
    * @returns {object} updated Club
    */
   async update(req, res) {
-    const findOneQuery = "SELECT * FROM club WHERE id=$1";
     const updateOneQuery = `UPDATE club
-      SET club_name=$1,private_club=$2
-      WHERE id=$3 RETURNING *`;
+                            SET club_name = $1, private_club = $2
+                            WHERE id = $3 RETURNING *`;
     try {
-      const { rows } = await db.query(findOneQuery, [req.params.id]);
-      if (!rows[0]) {
-        return res.status(404).send({ message: "club not found" });
-      }
       const values = [
-        req.body.club_name || rows[0].club_name,
-        req.body.private_club || rows[0].private_club,
-        req.params.id
+        req.params.name,
+        req.params.private,
+        req.params.cid
       ];
       const response = await db.query(updateOneQuery, values);
       return res.status(200).send(response.rows[0]);

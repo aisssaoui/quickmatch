@@ -21,6 +21,152 @@ const player_belong_club = {
   },
 
   /**
+   * Get all the club where the $1 player is
+   * @param {object} req
+   * @param {object} res
+   * @returns {object} player_belong_club & club object
+   */
+  async getPlayerClubsByPlayerID(req, res) {
+    const text =
+      `SELECT * FROM
+         (
+           SELECT C.id, COUNT(PBC.player) as nb_player FROM
+             club C
+             JOIN
+             player_belong_club PBC
+             ON C.id = PBC.club
+           GROUP BY C.id
+         ) counter_club
+       JOIN
+         (
+        	 SELECT * FROM
+             club C
+             JOIN
+             player_belong_club PBC
+             ON C.id = PBC.club
+           WHERE PBC.player = $1
+         ) player_clubs
+       ON counter_club.id = player_clubs.id
+       ORDER BY club_name, creation_date`;
+    try {
+      const { rows, rowCount } = await db.query(text, [req.params.id]);
+      return res.status(200).send({ rows, rowCount });
+    } catch (error) {
+      return res.status(400).send(error);
+    }
+  },
+
+  /**
+  * Get all the club where the $1 player is
+  * @param {object} req
+  * @param {object} res
+  * @returns {object} player_belong_club & club object
+  */
+  async getPlayerClubsByPlayerIDRows(req, res) {
+    const text =
+    `SELECT * FROM
+    (
+      SELECT C.id, COUNT(PBC.player) as nb_player FROM
+      club C
+      JOIN
+      player_belong_club PBC
+      ON C.id = PBC.club
+      GROUP BY C.id
+    ) counter_club
+    JOIN
+    (
+      SELECT * FROM
+      club C
+      JOIN
+      player_belong_club PBC
+      ON C.id = PBC.club
+      WHERE PBC.player = $1
+    ) player_clubs
+    ON counter_club.id = player_clubs.id
+    ORDER BY club_name, creation_date`;
+    try {
+      const { rows, rowCount } = await db.query(text, [req.params.id]);
+      return res.status(200).send({ rows, rowCount });
+    } catch (error) {
+      return res.status(400).send(error);
+    }
+  },
+
+  /**
+   * Get all the club where the $1 player is not and which are public club
+   * @param {object} req
+   * @param {object} res
+   * @returns {object} player_belong_club & club object
+   */
+  async NgetPlayerClubsByPlayerID(req, res) {
+    const text =
+      `SELECT * FROM
+          (
+            SELECT C.id, COUNT(PBC.player) as nb_player FROM
+              club C
+              JOIN
+              player_belong_club PBC
+              ON C.id = PBC.club
+            GROUP BY C.id
+          ) counter_club
+       JOIN
+          (
+	          SELECT * FROM club C
+              WHERE C.id NOT IN
+              (
+                SELECT club FROM player_belong_club
+                WHERE player = $1
+              )
+	            AND C.private_club = FALSE
+          ) player_not_clubs
+       ON counter_club.id = player_not_clubs.id
+       ORDER BY club_name, creation_date`;
+    try {
+      const { rows, rowCount } = await db.query(text, [req.params.id]);
+      return res.status(200).send({ rows, rowCount });
+    } catch (error) {
+      return res.status(400).send(error);
+    }
+  },
+
+  /**
+  * Get all the club where the $1 player is not and which are public club
+  * @param {object} req
+  * @param {object} res
+  * @returns {object} player_belong_club & club object
+  */
+  async NgetPlayerClubsByPlayerIDRows(req, res) {
+    const text =
+    `SELECT * FROM
+    (
+      SELECT C.id, COUNT(PBC.player) as nb_player FROM
+      club C
+      JOIN
+      player_belong_club PBC
+      ON C.id = PBC.club
+      GROUP BY C.id
+    ) counter_club
+    JOIN
+    (
+      SELECT * FROM club C
+      WHERE C.id NOT IN
+      (
+        SELECT club FROM player_belong_club
+        WHERE player = $1
+      )
+      AND C.private_club = FALSE
+    ) player_not_clubs
+    ON counter_club.id = player_not_clubs.id
+    ORDER BY club_name, creation_date`;
+    try {
+      const { rows, rowCount } = await db.query(text, [req.params.id]);
+      return res.status(200).send({ rows, rowCount });
+    } catch (error) {
+      return res.status(400).send(error);
+    }
+  },
+
+  /**
    * Get all the player who belong to the $1 club
    * @param {object} req
    * @param {object} res
@@ -45,7 +191,31 @@ const player_belong_club = {
   },
 
   /**
-  * Get all the player who do not belong to the $1 club and have a public profil
+   * Get all the player who belong to the $1 club
+   * @param {object} req
+   * @param {object} res
+   * @returns {object} player_belong_club & player object
+   */
+  async getPlayerClubsByClubIDRows(req, res) {
+    const text =
+      `SELECT * FROM
+       player_belong_club PBC INNER JOIN player P ON P.id = PBC.player
+       WHERE PBC.club = $1
+       ORDER BY
+          PBC.is_admin DESC,
+          PBC.inscription_date ASC,
+          P.surname ASC,
+          P.first_name ASC`;
+    try {
+      const { rows, rowCount } = await db.query(text, [req.params.id]);
+      return res.status(200).send({ rows, rowCount });
+    } catch (error) {
+      return res.status(400).send(error);
+    }
+  },
+
+  /**
+  * Get all the player who do not belong to the $1 club, have a public profil, and do not have an invitation for the $1 club
   * @param {object} req
   * @param {object} res
   * @returns {object} player_belong_club & player object
@@ -56,53 +226,11 @@ const player_belong_club = {
      P.id NOT IN (SELECT PBC.player FROM player_belong_club PBC WHERE PBC.club = $1)
      AND
      P.private_profil = FALSE
+     AND
+     P.id NOT IN (SELECT player FROM invitation_club WHERE club = $1)
      ORDER BY
         P.surname ASC,
         P.first_name ASC`;
-    try {
-      const { rows, rowCount } = await db.query(text, [req.params.id]);
-      return res.status(200).send({ rows, rowCount });
-    } catch (error) {
-      return res.status(400).send(error);
-    }
-  },
-
-  /**
-   * Get all the club where the $1 player is
-   * @param {object} req
-   * @param {object} res
-   * @returns {object} player_belong_club & club object
-   */
-  async getPlayerClubsByPlayerID(req, res) {
-    const text =
-      `SELECT * FROM
-          player_belong_club PBC
-          INNER JOIN
-          club C
-          on PBC.club = C.id
-       WHERE PBC.player = $1
-       ORDER BY C.club_name`;
-    try {
-      const { rows, rowCount } = await db.query(text, [req.params.id]);
-      return res.status(200).send({ rows, rowCount });
-    } catch (error) {
-      return res.status(400).send(error);
-    }
-  },
-
-  /**
-   * Get all the club where the $1 player is not and which are public club
-   * @param {object} req
-   * @param {object} res
-   * @returns {object} player_belong_club & club object
-   */
-  async NgetPlayerClubsByPlayerID(req, res) {
-    const text =
-      `SELECT * FROM club C WHERE
-       C.id NOT IN
-         (SELECT PBC.club FROM player_belong_club PBC WHERE PBC.player = $1)
-       AND C.private_club = FALSE
-       ORDER BY C.club_name`;
     try {
       const { rows, rowCount } = await db.query(text, [req.params.id]);
       return res.status(200).send({ rows, rowCount });

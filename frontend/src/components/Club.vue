@@ -710,6 +710,9 @@ export default {
             alert("Une invitation a été envoyé à " + pseudo);
             let n_page = this.playersNotInClubPage;
             document.getElementById(this.playersNotInClubPage).style.backgroundColor = "white";
+            if (this.playersNotInClubToShowPage.length == 1 && n_page != 1){
+              n_page--;
+            }
             this.add_club_menu().then(response => {
               this.page_ac(n_page);
             });

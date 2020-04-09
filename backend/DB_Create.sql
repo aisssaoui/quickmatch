@@ -26,6 +26,7 @@ id SMALLSERIAL PRIMARY KEY,
 club_name VARCHAR(40) NOT NULL,
 creation_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 private_club BOOLEAN,
+nb_match_played SMALLINT DEFAULT 0 NOT NULL CHECK (nb_match_played >= 0)
 UNIQUE(club_name)
 );
 

@@ -183,7 +183,7 @@ export default {
     const player = await axios.get("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/CalendarBPNotDecided/" + this.id, {responseType: "json"});
     this.InvitationsToShow = player.data.rows;
     this.InvitationsNbRow = player.data.rowCount;
-    this.InvitationsPageMax = Math.floor((this.InvitationsNbRow.length -1) / this.InvitationsNbRowPerPage) + 1;
+    this.InvitationsPageMax = Math.floor((this.InvitationsNbRow -1) / this.InvitationsNbRowPerPage) + 1;
     for (let i = 0; i < Math.min(this.InvitationsNbRowPerPage, this.InvitationsNbRow); i++){
       this.InvitationsToShowPage.push(this.InvitationsToShow[i]);
     }
@@ -349,8 +349,8 @@ export default {
       const player = await axios.get("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/CalendarBPNotDecided/" + this.id, {responseType: "json"});
 
       this.InvitationsToShow = player.data.rows;
-      this.InvitationsNbRow = this.InvitationsToShow.length;
-      this.InvitationsPageMax = Math.floor((this.InvitationsNbRow.length -1) / this.InvitationsNbRowPerPage) + 1;
+      this.InvitationsNbRow = player.data.rowCount;
+      this.InvitationsPageMax = Math.floor((this.InvitationsNbRow -1) / this.InvitationsNbRowPerPage) + 1;
 
       this.switch_inv = 'inv';
     },
@@ -358,8 +358,8 @@ export default {
       const invitationsClub = await axios.get("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/InvitationClub/" + this.id, {responseType: "json"});
 
       this.InvitationsClubToShow = invitationsClub.data.rows;
-      this.InvitationsNbRow = invitationsClub.data.rowCount;
-      this.InvitationsPageMax = Math.floor((invitationsClub.data.rowCount -1) / this.InvitationsNbRowPerPage) + 1;
+      this.InvitationsClubNbRow = invitationsClub.data.rowCount;
+      this.InvitationsClubPageMax = Math.floor((invitationsClub.data.rowCount -1) / this.InvitationsClubNbRowPerPage) + 1;
 
       this.switch_inv = 'inv_c';
     },
