@@ -22,17 +22,21 @@ class MatchCreationFragmentViewModel : ViewModel() {
 
     /* counts for meets and slots to know progress of the process */
 
-    private val _countMeets = MutableLiveData<Int>(0)
+    private val _countMeets = MutableLiveData(0)
     val countMeets : LiveData<Int>
         get() = _countMeets
 
-    private val _countSlots = MutableLiveData<Int>(0)
+    private val _countSlots = MutableLiveData(0)
     val countSlots : LiveData<Int>
         get() = _countSlots
 
-    private val _countFinishedProcesses = MutableLiveData<Int>(0)
+    private val _countFinishedProcesses = MutableLiveData(0)
     val countFinishedProcesses : LiveData<Int>
         get() = _countFinishedProcesses
+
+    private val _countInvitations = MutableLiveData(0)
+    val countInvitations : LiveData<Int>
+        get() = _countInvitations
 
     /* Live datas storing database datas as objects */
 
@@ -52,7 +56,7 @@ class MatchCreationFragmentViewModel : ViewModel() {
     val newMatches : LiveData<MutableList<MeetObject>>
         get() = _newMatches
 
-    private val _players = MutableLiveData<List<PlayerAndPlayerBelongClubObject>>()
+    private val _players = MutableLiveData<List<PlayerAndPlayerBelongClubObject>>(listOf())
     val players : LiveData<List<PlayerAndPlayerBelongClubObject>>
         get() = _players
 
@@ -298,6 +302,7 @@ class MatchCreationFragmentViewModel : ViewModel() {
 
                 DatabaseApi.retrofitService.createInvitation(newInvitation)
                 _invitationCreationStatus.value = RequestStatus.DONE
+                _countInvitations.value = countInvitations.value?.plus(1)
 
             } catch (t: Throwable) {
 
@@ -340,6 +345,7 @@ class MatchCreationFragmentViewModel : ViewModel() {
         _countMeets.value = 0
         _countSlots.value = 0
         _countFinishedProcesses.value = 0
+        _countInvitations.value = 0
     }
 
 

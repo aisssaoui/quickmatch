@@ -14,6 +14,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
+import com.example.quickmatch.BaseFragment
 
 import com.example.quickmatch.R
 import com.example.quickmatch.databinding.FragmentClubCreationBinding
@@ -24,7 +25,7 @@ import kotlinx.coroutines.Job
 /**
  * A simple [Fragment] subclass.
  */
-class ClubCreationFragmentUI : Fragment() {
+class ClubCreationFragmentUI : BaseFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
@@ -78,5 +79,8 @@ class ClubCreationFragmentUI : Fragment() {
         return binding.root
     }
 
-
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        getActionBar()?.title = "Créér un club"
+    }
 }

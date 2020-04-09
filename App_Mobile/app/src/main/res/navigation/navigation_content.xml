@@ -95,5 +95,14 @@
     <fragment
         android:id="@+id/matchCreationFragmentUI"
         android:name="com.example.quickmatch.content.match.MatchCreationFragmentUI"
-        android:label="MatchCreationFragmentUI" />
+        android:label="MatchCreationFragmentUI" >
+        <action
+            android:id="@+id/action_matchCreationFragmentUI_to_matchFragmentUI"
+            app:destination="@id/matchFragmentUI"
+            app:popUpTo="@+id/matchFragmentUI" />
+    </fragment>
+    <fragment
+        android:id="@+id/invitationFragmentUI"
+        android:name="com.example.quickmatch.content.invitation.InvitationFragmentUI"
+        android:label="InvitationFragmentUI" />
 </navigation>

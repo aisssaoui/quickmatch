@@ -8,8 +8,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.example.quickmatch.BaseFragment
 
 import com.example.quickmatch.R
@@ -108,9 +110,10 @@ class MatchCreationFragmentUI : BaseFragment() {
             }
         }
 
+        /* what happens when user clicks create */
         binding.buttonCreateMatch.setOnClickListener {
-            it.isEnabled = false
 
+            /* create a list of boolean to know which day the user wishes to play */
             this.repeatDays = listOf(
                 binding.checkSunday.isChecked,
                 binding.checkMonday.isChecked,
@@ -118,25 +121,42 @@ class MatchCreationFragmentUI : BaseFragment() {
                 binding.checkWednesday.isChecked,
                 binding.checkThursday.isChecked,
                 binding.checkFriday.isChecked,
-                binding.checkSaturday.isChecked)
+                binding.checkSaturday.isChecked
+            )
 
+            if(binding.autoCompleteInput.text.toString() == ""
+                || binding.editDate.text.toString() == ""
+                || binding.editStartHour.text.toString() == ""
+                || binding.editEndHour.text.toString() == ""
+                || binding.editLocation.text.toString() == ""
+                || repeatDays!!.none { day -> day }
+            ) {
 
-            viewModel.processMatchCreation(
-                chosenDate,
-                binding.editStartHour.text.toString(),
-                binding.editEndHour.text.toString(),
-                binding.pickerMin.value,
-                binding.pickerMax.value,
-                binding.editLocation.text.toString(),
-                this.repeatDays!!,
-                binding.pickerRepetitions.value)
+                Toast.makeText(this.context, resources.getText(R.string.warning_match_creation), Toast.LENGTH_LONG).show()
 
-            viewModel.processCheckSlots(
-                binding.editStartHour.text.toString(),
-                binding.editEndHour.text.toString(),
-                this.repeatDays!!)
+            } else {
 
-            viewModel.getSelectedClubPlayers(binding.autoCompleteInput.text.toString())
+                it.isEnabled = false
+
+                viewModel.processMatchCreation(
+                    chosenDate,
+                    binding.editStartHour.text.toString(),
+                    binding.editEndHour.text.toString(),
+                    binding.pickerMin.value,
+                    binding.pickerMax.value,
+                    binding.editLocation.text.toString(),
+                    this.repeatDays!!,
+                    binding.pickerRepetitions.value
+                )
+
+                viewModel.processCheckSlots(
+                    binding.editStartHour.text.toString(),
+                    binding.editEndHour.text.toString(),
+                    this.repeatDays!!
+                )
+
+                viewModel.getSelectedClubPlayers(binding.autoCompleteInput.text.toString())
+            }
         }
 
         /* settings for teams' size pickers */
@@ -286,6 +306,17 @@ class MatchCreationFragmentUI : BaseFragment() {
                         viewModel.resetCreateInvitationStatus()
                     }
                     else -> Timber.i("Creating invitation")
+                }
+            }
+        })
+
+        viewModel.countInvitations.observe(this, Observer {
+            it?.let {
+                val numberToCreate = viewModel.players.value!!.size * repeatDays!!.filter { day -> day }.size * (binding.pickerRepetitions.value + 1)
+                if(it > 0 && it == numberToCreate) {
+                    viewModel.resetCounts()
+                    Toast.makeText(this.context, resources.getString(R.string.success_match_creation), Toast.LENGTH_SHORT).show()
+                    this.findNavController().navigate(MatchCreationFragmentUIDirections.actionMatchCreationFragmentUIToMatchFragmentUI())
                 }
             }
         })

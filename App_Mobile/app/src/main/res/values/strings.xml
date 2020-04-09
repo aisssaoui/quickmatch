@@ -83,5 +83,12 @@
     <string name="create_match_text">Créer le match</string>
     <string name="date_match_text">Date du match</string>
     <string name="number_of_repetitions_text">Nombre de répétitions</string>
+    <string name="warning_match_creation">Il reste des champs à remplir !
+
+        <b>Un club, une date et les heures de début et de fin sont requis.
+
+    De même, au moins un jour est requis.</b></string>
+    <string name="success_match_creation">Match créé avec succès !</string>
+    <string name="work_ongoing_text">En construction...</string>
 
 </resources>
