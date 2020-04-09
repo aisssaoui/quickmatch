@@ -58,13 +58,13 @@ var app = (0, _express2.default)();
 app.use(_express2.default.json());
 app.use((0, _cors2.default)());
 
-app.get("/dbcontrol", function(req, res) {
+app.get("/dbcontrol", function (req, res) {
   return res
     .status(200)
     .send({ message: "YAY! Congratulations! Your first endpoint is working" });
 });
 
-app.get("/dbcontrol/test", function(req, res) {
+app.get("/dbcontrol/test", function (req, res) {
   res.send("Hello");
 });
 
@@ -112,7 +112,7 @@ app.get(
   _invitation_club2.default.getPlayerInvitations
 );
 app.delete(
-  "/dbcontrol/api/v1/InvitationClub/:ci_id",
+  "/dbcontrol/api/v1/InvitationClub/:pid&:cid",
   _invitation_club2.default.delete
 );
 
@@ -122,38 +122,33 @@ app.delete(
 // app.get("/dbcontrol/api/v1/InvitationForMeet/:id", _invitation_for_meet2.default.getOne);
 // app.put("/dbcontrol/api/v1/InvitationForMeet/:id", _invitation_for_meet2.default.update);
 // app.delete("/dbcontrol/api/v1/InvitationForMeet/:id", _invitation_for_meet2.default.delete);
-//app.get("/dbcontrol/api/v1/Playersrows", _player2.default.getAllRows);
+// app.get("/dbcontrol/api/v1/Playersrows", _player2.default.getAllRows);
 
 // Table slot
 app.post("/dbcontrol/api/v1/Slots", _slot2.default.create);
 app.get("/dbcontrol/api/v1/Slots", _slot2.default.getAll);
 app.get("/dbcontrol/api/v1/Slots/:id", _slot2.default.getOne);
-//app.put("/dbcontrol/api/v1/Slots/:id", _slot2.default.update);
+app.put("/dbcontrol/api/v1/Slots/:id", _slot2.default.update);
 app.delete("/dbcontrol/api/v1/Slots/:id", _slot2.default.delete);
 app.get("/dbcontrol/api/v1/SlotsRows", _slot2.default.getAllRows);
+app.get(
+  "/dbcontrol/api/v1/Slots/:start/:end/:day",
+  _slot2.default.getByHoursAndRepeatDay
+);
 
 // Table meet_sheet
 app.post("/dbcontrol/api/v1/MeetsSheet", _meet_sheet2.default.create);
 app.get("/dbcontrol/api/v1/MeetsSheet", _meet_sheet2.default.getAll);
-app.get(
-  "/dbcontrol/api/v1/MeetsSheet/:player_mail_address",
-  _meet_sheet2.default.getOne
-);
-//app.put("/dbcontrol/api/v1/MeetsSheet/:player_mail_adress", _meet_sheet2.default.update);
-
-/* TODO : meetsheet getone avec l'@ mail ne marche pas */
-
-app.delete(
-  "/dbcontrol/api/v1/MeetsSheet/:player_mail_address",
-  _meet_sheet2.default.delete
-);
+app.get("/dbcontrol/api/v1/MeetsSheet/:pid", _meet_sheet2.default.getOne);
+app.put("/dbcontrol/api/v1/MeetsSheet/:pid", _meet_sheet2.default.update);
+app.delete("/dbcontrol/api/v1/MeetsSheet/:pid", _meet_sheet2.default.delete);
 app.get("/dbcontrol/api/v1/MeetsSheetRows", _meet_sheet2.default.getAllRows);
 
 // Table meet
 app.post("/dbcontrol/api/v1/Meets", _meet2.default.create);
 app.get("/dbcontrol/api/v1/Meets", _meet2.default.getAll);
 app.get("/dbcontrol/api/v1/Meets/:id", _meet2.default.getOne);
-// app.put("/dbcontrol/api/v1/Meets/:id", _meet2.default.update);
+app.put("/dbcontrol/api/v1/Meets/:id", _meet2.default.update);
 app.delete("/dbcontrol/api/v1/Meets/:id", _meet2.default.delete);
 app.get("/dbcontrol/api/v1/MeetsRows", _meet2.default.getAllRows);
 
@@ -212,6 +207,10 @@ app.put(
 app.get(
   "/dbcontrol/api/v1/CalendarBPlayer/:id",
   _calendar_db2.default.getByPlayer
+);
+app.get(
+  "/dbcontrol/api/v1/CalendarBPlayerRows/:id",
+  _calendar_db2.default.getByPlayerRows
 );
 app.get("/dbcontrol/api/v1/CalendarBMeet/:id", _calendar_db2.default.getByMeet);
 app.get(

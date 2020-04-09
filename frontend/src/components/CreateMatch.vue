@@ -6,9 +6,10 @@
     <br />
     <v-card class="mx-auto" max-width="1000" tile>
       <br />
-      <span v-if="Err" style="color : red; font-size: 25px;margin: 15px;"
-        >Merci de renseigner tous les champs</span
-      >
+      <span
+        v-if="Err"
+        style="color : red; font-size: 25px;margin: 15px;"
+      >Merci de renseigner tous les champs</span>
 
       <v-list-item two-line>
         <v-list-item-content>
@@ -90,18 +91,13 @@
       <v-list-item>
         <v-list-item-content>
           <v-list-item-subtitle class="headline">
-            <v-text-field
-              label="Localisation"
-              v-model="location"
-            ></v-text-field>
+            <v-text-field label="Localisation" v-model="location"></v-text-field>
           </v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
 
       <v-list-item style="width: 900px">
-        <v-subheader
-          >Min et Max de joueurs requis par équipe pour le match</v-subheader
-        >
+        <v-subheader>Min et Max de joueurs requis par équipe pour le match</v-subheader>
         <v-range-slider
           v-model="range"
           :max="max"
@@ -115,71 +111,35 @@
       </v-list-item>
 
       <v-list-item>
-        <v-list-item-title class="font-weight-bold"
-          >Jour de répétition:</v-list-item-title
-        >
+        <v-list-item-title class="font-weight-bold">Jour de répétition:</v-list-item-title>
       </v-list-item>
 
       <v-list-item>
         <v-list-item>
-          <v-checkbox
-            v-model="selected"
-            label="Lundi"
-            value="Monday"
-          ></v-checkbox>
+          <v-checkbox v-model="selected" label="Lundi" value="Monday"></v-checkbox>
         </v-list-item>
         <v-list-item>
-          <v-checkbox
-            v-model="selected"
-            label="Mardi"
-            value="Tuesday"
-          ></v-checkbox>
+          <v-checkbox v-model="selected" label="Mardi" value="Tuesday"></v-checkbox>
         </v-list-item>
         <v-list-item>
-          <v-checkbox
-            v-model="selected"
-            label="Mercredi"
-            value="Wednesday"
-          ></v-checkbox>
+          <v-checkbox v-model="selected" label="Mercredi" value="Wednesday"></v-checkbox>
         </v-list-item>
         <v-list-item>
-          <v-checkbox
-            v-model="selected"
-            label="Jeudi"
-            value="Thursday"
-          ></v-checkbox>
+          <v-checkbox v-model="selected" label="Jeudi" value="Thursday"></v-checkbox>
         </v-list-item>
         <v-list-item>
-          <v-checkbox
-            v-model="selected"
-            label="Vendredi"
-            value="Friday"
-          ></v-checkbox>
+          <v-checkbox v-model="selected" label="Vendredi" value="Friday"></v-checkbox>
         </v-list-item>
         <v-list-item>
-          <v-checkbox
-            v-model="selected"
-            label="Samedi"
-            value="Saturday"
-          ></v-checkbox>
+          <v-checkbox v-model="selected" label="Samedi" value="Saturday"></v-checkbox>
         </v-list-item>
         <v-list-item>
-          <v-checkbox
-            v-model="selected"
-            label="Dimanche"
-            value="Sunday"
-          ></v-checkbox>
+          <v-checkbox v-model="selected" label="Dimanche" value="Sunday"></v-checkbox>
         </v-list-item>
       </v-list-item>
 
       <v-card-actions>
-        <v-btn
-          text
-          class="title"
-          color="deep-purple accent-4"
-          v-on:click="CreateMatch"
-          >Créer !</v-btn
-        >
+        <v-btn text class="title" color="deep-purple accent-4" v-on:click="CreateMatch">Créer !</v-btn>
       </v-card-actions>
     </v-card>
   </div>
@@ -188,6 +148,7 @@
 <script>
 import axios from "axios";
 import store from "../store";
+import moment from "moment";
 
 export default {
   data: () => ({
@@ -201,10 +162,19 @@ export default {
     items: [],
     selected: [],
     location: null,
-    min: 5,
-    max: 11,
-    range: [5, 11],
-    ticksLabels: [5, 6, 7, 8, 9, 10, 11]
+    min: 1,
+    max: 15,
+    range: [0, 16],
+    ticksLabels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
+    daysOfWeek: [
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+      "Sunday"
+    ]
   }),
 
   methods: {
@@ -271,15 +241,31 @@ export default {
       //Create Meet
       let meetsID = [];
       for (let i = 0; i < this.selected.length; i++) {
+        //Get Precise_date
+        const dayINeed = this.daysOfWeek.indexOf(this.selected[i]) + 1;
+        const today = moment().isoWeekday();
+        let gameDate = "";
+        if (today <= dayINeed) {
+          gameDate = moment().isoWeekday(dayINeed);
+        } else {
+          gameDate = moment()
+            .add(1, "weeks")
+            .isoWeekday(dayINeed);
+        }
+
+        let precise_date = gameDate.format("YYYY-MM-DD") + " " + ts;
+
+        let deletion_date = moment(precise_date).add(21, "days");
         let apiRep3 = null;
         apiRep3 = await axios.post(
           "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/Meets",
           {
             location: this.location,
-            precise_date: null,
+            precise_date: precise_date,
             minimal_team_size: this.range[0],
             maximal_team_size: this.range[1],
-            deletion_date: null
+            deletion_date: deletion_date,
+            played: false
           }
         );
         if (apiRep3.data.name != "error") {

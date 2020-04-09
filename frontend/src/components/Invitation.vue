@@ -35,6 +35,24 @@
           </div>
         </div>
       </div>
+
+
+      <div v-for="row in InvitationsClubToShow" :key="row.id">
+          <hr />
+
+          <v-list-item two-line>
+            <v-list-item-content>
+              <v-list-item-title class="font-weight-bold">Invitation pour le club '{{ row.club_name }}'</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+
+          <v-btn class="btn" rounded color="red" v-on:click="declineClubInv(row.player, row.club, row.club_name)">Refuser</v-btn>
+          <v-btn class="btn" rounded color="green" v-on:click="acceptClubInv(row.player, row.club, row.club_name)">Accepter</v-btn>
+          <br />
+          <br />
+      </div>
+
+
       <br />
       <br />
       <p style="text-align: center">Vous n'avez pas d'autres invitations</p>
@@ -47,14 +65,14 @@
 import WorkInProgress from "./WorkInProgress";
 import axios from "axios";
 import store from "../store";
-
 export default {
   components: {
     WorkInProgress
   },
   data() {
     return {
-      InvitationsToShow: {}
+      InvitationsToShow: {},
+      InvitationsClubToShow: {}
     };
   },
   async created() {
@@ -66,6 +84,9 @@ export default {
       }
     );
     this.InvitationsToShow = player.data;
+    const invitationsClub = await axios
+      .get("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/InvitationClub/" + this.id);
+    this.InvitationsClubToShow = invitationsClub.data.rows;
   },
   methods: {
     DayInFrench: function(day) {
@@ -96,7 +117,6 @@ export default {
       alert("Match accepté !");
       this.$router.go();
     },
-
     declineInv: async function(mid) {
       let invID;
       let apiRep = await axios.get(
@@ -115,6 +135,41 @@ export default {
       );
       alert("Match refusé !");
       this.$router.go();
+    },
+    acceptClubInv: async function(pid, cid, club_name) {
+      await axios
+        .delete("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/InvitationClub/" + pid + "&" + cid)
+        .catch(e => {
+          alert("Echec, veuillez réessayer, si le problème persiste, réessayer plus tard");
+          this.$router.go();
+        });
+      await axios
+        .post("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/PlayerClubs",
+          {
+            club: cid,
+            player: pid,
+            is_admin: false
+          })
+        .then(response => {
+          alert("Invitation du club '" + club_name + "' accepté !");
+          this.$router.go();
+        })
+        .catch(e => {
+          alert("Echec, veuillez réessayer, si le problème persiste, réessayer plus tard");
+          this.$router.go();
+        });
+    },
+    declineClubInv: async function(pid, cid, club_name) {
+      await axios
+        .delete("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/InvitationClub/" + pid + "&" + cid)
+        .then(response => {
+          alert("Invitation du club '" + club_name + "' refusé !");
+          this.$router.go();
+        })
+        .catch(e => {
+          alert("Echec, veuillez réessayer, si le problème persiste, réessayer plus tard");
+          this.$router.go();
+        });
     }
   },
   computed: {
