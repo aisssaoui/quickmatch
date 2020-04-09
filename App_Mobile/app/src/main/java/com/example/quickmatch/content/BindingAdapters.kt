@@ -1,12 +1,7 @@
 package com.example.quickmatch.content
 
-import android.annotation.SuppressLint
-import android.graphics.Color
 import android.graphics.Typeface
-import android.media.Image
-import android.provider.Settings.Global.getString
 import android.view.View
-import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
@@ -21,7 +16,6 @@ import com.example.quickmatch.content.club.ClubCreationStatus
 import com.example.quickmatch.network.*
 import com.example.quickmatch.utils.FormatUtils
 import timber.log.Timber
-import kotlin.math.absoluteValue
 
 /* Binding adapters for live datas */
 
@@ -86,7 +80,7 @@ fun bindStatusMail(imgView: ImageView, status: ClubCreationStatus?) {
 fun TextView.setClubCreationDate(club: ClubObject?) {
 
     club?.let {
-        text = "Créé le " + FormatUtils.parseDateToJJMMAAAA(it.creationDate!!)
+        text = "Créé le " + FormatUtils.parseDbDateToJJMMAAAA(it.creationDate!!)
     }
 }
 
@@ -120,7 +114,7 @@ fun ImageButton.setClubJoinIcon(club: ClubObject?) {
 fun TextView.setClubInscriptionDate(clubAndPlayer: ClubAndPlayerBelongClubObject?) {
 
     clubAndPlayer?.let {
-        text = "Membre depuis le : " + FormatUtils.parseDateToJJMMAAAA(it.inscriptionDate!!)
+        text = "Membre depuis le : " + FormatUtils.parseDbDateToJJMMAAAA(it.inscriptionDate!!)
     }
 }
 

@@ -4,6 +4,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import timber.log.Timber
 import java.security.MessageDigest
+import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  * Hashing Utils
@@ -39,8 +41,12 @@ object HashUtils {
 object FormatUtils {
 
     /* team sizes */
-    const val MINIMUM_TEAM_SIZE = 5
+    const val MINIMUM_TEAM_SIZE = 1
     const val MAXIMUM_TEAM_SIZE = 11
+
+    /* repetitions */
+    const val MINIMUM_REPETITIONS = 0
+    const val MAXIMUM_REPETITIONS = 4
 
     /* sizes to respect to store in database */
     const val MAIL_SIZE = 50
@@ -55,6 +61,9 @@ object FormatUtils {
     val passwordPattern = Regex("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{$MIN_PASSWORD_SIZE,$BASIC_SIZE}$")
     val phoneNumberPattern = Regex("^(?:(?:\\+|00)33|0)\\s*[1-9](?:[\\s.-]*\\d{2}){4}\$")
 
+    /* Database date format */
+    const val DATE_FORMAT = "yyyy-MM-dd"
+
     /* Parse phone number to keek the difits only */
     fun parsePhoneNumber(phoneNumber: String) : String? {
         if(phoneNumber != "") {
@@ -66,13 +75,31 @@ object FormatUtils {
     }
 
     /* parse a date string from database */
-    fun parseDateToJJMMAAAA(date: String?) : String {
+    fun parseDbDateToJJMMAAAA(date: String?) : String {
         date?.let {
             val splitDate = date.split("-", "T")
             val day = splitDate[2]
             val month = splitDate[1]
             val year = splitDate[0]
             return "$day / $month / $year"
+        }
+        return ""
+    }
+
+    /* get the string for a day of the week given as integer */
+    /* week starts at Sunday (1) and ends at Saturday (7) */
+    fun toStringDay(day: Int?) : String {
+        day?.let {
+            return when(day) {
+                Calendar.SUNDAY     -> "Sunday"
+                Calendar.MONDAY     -> "Monday"
+                Calendar.TUESDAY    -> "Tuesday"
+                Calendar.WEDNESDAY  -> "Wednesday"
+                Calendar.THURSDAY   -> "Thursday"
+                Calendar.FRIDAY     -> "Friday"
+                Calendar.SATURDAY   -> "Saturday"
+                else                -> "Wrong day"
+            }
         }
         return ""
     }
