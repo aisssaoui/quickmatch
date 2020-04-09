@@ -67,11 +67,13 @@
         <v-layout justify-center="true">
           <v-card-title align="center">Mot de passe oublié ?</v-card-title>
         </v-layout>
+        <!--
         <v-row class="pa-0" align="center" justify="center">
           <v-col cols="10">
             <v-btn rounded outlined block>Changer de mot de passe</v-btn>
           </v-col>
         </v-row>
+        -->
       </v-card>
     </v-layout>
   </v-container>

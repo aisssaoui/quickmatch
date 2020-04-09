@@ -327,6 +327,36 @@ const player_belong_club = {
   },
 
   /**
+   * Get a couple player/couple
+   * @param {object} req
+   * @param {object} res
+   * @returns {object} player_belong_club object
+   */
+  async getOne(req, res) {
+    const findAllQuery = `SELECT * FROM
+                            player P
+                            JOIN
+                            player_belong_club PBC
+                            ON
+                            P.id = PBC.player
+                            JOIN
+                            club C
+                            ON
+                            PBC.club = C.id
+                          WHERE PBC.player = $1 AND PBC.club = $2`;
+    const values = [
+      req.params.pid,
+      req.params.cid
+    ];
+    try {
+      const { rows, rowCount } = await db.query(findAllQuery, values);
+      return res.status(200).send({ rows, rowCount });
+    } catch (error) {
+      return res.status(400).send(error);
+    }
+  },
+
+  /**
    * Get the number of admin of the $1 club
    * @param {object} req
    * @param {object} res

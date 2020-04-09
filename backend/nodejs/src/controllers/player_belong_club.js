@@ -610,45 +610,92 @@ var player_belong_club = {
 
 
   /**
+   * Get a couple player/couple
+   * @param {object} req
+   * @param {object} res
+   * @returns {object} player_belong_club object
+   */
+  getOne: function () {
+    var _ref26 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee13(req, res) {
+      var findAllQuery, values, _ref27, rows, rowCount;
+
+      return regeneratorRuntime.wrap(function _callee13$(_context13) {
+        while (1) {
+          switch (_context13.prev = _context13.next) {
+            case 0:
+              findAllQuery = "SELECT * FROM\n                            player P\n                            JOIN\n                            player_belong_club PBC\n                            ON\n                            P.id = PBC.player\n                            JOIN\n                            club C\n                            ON\n                            PBC.club = C.id\n                          WHERE PBC.player = $1 AND PBC.club = $2";
+              values = [req.params.pid, req.params.cid];
+              _context13.prev = 2;
+              _context13.next = 5;
+              return _db2.default.query(findAllQuery, values);
+
+            case 5:
+              _ref27 = _context13.sent;
+              rows = _ref27.rows;
+              rowCount = _ref27.rowCount;
+              return _context13.abrupt("return", res.status(200).send({ rows: rows, rowCount: rowCount }));
+
+            case 11:
+              _context13.prev = 11;
+              _context13.t0 = _context13["catch"](2);
+              return _context13.abrupt("return", res.status(400).send(_context13.t0));
+
+            case 14:
+            case "end":
+              return _context13.stop();
+          }
+        }
+      }, _callee13, this, [[2, 11]]);
+    }));
+
+    function getOne(_x25, _x26) {
+      return _ref26.apply(this, arguments);
+    }
+
+    return getOne;
+  }(),
+
+
+  /**
    * Get the number of admin of the $1 club
    * @param {object} req
    * @param {object} res
    * @returns {object} int
    */
   getCountAdmin: function () {
-    var _ref26 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee13(req, res) {
-      var text, _ref27, rows, rowCount;
+    var _ref28 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee14(req, res) {
+      var text, _ref29, rows, rowCount;
 
-      return regeneratorRuntime.wrap(function _callee13$(_context13) {
+      return regeneratorRuntime.wrap(function _callee14$(_context14) {
         while (1) {
-          switch (_context13.prev = _context13.next) {
+          switch (_context14.prev = _context14.next) {
             case 0:
               text = "SELECT COUNT(*) AS nb FROM player_belong_club WHERE club = $1 AND is_admin = TRUE GROUP BY club";
-              _context13.prev = 1;
-              _context13.next = 4;
+              _context14.prev = 1;
+              _context14.next = 4;
               return _db2.default.query(text, [req.params.cid]);
 
             case 4:
-              _ref27 = _context13.sent;
-              rows = _ref27.rows;
-              rowCount = _ref27.rowCount;
-              return _context13.abrupt("return", res.status(200).send({ rows: rows, rowCount: rowCount }));
+              _ref29 = _context14.sent;
+              rows = _ref29.rows;
+              rowCount = _ref29.rowCount;
+              return _context14.abrupt("return", res.status(200).send({ rows: rows, rowCount: rowCount }));
 
             case 10:
-              _context13.prev = 10;
-              _context13.t0 = _context13["catch"](1);
-              return _context13.abrupt("return", res.status(400).send(_context13.t0));
+              _context14.prev = 10;
+              _context14.t0 = _context14["catch"](1);
+              return _context14.abrupt("return", res.status(400).send(_context14.t0));
 
             case 13:
             case "end":
-              return _context13.stop();
+              return _context14.stop();
           }
         }
-      }, _callee13, this, [[1, 10]]);
+      }, _callee14, this, [[1, 10]]);
     }));
 
-    function getCountAdmin(_x25, _x26) {
-      return _ref26.apply(this, arguments);
+    function getCountAdmin(_x27, _x28) {
+      return _ref28.apply(this, arguments);
     }
 
     return getCountAdmin;
@@ -662,39 +709,39 @@ var player_belong_club = {
    * @returns {object} updated player_belong_club object
    */
   promoteToAdmin: function () {
-    var _ref28 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee14(req, res) {
-      var text, values, _ref29, rows;
+    var _ref30 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee15(req, res) {
+      var text, values, _ref31, rows;
 
-      return regeneratorRuntime.wrap(function _callee14$(_context14) {
+      return regeneratorRuntime.wrap(function _callee15$(_context15) {
         while (1) {
-          switch (_context14.prev = _context14.next) {
+          switch (_context15.prev = _context15.next) {
             case 0:
               text = "UPDATE player_belong_club SET is_admin = TRUE WHERE player = $1 AND club = $2 RETURNING *";
               values = [req.params.pid, req.params.cid];
-              _context14.prev = 2;
-              _context14.next = 5;
+              _context15.prev = 2;
+              _context15.next = 5;
               return _db2.default.query(text, values);
 
             case 5:
-              _ref29 = _context14.sent;
-              rows = _ref29.rows;
-              return _context14.abrupt("return", res.status(200).send(rows[0]));
+              _ref31 = _context15.sent;
+              rows = _ref31.rows;
+              return _context15.abrupt("return", res.status(200).send(rows[0]));
 
             case 10:
-              _context14.prev = 10;
-              _context14.t0 = _context14["catch"](2);
-              return _context14.abrupt("return", res.status(400).send(_context14.t0));
+              _context15.prev = 10;
+              _context15.t0 = _context15["catch"](2);
+              return _context15.abrupt("return", res.status(400).send(_context15.t0));
 
             case 13:
             case "end":
-              return _context14.stop();
+              return _context15.stop();
           }
         }
-      }, _callee14, this, [[2, 10]]);
+      }, _callee15, this, [[2, 10]]);
     }));
 
-    function promoteToAdmin(_x27, _x28) {
-      return _ref28.apply(this, arguments);
+    function promoteToAdmin(_x29, _x30) {
+      return _ref30.apply(this, arguments);
     }
 
     return promoteToAdmin;

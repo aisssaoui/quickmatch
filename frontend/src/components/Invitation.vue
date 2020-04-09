@@ -8,6 +8,8 @@
       <div v-if="InvitationsToShow.length != 0">
         <div class="tab_head tab_inv">Localisation</div>
         <div class="tab_head tab_inv">Date</div>
+        <div class="tab_head tab_inv">Nombre minimum de joueurs</div>
+        <div class="tab_head tab_inv">Nombre maximum de joueurs</div>
         <div class="tab_head tab_inv">Refuser</div>
         <div class="tab_head tab_inv">Accepter</div>
 
@@ -15,6 +17,8 @@
           <hr>
           <div class="tab_row tab_inv">{{ row.location }}</div>
           <div class="tab_row tab_inv">Le {{DayInFrench(row.repeat_day)}} de {{row.start_hour}} à {{row.end_hour}}</div>
+          <div class="tab_row tab_inv">{{ row.minimal_team_size }}</div>
+          <div class="tab_row tab_inv">{{ row.maximal_team_size }}</div>
           <div class="tab_btn tab_inv">
             <v-btn dark small rounded color="#666" v-on:click="declineInv(row.meet)">Refuser</v-btn>
           </div>
@@ -47,12 +51,18 @@
 
       <div v-if="InvitationsClubToShow.length != 0">
         <div class="tab_head tab_inv_c">Nom du Club</div>
+        <div class="tab_head tab_inv_c">Date de création</div>
+        <div class="tab_head tab_inv_c">Nombre de joueur(s)</div>
+        <div class="tab_head tab_inv_c">Nombre de match(s) joué(s)</div>
         <div class="tab_head tab_inv_c">Refuser</div>
         <div class="tab_head tab_inv_c">Accepter</div>
 
         <div v-for="row in InvitationsClubToShowPage" :key="row.id">
           <hr>
           <div class="tab_row tab_inv_c">{{ row.club_name }}</div>
+          <div class="tab_row tab_inv_c">{{ new Date(row.creation_date).toLocaleDateString('fr-FR') }}</div>
+          <div class="tab_row tab_inv_c">{{ row.nb_match_played }}</div>
+          <div class="tab_row tab_inv_c">{{ row.nb_player }}</div>
           <div class="tab_btn tab_inv_c">
             <v-btn dark small rounded color="#666" v-on:click="declineClubInv(row.player, row.club, row.club_name)">Refuser</v-btn>
           </div>
@@ -131,10 +141,10 @@
     font-size: 120%;
   }
   .tab_inv{
-    width: 20%;
+    width: 16%;
   }
   .tab_inv_c{
-    width: 15%;
+    width: 16%;
   }
 </style>
 

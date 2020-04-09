@@ -27,6 +27,8 @@
           <div v-if="clubsInToShow.length != 0">
             <div class="tab_head tab_v_clubs">Nom du Club</div>
             <div class="tab_head tab_v_clubs">Date de création</div>
+            <div class="tab_head tab_v_clubs">Nombre de joueur(s)</div>
+            <div class="tab_head tab_v_clubs">Nombre de match(s) joué(s)</div>
             <div class="tab_head tab_v_clubs">Club privé</div>
             <div class="tab_head tab_v_clubs">Administrateur</div>
             <div class="tab_head tab_v_clubs">Quitter le club</div>
@@ -36,6 +38,8 @@
               <hr>
               <div class="tab_row tab_v_clubs">{{ row.club_name }}</div>
               <div class="tab_row tab_v_clubs">{{ new Date(row.creation_date).toLocaleDateString('fr-FR') }}</div>
+              <div class="tab_row tab_v_clubs">{{ row.nb_player }}</div>
+              <div class="tab_row tab_v_clubs">{{ row.nb_match_played }}</div>
               <div v-if="row.private_club" class="tab_row tab_v_clubs">oui</div>
               <div v-else class="tab_row tab_v_clubs">non</div>
               <div v-if="row.is_admin" class="tab_row tab_v_clubs">oui</div>
@@ -87,12 +91,16 @@
           <div v-if="clubsNotInToShow.length != 0">
             <div class="tab_head tab_r_clubs">Nom du Club</div>
             <div class="tab_head tab_r_clubs">Date de création</div>
+            <div class="tab_head tab_r_clubs">Nombre de joueur(s)</div>
+            <div class="tab_head tab_r_clubs">Nombre de match(s) joué(s)</div>
             <div class="tab_head tab_r_clubs">Demander à rejoindre</div>
 
             <div v-for="row in clubsNotInToShowPage" :key="row.id">
               <hr>
               <div class="tab_row tab_r_clubs">{{ row.club_name }}</div>
               <div class="tab_row tab_r_clubs">{{ new Date(row.creation_date).toLocaleDateString('fr-FR') }}</div>
+              <div class="tab_row tab_r_clubs">{{ row.nb_player }}</div>
+              <div class="tab_row tab_r_clubs">{{ row.nb_match_played }}</div>
               <div class="tab_btn tab_r_clubs">
                 <v-btn dark small rounded color="#666" v-on:click="join_club(row.id, row.club_name)">Demander à rejoindre</v-btn>
               </div>
@@ -123,6 +131,27 @@
           <div style="margin-left: 5px; padding-top: 5px;">
             <v-btn dark small rounded align="left" color="#666" v-on:click="main_menu().then(response => {page_vc(1);})">Retourner au menu principale</v-btn>
           </div>
+          <div class="title">Vos statistiques au sein du club {{ name_club_switch }}</div>
+          <br>
+
+          <hr>
+          <div class="tab_head tab_g_stat_clubs">Nom</div>
+          <div class="tab_head tab_g_stat_clubs">Prénom</div>
+          <div class="tab_head tab_g_stat_clubs">Nombre de but(s)</div>
+          <div class="tab_head tab_g_stat_clubs">Nombre de but(s) encaissé(s)</div>
+          <div class="tab_head tab_g_stat_clubs">Nombre de match joué(s)</div>
+          <div class="tab_head tab_g_stat_clubs">Nombre de victoire(s)</div>
+
+          <br>
+          <div class="tab_row tab_g_stat_clubs">{{ playersInClubStatToShow.surname }}</div>
+          <div class="tab_row tab_g_stat_clubs">{{ playersInClubStatToShow.first_name }}</div>
+          <div class="tab_row tab_g_stat_clubs">{{ playersInClubStatToShow.scored_goals_club }}</div>
+          <div class="tab_row tab_g_stat_clubs">{{ playersInClubStatToShow.conceded_goals_club }}</div>
+          <div class="tab_row tab_g_stat_clubs">{{ playersInClubStatToShow.matches_played_club }}</div>
+          <div class="tab_row tab_g_stat_clubs">{{ playersInClubStatToShow.victories_club }}</div>
+        </div>
+
+        <div class="my_card">
           <div class="title">Joueurs du club {{ name_club_switch }}</div>
           <br>
 
@@ -280,10 +309,13 @@
     font-size: 120%;
   }
   .tab_v_clubs{
-    width: 16%;
+    width: 12%;
   }
   .tab_r_clubs{
-    width: 32%;
+    width: 19%;
+  }
+  .tab_g_stat_clubs{
+    width: 16%;
   }
   .tab_g_clubs{
     width: 10.6%;
@@ -320,6 +352,8 @@ export default {
       clubsNotInNbRow: 0,
       clubsNotInToShowPage: [],
       //////////////////////////////////////////////////////////////////////////
+      playersInClubStatToShow: {},
+      //
       playersInClubToShow: {},
       playersInClubNbPageMenu: 5, // si nombre plus grand que 4, utilisation des ..., ex les btn du bas : " < 1 ... 5 6 7 8 9 ... 18 > "
       playersInClubPage: 1,
@@ -606,6 +640,17 @@ export default {
       this.playersInClubToShow = playersIn.data.rows;
       this.playersInClubNbRow = playersIn.data.rowCount;
       this.playersInClubPageMax = Math.floor((playersIn.data.rowCount -1) / this.playersInClubNbRowPerPage) + 1;
+
+      const player_stat = await axios
+        .get("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/PlayerClubs/one" + this.id + "&" + cid, {responseType: "json"})
+        .catch(e => {
+          alert(
+            "Une erreur s'est produite, nous allons rafraichir la page, si le problème persiste, quittez la page"
+          );
+          this.$router.go();
+        });
+      this.playersInClubStatToShow = player_stat.data.rows[0];
+
       this.switch_menu = 'g';
     },
     page_left_gc(){
