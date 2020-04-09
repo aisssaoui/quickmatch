@@ -128,8 +128,11 @@
 
       <div v-if="switch_menu == 'g'">
         <div class="my_card">
-          <div style="margin-left: 5px; padding-top: 5px;">
+          <div style="margin-left: 5px; padding-top: 5px; display: inline-block">
             <v-btn dark small rounded align="left" color="#666" v-on:click="main_menu().then(response => {page_vc(1);})">Retourner au menu principale</v-btn>
+          </div>
+          <div v-if="admin_club_switch" style="margin-right: 5px; padding-top: 5px; display: inline-block; float: right">
+            <v-btn dark small rounded align="right" color="#666" v-on:click="main_menu().then(response => {page_vc(1);})">Modifier le club</v-btn>
           </div>
           <div class="title">Vos statistiques au sein du club {{ name_club_switch }}</div>
           <br>

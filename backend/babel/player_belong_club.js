@@ -47,7 +47,7 @@ const player_belong_club = {
            WHERE PBC.player = $1
          ) player_clubs
        ON counter_club.id = player_clubs.id
-       ORDER BY club_name, creation_date`;
+       ORDER BY is_admin DESC`;
     try {
       const { rows, rowCount } = await db.query(text, [req.params.id]);
       return res.status(200).send({ rows, rowCount });

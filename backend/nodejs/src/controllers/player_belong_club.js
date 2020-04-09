@@ -79,7 +79,7 @@ var player_belong_club = {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
-              text = "SELECT * FROM\n         (\n           SELECT C.id, COUNT(PBC.player) as nb_player FROM\n             club C\n             JOIN\n             player_belong_club PBC\n             ON C.id = PBC.club\n           GROUP BY C.id\n         ) counter_club\n       JOIN\n         (\n        \t SELECT * FROM\n             club C\n             JOIN\n             player_belong_club PBC\n             ON C.id = PBC.club\n           WHERE PBC.player = $1\n         ) player_clubs\n       ON counter_club.id = player_clubs.id\n       ORDER BY club_name, creation_date";
+              text = "SELECT * FROM\n         (\n           SELECT C.id, COUNT(PBC.player) as nb_player FROM\n             club C\n             JOIN\n             player_belong_club PBC\n             ON C.id = PBC.club\n           GROUP BY C.id\n         ) counter_club\n       JOIN\n         (\n        \t SELECT * FROM\n             club C\n             JOIN\n             player_belong_club PBC\n             ON C.id = PBC.club\n           WHERE PBC.player = $1\n         ) player_clubs\n       ON counter_club.id = player_clubs.id\n       ORDER BY is_admin DESC";
               _context2.prev = 1;
               _context2.next = 4;
               return _db2.default.query(text, [req.params.id]);
