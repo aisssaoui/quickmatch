@@ -26,7 +26,12 @@
         android:id="@+id/matchFragmentUI"
         android:name="com.example.quickmatch.content.match.MatchFragmentUI"
         android:label="fragment_matchs"
-        tools:layout="@layout/fragment_matchs" />
+        tools:layout="@layout/fragment_matchs" >
+        <action
+            android:id="@+id/action_matchFragmentUI_to_matchCreationFragmentUI"
+            app:destination="@id/matchCreationFragmentUI"
+            app:popUpTo="@+id/matchFragmentUI" />
+    </fragment>
     <fragment
         android:id="@+id/statFragmentUI"
         android:name="com.example.quickmatch.content.stat.StatFragmentUI"
@@ -40,6 +45,13 @@
         <action
             android:id="@+id/action_clubFragmentUI_to_clubListFragmentUI"
             app:destination="@id/clubListFragmentUI" />
+        <action
+            android:id="@+id/action_clubFragmentUI_to_clubCreationFragmentUI"
+            app:destination="@id/clubCreationFragmentUI" />
+        <action
+            android:id="@+id/action_clubFragmentUI_to_clubIntefaceFragment"
+            app:destination="@id/clubIntefaceFragment"
+            app:popUpTo="@+id/clubFragmentUI" />
     </fragment>
     <fragment
         android:id="@+id/settingFragmentUI"
@@ -57,6 +69,40 @@
     </fragment>
     <fragment
         android:id="@+id/clubListFragmentUI"
-        android:name="com.example.quickmatch.content.club.ClubListFragmentUI"
+        android:name="com.example.quickmatch.content.club.ClubJoinFragmentUI"
         android:label="ClubListFragmentUI" />
+    <fragment
+        android:id="@+id/clubCreationFragmentUI"
+        android:name="com.example.quickmatch.content.club.ClubCreationFragmentUI"
+        android:label="ClubCreationFragmentUI" >
+        <action
+            android:id="@+id/action_clubCreationFragmentUI_to_clubFragmentUI"
+            app:destination="@id/clubFragmentUI"
+            app:popUpTo="@+id/clubFragmentUI" />
+    </fragment>
+    <fragment
+        android:id="@+id/clubIntefaceFragment"
+        android:name="com.example.quickmatch.content.club.ClubInterfaceFragment"
+        android:label="ClubIntefaceFragment" >
+        <action
+            android:id="@+id/action_clubIntefaceFragment_to_clubFragmentUI"
+            app:destination="@id/clubFragmentUI"
+            app:popUpTo="@+id/homeFragmentUI" />
+        <argument
+            android:name="clubId"
+            app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/matchCreationFragmentUI"
+        android:name="com.example.quickmatch.content.match.MatchCreationFragmentUI"
+        android:label="MatchCreationFragmentUI" >
+        <action
+            android:id="@+id/action_matchCreationFragmentUI_to_matchFragmentUI"
+            app:destination="@id/matchFragmentUI"
+            app:popUpTo="@+id/matchFragmentUI" />
+    </fragment>
+    <fragment
+        android:id="@+id/invitationFragmentUI"
+        android:name="com.example.quickmatch.content.invitation.InvitationFragmentUI"
+        android:label="InvitationFragmentUI" />
 </navigation>

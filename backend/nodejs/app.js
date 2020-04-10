@@ -23,6 +23,9 @@ var _club2 = _interopRequireDefault(_club);
 var _invitation = require("./src/controllers/invitation");
 var _invitation2 = _interopRequireDefault(_invitation);
 
+var _invitation_club = require("./src/controllers/invitation_club");
+var _invitation_club2 = _interopRequireDefault(_invitation_club);
+
 // var _invitation_for_meet = require("./src/controllers/invitation_for_meet");
 // var _invitation_for_meet2 = _interopRequireDefault(_invitation_for_meet);
 
@@ -55,13 +58,13 @@ var app = (0, _express2.default)();
 app.use(_express2.default.json());
 app.use((0, _cors2.default)());
 
-app.get("/dbcontrol", function(req, res) {
+app.get("/dbcontrol", function (req, res) {
   return res
     .status(200)
     .send({ message: "YAY! Congratulations! Your first endpoint is working" });
 });
 
-app.get("/dbcontrol/test", function(req, res) {
+app.get("/dbcontrol/test", function (req, res) {
   res.send("Hello");
 });
 
@@ -99,44 +102,53 @@ app.put("/dbcontrol/api/v1/Invitations/:id", _invitation2.default.update);
 app.delete("/dbcontrol/api/v1/Invitations/:id", _invitation2.default.delete);
 app.get("/dbcontrol/api/v1/InvitationsRows", _invitation2.default.getAllRows);
 
+// Table Invitation_Club
+app.post(
+  "/dbcontrol/api/v1/InvitationClub/:pid&:cid",
+  _invitation_club2.default.create
+);
+app.get(
+  "/dbcontrol/api/v1/InvitationClub/:pid",
+  _invitation_club2.default.getPlayerInvitations
+);
+app.delete(
+  "/dbcontrol/api/v1/InvitationClub/:pid&:cid",
+  _invitation_club2.default.delete
+);
+
 // Table invitation_for_meet
 // app.post("/dbcontrol/api/v1/InvitationForMeet", _invitation_for_meet2.default.create);
 // app.get("/dbcontrol/api/v1/InvitationForMeet", _invitation_for_meet2.default.getAll);
 // app.get("/dbcontrol/api/v1/InvitationForMeet/:id", _invitation_for_meet2.default.getOne);
 // app.put("/dbcontrol/api/v1/InvitationForMeet/:id", _invitation_for_meet2.default.update);
 // app.delete("/dbcontrol/api/v1/InvitationForMeet/:id", _invitation_for_meet2.default.delete);
-//app.get("/dbcontrol/api/v1/Playersrows", _player2.default.getAllRows);
+// app.get("/dbcontrol/api/v1/Playersrows", _player2.default.getAllRows);
 
 // Table slot
 app.post("/dbcontrol/api/v1/Slots", _slot2.default.create);
 app.get("/dbcontrol/api/v1/Slots", _slot2.default.getAll);
 app.get("/dbcontrol/api/v1/Slots/:id", _slot2.default.getOne);
-//app.put("/dbcontrol/api/v1/Slots/:id", _slot2.default.update);
+app.put("/dbcontrol/api/v1/Slots/:id", _slot2.default.update);
 app.delete("/dbcontrol/api/v1/Slots/:id", _slot2.default.delete);
 app.get("/dbcontrol/api/v1/SlotsRows", _slot2.default.getAllRows);
+app.get(
+  "/dbcontrol/api/v1/Slots/:start/:end/:day",
+  _slot2.default.getByHoursAndRepeatDay
+);
 
 // Table meet_sheet
 app.post("/dbcontrol/api/v1/MeetsSheet", _meet_sheet2.default.create);
 app.get("/dbcontrol/api/v1/MeetsSheet", _meet_sheet2.default.getAll);
-app.get(
-  "/dbcontrol/api/v1/MeetsSheet/:player_mail_address",
-  _meet_sheet2.default.getOne
-);
-//app.put("/dbcontrol/api/v1/MeetsSheet/:player_mail_adress", _meet_sheet2.default.update);
-
-/* TODO : meetsheet getone avec l'@ mail ne marche pas */
-
-app.delete(
-  "/dbcontrol/api/v1/MeetsSheet/:player_mail_address",
-  _meet_sheet2.default.delete
-);
+app.get("/dbcontrol/api/v1/MeetsSheet/:pid", _meet_sheet2.default.getOne);
+app.put("/dbcontrol/api/v1/MeetsSheet/:pid", _meet_sheet2.default.update);
+app.delete("/dbcontrol/api/v1/MeetsSheet/:pid", _meet_sheet2.default.delete);
 app.get("/dbcontrol/api/v1/MeetsSheetRows", _meet_sheet2.default.getAllRows);
 
 // Table meet
 app.post("/dbcontrol/api/v1/Meets", _meet2.default.create);
 app.get("/dbcontrol/api/v1/Meets", _meet2.default.getAll);
 app.get("/dbcontrol/api/v1/Meets/:id", _meet2.default.getOne);
-// app.put("/dbcontrol/api/v1/Meets/:id", _meet2.default.update);
+app.put("/dbcontrol/api/v1/Meets/:id", _meet2.default.update);
 app.delete("/dbcontrol/api/v1/Meets/:id", _meet2.default.delete);
 app.get("/dbcontrol/api/v1/MeetsRows", _meet2.default.getAllRows);
 
@@ -150,12 +162,24 @@ app.get(
   _player_belong_club2.default.getPlayerClubsByPlayerID
 );
 app.get(
+  "/dbcontrol/api/v1/PlayerClubsRows/pid:id",
+  _player_belong_club2.default.getPlayerClubsByPlayerIDRows
+);
+app.get(
   "/dbcontrol/api/v1/PlayerClubs/npid:id",
   _player_belong_club2.default.NgetPlayerClubsByPlayerID
 );
 app.get(
+  "/dbcontrol/api/v1/PlayerClubsRows/npid:id",
+  _player_belong_club2.default.NgetPlayerClubsByPlayerIDRows
+);
+app.get(
   "/dbcontrol/api/v1/PlayerClubs/cid:id",
   _player_belong_club2.default.getPlayerClubsByClubID
+);
+app.get(
+  "/dbcontrol/api/v1/PlayerClubsRows/cid:id",
+  _player_belong_club2.default.getPlayerClubsByClubIDRows
 );
 app.get(
   "/dbcontrol/api/v1/PlayerClubs/ncid:id",
@@ -178,14 +202,15 @@ app.put(
   "/dbcontrol/api/v1/PlayerClubsPromoteToAdmin/:pid&:cid",
   _player_belong_club2.default.promoteToAdmin
 );
-app.get(
-  "/dbcontrol/api/v1/PlayerClubsRows",
-  _player_belong_club2.default.getAllRows
-);
 
+// Calendar related routes
 app.get(
   "/dbcontrol/api/v1/CalendarBPlayer/:id",
   _calendar_db2.default.getByPlayer
+);
+app.get(
+  "/dbcontrol/api/v1/CalendarBPlayerRows/:id",
+  _calendar_db2.default.getByPlayerRows
 );
 app.get("/dbcontrol/api/v1/CalendarBMeet/:id", _calendar_db2.default.getByMeet);
 app.get(

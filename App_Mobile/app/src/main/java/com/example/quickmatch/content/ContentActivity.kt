@@ -5,7 +5,10 @@ import android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP
 import android.os.Bundle
 import android.view.Gravity
 import android.view.MenuItem
+import android.view.View
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
@@ -31,6 +34,7 @@ import timber.log.Timber
 private lateinit var contentDrawerLayout: DrawerLayout
 lateinit var player: PlayerObject
 private lateinit var navigationView: NavigationView
+private lateinit var navHeader: View
 
 class ContentActivity : AppCompatActivity()/*, NavigationView.OnNavigationItemSelectedListener */{
 
@@ -44,6 +48,7 @@ class ContentActivity : AppCompatActivity()/*, NavigationView.OnNavigationItemSe
         contentDrawerLayout = binding.drawerLayout
         player = intent.getParcelableExtra("player")
         navigationView = binding.navView
+        navHeader = navigationView.getHeaderView(0)
 
         //navigationView.setNavigationItemSelectedListener { item -> onNavigationItemSelected(item) }
 
@@ -54,6 +59,7 @@ class ContentActivity : AppCompatActivity()/*, NavigationView.OnNavigationItemSe
         /* Setup navigation_access bar, with drawer menu */
         NavigationUI.setupActionBarWithNavController(this, navController, drawerLayout)
         NavigationUI.setupWithNavController(binding.navView, navController)
+
 
         //fragment = HomeFragmentUI()
     }

@@ -5,27 +5,27 @@
     </v-btn>
     <v-divider vertical></v-divider>
 
-    <v-btn to="/calendar" text>
+    <v-btn v-if="isSignedIn" to="/calendar" text>
       <v-icon dark left>mdi-calendar-clock</v-icon>Agenda
     </v-btn>
     <v-divider vertical></v-divider>
 
-    <v-btn to="/stat" text>
+    <v-btn v-if="isSignedIn" to="/stat" text>
       <v-icon dark left>mdi-poll</v-icon>Statistiques
     </v-btn>
     <v-divider vertical></v-divider>
 
-    <v-btn to="/match" text>
+    <v-btn v-if="isSignedIn" to="/match" text>
       <v-icon dark left>mdi-trophy-outline</v-icon>Matchs
     </v-btn>
     <v-divider vertical></v-divider>
 
-    <v-btn to="/profile" text>
+    <v-btn v-if="isSignedIn" to="/profile" text>
       <v-icon dark left>mdi-account-outline</v-icon>Profil
     </v-btn>
     <v-divider vertical></v-divider>
 
-    <v-btn to="/club" text>
+    <v-btn v-if="isSignedIn" to="/club" text>
       <v-icon dark left>mdi-account-outline</v-icon>Clubs
     </v-btn>
     <v-divider vertical></v-divider>

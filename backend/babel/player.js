@@ -16,7 +16,7 @@ const Player = {
     const values = [
       req.body.surname,
       req.body.first_name,
-      req.body.mail_adress,
+      req.body.mail_address,
       req.body.phone_number,
       req.body.pseudo,
       req.body.mdp,
@@ -198,7 +198,7 @@ const Player = {
    * Delete A Player
    * @param {object} req
    * @param {object} res
-   * @returns {void} return statuc code 204
+   * @returns {void} return status code 204
    */
   async delete(req, res) {
     const deleteQuery = "DELETE FROM player WHERE id=$1 RETURNING *";

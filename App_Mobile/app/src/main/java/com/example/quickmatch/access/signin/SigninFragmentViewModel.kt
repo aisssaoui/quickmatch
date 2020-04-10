@@ -11,10 +11,8 @@ import kotlinx.coroutines.*
 import timber.log.Timber
 
 /* enum classes for status check on requests */
-enum class SigninMailStatus { ACCOUNT_EXISTS, MAIL_VALID, LOADING }
-enum class SigninPseudoStatus { PSEUDO_EXISTS, PSEUDO_VALID, LOADING }
-enum class SigninPhoneNumberStatus { PHONE_NUMBER_EXISTS, PHONE_NUMBER_VALID, LOADING }
-enum class SigninStatus { NETWORK_ERROR, DONE }
+enum class SigninCheckStatus { EXISTS, VALID, LOADING }
+enum class SigninStatus { NETWORK_ERROR, DONE, LOADING }
 
 class SigninFragmentViewModel : ViewModel() {
 
@@ -54,19 +52,29 @@ class SigninFragmentViewModel : ViewModel() {
         get() = _signinStatus
 
     // Result of the mailCheck query
-    private val _mailStatus = MutableLiveData<SigninMailStatus>()
-    val mailStatus : LiveData<SigninMailStatus>
+    private val _mailStatus = MutableLiveData<SigninCheckStatus>()
+    val mailStatus : LiveData<SigninCheckStatus>
         get() = _mailStatus
 
     // Result of the pseudoCheck query
-    private val _pseudoStatus = MutableLiveData<SigninPseudoStatus>()
-    val pseudoStatus : LiveData<SigninPseudoStatus>
+    private val _pseudoStatus = MutableLiveData<SigninCheckStatus>()
+    val pseudoStatus : LiveData<SigninCheckStatus>
         get() = _pseudoStatus
 
     // Result of the phoneCheck query
-    private val _phoneNumberStatus = MutableLiveData<SigninPhoneNumberStatus>()
-    val phoneNumberStatus : LiveData<SigninPhoneNumberStatus>
+    private val _phoneNumberStatus = MutableLiveData<SigninCheckStatus>()
+    val phoneNumberStatus : LiveData<SigninCheckStatus>
         get() = _phoneNumberStatus
+
+    /* Mutable map containing state of each unicity check */
+    val mapUnicityChecks = MutableLiveData<MutableMap<String, Boolean>>()
+    //val mapUnicityChecks : LiveData<MutableMap<String, Boolean>>
+        //get() = _mapUnicityChecks
+
+    /* Boolean indicating if the infos given allow the user to signin */
+    private val _authorizedToSignin = MutableLiveData<Boolean>()
+    val authorizedToSignin : LiveData<Boolean>
+        get() = _authorizedToSignin
 
     /* Coroutine needed instances */
 
@@ -76,7 +84,24 @@ class SigninFragmentViewModel : ViewModel() {
     // Uses main thread coz retrofit works itself on background threads
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
+    /* Player object received from database */
+    private var _player : PlayerObject? = null
+    val player : PlayerObject?
+        get() = _player
+
+    init {
+        _authorizedToSignin.value = false
+    }
+
     /* Methods */
+
+    /* set authorization of signing in method */
+    fun checkUnicityState() {
+        val status = listOf(_mailStatus.value, _pseudoStatus.value, _phoneNumberStatus.value)
+        Timber.i(status.toString())
+        _authorizedToSignin.value = SigninCheckStatus.EXISTS !in status &&
+                SigninCheckStatus.LOADING !in status
+    }
 
     /* Check format for pseudo */
     fun checkFormatPseudo(pseudo: String) {
@@ -120,19 +145,19 @@ class SigninFragmentViewModel : ViewModel() {
     /* request to check if the mail typed already exists */
     private fun checkMailAddress(mailAddress: String) {
 
-        _mailStatus.value = SigninMailStatus.LOADING
+        _mailStatus.value = SigninCheckStatus.LOADING
 
         coroutineScope.launch {
 
             try { // Case request gives an existing player
 
                 var result = DatabaseApi.retrofitService.getPlayerByMail(mailAddress)
-                _mailStatus.value  = SigninMailStatus.ACCOUNT_EXISTS
+                _mailStatus.value  = SigninCheckStatus.EXISTS
 
             } catch (t : Throwable) { // Case we get an error
 
                 Timber.i( t.message + " mail")
-                _mailStatus.value = SigninMailStatus.MAIL_VALID
+                _mailStatus.value = SigninCheckStatus.VALID
 
             }
         }
@@ -141,60 +166,56 @@ class SigninFragmentViewModel : ViewModel() {
     /* request to check if the pseudo typed already exists */
     private fun checkPseudo(pseudo: String) {
 
-        _pseudoStatus.value = SigninPseudoStatus.LOADING
+        _pseudoStatus.value = SigninCheckStatus.LOADING
 
         coroutineScope.launch {
 
             try { // Case request gives an existing player
 
                 var result = DatabaseApi.retrofitService.getPlayerByPseudo(pseudo)
-                _pseudoStatus.value  = SigninPseudoStatus.PSEUDO_EXISTS
-
+                _pseudoStatus.value  = SigninCheckStatus.EXISTS
             } catch (t : Throwable) { // Case we get an error
 
                 Timber.i(t.message + " pseudo")
-                _pseudoStatus.value = SigninPseudoStatus.PSEUDO_VALID
+                _pseudoStatus.value = SigninCheckStatus.VALID
 
             }
         }
     }
 
-    //TODO uncomment when route is available
-    /*
-    /* request to check if the pseudo typed already exists */
-    private fun checkPhoneNumber(phoneNumber: String?) {
 
-        // Check phone number format
-        if(phoneNumber.isNullOrEmpty()) {
-            _phoneNumberStatus.value = SigninPhoneNumberStatus.WRONG_FORMAT
-            return
-        }
+    /* request to check if the phone number typed already exists */
+    private fun checkPhoneNumber(phoneNumber: String) {
 
         coroutineScope.launch {
+
+            _phoneNumberStatus.value = SigninCheckStatus.LOADING
 
             try { // Case request gives an existing player
 
                 var result = DatabaseApi.retrofitService.getPlayerByPhoneNumber(phoneNumber)
-                _phoneNumberStatus.value  = SigninPhoneNumberStatus.PHONE_NUMBER_EXISTS
+                _phoneNumberStatus.value  = SigninCheckStatus.EXISTS
 
             } catch (t : Throwable) { // Case we get an error
 
                 Timber.i(t.message + " phone")
-                _phoneNumberStatus.value = SigninPhoneNumberStatus.PHONE_NUMBER_VALID
+                _phoneNumberStatus.value = SigninCheckStatus.VALID
 
             }
         }
-    }*/
+    }
 
+    fun checkUnicity(mailAddress: String, pseudo: String, phoneNumber: String){
+
+        /* Launch check requests */
+        checkMailAddress(mailAddress)
+        checkPseudo(pseudo)
+        checkPhoneNumber(phoneNumber)
+    }
 
     /* function checking the validity of unique informations and then posting the new player to the remote server */
     fun tryToSignIn(name : String, firstName : String, pseudo : String, mailAddress : String,
                     password : String, passwordCheck: String, phoneNumber : String) {
-
-        /* Check unicity for unique fields */
-        checkMailAddress(mailAddress)
-        checkPseudo(pseudo)
-        //checkPhoneNumber(phoneNumber)
 
         /* Parse phone number */
         val finalPhoneNumber = FormatUtils.parsePhoneNumber(phoneNumber)
@@ -205,19 +226,18 @@ class SigninFragmentViewModel : ViewModel() {
         /* Player that will be posted to the database */
         var newPlayerObject = PlayerObject(null, name, firstName, pseudo, hashedPassword, mailAddress, finalPhoneNumber,
                 0, 0, 0, 0,
-                null, null )
+                null, null, null, null)
 
-        //Timber.i(newPlayerObject.toString())
+        Timber.i(newPlayerObject.toString())
 
         coroutineScope.launch {
 
-            var firstResult : PlayerObject? = null
+            _signinStatus.value = SigninStatus.LOADING
 
             try {
 
-                firstResult = DatabaseApi.retrofitService.addPlayer(newPlayerObject)
-
-                Timber.i(firstResult.toString())
+                _player = DatabaseApi.retrofitService.addPlayer(newPlayerObject)
+                Timber.i(_player.toString())
 
             } catch (t: Throwable) {
 
@@ -225,19 +245,17 @@ class SigninFragmentViewModel : ViewModel() {
                 _signinStatus.value = SigninStatus.NETWORK_ERROR
             }
 
-            if (firstResult == null) return@launch
+            if (_player == null) return@launch
+
+            _player!!.password = HashUtils.sha512(password + _player!!.id.toString())
+            Timber.i(_player.toString())
 
             try { /* update salted password */
 
-                var finalPlayerObject = firstResult!!
-                finalPlayerObject.password = HashUtils.sha512(password + firstResult.id.toString())
-
-                Timber.i(finalPlayerObject.password)
-
-                var result = DatabaseApi.retrofitService.updatePlayerById(finalPlayerObject.id!!, finalPlayerObject)
+                _player = DatabaseApi.retrofitService.updatePlayerById(_player!!.id!!, _player!!)
 
                 _signinStatus.value = SigninStatus.DONE
-                Timber.i(result.toString())
+                Timber.i(_player.toString())
 
             } catch (t: Throwable) {
 
@@ -246,6 +264,10 @@ class SigninFragmentViewModel : ViewModel() {
 
             }
         }
+    }
+
+    fun resetSigninStatus() {
+        _signinStatus.value = null
     }
 
 }

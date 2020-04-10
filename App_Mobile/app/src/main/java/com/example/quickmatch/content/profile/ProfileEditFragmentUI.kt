@@ -27,8 +27,6 @@ class ProfileEditFragmentUI : BaseFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
 
-        getActionBar()?.hide()
-
         val binding : FragmentProfileEditBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_profile_edit, container, false)
         val viewModel = ViewModelProviders.of(this).get(ProfileFragmentViewModel::class.java)
 
@@ -101,5 +99,8 @@ class ProfileEditFragmentUI : BaseFragment() {
         return binding.root
     }
 
-
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        getActionBar()?.title = "Modifier mon profil"
+    }
 }

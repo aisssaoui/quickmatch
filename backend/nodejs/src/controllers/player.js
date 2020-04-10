@@ -1,7 +1,7 @@
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+  value: true,
 });
 
 var _moment = require("moment");
@@ -17,9 +17,9 @@ function _interopRequireDefault(obj) {
 }
 
 function _asyncToGenerator(fn) {
-  return function() {
+  return function () {
     var gen = fn.apply(this, arguments);
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
       function step(key, arg) {
         try {
           var info = gen[key](arg);
@@ -32,10 +32,10 @@ function _asyncToGenerator(fn) {
           resolve(value);
         } else {
           return Promise.resolve(value).then(
-            function(value) {
+            function (value) {
               step("next", value);
             },
-            function(err) {
+            function (err) {
               step("throw", err);
             }
           );
@@ -54,7 +54,7 @@ var Player = {
    * @param {object} res
    * @returns {object} Player object
    */
-  create: (function() {
+  create: (function () {
     var _ref = _asyncToGenerator(
       /*#__PURE__*/ regeneratorRuntime.mark(function _callee(req, res) {
         var text, values, _ref2, rows;
@@ -69,11 +69,11 @@ var Player = {
                   values = [
                     req.body.surname,
                     req.body.first_name,
-                    req.body.mail_adress,
+                    req.body.mail_address,
                     req.body.phone_number,
                     req.body.pseudo,
                     req.body.mdp,
-                    req.body.avatar
+                    req.body.avatar,
                   ];
                   _context.prev = 2;
                   _context.next = 5;
@@ -121,7 +121,7 @@ var Player = {
    * @param {object} res
    * @returns {object} players array
    */
-  getAll: (function() {
+  getAll: (function () {
     var _ref3 = _asyncToGenerator(
       /*#__PURE__*/ regeneratorRuntime.mark(function _callee2(req, res) {
         var findAllQuery, _ref4, rows, rowCount;
@@ -179,7 +179,7 @@ var Player = {
    * @param {object} res
    * @returns {object} players array
    */
-  getAllRows: (function() {
+  getAllRows: (function () {
     var _ref5 = _asyncToGenerator(
       /*#__PURE__*/ regeneratorRuntime.mark(function _callee3(req, res) {
         var findAllQuery, a;
@@ -234,7 +234,7 @@ var Player = {
    * @param {object} res
    * @returns {object} player object
    */
-  getByID: (function() {
+  getByID: (function () {
     var _ref6 = _asyncToGenerator(
       /*#__PURE__*/ regeneratorRuntime.mark(function _callee4(req, res) {
         var text, _ref7, rows;
@@ -303,7 +303,7 @@ var Player = {
    * @param {object} res
    * @returns {object} player object
    */
-  getByPseudo: (function() {
+  getByPseudo: (function () {
     var _ref8 = _asyncToGenerator(
       /*#__PURE__*/ regeneratorRuntime.mark(function _callee5(req, res) {
         var text, _ref9, rows;
@@ -372,7 +372,7 @@ var Player = {
    * @param {object} res
    * @returns {object} player object
    */
-  getByMail: (function() {
+  getByMail: (function () {
     var _ref10 = _asyncToGenerator(
       /*#__PURE__*/ regeneratorRuntime.mark(function _callee6(req, res) {
         var text, _ref11, rows;
@@ -441,7 +441,7 @@ var Player = {
    * @param {object} res
    * @returns {object} player object
    */
-  getByPhone: (function() {
+  getByPhone: (function () {
     var _ref12 = _asyncToGenerator(
       /*#__PURE__*/ regeneratorRuntime.mark(function _callee7(req, res) {
         var text, _ref13, rows;
@@ -510,7 +510,7 @@ var Player = {
    * @param {object} res
    * @returns {object} player_stat object
    */
-  getPlayerStat: (function() {
+  getPlayerStat: (function () {
     var _ref14 = _asyncToGenerator(
       /*#__PURE__*/ regeneratorRuntime.mark(function _callee8(req, res) {
         var text, _ref15, rows, rowCount;
@@ -569,7 +569,7 @@ var Player = {
    * @param {object} res
    * @returns {object} updated Player
    */
-  update: (function() {
+  update: (function () {
     var _ref16 = _asyncToGenerator(
       /*#__PURE__*/ regeneratorRuntime.mark(function _callee9(req, res) {
         var findOneQuery, updateOneQuery, _ref17, rows, values, response;
@@ -616,7 +616,7 @@ var Player = {
                     req.body.private_profil === null
                       ? rows[0].private_profil
                       : req.body.private_profil,
-                    req.params.id
+                    req.params.id,
                   ];
                   _context9.next = 12;
                   return _db2.default.query(updateOneQuery, values);
@@ -660,9 +660,9 @@ var Player = {
    * Delete A Player
    * @param {object} req
    * @param {object} res
-   * @returns {void} return statuc code 204
+   * @returns {void} return status code 204
    */
-  delete: (function() {
+  delete: (function () {
     var _ref18 = _asyncToGenerator(
       /*#__PURE__*/ regeneratorRuntime.mark(function _callee10(req, res) {
         var deleteQuery, _ref19, rows;
@@ -694,7 +694,7 @@ var Player = {
                 case 8:
                   return _context10.abrupt(
                     "return",
-                    res.status(204).send({ message: "deleted" })
+                    res.status(200).send({ message: "deleted" })
                   );
 
                 case 11:
@@ -723,7 +723,7 @@ var Player = {
     }
 
     return _delete;
-  })()
+  })(),
 };
 
 exports.default = Player;
