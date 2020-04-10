@@ -63,6 +63,7 @@
             <v-btn to="/signin" rounded outlined block>Inscrivez vous !</v-btn>
           </v-col>
         </v-row>
+        <!--
         <v-divider></v-divider>
         <v-layout justify-center="true">
           <v-card-title align="center">Mot de passe oublié ?</v-card-title>
@@ -72,6 +73,7 @@
             <v-btn rounded outlined block>Changer de mot de passe</v-btn>
           </v-col>
         </v-row>
+        -->
       </v-card>
     </v-layout>
   </v-container>

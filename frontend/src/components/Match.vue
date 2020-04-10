@@ -40,7 +40,7 @@
               <div class="tab_v_matchs">{{ row.day }}</div>
               <div class="tab_v_matchs">{{ row.hour }}</div>
               <div class="tab_v_matchs">{{ row.location }}</div>
-              
+
               <div class="btn_v_matchs">
                 <v-btn
                   dark
@@ -53,31 +53,31 @@
               <div class="tab_v_matchs">{{ row.decision }}</div>
 
               <div v-if="row.decision == 'En Attente'" class="btn_v_matchs">
-                  <v-btn 
-                    dark 
-                    small 
-                    rounded 
+                  <v-btn
+                    dark
+                    small
+                    rounded
                     color="green"
                     @click="AcceptInvit(row.meetid)"
                   >Accepter</v-btn>
-                  <v-btn 
-                    dark 
-                    small 
-                    rounded 
+                  <v-btn
+                    dark
+                    small
+                    rounded
                     color="red"
                   @click="DeclineInvit(row.meetid)"
                   >Refuser</v-btn>
               </div>
               <div v-else class="btn_v_matchs">
-                                    <v-btn 
-                    dark 
-                    small 
-                    rounded 
+                                    <v-btn
+                    dark
+                    small
+                    rounded
                     color="grey"
                   @click="ModifyInvit(row.meetid)"
                   >Modifier</v-btn>
               </div>
-              
+
             </div>
             <br />
 
@@ -173,7 +173,6 @@
   </div>
 </template>
 
-
 <style>
 .pages {
   text-align: center;
@@ -208,15 +207,13 @@
 }
 .tab_head_v_matchs,
 .tab_v_matchs,
-.btn_v_matchs { 
+.btn_v_matchs {
   display: inline-block;
   overflow: hidden;
   text-overflow: ellipsis;
   margin-top: 5px;
   margin-left: 5px;
 }
-
-
 .tab_head_v_matchs {
   font-weight: bold;
   color: white;
@@ -230,10 +227,7 @@
 .btn_v_matchs {
   width: 16%;
 }
-
 </style>
-
-
 
 <script>
 import store from "../store";
@@ -278,7 +272,6 @@ export default {
       ]
     };
   },
-
   async created() {
     var matchsIn = await axios
       .get(
@@ -338,7 +331,6 @@ export default {
     );
     this.pseudo = pseudodata.data.pseudo;
   },
-
   computed: {
     isSignedIn() {
       store.dispatch("isSignedIn");
@@ -452,7 +444,7 @@ export default {
 
           });
         }
-        
+
         else if (this.checkDecision(declinedTable[i])) {
           this.matchs.push({
             club: "club" + i + "!",
@@ -519,7 +511,6 @@ export default {
         this.page_vc(this.matchsInPage + 1);
       }
     },
-
     page_vc(n) {
       document.getElementById("m" + this.matchsInPage).style.backgroundColor =
         "white";
@@ -678,4 +669,3 @@ export default {
   }
 };
 </script>
-

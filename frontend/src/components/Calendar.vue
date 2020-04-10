@@ -379,7 +379,7 @@ export default {
               gameDate.format("YYYY-MM-DD") +
               " " +
               this.byPlayerTable.rows[i].end_hour,
-            color: color,
+            color: "blue",
             meetid: this.byPlayerTable.rows[i].meet,
             inv: true
           });
@@ -486,6 +486,9 @@ export default {
       return d > 3 && d < 21
         ? "th"
         : ["th", "st", "nd", "rd", "th", "th", "th", "th", "th", "th"][d % 10];
+    },
+    surname() {
+      return store.getters.surname();
     }
   },
   async created() {

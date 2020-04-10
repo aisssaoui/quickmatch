@@ -33,12 +33,22 @@ const invitation_club = {
    * @returns {object} inviations array
    */
   async getPlayerInvitations(req, res) {
-    const text = `SELECT I.id, I.player, I.club, C.club_name FROM
+    const text = `SELECT I.id, I.player, I.club, C.club_name, C.creation_date, C.nb_match_played, counter_clubs.nb_player FROM
                     Invitation_Club I
                     JOIN
                     Club C
                     ON
                     I.club = C.id
+                    JOIN
+                    (
+                      SELECT C.id, COUNT(PBC.player) as nb_player FROM
+                        club C
+                        JOIN
+                        player_belong_club PBC
+                        ON C.id = PBC.club
+                      GROUP BY C.id
+                    ) counter_clubs
+                    ON counter_clubs.id = C.id
                   WHERE I.player = $1`;
     const values = [req.params.pid];
 
