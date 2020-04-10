@@ -70,8 +70,8 @@ const Club = {
                         player_belong_club PBC
                         ON C.id = PBC.club
                       GROUP BY C.id, C.club_name, C.creation_date, C.private_club, C.nb_match_played
-                    )
-                  WHERE C.id = $1`;
+                    ) one_club
+                  WHERE one_club.id = $1`;
     try {
       const { rows } = await db.query(text, [req.params.id]);
       if (!rows[0]) {

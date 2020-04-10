@@ -168,7 +168,7 @@ var Club = {
         while (1) {
           switch (_context4.prev = _context4.next) {
             case 0:
-              text = "SELECT * FROM\n                    (\n                      SELECT C.id, C.club_name, C.creation_date, C.private_club, C.nb_match_played, COUNT(PBC.player) as nb_player FROM\n                        club C\n                        JOIN\n                        player_belong_club PBC\n                        ON C.id = PBC.club\n                      GROUP BY C.id, C.club_name, C.creation_date, C.private_club, C.nb_match_played\n                    )\n                  WHERE C.id = $1";
+              text = "SELECT * FROM\n                    (\n                      SELECT C.id, C.club_name, C.creation_date, C.private_club, C.nb_match_played, COUNT(PBC.player) as nb_player FROM\n                        club C\n                        JOIN\n                        player_belong_club PBC\n                        ON C.id = PBC.club\n                      GROUP BY C.id, C.club_name, C.creation_date, C.private_club, C.nb_match_played\n                    ) one_club\n                  WHERE one_club.id = $1";
               _context4.prev = 1;
               _context4.next = 4;
               return _db2.default.query(text, [req.params.id]);
