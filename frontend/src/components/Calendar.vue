@@ -379,7 +379,7 @@ export default {
               gameDate.format("YYYY-MM-DD") +
               " " +
               this.byPlayerTable.rows[i].end_hour,
-            color: color,
+            color: "blue",
             meetid: this.byPlayerTable.rows[i].meet,
             inv: true
           });
