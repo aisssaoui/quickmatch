@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.viewpager.widget.ViewPager
 import com.example.quickmatch.BaseFragment
 
 import com.example.quickmatch.R
@@ -14,6 +15,7 @@ import com.example.quickmatch.databinding.FragmentInvitationBinding
 class InvitationFragmentUI : BaseFragment() {
 
     private lateinit var viewModel: InvitationFragmentViewModel
+    private lateinit var viewPager: ViewPager
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
@@ -21,6 +23,9 @@ class InvitationFragmentUI : BaseFragment() {
         viewModel = ViewModelProviders.of(this).get(InvitationFragmentViewModel::class.java)
 
         binding.viewModel = viewModel
+
+        viewPager = binding.pager
+        viewPager.adapter = InvitationPagerAdapter(this.childFragmentManager)
 
         return binding.root
 

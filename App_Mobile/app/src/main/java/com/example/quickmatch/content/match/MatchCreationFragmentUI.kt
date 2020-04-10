@@ -42,6 +42,7 @@ class MatchCreationFragmentUI : BaseFragment() {
             ArrayAdapter(context!!, android.R.layout.simple_list_item_1, clubNames!!).also { adapter ->
                 binding.autoCompleteInput.setAdapter(adapter)
             }
+            Timber.i(clubNames.toString())
         })
 
 

@@ -4,7 +4,7 @@ import com.squareup.moshi.Json
 
 data class PlayerMeetObject(
     @Json(name = "meet") val meetId : Int,
-    @Json(name = "player") val player : Int,
+    @Json(name = "player") val playerId : Int,
     val played : Boolean?,
     val status : Boolean?,
     val won : Boolean?,

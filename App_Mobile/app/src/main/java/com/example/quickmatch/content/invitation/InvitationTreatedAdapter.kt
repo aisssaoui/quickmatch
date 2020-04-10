@@ -1,15 +1,15 @@
-package com.example.quickmatch.content.match
+package com.example.quickmatch.content.invitation
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.quickmatch.databinding.ListMatchFinishedItemBinding
+import com.example.quickmatch.databinding.ListInvitationTreatedItemBinding
 import com.example.quickmatch.network.PlayerMeetObject
 
-
-class MatchFinishedAdapter(val clickListener: MatchFinishedClickListener) : ListAdapter<PlayerMeetObject, MatchFinishedAdapter.ViewHolder>(MatchFinishedDiffCallback()) {
+class InvitationTreatedAdapter(val clickListener: InvitationTreatedClickListener)
+    : ListAdapter<PlayerMeetObject, InvitationTreatedAdapter.ViewHolder>(InvitationTreateatedDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder.from(parent)
@@ -20,11 +20,11 @@ class MatchFinishedAdapter(val clickListener: MatchFinishedClickListener) : List
         holder.bind(item, clickListener)
     }
 
-    class ViewHolder private constructor(val binding: ListMatchFinishedItemBinding): RecyclerView.ViewHolder(binding.root) {
+    class ViewHolder private constructor(val binding: ListInvitationTreatedItemBinding): RecyclerView.ViewHolder(binding.root) {
 
         /* bind view values to the datas */
-        fun bind(item: PlayerMeetObject, clickListener: MatchFinishedClickListener) {
-            binding.match = item
+        fun bind(item: PlayerMeetObject, clickListener: InvitationTreatedClickListener) {
+            binding.invitation = item
             binding.clickListener = clickListener
             binding.executePendingBindings()
         }
@@ -33,7 +33,7 @@ class MatchFinishedAdapter(val clickListener: MatchFinishedClickListener) : List
         companion object {
             fun from(parent: ViewGroup): ViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
-                val binding = ListMatchFinishedItemBinding.inflate(layoutInflater, parent, false)
+                val binding = ListInvitationTreatedItemBinding.inflate(layoutInflater, parent, false)
                 return ViewHolder(binding)
             }
         }
@@ -41,9 +41,9 @@ class MatchFinishedAdapter(val clickListener: MatchFinishedClickListener) : List
     }
 }
 
-class MatchFinishedDiffCallback : DiffUtil.ItemCallback<PlayerMeetObject>() {
+class InvitationTreateatedDiffCallback : DiffUtil.ItemCallback<PlayerMeetObject>() {
     override fun areItemsTheSame(oldItem: PlayerMeetObject, newItem: PlayerMeetObject): Boolean {
-        return oldItem.meetId == newItem.meetId && oldItem.playerId == newItem.playerId
+        return oldItem.playerId == newItem.playerId && oldItem.meetId == newItem.meetId
     }
 
     override fun areContentsTheSame(oldItem: PlayerMeetObject, newItem: PlayerMeetObject): Boolean {
@@ -52,9 +52,8 @@ class MatchFinishedDiffCallback : DiffUtil.ItemCallback<PlayerMeetObject>() {
 
 
 }
-class MatchFinishedClickListener(val clickListener: (matchId: Int?) -> Unit) {
-    fun onClick(match: PlayerMeetObject) {
-        return clickListener(match.meetId)
+class InvitationTreatedClickListener(val clickListener: (invitationId: Int?) -> Unit) {
+    fun onClick(invitation: PlayerMeetObject) {
+        return clickListener(invitation.meetId)
     }
 }
-
