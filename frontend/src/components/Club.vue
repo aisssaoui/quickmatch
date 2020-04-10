@@ -17,7 +17,7 @@
             <v-btn dark rounded align="left" color="#666" v-on:click="create_club">Créer le club</v-btn>
           </div>
 
-          <br><hr>
+          <br><br>
         </div>
 
         <div class="my_card">
@@ -48,10 +48,10 @@
                 <v-btn dark small rounded color="#666" v-on:click="leave_club(row.id, row.club_name, row.is_admin)">Quitter le club</v-btn>
               </div>
               <div class="tab_btn tab_v_clubs" v-if="row.is_admin" >
-                <v-btn dark small rounded color="#666" v-on:click="manage_club_menu(row.club_name, row.id, row.is_admin).then(response => {page_gc(1);})">Gérer le club</v-btn>
+                <v-btn dark small rounded color="#666" v-on:click="manage_club_menu(row.club_name, row.id, row.is_admin, row.private_club).then(response => {page_gc(1);})">Gérer le club</v-btn>
               </div>
               <div class="tab_btn tab_v_clubs" v-else >
-                <v-btn dark small rounded color="#666" v-on:click="manage_club_menu(row.club_name, row.id, row.is_admin).then(response => {page_gc(1);})">Voir le club</v-btn>
+                <v-btn dark small rounded color="#666" v-on:click="manage_club_menu(row.club_name, row.id, row.is_admin, row.private_club).then(response => {page_gc(1);})">Voir le club</v-btn>
               </div>
             </div>
             <br>
@@ -131,9 +131,29 @@
           <div style="margin-left: 5px; padding-top: 5px; display: inline-block">
             <v-btn dark small rounded align="left" color="#666" v-on:click="main_menu().then(response => {page_vc(1);})">Retourner au menu principale</v-btn>
           </div>
-          <div v-if="admin_club_switch" style="margin-right: 5px; padding-top: 5px; display: inline-block; float: right">
-            <v-btn dark small rounded align="right" color="#666" v-on:click="main_menu().then(response => {page_vc(1);})">Modifier le club</v-btn>
+          <div v-if="!update_club" style="margin-right: 5px; padding-top: 5px; display: inline-block; float: right">
+            <v-btn dark small rounded align="right" color="#666" v-on:click="update_club_btn()">Modifier le club</v-btn>
           </div>
+          <div v-else style="margin-right: 5px; padding-top: 5px; display: inline-block; float: right">
+            <v-btn dark small rounded align="right" color="#666" v-on:click="update_club_btn()">Annuler</v-btn>
+          </div>
+
+          <div v-if="update_club">
+            <br><hr>
+            <v-form v-model="valid">
+              <div class="title">Modifier le nom et/ou statut du club</div>
+              <br>
+              <v-col class="py-0" cols="4" md="12">
+                <v-text-field dark v-model="club_name_update" :rules="club_nameRules" :counter="50" label="Nom du club" outlined filled></v-text-field>
+                <v-checkbox dark v-model="private_club_update" label="Club privé"></v-checkbox>
+              </v-col>
+            </v-form>
+            <div style="text-align: right; margin-right: 5px;">
+              <v-btn dark rounded align="left" color="#666" v-on:click="update_club_confirm()">Confirmer</v-btn>
+            </div>
+            <br><hr>
+          </div>
+
           <div class="title">Vos statistiques au sein du club {{ name_club_switch }}</div>
           <br>
 
@@ -211,7 +231,7 @@
             <v-btn dark small rounded align="left" color="#666" v-on:click="main_menu().then(response => {page_vc(1);})">Retourner au menu principale</v-btn>
           </div>
           <div style="margin-left: 5px; margin-top: 5px;">
-            <v-btn dark small rounded align="left" color="#666" v-on:click="manage_club_menu(name_club_switch, id_club_switch, admin_club_switch).then(response => {page_gc(1);})">Retourner au menu de gestion du club "{{ name_club_switch }}"</v-btn>
+            <v-btn dark small rounded align="left" color="#666" v-on:click="manage_club_menu(name_club_switch, id_club_switch, admin_club_switch, private_club_switch).then(response => {page_gc(1);})">Retourner au menu de gestion du club "{{ name_club_switch }}"</v-btn>
           </div>
           <div class="title">Ajouter un joueur</div>
           <br>
@@ -374,16 +394,17 @@ export default {
       playersNotInClubToShowPage: [],
       //////////////////////////////////////////////////////////////////////////
       /**possible value of switch_menu
-        'p' (principale) : vos club + creer un club
-        'r' (rejoindre) : rejoindre un club
-        'g' (gerer) : gerer les joueurs de son club
-        'a' (ajouter) : ajouter des joueurs à son club
-      */
+       * 'p' (principale) : vos club + creer un club
+       * 'r' (rejoindre) : rejoindre un club
+       * 'g' (gerer) : gerer les joueurs de son club
+       * 'a' (ajouter) : ajouter des joueurs à son club
+       */
       switch_menu: 'p',
       //////////////////////////////////////////////////////////////////////////
       valid: false,
       club_name: null,
       private_club: false,
+      //
       club_nameRules: [
         v => !!v || "Nom de club requis",
         v => v.length >= 2 || "Nom de club trop court",
@@ -391,16 +412,22 @@ export default {
           /^[a-zA-Z1-9_ \-éèçîïœžâêôàûùâãäåæçëìíîïðñòóôõúûüýö]+$/.test(v) ||
           "Nom de club invalide"
       ],
-      id_club_switch: -1,
-      name_club_switch: "",
-      admin_club_switch: false,
       pseudoRules: [
         v => !!v || "Pseudo requis",
         v => v.length >= 2 || "Pseudo trop court",
         v =>
           /^[a-zA-Z0-9 _\-éèçîïœžâêôàûùâãäåæçëìíîïðñòóôõúûüýö]+$/.test(v) ||
           'Pseudo invalide (lettres, nombres, espace, "_" et "-" seulement)'
-      ]
+      ],
+      //
+      id_club_switch: -1,
+      name_club_switch: "",
+      admin_club_switch: false,
+      private_club_switch: false,
+      //
+      update_club: false,
+      club_name_update: null,
+      private_club_update: false
     };
   },
   async created() {
@@ -628,10 +655,13 @@ export default {
       });
     },
     ////////////////////////////////////////////////////////////////////////////
-    async manage_club_menu(club_name, cid, is_admin){
+    async manage_club_menu(club_name, cid, is_admin, private_club){
       this.name_club_switch = club_name;
+      this.club_name_update = club_name
       this.id_club_switch = cid;
       this.admin_club_switch = is_admin;
+      this.private_club_switch = private_club;
+      this.private_club_update = private_club;
       let playersIn = await axios
         .get("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/PlayerClubs/cid" + cid, {responseType: "json"})
         .catch(e => {
@@ -686,7 +716,7 @@ export default {
         alert("Vous avez promu admin " + pseudo);
         let n_page = this.playersInClubPage;
         document.getElementById(this.playersInClubPage).style.backgroundColor = "white";
-        this.manage_club_menu(this.name_club_switch, this.id_club_switch, this.admin_club_switch).then(response => {
+        this.manage_club_menu(this.name_club_switch, this.id_club_switch, this.admin_club_switch, this.private_club_switch).then(response => {
           this.page_gc(n_page);
         });
       })
@@ -705,7 +735,7 @@ export default {
         if (this.playersInClubToShowPage.length == 1 && n_page != 1){
           n_page--;
         }
-        this.manage_club_menu(this.name_club_switch, this.id_club_switch, this.admin_club_switch).then(response => {
+        this.manage_club_menu(this.name_club_switch, this.id_club_switch, this.admin_club_switch, this.private_club_switch).then(response => {
           this.page_gc(n_page);
         });
       })
@@ -713,6 +743,29 @@ export default {
         alert("Echec, veuillez réessayer, si le problème persiste, réessayer plus tard");
         this.$router.go();
       });
+    },
+    async update_club_btn(){
+      if (this.update_club){
+        this.update_club = false;
+      }
+      else{
+        this.update_club = true;
+      }
+    },
+    async update_club_confirm(){
+      await axios
+        .put("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/Clubs/" + this.id_club_switch + "&" + this.club_name_update + "&" + this.private_club_update)
+        .then(response => {
+          alert("Vos modification ont bien été pris en compte");
+          this.update_club_btn();
+          this.manage_club_menu(this.name_club_switch, this.id_club_switch, this.admin_club_switch, this.private_club_switch).then(response => {
+            this.page_gc(this.playersInClubPage);
+          });
+        })
+        .catch(e => {
+          alert("Echec, veuillez réessayer, si le problème persiste, réessayer plus tard");
+          this.$router.go();
+        });
     },
     ////////////////////////////////////////////////////////////////////////////
     async add_club_menu(){
