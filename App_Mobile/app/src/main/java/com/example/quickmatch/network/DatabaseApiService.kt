@@ -80,7 +80,7 @@ interface DatabaseApiService {
 
     /* POST REQUESTS */
     @POST("dbcontrol/api/v1/Invitations")
-    suspend fun addInvitation(invitationObject: InvitationObject)
+    suspend fun createInvitation(@Body invitationObject: InvitationObject)
 
     /* DELETE REQUESTS */
     @DELETE("dbcontrol/api/v1/Invitations/{id}")
@@ -92,10 +92,12 @@ interface DatabaseApiService {
     suspend fun getAllSlots() : List<SlotObject>
     @GET("dbcontrol/api/v1/Slots/{id}")
     suspend fun getSlotById(@Path("id") id : Int) : SlotObject
+    @GET("dbcontrol/api/v1/slots/{start}/{end}/{day}")
+    suspend fun getUniqueSlot(@Path("start") start: String, @Path("end") end: String, @Path("day") day: String) : SlotObject
 
     /* POST REQUESTS */
     @POST("dbcontrol/api/v1/Slots")
-    suspend fun addSlot(slotObject : SlotObject)
+    suspend fun createSlot(@Body slot : SlotObject) : SlotObject
 
     /* DELETE REQUESTS */
     @DELETE("dbcontrol/api/v1/Slots/{id}")
@@ -114,7 +116,7 @@ interface DatabaseApiService {
 
     /* POST REQUESTS */
     @POST("dbcontrol/api/v1/Meets")
-    suspend fun addMeet(meetObject : MeetObject)
+    suspend fun createMeet(@Body meetObject : MeetObject) : MeetObject
 
     /* DELETE REQUESTS */
     @DELETE("dbcontrol/api/v1/Meets/{id}")
