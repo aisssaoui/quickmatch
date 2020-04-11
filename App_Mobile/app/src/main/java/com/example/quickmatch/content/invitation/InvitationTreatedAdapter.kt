@@ -43,7 +43,7 @@ class InvitationTreatedAdapter(val clickListener: InvitationTreatedClickListener
 
 class InvitationTreateatedDiffCallback : DiffUtil.ItemCallback<PlayerMeetObject>() {
     override fun areItemsTheSame(oldItem: PlayerMeetObject, newItem: PlayerMeetObject): Boolean {
-        return oldItem.playerId == newItem.playerId && oldItem.meetId == newItem.meetId
+        return oldItem.invitationId == newItem.invitationId
     }
 
     override fun areContentsTheSame(oldItem: PlayerMeetObject, newItem: PlayerMeetObject): Boolean {
@@ -54,6 +54,6 @@ class InvitationTreateatedDiffCallback : DiffUtil.ItemCallback<PlayerMeetObject>
 }
 class InvitationTreatedClickListener(val clickListener: (invitationId: Int?) -> Unit) {
     fun onClick(invitation: PlayerMeetObject) {
-        return clickListener(invitation.meetId)
+        return clickListener(invitation.invitationId)
     }
 }

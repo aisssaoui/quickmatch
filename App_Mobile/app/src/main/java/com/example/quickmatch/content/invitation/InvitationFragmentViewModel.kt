@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.example.quickmatch.content.club.RequestStatus
 import com.example.quickmatch.content.player
 import com.example.quickmatch.network.DatabaseApi
+import com.example.quickmatch.network.InvitationStatusObject
 import com.example.quickmatch.network.PlayerMeetObject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -15,6 +16,8 @@ import timber.log.Timber
 
 class InvitationFragmentViewModel : ViewModel() {
 
+    /* statuses for requests */
+
     private val _getNewInvitationsStatus = MutableLiveData<RequestStatus>()
     val getNewInvitationsStatus : LiveData<RequestStatus>
         get() = _getNewInvitationsStatus
@@ -22,6 +25,16 @@ class InvitationFragmentViewModel : ViewModel() {
     private val _getTreatedInvitationsStatus = MutableLiveData<RequestStatus>()
     val getTreatedInvitationsStatus : LiveData<RequestStatus>
         get() = _getTreatedInvitationsStatus
+
+    private val _acceptInvitationStatus = MutableLiveData<RequestStatus>()
+    val acceptInvitationStatus : LiveData<RequestStatus>
+        get() = _acceptInvitationStatus
+
+    private val _declineInvitationStatus = MutableLiveData<RequestStatus>()
+    val declineInvitationStatus : LiveData<RequestStatus>
+        get() = _declineInvitationStatus
+
+    /* results */
 
     private val _treatedInvitations = MutableLiveData<List<PlayerMeetObject>>()
     val treatedInvitations : LiveData<List<PlayerMeetObject>>
@@ -77,6 +90,51 @@ class InvitationFragmentViewModel : ViewModel() {
 
                 Timber.i("%s / getTreatedInvitations()", t.message)
                 _getTreatedInvitationsStatus.value = RequestStatus.ERROR
+
+            }
+        }
+    }
+
+    fun acceptInvitation(invitationId: Int) {
+
+        _acceptInvitationStatus.value = RequestStatus.LOADING
+
+        coroutineScope.launch {
+
+            try {
+
+                val status = InvitationStatusObject(true)
+                DatabaseApi.retrofitService.updateInvitation(invitationId, status)
+                getTreatedInvitations()
+                getNewInvitations()
+                _acceptInvitationStatus.value = RequestStatus.DONE
+
+            } catch (t: Throwable) {
+
+                _acceptInvitationStatus.value = RequestStatus.ERROR
+                Timber.i("%s / acceptInvitation()", t.message)
+            }
+        }
+    }
+
+    fun declineInvitation(invitationId: Int) {
+
+        _declineInvitationStatus.value = RequestStatus.LOADING
+
+        coroutineScope.launch {
+
+            try {
+
+                val status = InvitationStatusObject(false)
+                DatabaseApi.retrofitService.updateInvitation(invitationId, status)
+                getTreatedInvitations()
+                getNewInvitations()
+                _declineInvitationStatus.value = RequestStatus.DONE
+
+            } catch (t: Throwable) {
+
+                _declineInvitationStatus.value = RequestStatus.ERROR
+                Timber.i("%s / declineInvitation()", t.message)
 
             }
         }

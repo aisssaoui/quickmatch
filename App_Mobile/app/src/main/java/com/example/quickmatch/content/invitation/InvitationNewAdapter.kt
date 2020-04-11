@@ -9,7 +9,7 @@ import com.example.quickmatch.databinding.ListInvitationNewItemBinding
 import com.example.quickmatch.network.InvitationObject
 import com.example.quickmatch.network.PlayerMeetObject
 
-class InvitationNewAdapter(val clickListener: InvitationNewClickListener)
+class InvitationNewAdapter(val clickListenerAccept: InvitationNewClickListenerAccept, val clickListenerDecline: InvitationNewClickListenerDecline)
     : ListAdapter<PlayerMeetObject, InvitationNewAdapter.ViewHolder>(InvitationNewDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -18,15 +18,16 @@ class InvitationNewAdapter(val clickListener: InvitationNewClickListener)
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = getItem(position)
-        holder.bind(item, clickListener)
+        holder.bind(item, clickListenerAccept, clickListenerDecline)
     }
 
     class ViewHolder private constructor(val binding: ListInvitationNewItemBinding): RecyclerView.ViewHolder(binding.root) {
 
         /* bind view values to the datas */
-        fun bind(item: PlayerMeetObject, clickListener: InvitationNewClickListener) {
+        fun bind(item: PlayerMeetObject, clickListenerAccept: InvitationNewClickListenerAccept, clickListenerDecline: InvitationNewClickListenerDecline) {
             binding.invitation = item
-            binding.clickListener = clickListener
+            binding.clickListenerAccept = clickListenerAccept
+            binding.clickListenerDecline = clickListenerDecline
             binding.executePendingBindings()
         }
 
@@ -44,7 +45,7 @@ class InvitationNewAdapter(val clickListener: InvitationNewClickListener)
 
 class InvitationNewDiffCallback : DiffUtil.ItemCallback<PlayerMeetObject>() {
     override fun areItemsTheSame(oldItem: PlayerMeetObject, newItem: PlayerMeetObject): Boolean {
-        return oldItem.playerId == newItem.playerId && oldItem.meetId == newItem.meetId
+        return oldItem.invitationId == newItem.invitationId
     }
 
     override fun areContentsTheSame(oldItem: PlayerMeetObject, newItem: PlayerMeetObject): Boolean {
@@ -53,8 +54,14 @@ class InvitationNewDiffCallback : DiffUtil.ItemCallback<PlayerMeetObject>() {
 
 
 }
-class InvitationNewClickListener(val clickListener: (invitationId: Int?) -> Unit) {
+class InvitationNewClickListenerAccept(val clickListener: (invitationId: Int?) -> Unit) {
     fun onClick(invitation: PlayerMeetObject) {
-        return clickListener(invitation.meetId)
+        return clickListener(invitation.invitationId)
+    }
+}
+
+class InvitationNewClickListenerDecline(val clickListener: (invitationId: Int?) -> Unit) {
+    fun onClick(invitation: PlayerMeetObject) {
+        return clickListener(invitation.invitationId)
     }
 }

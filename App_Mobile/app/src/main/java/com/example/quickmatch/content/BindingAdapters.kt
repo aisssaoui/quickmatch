@@ -183,18 +183,34 @@ fun ImageView.setProfilMembership(isAdmin: Boolean?) {
     }
 }
 
-@BindingAdapter("matchInfosFormatted")
-fun TextView.setMatchInfos(match: PlayerMeetObject?) {
-    match?.let {
-        text = "Match à ${match.location}"
-    }
-}
-
 
 @BindingAdapter("matchWonFormatted")
 fun CardView.setMatchResultColor(match: PlayerMeetObject?) {
     match?.let {
         val color = if(it.won == true) R.color.green_match else R.color.red_match
         setCardBackgroundColor(ContextCompat.getColor(context, color))
+    }
+}
+
+@BindingAdapter("matchLocationFormatted")
+fun TextView.setMatchLocationText(match: PlayerMeetObject?) {
+    match?.let {
+        text = "Match à ${match.location}"
+    }
+}
+
+@BindingAdapter("matchDateAndHourFormatted")
+fun TextView.setMatchDateAndHourText(match: PlayerMeetObject?) {
+    match?.let {
+        text = "Le ${FormatUtils.parseDbDateToJJMMAAAA(it.date)} de ${FormatUtils.parseDbTimeToHHMM(it.start)} à ${FormatUtils.parseDbTimeToHHMM(it.end)}"
+    }
+}
+
+@BindingAdapter("invitationDecisionFormatted")
+fun TextView.setInvitationDecisionColor(invitation: PlayerMeetObject?) {
+    invitation?.let {
+        setTextColor(resources.getColor(
+            if(it.status!!) R.color.accepted_invitation else R.color.declined_invitation
+        ))
     }
 }

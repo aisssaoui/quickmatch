@@ -86,6 +86,10 @@ interface DatabaseApiService {
     @DELETE("dbcontrol/api/v1/Invitations/{id}")
     suspend fun deleteInvitationById(@Path("id") id : Int)
 
+    /* UPDATE REQUESTS */
+    @PUT("dbcontrol/api/v1/Invitations/{id}")
+    suspend fun updateInvitation(@Path("id") id : Int, @Body status: InvitationStatusObject)
+
     /* SLOTS */
     /* GET REQUESTS */
     @GET("dbcontrol/api/v1/SlotsRows")

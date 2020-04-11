@@ -90,5 +90,6 @@
     De même, au moins un jour est requis.</b></string>
     <string name="success_match_creation">Match créé avec succès !</string>
     <string name="work_ongoing_text">En construction...</string>
+    <string name="change">MODIFIER</string>
 
 </resources>

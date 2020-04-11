@@ -81,9 +81,19 @@ object FormatUtils {
             val day = splitDate[2]
             val month = splitDate[1]
             val year = splitDate[0]
-            return "$day / $month / $year"
+            return "$day/$month/$year"
         }
-        return ""
+        return "(non déterminé)"
+    }
+    /* parse a date string from database */
+    fun parseDbTimeToHHMM(time: String?) : String {
+        time?.let {
+            val splitTime = time.split(":")
+            val hour = splitTime[0]
+            val minute = splitTime[1]
+            return "$hour:$minute"
+        }
+        return "(non déterminé)"
     }
 
     /* get the string for a day of the week given as integer */
