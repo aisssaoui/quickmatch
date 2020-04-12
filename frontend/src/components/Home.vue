@@ -120,6 +120,13 @@
         <v-btn v-if="!isSignedIn" class="row wrap align-center" small color="primary" to="/signin">S'inscrire</v-btn>
       </v-col>
     </v-row>
+      <v-row class="mb-6" justify="center">
+      <a href="../../../App_Mobile/app/build/outputs/apk/release/release/app-release.apk" download="quickmatch.apk">
+        <v-btn outlined color="indigo">
+          <v-icon left color="indigo">mdi-cellphone-android</v-icon>Télécharger l'appli mobile
+        </v-btn>
+      </a>
+      </v-row>
     </v-container>
 
     <hr style="width:50%; margin: auto;" color="#20003c" size="1px"/>
