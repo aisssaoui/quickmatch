@@ -121,7 +121,7 @@
       </v-col>
     </v-row>
       <v-row class="mb-6" justify="center">
-      <a href="../../../App_Mobile/app/build/outputs/apk/release/release/app-release.apk" download="quickmatch.apk">
+      <a href="https://quickmatch.fr/mobile/app-release.apk" download="quickmatch.apk">
         <v-btn outlined color="indigo">
           <v-icon left color="indigo">mdi-cellphone-android</v-icon>Télécharger l'appli mobile
         </v-btn>
