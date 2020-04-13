@@ -105,4 +105,21 @@
         android:id="@+id/invitationFragmentUI"
         android:name="com.example.quickmatch.content.invitation.InvitationFragmentUI"
         android:label="InvitationFragmentUI" />
+    <fragment
+        android:id="@+id/matchUpcomingFragment"
+        android:name="com.example.quickmatch.content.match.MatchUpcomingFragment"
+        android:label="MatchUpcomingFragment" >
+        <action
+            android:id="@+id/action_matchUpcomingFragment_to_matchPlayFragmentUI"
+            app:destination="@id/matchPlayFragmentUI"
+            app:popUpTo="@+id/matchFragmentUI" />
+    </fragment>
+    <fragment
+        android:id="@+id/matchPlayFragmentUI"
+        android:name="com.example.quickmatch.content.match.MatchPlayFragmentUI"
+        android:label="MatchPlayFragmentUI" >
+        <argument
+            android:name="matchId"
+            app:argType="integer" />
+    </fragment>
 </navigation>

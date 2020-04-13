@@ -23,7 +23,7 @@
             android:layout_height="match_parent">
 
             <TextView
-                android:id="@+id/match_infos_text"
+                android:id="@+id/match_location_text"
                 matchLocationFormatted="@{match}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
