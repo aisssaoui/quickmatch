@@ -15,6 +15,7 @@ import com.example.quickmatch.R
 import com.example.quickmatch.content.club.ClubCreationStatus
 import com.example.quickmatch.network.*
 import com.example.quickmatch.utils.FormatUtils
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import timber.log.Timber
 
 /* Binding adapters for live datas */
@@ -209,8 +210,30 @@ fun TextView.setMatchDateAndHourText(match: PlayerMeetObject?) {
 @BindingAdapter("invitationDecisionFormatted")
 fun TextView.setInvitationDecisionColor(invitation: PlayerMeetObject?) {
     invitation?.let {
-        setTextColor(resources.getColor(
+        setTextColor(context.getColor(
             if(it.status!!) R.color.accepted_invitation else R.color.declined_invitation
         ))
+    }
+}
+
+@BindingAdapter("meetLocationFormatted")
+fun TextView.setMeetLocationText(match: MeetObject?) {
+    match?.let {
+        text = "Match à ${match.location}"
+    }
+}
+
+@BindingAdapter("meetDateAndHourFormatted")
+fun TextView.setMeetDateAndHourText(match: MeetObject?) {
+    match?.let {
+        text = FormatUtils.parseDbDateToJJMMAAAA(it.date)
+    }
+}
+
+@BindingAdapter("playerNameFormatted")
+fun TextView.setPlayerName(player: PlayerObject?) {
+
+    player?.let {
+        text = "${player.surname} ${player.firstName}"
     }
 }

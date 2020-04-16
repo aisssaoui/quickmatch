@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
 
 import com.example.quickmatch.R
 import com.example.quickmatch.databinding.FragmentMatchUpcomingBinding
@@ -24,13 +25,15 @@ class MatchUpcomingFragment : Fragment() {
         val binding : FragmentMatchUpcomingBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_match_upcoming, container, false)
         val viewModel : MatchFragmentViewModel = ViewModelProviders.of(this).get(MatchFragmentViewModel::class.java)
 
+        binding.lifecycleOwner = viewLifecycleOwner
+
         val adapter = MatchUpcomingAdapter(MatchUpcomingClickListener {
-            Toast.makeText(context, "Match $it clicked", Toast.LENGTH_SHORT).show()
+            findNavController().navigate(MatchFragmentUIDirections.actionMatchFragmentUIToMatchPlayFragmentUI(it!!))
         })
 
         binding.listUpcomingMatches.adapter = adapter
         binding.viewModel = viewModel
-        binding.lifecycleOwner = this
+
 
         viewModel.upcomingMatches.observe(this, Observer {
             it?.let {

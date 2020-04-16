@@ -17,8 +17,7 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:onClick="@{() -> clickListener.onClick(match)}">
+        android:layout_marginTop="8dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -63,7 +62,8 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:stateListAnimator="@null"/>
+                android:stateListAnimator="@null"
+                android:onClick="@{() -> clickListener.onClick(match)}"/>
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
