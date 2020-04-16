@@ -306,22 +306,21 @@ export default {
           this.$router.go();
         }
       });
+
     this.statsInToShow = statsIn.data.rows;
     this.statsInPage = 1;
     this.statsInNbRow = statsIn.data.rowCount;
-    this.statsInPageMax =
-      Math.floor((statsIn.data.rowCount - 1) / this.statsInNbRowPerPage) + 1;
+    this.statsInPageMax = Math.floor((statsIn.data.rowCount - 1) / this.statsInNbRowPerPage) + 1;
     this.statsInToShowPage = [];
-    for (
-      let i = 0;
-      i < Math.min(this.statsInNbRowPerPage, this.statsInNbRow);
-      i++
-    ) {
+    for (let i = 0; i < Math.min(this.statsInNbRowPerPage, this.statsInNbRow); i++) {
       this.statsInToShowPage.push(this.statsInToShow[i]);
     }
 
     this.byPlayerTable = matchsIn.data;
-    this.matchInfo();
+    this.matchInfo().then(response => {
+      this.page_vc(Math.min(this.matchsInPageMax, this.matchsInPage));
+      this.page_st(Math.min(this.statsInPageMax, this.statsInPage));
+    });
 
     const pseudodata = await axios.get(
       "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/Players/id" + this.id,
@@ -342,6 +341,31 @@ export default {
     }
   },
   methods: {
+    async refresh_match() {
+      var matchsIn = await axios
+        .get(
+          "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/CalendarBPlayer/" +
+            this.id,
+          { responseType: "json" }
+        )
+        .catch(e => {
+          if (this.isSignedIn()) {
+            alert(
+              "Une erreur s'est produite, nous allons rafraichir la page, si le problème persiste, quittez la page"
+            );
+            this.$router.go();
+          }
+        });
+
+      this.matchsInToShow = matchsIn.data.rows;
+
+      this.byPlayerTable = matchsIn.data;
+
+      this.matchs = [];
+
+      await this.matchInfo();
+    },
+
     async matchInfo() {
       let byPlayerTable = [];
       let tableMeet = [];
@@ -351,16 +375,14 @@ export default {
       for (let i = 0; i < this.byPlayerTable.rowCount; i++) {
         meets.push(this.byPlayerTable.rows[i].meet);
       }
-      let by_meet_table;
-      let accepted;
-      let declined;
+      let by_meet_table = {};
+      let accepted = {};
+      let declined = {};
       for (let i = 0; i < meets.length; i++) {
         by_meet_table = await axios.get(
           "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/CalendarBMeet/" +
             meets[i],
-          {
-            responseType: "json"
-          }
+          { responseType: "json" }
         );
         tableMeet.push(by_meet_table.data);
 
@@ -477,25 +499,14 @@ export default {
           });
 
         }
-        this.matchsInPage = 1;
+
         this.matchsInNbRow = this.matchs.length;
-        this.matchsInPageMax =
-          Math.floor((this.matchs.length - 1) / this.matchsInNbRowPerPage) + 1;
+        this.matchsInPageMax = Math.floor((this.matchs.length - 1) / this.matchsInNbRowPerPage) + 1;
         this.matchsInToShowPage = [];
-        for (
-          let i = 0;
-          i < Math.min(this.matchsInNbRowPerPage, this.matchsInNbRow);
-          i++
-        ) {
+        for (let i = 0; i < Math.min(this.matchsInNbRowPerPage, this.matchsInNbRow); i++) {
           this.matchsInToShowPage.push(this.matchs[i]);
         }
       }
-      setTimeout(() => {
-        document.getElementById("m" + this.matchsInPage).style.backgroundColor =
-          "orange";
-        document.getElementById("s" + this.matchsInPage).style.backgroundColor =
-          "orange";
-      }, 1);
     },
 
     //////////////////////////////////////////////////////////////////////
@@ -512,22 +523,16 @@ export default {
       }
     },
     page_vc(n) {
-      document.getElementById("m" + this.matchsInPage).style.backgroundColor =
-        "white";
+      document.getElementById("m" + this.matchsInPage).style.backgroundColor = "white";
       this.matchsInPage = n;
-      document.getElementById("m" + this.matchsInPage).style.backgroundColor =
-        "orange";
+      document.getElementById("m" + this.matchsInPage).style.backgroundColor = "orange";
       let len = this.matchsInToShowPage.length;
       for (let i = 0; i < len; i++) {
         this.matchsInToShowPage.pop();
       }
       for (
         let i = (this.matchsInPage - 1) * this.matchsInNbRowPerPage;
-        i <
-        Math.min(
-          this.matchsInNbRow,
-          this.matchsInPage * this.matchsInNbRowPerPage
-        );
+        i < Math.min(this.matchsInNbRow, this.matchsInPage * this.matchsInNbRowPerPage);
         i++
       ) {
         this.matchsInToShowPage.push(this.matchs[i]);
@@ -548,11 +553,9 @@ export default {
       }
     },
     page_st(n) {
-      document.getElementById("s" + this.statsInPage).style.backgroundColor =
-        "white";
+      document.getElementById("s" + this.statsInPage).style.backgroundColor = "white";
       this.statsInPage = n;
-      document.getElementById("s" + this.statsInPage).style.backgroundColor =
-        "orange";
+      document.getElementById("s" + this.statsInPage).style.backgroundColor = "orange";
       let len = this.statsInToShowPage.length;
       for (let i = 0; i < len; i++) {
         this.statsInToShowPage.pop();
@@ -560,10 +563,7 @@ export default {
       for (
         let i = (this.statsInPage - 1) * this.statsInNbRowPerPage;
         i <
-        Math.min(
-          this.statsInNbRow,
-          this.statsInPage * this.statsInNbRowPerPage
-        );
+        Math.min(this.statsInNbRow, this.statsInPage * this.statsInNbRowPerPage);
         i++
       ) {
         this.statsInToShowPage.push(this.statsInToShow[i]);
@@ -622,9 +622,14 @@ export default {
         {
           status: true
         }
-      );
-      alert("Invitation acceptée !");
-      this.$router.go();
+      )
+      .then(response => {
+        alert("Invitation acceptée !");
+        document.getElementById("m" + this.matchsInPage).style.backgroundColor = "white";
+        this.refresh_match().then(response => {
+          this.page_vc(this.matchsInPage);
+        });
+      });
     },
     async DeclineInvit(meetid) {
       const inv_id = await axios.get(
@@ -642,11 +647,15 @@ export default {
         {
           status: false
         }
-      );
-      alert("Invitation refusée !");
-      this.$router.go();
+      )
+      .then(response => {
+        alert("Invitation refusée !");
+        document.getElementById("m" + this.matchsInPage).style.backgroundColor = "white";
+        this.refresh_match().then(response => {
+          this.page_vc(this.matchsInPage);
+        });
+      });
     },
-
 
     DayInFr(s) {
       switch (s) {

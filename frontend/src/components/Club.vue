@@ -561,7 +561,7 @@ export default {
       }
       return false;
     },
-    async leave_club(cid, club_name, is_admin) {
+    async leave_club(cid, club_name, is_admin){
       let count_admin = await axios
         .get("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/PlayerClubsCountAdmin/" + cid, {responseType: "json"})
         .catch(e => {
