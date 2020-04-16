@@ -11,6 +11,11 @@
             type="com.example.quickmatch.access.signin.SigninFragmentViewModel" />
     </data>
 
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -322,4 +327,5 @@
             app:srcCompat="@drawable/ic_sync_orange_24dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
 </layout>

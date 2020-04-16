@@ -80,11 +80,15 @@ interface DatabaseApiService {
 
     /* POST REQUESTS */
     @POST("dbcontrol/api/v1/Invitations")
-    suspend fun addInvitation(invitationObject: InvitationObject)
+    suspend fun createInvitation(@Body invitationObject: InvitationObject)
 
     /* DELETE REQUESTS */
     @DELETE("dbcontrol/api/v1/Invitations/{id}")
     suspend fun deleteInvitationById(@Path("id") id : Int)
+
+    /* UPDATE REQUESTS */
+    @PUT("dbcontrol/api/v1/Invitations/{id}")
+    suspend fun updateInvitation(@Path("id") id : Int, @Body status: InvitationStatusObject)
 
     /* SLOTS */
     /* GET REQUESTS */
@@ -92,10 +96,12 @@ interface DatabaseApiService {
     suspend fun getAllSlots() : List<SlotObject>
     @GET("dbcontrol/api/v1/Slots/{id}")
     suspend fun getSlotById(@Path("id") id : Int) : SlotObject
+    @GET("dbcontrol/api/v1/slots/{start}/{end}/{day}")
+    suspend fun getUniqueSlot(@Path("start") start: String, @Path("end") end: String, @Path("day") day: String) : SlotObject
 
     /* POST REQUESTS */
     @POST("dbcontrol/api/v1/Slots")
-    suspend fun addSlot(slotObject : SlotObject)
+    suspend fun createSlot(@Body slot : SlotObject) : SlotObject
 
     /* DELETE REQUESTS */
     @DELETE("dbcontrol/api/v1/Slots/{id}")
@@ -110,15 +116,21 @@ interface DatabaseApiService {
     @GET("dbcontrol/api/v1/Meets/{id}")
     suspend fun getMeetById(@Path("id") id : Int) : MeetObject
     @GET("dbcontrol/api/v1/CalendarBPlayerRows/{id}")
-    suspend fun getPlayerMatches(@Path("id") id : Int) : List<PlayerMeetObject>
+    suspend fun getPlayerInvitations(@Path("id") id : Int) : List<PlayerMeetObject>
+    @GET("dbcontrol/api/v1/CalendarBMeetRows/{id}")
+    suspend fun getMeetPlayers(@Path("id") id : Int) : List<PlayerMeetObject>
 
     /* POST REQUESTS */
     @POST("dbcontrol/api/v1/Meets")
-    suspend fun addMeet(meetObject : MeetObject)
+    suspend fun createMeet(@Body meetObject : MeetObject) : MeetObject
 
     /* DELETE REQUESTS */
     @DELETE("dbcontrol/api/v1/Meets/{id}")
     suspend fun deleteMeetById(@Path("id") id : Int)
+
+    /* PUT REQUESTS */
+    @PUT("dbcontrol/api/v1/Meets/{id}")
+    suspend fun updateMeet(@Path("id") id : Int, @Body meetObject: MeetObject) : MeetObject
 
     /* MEETSHEETS */
     /* GET REQUESTS */
@@ -131,7 +143,7 @@ interface DatabaseApiService {
 
     /* POST REQUESTS */
     @POST("dbcontrol/api/v1/MeetsSheet")
-    suspend fun addMeetsSheet(meetsSheetObject: MeetsSheetObject)
+    suspend fun createMeetsSheet(@Body meetsSheetObject: MeetsSheetObject)
 
     /* DELETE REQUESTS */
     @DELETE("dbcontrol/api/v1/MeetsSheet/{mail}")

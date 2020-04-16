@@ -168,7 +168,7 @@ var Club = {
         while (1) {
           switch (_context4.prev = _context4.next) {
             case 0:
-              text = "SELECT * FROM club WHERE id = $1";
+              text = "SELECT * FROM\n                    (\n                      SELECT C.id, C.club_name, C.creation_date, C.private_club, C.nb_match_played, COUNT(PBC.player) as nb_player FROM\n                        club C\n                        JOIN\n                        player_belong_club PBC\n                        ON C.id = PBC.club\n                      GROUP BY C.id, C.club_name, C.creation_date, C.private_club, C.nb_match_played\n                    ) one_club\n                  WHERE one_club.id = $1";
               _context4.prev = 1;
               _context4.next = 4;
               return _db2.default.query(text, [req.params.id]);
@@ -216,49 +216,32 @@ var Club = {
    */
   update: function () {
     var _ref8 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5(req, res) {
-      var findOneQuery, updateOneQuery, _ref9, rows, values, response;
-
+      var updateOneQuery, values, response;
       return regeneratorRuntime.wrap(function _callee5$(_context5) {
         while (1) {
           switch (_context5.prev = _context5.next) {
             case 0:
-              findOneQuery = "SELECT * FROM club WHERE id=$1";
-              updateOneQuery = "UPDATE club\n      SET club_name=$1,private_club=$2\n      WHERE id=$3 RETURNING *";
-              _context5.prev = 2;
+              updateOneQuery = "UPDATE club\n                            SET club_name = $1, private_club = $2\n                            WHERE id = $3 RETURNING *";
+              _context5.prev = 1;
+              values = [req.params.name, req.params.private, req.params.cid];
               _context5.next = 5;
-              return _db2.default.query(findOneQuery, [req.params.id]);
-
-            case 5:
-              _ref9 = _context5.sent;
-              rows = _ref9.rows;
-
-              if (rows[0]) {
-                _context5.next = 9;
-                break;
-              }
-
-              return _context5.abrupt("return", res.status(404).send({ message: "club not found" }));
-
-            case 9:
-              values = [req.body.club_name || rows[0].club_name, req.body.private_club || rows[0].private_club, req.params.id];
-              _context5.next = 12;
               return _db2.default.query(updateOneQuery, values);
 
-            case 12:
+            case 5:
               response = _context5.sent;
               return _context5.abrupt("return", res.status(200).send(response.rows[0]));
 
-            case 16:
-              _context5.prev = 16;
-              _context5.t0 = _context5["catch"](2);
+            case 9:
+              _context5.prev = 9;
+              _context5.t0 = _context5["catch"](1);
               return _context5.abrupt("return", res.status(400).send(_context5.t0));
 
-            case 19:
+            case 12:
             case "end":
               return _context5.stop();
           }
         }
-      }, _callee5, this, [[2, 16]]);
+      }, _callee5, this, [[1, 9]]);
     }));
 
     function update(_x9, _x10) {
@@ -276,7 +259,7 @@ var Club = {
    * @returns {void} return statuc code 204
    */
   delete: function () {
-    var _ref10 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee6(req, res) {
+    var _ref9 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee6(req, res) {
       var deleteQuery1, deleteQuery2, deleteQuery3;
       return regeneratorRuntime.wrap(function _callee6$(_context6) {
         while (1) {
@@ -314,7 +297,7 @@ var Club = {
     }));
 
     function _delete(_x11, _x12) {
-      return _ref10.apply(this, arguments);
+      return _ref9.apply(this, arguments);
     }
 
     return _delete;

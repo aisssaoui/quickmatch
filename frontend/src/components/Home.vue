@@ -65,7 +65,11 @@
       </v-carousel-item>
     </v-carousel>
     <v-flex>
+<<<<<<< HEAD
       <v-jumbotron id="jumb" class="row text-center padding" style="padding: 10px 5px 10px 5px;">
+=======
+      <v-jumbotron id="jumb" class="row" style="padding: 10px 5px 10px 5px; background-color: #20003c">
+>>>>>>> fdfbea2931440ed3e9487f9c68ee55f948e08d84
         <div class="col-md-12 col-sm-12 col-md-9 col-lg-9 col-xl-10">
           <p
             class="title font-weight-regular"
@@ -130,6 +134,7 @@
           </div>Le but de cette application est de vous proposer un système d'organisation simple permettant d'organiser vos rencontres sportives de la plus facile des manières !
         </div>
       </div>
+<<<<<<< HEAD
       <v-row class="mb-6" justify="center">
         <v-col class="pa-md-4" lg="2" md="auto" sd="auto">
           <v-btn
@@ -149,6 +154,25 @@
             to="/signin"
           >S'inscrire</v-btn>
         </v-col>
+=======
+      <v-row
+      class="mb-6"
+      justify="center"
+    >
+      <v-col class="pa-md-4" lg="2" md="auto" sd="auto">
+        <v-btn v-if="!isSignedIn" class="row wrap align-center" small color="primary" to="/login">Se connecter</v-btn>
+      </v-col>
+      <v-col class="pa-md-4" lg="2" md="auto" sd="auto">
+        <v-btn v-if="!isSignedIn" class="row wrap align-center" small color="primary" to="/signin">S'inscrire</v-btn>
+      </v-col>
+    </v-row>
+      <v-row class="mb-6" justify="center">
+      <a href="https://quickmatch.fr/mobile/app-release.apk" download="quickmatch.apk">
+        <v-btn outlined color="indigo">
+          <v-icon left color="indigo">mdi-cellphone-android</v-icon>Télécharger l'appli mobile
+        </v-btn>
+      </a>
+>>>>>>> fdfbea2931440ed3e9487f9c68ee55f948e08d84
       </v-row>
     </v-container>
 

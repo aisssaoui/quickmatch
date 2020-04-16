@@ -31,6 +31,10 @@
             android:id="@+id/action_matchFragmentUI_to_matchCreationFragmentUI"
             app:destination="@id/matchCreationFragmentUI"
             app:popUpTo="@+id/matchFragmentUI" />
+        <action
+            android:id="@+id/action_matchFragmentUI_to_matchPlayFragmentUI"
+            app:destination="@id/matchPlayFragmentUI"
+            app:popUpTo="@+id/matchFragmentUI" />
     </fragment>
     <fragment
         android:id="@+id/statFragmentUI"
@@ -95,5 +99,38 @@
     <fragment
         android:id="@+id/matchCreationFragmentUI"
         android:name="com.example.quickmatch.content.match.MatchCreationFragmentUI"
-        android:label="MatchCreationFragmentUI" />
+        android:label="MatchCreationFragmentUI" >
+        <action
+            android:id="@+id/action_matchCreationFragmentUI_to_matchFragmentUI"
+            app:destination="@id/matchFragmentUI"
+            app:popUpTo="@+id/matchFragmentUI" />
+    </fragment>
+    <fragment
+        android:id="@+id/invitationFragmentUI"
+        android:name="com.example.quickmatch.content.invitation.InvitationFragmentUI"
+        android:label="InvitationFragmentUI" />
+    <fragment
+        android:id="@+id/matchUpcomingFragment"
+        android:name="com.example.quickmatch.content.match.MatchUpcomingFragment"
+        android:label="MatchUpcomingFragment" />
+    <fragment
+        android:id="@+id/matchPlayFragmentUI"
+        android:name="com.example.quickmatch.content.match.MatchPlayFragmentUI"
+        android:label="MatchPlayFragmentUI" >
+        <argument
+            android:name="matchId"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_matchPlayFragmentUI_to_matchMeetsheetFragmentUI"
+            app:destination="@id/matchMeetsheetFragmentUI"
+            app:popUpTo="@+id/matchPlayFragmentUI" />
+    </fragment>
+    <fragment
+        android:id="@+id/matchMeetsheetFragmentUI"
+        android:name="com.example.quickmatch.content.match.MatchMeetsheetFragmentUI"
+        android:label="MatchMeetsheetFragmentUI" >
+        <argument
+            android:name="matchId"
+            app:argType="integer" />
+    </fragment>
 </navigation>

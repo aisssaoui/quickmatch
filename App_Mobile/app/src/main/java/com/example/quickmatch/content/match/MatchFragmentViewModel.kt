@@ -1,13 +1,11 @@
 package com.example.quickmatch.content.match
 
-import android.provider.ContactsContract
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.quickmatch.content.club.RequestStatus
 import com.example.quickmatch.content.player
 import com.example.quickmatch.network.DatabaseApi
-import com.example.quickmatch.network.MeetObject
 import com.example.quickmatch.network.PlayerMeetObject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -52,7 +50,7 @@ class MatchFragmentViewModel : ViewModel() {
 
             try {
 
-                _playedMatches.value = DatabaseApi.retrofitService.getPlayerMatches(player.id!!).filter { meet -> meet.played == true }
+                _playedMatches.value = DatabaseApi.retrofitService.getPlayerInvitations(player.id!!).filter { meet -> meet.status == true && meet.played == true }
                 Timber.i(_playedMatches.value.toString())
                 _getPlayedStatus.value = RequestStatus.DONE
 
@@ -74,7 +72,7 @@ class MatchFragmentViewModel : ViewModel() {
 
             try {
 
-                _upcomingMatches.value = DatabaseApi.retrofitService.getPlayerMatches(player.id!!).filter { meet -> meet.played != true }
+                _upcomingMatches.value = DatabaseApi.retrofitService.getPlayerInvitations(player.id!!).filter { meet -> meet.status == true && meet.played != true }
                 Timber.i(_upcomingMatches.value.toString())
                 _getUpcomingStatus.value = RequestStatus.DONE
 

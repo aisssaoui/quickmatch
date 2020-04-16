@@ -1,12 +1,7 @@
 package com.example.quickmatch.content
 
-import android.annotation.SuppressLint
-import android.graphics.Color
 import android.graphics.Typeface
-import android.media.Image
-import android.provider.Settings.Global.getString
 import android.view.View
-import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
@@ -20,8 +15,8 @@ import com.example.quickmatch.R
 import com.example.quickmatch.content.club.ClubCreationStatus
 import com.example.quickmatch.network.*
 import com.example.quickmatch.utils.FormatUtils
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import timber.log.Timber
-import kotlin.math.absoluteValue
 
 /* Binding adapters for live datas */
 
@@ -86,7 +81,7 @@ fun bindStatusMail(imgView: ImageView, status: ClubCreationStatus?) {
 fun TextView.setClubCreationDate(club: ClubObject?) {
 
     club?.let {
-        text = "Créé le " + FormatUtils.parseDateToJJMMAAAA(it.creationDate!!)
+        text = "Créé le " + FormatUtils.parseDbDateToJJMMAAAA(it.creationDate!!)
     }
 }
 
@@ -120,7 +115,7 @@ fun ImageButton.setClubJoinIcon(club: ClubObject?) {
 fun TextView.setClubInscriptionDate(clubAndPlayer: ClubAndPlayerBelongClubObject?) {
 
     clubAndPlayer?.let {
-        text = "Membre depuis le : " + FormatUtils.parseDateToJJMMAAAA(it.inscriptionDate!!)
+        text = "Membre depuis le : " + FormatUtils.parseDbDateToJJMMAAAA(it.inscriptionDate!!)
     }
 }
 
@@ -189,18 +184,56 @@ fun ImageView.setProfilMembership(isAdmin: Boolean?) {
     }
 }
 
-@BindingAdapter("matchInfosFormatted")
-fun TextView.setMatchInfos(match: PlayerMeetObject?) {
-    match?.let {
-        text = "Match à ${match.location}"
-    }
-}
-
 
 @BindingAdapter("matchWonFormatted")
 fun CardView.setMatchResultColor(match: PlayerMeetObject?) {
     match?.let {
         val color = if(it.won == true) R.color.green_match else R.color.red_match
         setCardBackgroundColor(ContextCompat.getColor(context, color))
+    }
+}
+
+@BindingAdapter("matchLocationFormatted")
+fun TextView.setMatchLocationText(match: PlayerMeetObject?) {
+    match?.let {
+        text = "Match à ${match.location}"
+    }
+}
+
+@BindingAdapter("matchDateAndHourFormatted")
+fun TextView.setMatchDateAndHourText(match: PlayerMeetObject?) {
+    match?.let {
+        text = "Le ${FormatUtils.parseDbDateToJJMMAAAA(it.date)} de ${FormatUtils.parseDbTimeToHHMM(it.start)} à ${FormatUtils.parseDbTimeToHHMM(it.end)}"
+    }
+}
+
+@BindingAdapter("invitationDecisionFormatted")
+fun TextView.setInvitationDecisionColor(invitation: PlayerMeetObject?) {
+    invitation?.let {
+        setTextColor(context.getColor(
+            if(it.status!!) R.color.accepted_invitation else R.color.declined_invitation
+        ))
+    }
+}
+
+@BindingAdapter("meetLocationFormatted")
+fun TextView.setMeetLocationText(match: MeetObject?) {
+    match?.let {
+        text = "Match à ${match.location}"
+    }
+}
+
+@BindingAdapter("meetDateAndHourFormatted")
+fun TextView.setMeetDateAndHourText(match: MeetObject?) {
+    match?.let {
+        text = FormatUtils.parseDbDateToJJMMAAAA(it.date)
+    }
+}
+
+@BindingAdapter("playerNameFormatted")
+fun TextView.setPlayerName(player: PlayerObject?) {
+
+    player?.let {
+        text = "${player.surname} ${player.firstName}"
     }
 }

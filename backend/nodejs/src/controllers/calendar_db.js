@@ -96,6 +96,59 @@ var Calendar_db = {
     return getByPlayer;
   })(),
 
+  getNotDecided: (function () {
+    var _ref = _asyncToGenerator(
+      /*#__PURE__*/ regeneratorRuntime.mark(function _callee(req, res) {
+        var text, _ref2, rows, rowCount;
+
+        return regeneratorRuntime.wrap(
+          function _callee$(_context) {
+            while (1) {
+              switch ((_context.prev = _context.next)) {
+                case 0:
+                  text =
+                    "select m.id as meet, i.player as player, status, start_hour, end_hour, repeat_day, location, minimal_team_size, maximal_team_size from invitation i left outer join slot s on i.slot = s.id left outer join meet m on i.meet = m.id where i.player=$1 and status IS NULL order by repeat_day";
+                  _context.prev = 1;
+                  _context.next = 4;
+                  return _db2.default.query(text, [req.params.id]);
+
+                case 4:
+                  _ref2 = _context.sent;
+                  rows = _ref2.rows;
+                  rowCount = _ref2.rowCount;
+                  return _context.abrupt(
+                    "return",
+                    res.status(200).send({ rows: rows, rowCount: rowCount })
+                  );
+
+                case 10:
+                  _context.prev = 10;
+                  _context.t0 = _context["catch"](1);
+                  return _context.abrupt(
+                    "return",
+                    res.status(400).send(_context.t0)
+                  );
+
+                case 13:
+                case "end":
+                  return _context.stop();
+              }
+            }
+          },
+          _callee,
+          this,
+          [[1, 10]]
+        );
+      })
+    );
+
+    function getNotDecided(_x, _x2) {
+      return _ref.apply(this, arguments);
+    }
+
+    return getNotDecided;
+  })(),
+
   /* Get all Meets of a player (without rows) */
   getByPlayerRows: (function () {
     var _ref = _asyncToGenerator(

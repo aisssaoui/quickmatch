@@ -10,7 +10,6 @@ class MatchPagerAdapter(fm : FragmentManager) : FragmentPagerAdapter(fm) {
         return when(position) {
             0 -> MatchFinishedFragment()
             1 -> MatchUpcomingFragment()
-            //2 -> MatchStartedFragment()
             else -> MatchFinishedFragment()
         }
     }

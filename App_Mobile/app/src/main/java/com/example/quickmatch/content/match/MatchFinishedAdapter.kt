@@ -43,7 +43,7 @@ class MatchFinishedAdapter(val clickListener: MatchFinishedClickListener) : List
 
 class MatchFinishedDiffCallback : DiffUtil.ItemCallback<PlayerMeetObject>() {
     override fun areItemsTheSame(oldItem: PlayerMeetObject, newItem: PlayerMeetObject): Boolean {
-        return oldItem.meetId == newItem.meetId && oldItem.player == newItem.player
+        return oldItem.meetId == newItem.meetId && oldItem.playerId == newItem.playerId
     }
 
     override fun areContentsTheSame(oldItem: PlayerMeetObject, newItem: PlayerMeetObject): Boolean {

@@ -94,7 +94,7 @@ var invitation_club = {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
-              text = "SELECT I.id, I.player, I.club, C.club_name FROM\n                    Invitation_Club I\n                    JOIN\n                    Club C\n                    ON\n                    I.club = C.id\n                  WHERE I.player = $1";
+              text = "SELECT I.id, I.player, I.club, C.club_name, C.creation_date, C.nb_match_played, counter_clubs.nb_player FROM\n                    Invitation_Club I\n                    JOIN\n                    Club C\n                    ON\n                    I.club = C.id\n                    JOIN\n                    (\n                      SELECT C.id, COUNT(PBC.player) as nb_player FROM\n                        club C\n                        JOIN\n                        player_belong_club PBC\n                        ON C.id = PBC.club\n                      GROUP BY C.id\n                    ) counter_clubs\n                    ON counter_clubs.id = C.id\n                  WHERE I.player = $1";
               values = [req.params.pid];
               _context2.prev = 2;
               _context2.next = 5;

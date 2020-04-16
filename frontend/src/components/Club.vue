@@ -17,7 +17,7 @@
             <v-btn dark rounded align="left" color="#666" v-on:click="create_club">Créer le club</v-btn>
           </div>
 
-          <br><hr>
+          <br><br>
         </div>
 
         <div class="my_card">
@@ -27,6 +27,8 @@
           <div v-if="clubsInToShow.length != 0">
             <div class="tab_head tab_v_clubs">Nom du Club</div>
             <div class="tab_head tab_v_clubs">Date de création</div>
+            <div class="tab_head tab_v_clubs">Nombre de joueur(s)</div>
+            <div class="tab_head tab_v_clubs">Nombre de match(s) joué(s)</div>
             <div class="tab_head tab_v_clubs">Club privé</div>
             <div class="tab_head tab_v_clubs">Administrateur</div>
             <div class="tab_head tab_v_clubs">Quitter le club</div>
@@ -36,6 +38,8 @@
               <hr>
               <div class="tab_row tab_v_clubs">{{ row.club_name }}</div>
               <div class="tab_row tab_v_clubs">{{ new Date(row.creation_date).toLocaleDateString('fr-FR') }}</div>
+              <div class="tab_row tab_v_clubs">{{ row.nb_player }}</div>
+              <div class="tab_row tab_v_clubs">{{ row.nb_match_played }}</div>
               <div v-if="row.private_club" class="tab_row tab_v_clubs">oui</div>
               <div v-else class="tab_row tab_v_clubs">non</div>
               <div v-if="row.is_admin" class="tab_row tab_v_clubs">oui</div>
@@ -44,10 +48,10 @@
                 <v-btn dark small rounded color="#666" v-on:click="leave_club(row.id, row.club_name, row.is_admin)">Quitter le club</v-btn>
               </div>
               <div class="tab_btn tab_v_clubs" v-if="row.is_admin" >
-                <v-btn dark small rounded color="#666" v-on:click="manage_club_menu(row.club_name, row.id, row.is_admin).then(response => {page_gc(1);})">Gérer le club</v-btn>
+                <v-btn dark small rounded color="#666" v-on:click="manage_club_menu(row.id, row.is_admin).then(response => {page_gc(1);})">Gérer le club</v-btn>
               </div>
               <div class="tab_btn tab_v_clubs" v-else >
-                <v-btn dark small rounded color="#666" v-on:click="manage_club_menu(row.club_name, row.id, row.is_admin).then(response => {page_gc(1);})">Voir le club</v-btn>
+                <v-btn dark small rounded color="#666" v-on:click="manage_club_menu(row.id, row.is_admin).then(response => {page_gc(1);})">Voir le club</v-btn>
               </div>
             </div>
             <br>
@@ -87,12 +91,16 @@
           <div v-if="clubsNotInToShow.length != 0">
             <div class="tab_head tab_r_clubs">Nom du Club</div>
             <div class="tab_head tab_r_clubs">Date de création</div>
+            <div class="tab_head tab_r_clubs">Nombre de joueur(s)</div>
+            <div class="tab_head tab_r_clubs">Nombre de match(s) joué(s)</div>
             <div class="tab_head tab_r_clubs">Demander à rejoindre</div>
 
             <div v-for="row in clubsNotInToShowPage" :key="row.id">
               <hr>
               <div class="tab_row tab_r_clubs">{{ row.club_name }}</div>
               <div class="tab_row tab_r_clubs">{{ new Date(row.creation_date).toLocaleDateString('fr-FR') }}</div>
+              <div class="tab_row tab_r_clubs">{{ row.nb_player }}</div>
+              <div class="tab_row tab_r_clubs">{{ row.nb_match_played }}</div>
               <div class="tab_btn tab_r_clubs">
                 <v-btn dark small rounded color="#666" v-on:click="join_club(row.id, row.club_name)">Demander à rejoindre</v-btn>
               </div>
@@ -120,9 +128,53 @@
 
       <div v-if="switch_menu == 'g'">
         <div class="my_card">
-          <div style="margin-left: 5px; padding-top: 5px;">
+          <div style="margin-left: 5px; padding-top: 5px; display: inline-block">
             <v-btn dark small rounded align="left" color="#666" v-on:click="main_menu().then(response => {page_vc(1);})">Retourner au menu principale</v-btn>
           </div>
+          <div v-if="!update_club && admin_club_switch" style="margin-right: 5px; padding-top: 5px; display: inline-block; float: right">
+            <v-btn dark small rounded align="right" color="#666" v-on:click="update_club_btn()">Modifier le club</v-btn>
+          </div>
+          <div v-if="update_club && admin_club_switch" style="margin-right: 5px; padding-top: 5px; display: inline-block; float: right">
+            <v-btn dark small rounded align="right" color="#666" v-on:click="update_club_btn()">Annuler</v-btn>
+          </div>
+
+          <div v-if="update_club">
+            <br><hr>
+            <v-form v-model="valid">
+              <div class="title">Modifier le nom et/ou statut du club</div>
+              <br>
+              <v-col class="py-0" cols="4" md="12">
+                <v-text-field dark v-model="club_name_update" :rules="club_nameRules" :counter="50" label="Nom du club" outlined filled></v-text-field>
+                <v-checkbox dark v-model="private_club_update" label="Club privé"></v-checkbox>
+              </v-col>
+            </v-form>
+            <div style="text-align: right; margin-right: 5px;">
+              <v-btn dark rounded align="left" color="#666" v-on:click="update_club_confirm()">Confirmer</v-btn>
+            </div>
+            <br><hr>
+          </div>
+
+          <div class="title">Vos statistiques au sein du club {{ name_club_switch }}</div>
+          <br>
+
+          <hr>
+          <div class="tab_head tab_g_stat_clubs">Nom</div>
+          <div class="tab_head tab_g_stat_clubs">Prénom</div>
+          <div class="tab_head tab_g_stat_clubs">Nombre de but(s)</div>
+          <div class="tab_head tab_g_stat_clubs">Nombre de but(s) encaissé(s)</div>
+          <div class="tab_head tab_g_stat_clubs">Nombre de match joué(s)</div>
+          <div class="tab_head tab_g_stat_clubs">Nombre de victoire(s)</div>
+
+          <br>
+          <div class="tab_row tab_g_stat_clubs">{{ playersInClubStatToShow.surname }}</div>
+          <div class="tab_row tab_g_stat_clubs">{{ playersInClubStatToShow.first_name }}</div>
+          <div class="tab_row tab_g_stat_clubs">{{ playersInClubStatToShow.scored_goals_club }}</div>
+          <div class="tab_row tab_g_stat_clubs">{{ playersInClubStatToShow.conceded_goals_club }}</div>
+          <div class="tab_row tab_g_stat_clubs">{{ playersInClubStatToShow.matches_played_club }}</div>
+          <div class="tab_row tab_g_stat_clubs">{{ playersInClubStatToShow.victories_club }}</div>
+        </div>
+
+        <div class="my_card">
           <div class="title">Joueurs du club {{ name_club_switch }}</div>
           <br>
 
@@ -179,7 +231,7 @@
             <v-btn dark small rounded align="left" color="#666" v-on:click="main_menu().then(response => {page_vc(1);})">Retourner au menu principale</v-btn>
           </div>
           <div style="margin-left: 5px; margin-top: 5px;">
-            <v-btn dark small rounded align="left" color="#666" v-on:click="manage_club_menu(name_club_switch, id_club_switch, admin_club_switch).then(response => {page_gc(1);})">Retourner au menu de gestion du club "{{ name_club_switch }}"</v-btn>
+            <v-btn dark small rounded align="left" color="#666" v-on:click="manage_club_menu(id_club_switch, admin_club_switch).then(response => {page_gc(1);})">Retourner au menu de gestion du club "{{ name_club_switch }}"</v-btn>
           </div>
           <div class="title">Ajouter un joueur</div>
           <br>
@@ -280,10 +332,13 @@
     font-size: 120%;
   }
   .tab_v_clubs{
-    width: 16%;
+    width: 12%;
   }
   .tab_r_clubs{
-    width: 32%;
+    width: 19%;
+  }
+  .tab_g_stat_clubs{
+    width: 16%;
   }
   .tab_g_clubs{
     width: 10.6%;
@@ -320,6 +375,8 @@ export default {
       clubsNotInNbRow: 0,
       clubsNotInToShowPage: [],
       //////////////////////////////////////////////////////////////////////////
+      playersInClubStatToShow: {},
+      //
       playersInClubToShow: {},
       playersInClubNbPageMenu: 5, // si nombre plus grand que 4, utilisation des ..., ex les btn du bas : " < 1 ... 5 6 7 8 9 ... 18 > "
       playersInClubPage: 1,
@@ -337,33 +394,40 @@ export default {
       playersNotInClubToShowPage: [],
       //////////////////////////////////////////////////////////////////////////
       /**possible value of switch_menu
-        'p' (principale) : vos club + creer un club
-        'r' (rejoindre) : rejoindre un club
-        'g' (gerer) : gerer les joueurs de son club
-        'a' (ajouter) : ajouter des joueurs à son club
-      */
+       * 'p' (principale) : vos club + creer un club
+       * 'r' (rejoindre) : rejoindre un club
+       * 'g' (gerer) : gerer les joueurs de son club
+       * 'a' (ajouter) : ajouter des joueurs à son club
+       */
       switch_menu: 'p',
       //////////////////////////////////////////////////////////////////////////
       valid: false,
       club_name: null,
       private_club: false,
+      //
       club_nameRules: [
         v => !!v || "Nom de club requis",
         v => v.length >= 2 || "Nom de club trop court",
         v =>
-          /^[a-zA-Z1-9_ \-éèçîïœžâêôàûùâãäåæçëìíîïðñòóôõúûüýö]+$/.test(v) ||
+          /^[a-zA-Z0-9_ \-éèçîïœžâêôàûùâãäåæçëìíîïðñòóôõúûüýö]+$/.test(v) ||
           "Nom de club invalide"
       ],
-      id_club_switch: -1,
-      name_club_switch: "",
-      admin_club_switch: false,
       pseudoRules: [
         v => !!v || "Pseudo requis",
         v => v.length >= 2 || "Pseudo trop court",
         v =>
           /^[a-zA-Z0-9 _\-éèçîïœžâêôàûùâãäåæçëìíîïðñòóôõúûüýö]+$/.test(v) ||
           'Pseudo invalide (lettres, nombres, espace, "_" et "-" seulement)'
-      ]
+      ],
+      //
+      id_club_switch: -1,
+      name_club_switch: "",
+      admin_club_switch: false,
+      private_club_switch: false,
+      //
+      update_club: false,
+      club_name_update: null,
+      private_club_update: false
     };
   },
   async created() {
@@ -371,9 +435,7 @@ export default {
       .get("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/PlayerClubs/pid" + this.id, {responseType: "json"})
       .catch(e => {
         if (this.isSignedIn()) {
-          alert(
-            "Une erreur s'est produite, nous allons rafraichir la page, si le problème persiste, quittez la page"
-          );
+          alert("Une erreur s'est produite, nous allons rafraichir la page, si le problème persiste, quittez la page");
           this.$router.go();
         }
       });
@@ -566,7 +628,6 @@ export default {
     async join_club(cid, club_name){
       await axios.delete("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/InvitationClub/" + this.id + "&" + cid)
       .catch(e => {
-        console.log(e);
         alert("Echec, veuillez réessayer, si le problème persiste, réessayer plus tard");
         this.$router.go();
       });
@@ -594,10 +655,22 @@ export default {
       });
     },
     ////////////////////////////////////////////////////////////////////////////
-    async manage_club_menu(club_name, cid, is_admin){
-      this.name_club_switch = club_name;
+    async manage_club_menu(cid, is_admin){
+      let club_info = await axios
+        .get("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/Clubs/" + cid, {responseType: "json"})
+        .catch(e => {
+          alert(
+            "Une erreur s'est produite, nous allons rafraichir la page, si le problème persiste, quittez la page"
+          );
+          this.$router.go();
+        });
+      this.name_club_switch = club_info.data.club_name;
+      this.club_name_update = club_info.data.club_name;
       this.id_club_switch = cid;
       this.admin_club_switch = is_admin;
+      this.private_club_switch = club_info.data.private_club;
+      this.private_club_update = club_info.data.private_club;
+
       let playersIn = await axios
         .get("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/PlayerClubs/cid" + cid, {responseType: "json"})
         .catch(e => {
@@ -609,6 +682,17 @@ export default {
       this.playersInClubToShow = playersIn.data.rows;
       this.playersInClubNbRow = playersIn.data.rowCount;
       this.playersInClubPageMax = Math.floor((playersIn.data.rowCount -1) / this.playersInClubNbRowPerPage) + 1;
+
+      const player_stat = await axios
+        .get("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/PlayerClubs/one" + this.id + "&" + cid, {responseType: "json"})
+        .catch(e => {
+          alert(
+            "Une erreur s'est produite, nous allons rafraichir la page, si le problème persiste, quittez la page"
+          );
+          this.$router.go();
+        });
+      this.playersInClubStatToShow = player_stat.data.rows[0];
+
       this.switch_menu = 'g';
     },
     page_left_gc(){
@@ -641,7 +725,7 @@ export default {
         alert("Vous avez promu admin " + pseudo);
         let n_page = this.playersInClubPage;
         document.getElementById(this.playersInClubPage).style.backgroundColor = "white";
-        this.manage_club_menu(this.name_club_switch, this.id_club_switch, this.admin_club_switch).then(response => {
+        this.manage_club_menu(this.id_club_switch, this.admin_club_switch).then(response => {
           this.page_gc(n_page);
         });
       })
@@ -660,7 +744,7 @@ export default {
         if (this.playersInClubToShowPage.length == 1 && n_page != 1){
           n_page--;
         }
-        this.manage_club_menu(this.name_club_switch, this.id_club_switch, this.admin_club_switch).then(response => {
+        this.manage_club_menu(this.id_club_switch, this.admin_club_switch).then(response => {
           this.page_gc(n_page);
         });
       })
@@ -668,6 +752,29 @@ export default {
         alert("Echec, veuillez réessayer, si le problème persiste, réessayer plus tard");
         this.$router.go();
       });
+    },
+    async update_club_btn(){
+      if (this.update_club){
+        this.update_club = false;
+      }
+      else{
+        this.update_club = true;
+      }
+    },
+    async update_club_confirm(){
+      await axios
+        .put("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/Clubs/" + this.id_club_switch + "&" + this.club_name_update + "&" + this.private_club_update)
+        .then(response => {
+          alert("Vos modification ont bien été pris en compte");
+          this.update_club_btn();
+          this.manage_club_menu(this.id_club_switch, this.admin_club_switch).then(response => {
+            this.page_gc(this.playersInClubPage);
+          });
+        })
+        .catch(e => {
+          alert("Echec, veuillez réessayer, si le problème persiste, réessayer plus tard");
+          this.$router.go();
+        });
     },
     ////////////////////////////////////////////////////////////////////////////
     async add_club_menu(){
@@ -713,6 +820,9 @@ export default {
             alert("Une invitation a été envoyé à " + pseudo);
             let n_page = this.playersNotInClubPage;
             document.getElementById(this.playersNotInClubPage).style.backgroundColor = "white";
+            if (this.playersNotInClubToShowPage.length == 1 && n_page != 1){
+              n_page--;
+            }
             this.add_club_menu().then(response => {
               this.page_ac(n_page);
             });
