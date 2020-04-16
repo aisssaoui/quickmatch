@@ -233,6 +233,18 @@
           <div style="margin-left: 5px; margin-top: 5px;">
             <v-btn dark small rounded align="left" color="#666" v-on:click="manage_club_menu(id_club_switch, admin_club_switch).then(response => {page_gc(1);})">Retourner au menu de gestion du club "{{ name_club_switch }}"</v-btn>
           </div>
+          <!--
+          <div class="title">Ajouter un joueur qui n'est pas encore membre de Quickmatch</div>
+          <br>
+
+          <v-col class="py-0" cols="4" md="12">
+            <v-text-field dark v-model="add_player_email" :rules="emailRules" :counter="50" label="Email" outlined filled></v-text-field>
+          </v-col>
+          <div style="text-align: right; margin-right: 5px;">
+            <v-btn dark rounded align="left" color="#666" v-on:click="add_to_club_by_email().then(response => {add_player_email = '';})">Envoyer</v-btn>
+          </div>
+          <br><hr><br>
+          -->
           <div class="title">Ajouter un joueur</div>
           <br>
 
@@ -405,6 +417,8 @@ export default {
       club_name: null,
       private_club: false,
       //
+      add_player_email: "",
+      //
       club_nameRules: [
         v => !!v || "Nom de club requis",
         v => v.length >= 2 || "Nom de club trop court",
@@ -418,6 +432,10 @@ export default {
         v =>
           /^[a-zA-Z0-9 _\-éèçîïœžâêôàûùâãäåæçëìíîïðñòóôõúûüýö]+$/.test(v) ||
           'Pseudo invalide (lettres, nombres, espace, "_" et "-" seulement)'
+      ],
+      emailRules: [
+        v => !!v || 'E-mail requis',
+        v => /^[a-zA-Z0-9._-]+@[a-z0-9._-]{2,}\.[a-z]{2,4}$/.test(v) || 'E-mail invalide'
       ],
       //
       id_club_switch: -1,
@@ -778,6 +796,7 @@ export default {
     },
     ////////////////////////////////////////////////////////////////////////////
     async add_club_menu(){
+      this.add_player_email = "";
       let playersNotIn = await axios
         .get("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/PlayerClubs/ncid" + this.id_club_switch, {responseType: "json"})
         .catch(e => {
@@ -841,6 +860,69 @@ export default {
           this.$router.go();
         });
     },
+    async add_to_club_by_email(){
+      let apiRep1 = await axios
+        .get("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/Players/ma" + this.add_player_email)
+        .then(response => {
+          if (response.data.message == "player not found"){
+            alert("joueur non trouvé");
+          }
+          else{
+            this.already_in_club(response.data.id);
+          }
+        })
+        .catch(e => {
+          alert("Echec, veuillez réessayer, si le problème persiste, réessayer plus tard");
+          this.$router.go();
+        });
+    },
+    async already_in_club(pid){
+      let apiRep1 = await axios
+        .get("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/PlayerClubs/pid" + pid)
+        .then(response => {
+          for (let i = 0; i < response.data.rowCount; i++){
+            if (response.data.rows[i].id == this.id_club_switch){
+              alert("Il semblerait qu'un joueur de votre club possède déjà cette email\n"
+                    + "Peut être que vous ou un autre administrateur avez déjà invité cette personne");
+              return;
+            }
+          }
+          this.already_in_club_refresh(pid);
+        })
+        .catch(e => {
+          alert("Echec, veuillez réessayer, si le problème persiste, réessayer plus tard");
+          this.$router.go();
+        });
+    },
+    async already_in_club_refresh(pid){
+      await axios
+        .post("https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/InvitationClub/" + pid + "&" + this.id_club_switch)
+        .then(response => {
+          if (response.data.message == "invitation send"){
+            alert("Cette personne est déjà un membre de Quickmatch, une invitation lui a été envoyée");
+            let n_page = this.playersNotInClubPage;
+            document.getElementById(this.playersNotInClubPage).style.backgroundColor = "white";
+            if (this.playersNotInClubToShowPage.length == 1 && n_page != 1){
+              n_page--;
+            }
+            this.add_club_menu().then(response => {
+              this.page_ac(n_page);
+            });
+          }
+          else{
+            alert("Cette personne est déjà un membre de Quickmatch, de plus une invitation lui a déjà été envoyée");
+            let n_page = this.playersNotInClubPage;
+            document.getElementById(this.playersNotInClubPage).style.backgroundColor = "white";
+            this.add_club_menu().then(response => {
+              this.page_ac(n_page);
+            });
+          }
+        })
+        .catch(e => {
+          alert("Echec, veuillez réessayer, si le problème persiste, réessayer plus tard");
+          this.$router.go();
+        });
+    }
   }
 };
 </script>
