@@ -116,8 +116,8 @@ export default {
     NotConnected
   },
   data: () => ({
-    today: Date(),
-    focus: Date(),
+    today: new Date(),
+    focus: new Date(),
     type: "month",
     typeToLabel: {
       month: "Mois",
@@ -308,7 +308,8 @@ export default {
               " joueurs n'ont pas encore répondu au match";
           }
         }
-        if (gameDate < this.today) {
+        let cmpdate = new Date(gameDate);
+        if (cmpdate < this.today) {
           if (this.byPlayerTable.rows[i].played == true) {
             if (this.byPlayerTable.rows[i].won == true) {
               this.events.push({
@@ -333,11 +334,11 @@ export default {
                 details:
                   "<a href=https://youtu.be/dQw4w9WgXcQ>Score du matche sera affiché ici. Don't give up</a>",
                 start:
-                  gameDate.substring(0, 11) +
+                  gameDate.substring(0, 10) +
                   " " +
                   this.byPlayerTable.rows[i].start_hour,
                 end:
-                  gameDate.substring(0, 11) +
+                  gameDate.substring(0, 10) +
                   " " +
                   this.byPlayerTable.rows[i].end_hour,
                 color: "black",
