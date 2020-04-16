@@ -92,5 +92,13 @@
     <string name="work_ongoing_text">En construction...</string>
     <string name="change">MODIFIER</string>
     <string name="play_text">JOUER</string>
+    <string name="finish_match_text">Terminer le match</string>
+    <string name="send_meetsheet_text">Envoyer la feuille de match</string>
+    <string name="text_team1">Equipe 1</string>
+    <string name="text_team2">Equipe 2</string>
+    <string name="text_hyphen">-</string>
+    <string name="text_goals">Buts</string>
+    <string name="text_score">Score du match</string>
+    <string name="text_players_stats">Stats des joueurs</string>
 
 </resources>

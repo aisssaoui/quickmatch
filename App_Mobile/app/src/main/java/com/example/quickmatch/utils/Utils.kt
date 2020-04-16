@@ -56,6 +56,12 @@ object FormatUtils {
     const val AVATAR_SIZE = 60
     const val CLUB_NAME_SIZE = 40
 
+    /* timer settings */
+    const val MINIMUM_SECONDS = 0
+    const val MAXIMUM_SECONDS = 59
+    const val MINIMUM_MINUTES = 0
+    const val MAXIMUM_MINUTES = 60
+
     /* Regexs */
     val mailPattern = Regex("[a-zA-Z0-9._-]+@[a-z0-9-]+\\.[a-z]+")
     val passwordPattern = Regex("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{$MIN_PASSWORD_SIZE,$BASIC_SIZE}$")

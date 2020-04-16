@@ -117,6 +117,8 @@ interface DatabaseApiService {
     suspend fun getMeetById(@Path("id") id : Int) : MeetObject
     @GET("dbcontrol/api/v1/CalendarBPlayerRows/{id}")
     suspend fun getPlayerInvitations(@Path("id") id : Int) : List<PlayerMeetObject>
+    @GET("dbcontrol/api/v1/CalendarBMeetRows/{id}")
+    suspend fun getMeetPlayers(@Path("id") id : Int) : List<PlayerMeetObject>
 
     /* POST REQUESTS */
     @POST("dbcontrol/api/v1/Meets")
@@ -125,6 +127,10 @@ interface DatabaseApiService {
     /* DELETE REQUESTS */
     @DELETE("dbcontrol/api/v1/Meets/{id}")
     suspend fun deleteMeetById(@Path("id") id : Int)
+
+    /* PUT REQUESTS */
+    @PUT("dbcontrol/api/v1/Meets/{id}")
+    suspend fun updateMeet(@Path("id") id : Int, @Body meetObject: MeetObject) : MeetObject
 
     /* MEETSHEETS */
     /* GET REQUESTS */
@@ -137,7 +143,7 @@ interface DatabaseApiService {
 
     /* POST REQUESTS */
     @POST("dbcontrol/api/v1/MeetsSheet")
-    suspend fun addMeetsSheet(meetsSheetObject: MeetsSheetObject)
+    suspend fun createMeetsSheet(@Body meetsSheetObject: MeetsSheetObject)
 
     /* DELETE REQUESTS */
     @DELETE("dbcontrol/api/v1/MeetsSheet/{mail}")
