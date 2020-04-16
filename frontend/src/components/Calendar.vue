@@ -76,24 +76,26 @@
               </v-card-text>
               <v-card-actions>
                 <v-btn text color="primary" @click="selectedOpen = false">OK</v-btn>
-                <v-btn
-                  v-if="selectedEvent.inv"
-                  text
-                  color="success"
-                  @click="AcceptInvit(selectedEvent.meetid)"
-                >Accepter</v-btn>
-                <v-btn
-                  v-if="selectedEvent.inv"
-                  text
-                  color="error"
-                  @click="DeclineInvit(selectedEvent.meetid)"
-                >Refuser</v-btn>
-                <v-btn
-                  v-else
-                  text
-                  color="secondary"
-                  @click="ModifyInvit(selectedEvent.meetid)"
-                >Modifier</v-btn>
+                <div v-if="!selectedEvent.played">
+                  <v-btn
+                    v-if="selectedEvent.inv"
+                    text
+                    color="success"
+                    @click="AcceptInvit(selectedEvent.meetid)"
+                  >Accepter</v-btn>
+                  <v-btn
+                    v-if="selectedEvent.inv"
+                    text
+                    color="error"
+                    @click="DeclineInvit(selectedEvent.meetid)"
+                  >Refuser</v-btn>
+                  <v-btn
+                    v-else
+                    text
+                    color="secondary"
+                    @click="ModifyInvit(selectedEvent.meetid)"
+                  >Modifier</v-btn>
+                </div>
               </v-card-actions>
             </v-card>
           </v-menu>
@@ -265,18 +267,7 @@ export default {
       // Retrieve Players of a
       // Shows the slots
       for (let i = 0; i < this.byPlayerTable.rowCount; i++) {
-        // Finds the first coming repeat day
-        const dayINeed =
-          this.daysOfWeek.indexOf(this.byPlayerTable.rows[i].repeat_day) + 1;
-        const today = moment().isoWeekday();
-        let gameDate = "";
-        if (today <= dayINeed) {
-          gameDate = moment().isoWeekday(dayINeed);
-        } else {
-          gameDate = moment()
-            .add(1, "weeks")
-            .isoWeekday(dayINeed);
-        }
+        let gameDate = this.byPlayerTable.rows[i].precise_date;
         let color = "red";
         let waiting = 0;
         let playing = 0;
@@ -317,72 +308,115 @@ export default {
               " joueurs n'ont pas encore répondu au match";
           }
         }
-        if (this.checkPseudoInZabi(acceptedTable[i])) {
-          this.events.push({
-            name:
-              "Match à " +
-              this.byPlayerTable.rows[i].location +
-              " ~~~ " +
-              playing +
-              "/" +
-              this.byPlayerTable.rows[i].minimal_team_size * 2,
-            details: dts,
-            start:
-              gameDate.format("YYYY-MM-DD") +
-              " " +
-              this.byPlayerTable.rows[i].start_hour,
-            end:
-              gameDate.format("YYYY-MM-DD") +
-              " " +
-              this.byPlayerTable.rows[i].end_hour,
-            color: color,
-            meetid: this.byPlayerTable.rows[i].meet,
-            inv: false
-          });
-        } else if (this.checkPseudoInZabi(declinedTable[i])) {
-          this.events.push({
-            name:
-              "Match à " +
-              this.byPlayerTable.rows[i].location +
-              " ~~~ " +
-              playing +
-              "/" +
-              this.byPlayerTable.rows[i].minimal_team_size * 2,
-            details: dts,
-            start:
-              gameDate.format("YYYY-MM-DD") +
-              " " +
-              this.byPlayerTable.rows[i].start_hour,
-            end:
-              gameDate.format("YYYY-MM-DD") +
-              " " +
-              this.byPlayerTable.rows[i].end_hour,
-            color: "grey",
-            meetid: this.byPlayerTable.rows[i].meet,
-            inv: false
-          });
+        if (gameDate < this.today) {
+          if (this.byPlayerTable.rows[i].played == true) {
+            if (this.byPlayerTable.rows[i].won == true) {
+              this.events.push({
+                name: "Match remporté à " + this.byPlayerTable.rows[i].location,
+                details:
+                  "Score du matche sera affiché ici (ex. Team Faverge 9 - 0 Matmika)",
+                start:
+                  gameDate.substring(0, 11) +
+                  " " +
+                  this.byPlayerTable.rows[i].start_hour,
+                end:
+                  gameDate.substring(0, 11) +
+                  " " +
+                  this.byPlayerTable.rows[i].end_hour,
+                color: "black",
+                meetid: this.byPlayerTable.rows[i].meet,
+                played: true
+              });
+            } else {
+              this.events.push({
+                name: "Match perdu à " + this.byPlayerTable.rows[i].location,
+                details:
+                  "<a href=https://youtu.be/dQw4w9WgXcQ>Score du matche sera affiché ici. Don't give up</a>",
+                start:
+                  gameDate.substring(0, 11) +
+                  " " +
+                  this.byPlayerTable.rows[i].start_hour,
+                end:
+                  gameDate.substring(0, 11) +
+                  " " +
+                  this.byPlayerTable.rows[i].end_hour,
+                color: "black",
+                meetid: this.byPlayerTable.rows[i].meet,
+                played: true
+              });
+            }
+          }
         } else {
-          this.events.push({
-            name:
-              "Invitation à " +
-              this.byPlayerTable.rows[i].location +
-              " ~~~ " +
-              playing +
-              "/" +
-              this.byPlayerTable.rows[i].minimal_team_size * 2,
-            details: dts,
-            start:
-              gameDate.format("YYYY-MM-DD") +
-              " " +
-              this.byPlayerTable.rows[i].start_hour,
-            end:
-              gameDate.format("YYYY-MM-DD") +
-              " " +
-              this.byPlayerTable.rows[i].end_hour,
-            color: "blue",
-            meetid: this.byPlayerTable.rows[i].meet,
-            inv: true
-          });
+          if (this.checkPseudoInZabi(acceptedTable[i])) {
+            this.events.push({
+              name:
+                "Match à " +
+                this.byPlayerTable.rows[i].location +
+                " ~~~ " +
+                playing +
+                "/" +
+                this.byPlayerTable.rows[i].minimal_team_size * 2,
+              details: dts,
+              start:
+                gameDate.substring(0, 11) +
+                " " +
+                this.byPlayerTable.rows[i].start_hour,
+              end:
+                gameDate.substring(0, 11) +
+                " " +
+                this.byPlayerTable.rows[i].end_hour,
+              color: color,
+              meetid: this.byPlayerTable.rows[i].meet,
+              inv: false,
+              played: false
+            });
+          } else if (this.checkPseudoInZabi(declinedTable[i])) {
+            this.events.push({
+              name:
+                "Match à " +
+                this.byPlayerTable.rows[i].location +
+                " ~~~ " +
+                playing +
+                "/" +
+                this.byPlayerTable.rows[i].minimal_team_size * 2,
+              details: dts,
+              start:
+                gameDate.substring(0, 11) +
+                " " +
+                this.byPlayerTable.rows[i].start_hour,
+              end:
+                gameDate.substring(0, 11) +
+                " " +
+                this.byPlayerTable.rows[i].end_hour,
+              color: "grey",
+              meetid: this.byPlayerTable.rows[i].meet,
+              inv: false,
+              played: false
+            });
+          } else {
+            this.events.push({
+              name:
+                "Invitation à " +
+                this.byPlayerTable.rows[i].location +
+                " ~~~ " +
+                playing +
+                "/" +
+                this.byPlayerTable.rows[i].minimal_team_size * 2,
+              details: dts,
+              start:
+                gameDate.substring(0, 11) +
+                " " +
+                this.byPlayerTable.rows[i].start_hour,
+              end:
+                gameDate.substring(0, 11) +
+                " " +
+                this.byPlayerTable.rows[i].end_hour,
+              color: "blue",
+              meetid: this.byPlayerTable.rows[i].meet,
+              inv: true,
+              played: false
+            });
+          }
         }
       }
     },
@@ -492,24 +526,6 @@ export default {
     }
   },
   async created() {
-    const slot_Table = await axios.get(
-      "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/Slots",
-      {
-        responseType: "json"
-      }
-    );
-    const invitation_Table = await axios.get(
-      "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/Invitations",
-      {
-        responseType: "json"
-      }
-    );
-    const player_Table = await axios.get(
-      "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/Players",
-      {
-        responseType: "json"
-      }
-    );
     const by_player_table = await axios.get(
       "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/CalendarBPlayer/" +
         this.id,
@@ -524,9 +540,6 @@ export default {
       }
     );
     this.pseudo = pseudodata.data.pseudo;
-    // this.setSlotsTable(slot_Table);
-    // this.setInvitationsTable(invitation_Table);
-    // this.setPlayersTable(player_Table);
     this.byPlayerTable = by_player_table.data;
     this.showSlots();
   }

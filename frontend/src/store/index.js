@@ -61,7 +61,7 @@ export default new Vuex.Store({
     googleUser: Object,
     profile: Object,
     hasAccount: false,
-    cookieCheck: false // to avoid multiple checkings (infinite loop)
+    cookieCheck: false, // to avoid multiple checkings (infinite loop)
   },
   mutations: {
     setGoogleUser(state, googleUser) {
@@ -88,7 +88,11 @@ export default new Vuex.Store({
         var cookieExpiration = getCookie("quickmatchExpiration");
         var cookieId = getCookie("quickmatchId");
         var cookieValid = getCookie("quickmatchValid");
-        if (cookieId != null && cookieExpiration != null && cookieValid != null) {
+        if (
+          cookieId != null &&
+          cookieExpiration != null &&
+          cookieValid != null
+        ) {
           state.expirationDate = new Date(cookieExpiration);
           state.id = cookieId;
           state.hasAccount = true;
@@ -99,9 +103,9 @@ export default new Vuex.Store({
         var now = new Date();
         state.isSignedIn = now < state.expirationDate;
         if (state.isSignedIn == false) {
-            state.hasAccount = false;
-            alert("Votre session a expiré.");
-            document.location.reload(true);
+          state.hasAccount = false;
+          alert("Votre session a expiré.");
+          document.location.reload(true);
         }
       } else {
         state.isSignedIn = false;
@@ -113,9 +117,23 @@ export default new Vuex.Store({
       var end = new Date();
       end.setTime(end.getTime() - 1);
       /* cookie deletion */
-      setCookie("quickmatchExpiration", state.expirationDate, end, "/", "quickmatch.fr", false);
+      setCookie(
+        "quickmatchExpiration",
+        state.expirationDate,
+        end,
+        "/",
+        "quickmatch.fr",
+        false
+      );
       setCookie("quickmatchId", state.id, end, "/", "quickmatch.fr", false);
-      setCookie("quickmatchValid", state.isValid, end, "/", "quickmatch.fr", false);
+      setCookie(
+        "quickmatchValid",
+        state.isValid,
+        end,
+        "/",
+        "quickmatch.fr",
+        false
+      );
     },
     hasAccount(state) {
       state.hasAccount = true;
@@ -149,24 +167,17 @@ export default new Vuex.Store({
           false
         );
       } else {
-          state.id = cookieId;
+        state.id = cookieId;
       }
-  },
-  setEmail(state, mail) {
+    },
+    setEmail(state, mail) {
       state.email = mail;
       state.connectionDate = new Date();
       state.expirationDate = new Date();
       state.expirationDate.setSeconds(state.connectionDate.getSeconds() + 3600);
-  },
-  async setIsValid(state,bool) {
-    state.isValid = bool;
-    var cookieValid = getCookie("quickmatchValid");
-    if (cookieValid == null) {
-      setCookie("quickmatchValid", state.isValid, state.expirationDate, "/","quickmatch.fr", false);
-    }
-  },
-  async setIsValidGoogle(state) {
-    state.isValid = true;
+    },
+    async setIsValid(state, bool) {
+      state.isValid = bool;
       var cookieValid = getCookie("quickmatchValid");
       if (cookieValid == null) {
         setCookie(
@@ -177,43 +188,72 @@ export default new Vuex.Store({
           "quickmatch.fr",
           false
         );
-    }
-  },
-  async sendAgain(state) {
-    state.isValid = false;
-    if (state.email == "none") {
-      alert("Une erreur est survenue, vous allez être déconnecté(e) et redirigé(e) vers la page d'accueil. Si le problème persiste, merci de contacter le support. \n\n ERR: VERIFY_ACCOUNT_MAIL_NONE");
-      forcedDisconnection();
-      return 1;
-    }
+      }
+    },
+    async setIsValidGoogle(state) {
+      state.isValid = true;
+      var cookieValid = getCookie("quickmatchValid");
+      if (cookieValid == null) {
+        setCookie(
+          "quickmatchValid",
+          state.isValid,
+          state.expirationDate,
+          "/",
+          "quickmatch.fr",
+          false
+        );
+      }
+    },
+    async sendAgain(state) {
+      state.isValid = false;
+      if (state.email == "none") {
+        alert(
+          "Une erreur est survenue, vous allez être déconnecté(e) et redirigé(e) vers la page d'accueil. Si le problème persiste, merci de contacter le support. \n\n ERR: VERIFY_ACCOUNT_MAIL_NONE"
+        );
+        forcedDisconnection();
+        return 1;
+      }
       if (state.id == 0) {
-          let getId = await axios.get(
-            "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/players/ma" +
-              state.email,
-            { ResponseType: "json" }
-          );
-          state.id = getId.data.id;
+        let getId = await axios.get(
+          "https://dbcontrol.quickmatch.fr/dbcontrol/api/v1/players/ma" +
+            state.email,
+          { ResponseType: "json" }
+        );
+        state.id = getId.data.id;
       }
       var cookieCodeVerif = getCookie("quickmatchCodeVerif");
       if (cookieCodeVerif != null) {
-          alert("Merci de patienter quelques instants avant un nouvel envoi.");
-      }else{
-          var now = new Date();
-          var end = new Date();
-          end.setSeconds(now.getSeconds() + 120);
-          setCookie("quickmatchCodeVerif", state.isValid, end, "/", "quickmatch.fr", false);
-          let apiRep = await axios.post(
-              "https://dbcontrol.quickmatch.fr//dbcontrol/api/v1/sendMail",
-              {
-                  to: state.email, // list of receivers
-                  subject: 'Votre code de vérification Quickmatch', // Subject line
-                  text: "[HTML NOT SUPPORTED] Bonjour, votre code est le suivant:" + state.id + ". A bientôt sur Quickmatch.fr !",
-                  html: '<p>Bonjour,<br><br> Votre code est le suivant : ' + state.id + '.<br><br> Merci de nous faire confiance, <br> À bientôt sur Quickmatch.fr ! <br><br></p><font size="-5"><i> Ce mail a été envoyé automatiquement, merci de ne pas y répondre.</i></front>'// plain text body
-              }
-          );
-          alert("Le code vient d'être envoyé à l'adresse " + state.email +" !");
+        alert("Merci de patienter quelques instants avant un nouvel envoi.");
+      } else {
+        var now = new Date();
+        var end = new Date();
+        end.setSeconds(now.getSeconds() + 120);
+        setCookie(
+          "quickmatchCodeVerif",
+          state.isValid,
+          end,
+          "/",
+          "quickmatch.fr",
+          false
+        );
+        let apiRep = await axios.post(
+          "https://dbcontrol.quickmatch.fr//dbcontrol/api/v1/sendMail",
+          {
+            to: state.email, // list of receivers
+            subject: "Votre code de vérification Quickmatch", // Subject line
+            text:
+              "[HTML NOT SUPPORTED] Bonjour, votre code est le suivant:" +
+              state.id +
+              ". A bientôt sur Quickmatch.fr !",
+            html:
+              "<p>Bonjour,<br><br> Votre code est le suivant : " +
+              state.id +
+              '.<br><br> Merci de nous faire confiance, <br> À bientôt sur Quickmatch.fr ! <br><br></p><font size="-5"><i> Ce mail a été envoyé automatiquement, merci de ne pas y répondre.</i></front>', // plain text body
+          }
+        );
+        alert("Le code vient d'être envoyé à l'adresse " + state.email + " !");
       }
-  }
+    },
   },
   actions: {
     setGoogleUser(commit, googleUser) {
@@ -232,17 +272,17 @@ export default new Vuex.Store({
       this.commit("setID");
     },
     setEmail(commit, mail) {
-        this.commit("setEmail",mail);
+      this.commit("setEmail", mail);
     },
-    setIsValid(commit,bool) {
-        this.commit("setIsValid",bool);
+    setIsValid(commit, bool) {
+      this.commit("setIsValid", bool);
     },
     setIsValidGoogle(commit) {
-        this.commit("setIsValidGoogle");
+      this.commit("setIsValidGoogle");
     },
     sendAgain(commit) {
-        this.commit("sendAgain");
-    }
+      this.commit("sendAgain");
+    },
   },
   getters: {
     givenName: function(state) {
@@ -274,6 +314,6 @@ export default new Vuex.Store({
     },
     imageUrl: function(state) {
       return state.imageUrl;
-    }
-  }
+    },
+  },
 });
