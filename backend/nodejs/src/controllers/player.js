@@ -581,7 +581,7 @@ var Player = {
                 case 0:
                   findOneQuery = "SELECT * FROM player WHERE id = $1";
                   updateOneQuery =
-                    "UPDATE player\n      SET pseudo = $1, surname = $2, first_name = $3, mail_address = $4, phone_number = $5, bio=$6, avatar=$7, mdp=$8, is_valid=$9, private_profil=$10\n      WHERE id = $11 RETURNING *";
+                    "UPDATE player\n      SET pseudo = $1, surname = $2, first_name = $3, mail_address = $4, phone_number = $5, bio=$6, avatar=$7, mdp=$8, is_valid=$9, private_profil=$10, scored_goals=$11, conceded_goals=$12, matches_played=$13, victories=$14\n      WHERE id = $15 RETURNING *";
                   _context9.prev = 2;
                   _context9.next = 5;
                   return _db2.default.query(findOneQuery, [req.params.id]);
@@ -616,6 +616,10 @@ var Player = {
                     req.body.private_profil === null
                       ? rows[0].private_profil
                       : req.body.private_profil,
+                    req.body.scored_goals || rows[0].scored_goals,	
+                    req.body.conceded_goals	|| rows[0].conceded_goals,	
+                    req.body.matches_played	|| rows[0].matches_played,	
+                    req.body.victories || rows[0].victories,
                     req.params.id,
                   ];
                   _context9.next = 12;
