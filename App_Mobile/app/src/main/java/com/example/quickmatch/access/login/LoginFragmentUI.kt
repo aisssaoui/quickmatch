@@ -1,7 +1,9 @@
 package com.example.quickmatch.access.login
 
 
+import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -14,11 +16,13 @@ import androidx.core.content.getSystemService
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 
 import com.example.quickmatch.R
 import com.example.quickmatch.content.ContentActivity
+import com.example.quickmatch.content.club.RequestStatus
 import com.example.quickmatch.databinding.FragmentLoginBinding
 import com.example.quickmatch.splash.SplashAccessToContent
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -40,7 +44,7 @@ class LoginFragmentUI : Fragment() {
                               savedInstanceState: Bundle?): View? {
 
         val binding: FragmentLoginBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_login, container, false)
-        val viewModel = ViewModelProviders.of(this).get(LoginFragmentViewModel::class.java)
+        val viewModel = ViewModelProvider(this).get(LoginFragmentViewModel::class.java)
 
         binding.viewModel = viewModel
 
@@ -53,6 +57,39 @@ class LoginFragmentUI : Fragment() {
 
         val mGoogleSignInClient = GoogleSignIn.getClient(this.context!!, gso)
 
+        // Check for existing Google Sign In account, if the user is already signed in
+        // the GoogleSignInAccount will be non-null.
+        val account = GoogleSignIn.getLastSignedInAccount(this.activity)
+        if(account != null) {
+            viewModel.getPlayerByMail(account.email!!)
+        }
+
+        val alertGoogleAccountFound = AlertDialog.Builder(this.context)
+        alertGoogleAccountFound.setTitle("Compte Google")
+        alertGoogleAccountFound.setMessage("Un compte Google a été trouvé : ${account?.displayName} (${account?.email})")
+        alertGoogleAccountFound.setNegativeButton("Se connecter avec un autre compte") { dialog, _ ->
+            dialog.cancel()
+        }
+        alertGoogleAccountFound.setPositiveButton("Se connecter avec ce compte") { _, _ ->
+            val contentIntent = Intent(this.activity, SplashAccessToContent::class.java)
+            contentIntent.putExtra("player", viewModel.playerGoogle.value)
+
+            /* disable keyboard when navigating to the app */
+            val inputMethodManager = activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputMethodManager.hideSoftInputFromWindow(activity!!.currentFocus!!.applicationWindowToken, 0)
+
+            this.activity!!.finish() // Finish current activity
+            startActivity(contentIntent) // Move to content activity (splash between)
+        }
+
+        viewModel.getGooglePlayer.observe(viewLifecycleOwner, Observer {
+            when(it) {
+                RequestStatus.DONE -> alertGoogleAccountFound.show()
+                RequestStatus.ERROR -> Timber.i("Couldn't retrieve account from google mail address")
+                else -> Timber.i("Retrieving Google account from database...")
+            }
+        })
+
         binding.buttonLoginSignin.setOnClickListener {
             findNavController().navigate(LoginFragmentUIDirections.actionLoginFragmentUIToSigninFragmentUI())
         }
@@ -61,7 +98,7 @@ class LoginFragmentUI : Fragment() {
             viewModel.tryToLogin(binding.inputLoginMail.text.toString(), binding.inputLoginPassword.text.toString())
         }
 
-        viewModel.loginStatus.observe(this, Observer {
+        viewModel.loginStatus.observe(viewLifecycleOwner, Observer {
 
             when (it) {
                 LoginStatus.SUCCESS -> {
@@ -83,6 +120,7 @@ class LoginFragmentUI : Fragment() {
             }
         })
 
+
         binding.buttonLoginGoogle.setOnClickListener {
             // Start google sign in activity and wait for result
             startActivityForResult(mGoogleSignInClient.signInIntent, RC_SIGN_IN)
@@ -91,25 +129,13 @@ class LoginFragmentUI : Fragment() {
         return binding.root
     }
 
-    /*
-    private fun updateUI(account: GoogleSignInAccount?) {
-        if (account != null) findNavController().navigate(LoginFragmentUIDirections.actionLoginFragmentUIToHomeFragmentUI())
-    }*/
-
-    override fun onStart() {
-        super.onStart()
-
-        // Check for existing Google Sign In account, if the user is already signed in
-        // the GoogleSignInAccount will be non-null.
-        val account = GoogleSignIn.getLastSignedInAccount(this.activity)
-        //updateUI(account)
-    }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
         // Get google sign in activity result
+        Timber.i("request code: $requestCode")
         if (requestCode == RC_SIGN_IN) {
+            Timber.i("Made it to task creation")
             val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(data)
             handleSignInResult(task)
         }
@@ -118,12 +144,12 @@ class LoginFragmentUI : Fragment() {
     private fun handleSignInResult(task: Task<GoogleSignInAccount>) {
         try {
             val account = task.getResult(ApiException::class.java)
-            val idToken = account!!.idToken
-            //TODO Send token to the backend to check its validity
-            //updateUI(account)
+            Timber.i("account: $account")
+            //TODO create account or get existing account in DB with account.mail
+            //TODO go to content activity with the playerObject in the intent
+
         } catch (e: ApiException) {
-            Log.i("LoginFragmentUI", "SignIn failure: " + e.statusCode)
-            //updateUI(null)
+            Timber.i(e.message + " / handleSigninResult()")
         }
     }
 }

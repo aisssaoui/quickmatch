@@ -14,6 +14,7 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 
@@ -32,7 +33,7 @@ class SigninFragmentUI : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         val binding: FragmentSigninBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_signin, container, false)
-        val viewModel = ViewModelProviders.of(this).get(SigninFragmentViewModel::class.java)
+        val viewModel = ViewModelProvider(this).get(SigninFragmentViewModel::class.java)
 
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
