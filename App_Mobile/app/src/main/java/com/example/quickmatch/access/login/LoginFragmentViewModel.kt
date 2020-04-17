@@ -1,5 +1,6 @@
 package com.example.quickmatch.access.login
 
+import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -28,13 +29,27 @@ class LoginFragmentViewModel : ViewModel() {
         get() = _player
 
     /* Player object received from database with google mail address */
+    private val _playerSilentGoogle = MutableLiveData<PlayerObject>()
+    val playerSilentGoogle : LiveData<PlayerObject>
+        get() = _playerSilentGoogle
+
+    /* Player object received from database with google mail address */
     private val _playerGoogle = MutableLiveData<PlayerObject>()
     val playerGoogle : LiveData<PlayerObject>
         get() = _playerGoogle
 
+    private val _getSilentGooglePlayer = MutableLiveData<RequestStatus>()
+    val getSilentGooglePlayer : LiveData<RequestStatus>
+        get() = _getSilentGooglePlayer
+
     private val _getGooglePlayer = MutableLiveData<RequestStatus>()
     val getGooglePlayer : LiveData<RequestStatus>
         get() = _getGooglePlayer
+
+    private val _createGooglePlayerAccount = MutableLiveData<RequestStatus>()
+    val createGooglePlayerAccount : LiveData<RequestStatus>
+        get() = _createGooglePlayerAccount
+
 
     /* Create coroutine job and  */
     private var viewModelJob = Job()
@@ -64,7 +79,26 @@ class LoginFragmentViewModel : ViewModel() {
         }
     }
 
-    fun getPlayerByMail(mailAddress: String) {
+    fun getGooglePlayerByMail(mailAddress: String) {
+
+        _getSilentGooglePlayer.value  = RequestStatus.LOADING
+
+        coroutineScope.launch {
+
+            try {
+
+                _playerSilentGoogle.value = DatabaseApi.retrofitService.getPlayerByMail(mailAddress)
+                _getSilentGooglePlayer.value  = RequestStatus.DONE
+
+            } catch (t: Throwable) {
+
+                _getSilentGooglePlayer.value  = RequestStatus.ERROR
+                Timber.i(t.message + " / getPlayerByMail()")
+            }
+        }
+    }
+
+    fun getGooglePlayerOrCreateAccount(mailAddress: String) {
 
         _getGooglePlayer.value  = RequestStatus.LOADING
 
@@ -79,9 +113,42 @@ class LoginFragmentViewModel : ViewModel() {
 
                 _getGooglePlayer.value  = RequestStatus.ERROR
                 Timber.i(t.message + " / getPlayerByMail()")
+
             }
         }
     }
+
+    fun createGooglePlayer(mailAddress: String,
+                           familyName: String?,
+                           givenName: String?,
+                           displayName: String,
+                           photoUrl: String?) {
+
+
+        val newPlayer = PlayerObject(
+            null, familyName!!, givenName!!, displayName, "stocked by Google",
+            mailAddress, null, 0, 0, 0, 0, photoUrl!!, null,
+            null, false)
+
+        _createGooglePlayerAccount.value = RequestStatus.LOADING
+
+        coroutineScope.launch {
+
+            try {
+
+                _playerGoogle.value = DatabaseApi.retrofitService.addPlayer(newPlayer)
+                _createGooglePlayerAccount.value = RequestStatus.DONE
+
+            } catch (t: Throwable) {
+
+                _createGooglePlayerAccount.value = RequestStatus.ERROR
+                Timber.i(t.message + " / createGooglePlayer()")
+
+            }
+        }
+    }
+
+
 
     private fun checkPassword(player : PlayerObject, password: String) = when (player.password) {
                                                                                 "stocked by Google" -> _loginStatus.value = LoginStatus.GOOGLE
@@ -89,4 +156,15 @@ class LoginFragmentViewModel : ViewModel() {
                                                                                 else -> _loginStatus.value = LoginStatus.WRONG_PWD
                                                                                 }
 
+    fun resetGetGooglePlayerStatus() {
+        _getGooglePlayer.value = null
+    }
+
+    fun resetGetSilentGooglePlayerStatus() {
+        _getSilentGooglePlayer.value = null
+    }
+
+    fun resetCreateGoogleAccountStatus() {
+        _createGooglePlayerAccount.value = null
+    }
 }
