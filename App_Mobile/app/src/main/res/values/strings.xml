@@ -100,5 +100,9 @@
     <string name="text_goals">Buts</string>
     <string name="text_score">Score du match</string>
     <string name="text_players_stats">Stats des joueurs</string>
+    <string name="scored_goals"><b>Buts marqués : </b></string>
+    <string name="conceded_goals"><b>Buts encaissés : </b></string>
+    <string name="total_victories"><b>Nombre de victoires : </b></string>
+    <string name="total_matches"><b>Nombre de matchs joués : </b></string>
 
 </resources>

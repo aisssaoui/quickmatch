@@ -23,7 +23,6 @@ import com.example.quickmatch.content.club.ClubFragmentUI
 import com.example.quickmatch.content.home.HomeFragmentUI
 import com.example.quickmatch.content.match.MatchFragmentUI
 import com.example.quickmatch.content.profile.ProfileFragmentUI
-import com.example.quickmatch.content.setting.SettingFragmentUI
 import com.example.quickmatch.content.stat.StatFragmentUI
 import com.example.quickmatch.databinding.ActivityContentBinding
 import com.example.quickmatch.network.PlayerObject

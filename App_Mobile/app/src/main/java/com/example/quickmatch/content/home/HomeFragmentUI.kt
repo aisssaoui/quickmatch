@@ -26,7 +26,7 @@ class HomeFragmentUI : BaseFragment() {
         val contentActivity = (this.activity as ContentActivity)
         val playerPseudo = contentActivity.intent.getParcelableExtra<PlayerObject>("player").pseudo
 
-        binding.homeText.text = "Welcome to Quick Match $playerPseudo"
+        binding.homeText.text = "Bienvenu(e) dans Quick Match $playerPseudo"
         return binding.root
     }
 

@@ -237,3 +237,37 @@ fun TextView.setPlayerName(player: PlayerObject?) {
         text = "${player.surname} ${player.firstName}"
     }
 }
+
+@BindingAdapter("playerGoalsFormatted")
+fun TextView.setPlayerGoals(player: PlayerObject?) {
+
+    player?.let {
+        text = context.getString(R.string.scored_goals) + " " + player.scoredGoals.toString()
+    }
+}
+
+@BindingAdapter("playerConcededGoalsFormatted")
+fun TextView.setPlayerConcededGoals(player: PlayerObject?) {
+
+    player?.let {
+        text = context.getString(R.string.conceded_goals) + " " + player.concededGoals.toString()
+    }
+}
+
+@BindingAdapter("playerVictoriesFormatted")
+fun TextView.setPlayerVictories(player: PlayerObject?) {
+
+    player?.let {
+        val victories = player.victories
+        val total = player.matchesPlayed
+        text = context.getString(R.string.total_victories) + " $victories (${ 1.0 * victories / total * 100}%)"
+    }
+}
+
+@BindingAdapter("playerTotalMatchesFormatted")
+fun TextView.setPlayerTotalMatches(player: PlayerObject?) {
+
+    player?.let {
+        text = context.getString(R.string.total_matches) + " " + player.matchesPlayed.toString()
+    }
+}
